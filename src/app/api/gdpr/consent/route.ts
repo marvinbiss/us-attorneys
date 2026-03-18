@@ -90,7 +90,7 @@ export async function POST(request: Request) {
     if (error) throw error
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('GDPR consent error:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error recording consent' } },
@@ -136,7 +136,7 @@ export async function GET(_request: Request) {
       .order('consent_given_at', { ascending: false })
 
     return NextResponse.json({ consents: consents || [] })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('GDPR consent fetch error:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error retrieving consent history' } },

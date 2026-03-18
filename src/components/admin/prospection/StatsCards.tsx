@@ -1,5 +1,3 @@
-'use client'
-
 import { Mail, MessageSquare, Phone, Users, Send, TrendingUp, DollarSign, Inbox } from 'lucide-react'
 import type { OverviewStats } from '@/types/prospection'
 

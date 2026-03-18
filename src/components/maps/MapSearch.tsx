@@ -163,7 +163,7 @@ export default function MapSearch() {
         // Cache the results
         searchCache.set(bounds, data.providers, cacheKey)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Search error:', error)
     } finally {
       const endTime = performance.now()

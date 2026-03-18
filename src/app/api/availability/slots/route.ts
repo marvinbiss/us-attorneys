@@ -57,7 +57,7 @@ export async function GET(request: Request) {
       startDate: startDate.toISOString().split('T')[0],
       days,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Availability slots error:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error retrieving slots' } },

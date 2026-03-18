@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
       notifications: notifications || [],
       unreadCount: count || 0,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Notifications GET error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }

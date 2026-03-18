@@ -76,7 +76,7 @@ export async function GET(
       scheduled_at: booking.scheduled_at,
       duration_minutes: booking.duration_minutes,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Video Join] Error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },

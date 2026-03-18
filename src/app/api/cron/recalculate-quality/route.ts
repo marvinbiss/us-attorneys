@@ -125,7 +125,7 @@ export async function GET(request: Request) {
       updated: totalUpdated,
       errors: totalErrors,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Cron] Error in recalculate-quality:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error recalculating quality scores' } },

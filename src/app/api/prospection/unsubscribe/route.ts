@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
       status: 200,
       headers: securityHeaders,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Unsubscribe endpoint error', error as Error)
     return new NextResponse(unsubscribePage('Technical error', false), {
       status: 500,

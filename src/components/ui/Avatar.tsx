@@ -1,5 +1,3 @@
-'use client'
-
 import { forwardRef, ImgHTMLAttributes } from 'react'
 import { User } from 'lucide-react'
 import { clsx } from 'clsx'

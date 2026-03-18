@@ -80,7 +80,7 @@ export async function GET(
       success: true,
       data: quote,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Quote fetch error', error)
     return NextResponse.json(
       {
@@ -217,7 +217,7 @@ export async function PATCH(
       success: true,
       data: updatedQuote,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Quote update error', error)
     return NextResponse.json(
       {

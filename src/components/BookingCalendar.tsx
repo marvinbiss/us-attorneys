@@ -95,7 +95,7 @@ export default function BookingCalendar({
 
       const data = await response.json()
       setAvailableSlots(data.slots || {})
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error fetching slots:', err)
       setError('Unable to load availability. Please try again.')
     } finally {
@@ -165,7 +165,7 @@ export default function BookingCalendar({
 
       onBookingComplete?.(bookingData)
       setStep('confirmation')
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Booking error:', err)
       setError(err instanceof Error ? err.message : 'Booking failed')
     } finally {

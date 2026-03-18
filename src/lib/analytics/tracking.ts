@@ -146,7 +146,7 @@ async function sendToAnalytics(data: TrackingData) {
         keepalive: true,
       })
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Analytics error:', error)
   }
 }

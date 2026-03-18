@@ -160,7 +160,7 @@ export async function GET(request: NextRequest) {
         totalItems,
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Attorney leads GET error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }

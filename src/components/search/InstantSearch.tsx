@@ -66,7 +66,7 @@ export function InstantSearch({
         const data = await response.json()
         setSuggestions(data.suggestions || [])
       }
-    } catch (error) {
+    } catch (error: unknown) {
       // Ignore abort errors - they're expected when cancelling stale requests
       if (error instanceof Error && error.name === 'AbortError') {
         return

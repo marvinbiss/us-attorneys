@@ -162,7 +162,7 @@ export default function AdminNewContentPage() {
         const err = await response.json().catch(() => ({}))
         showToast(err.error?.message || 'Error saving page', 'error')
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error:', error)
       showToast('Error saving page', 'error')
     } finally {
@@ -232,7 +232,7 @@ export default function AdminNewContentPage() {
         const err = await response.json().catch(() => ({}))
         showToast(err.error?.message || 'Error creating page', 'error')
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error:', error)
       showToast('Error publishing page', 'error')
     } finally {

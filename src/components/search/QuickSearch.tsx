@@ -451,7 +451,7 @@ export default function QuickSearch() {
             aria-expanded={showDropdown && suggestions.length > 0}
             aria-haspopup="listbox"
             aria-autocomplete="list"
-            className="w-full rounded-full bg-gray-50 border border-gray-200 pl-10 pr-10 py-2 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition-all duration-200 hover:border-gray-300 hover:shadow-sm focus:border-blue-400 focus:bg-white focus:shadow-md focus:ring-2 focus:ring-blue-100"
+            className="w-full rounded-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 pl-10 pr-10 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none transition-all duration-200 hover:border-gray-300 dark:hover:border-gray-500 hover:shadow-sm focus:border-blue-400 focus:bg-white dark:focus:bg-gray-700 focus:shadow-md focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/50"
           />
 
           {/* Clear button */}
@@ -484,7 +484,7 @@ export default function QuickSearch() {
       {/* Suggestions Dropdown */}
       {showDropdown && suggestions.length > 0 && (
         <div
-          className="absolute top-full left-0 right-0 mt-1.5 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden"
+          className="absolute top-full left-0 right-0 mt-1.5 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-600 z-50 overflow-hidden"
           role="listbox"
           aria-label="Suggestions"
         >
@@ -505,8 +505,8 @@ export default function QuickSearch() {
                   className={`
                     w-full flex items-center gap-3 px-3.5 py-2.5 text-left transition-all duration-100
                     ${isHighlighted
-                      ? 'bg-blue-50'
-                      : 'hover:bg-gray-50'
+                      ? 'bg-blue-50 dark:bg-blue-900/30'
+                      : 'hover:bg-gray-50 dark:hover:bg-gray-700'
                     }
                   `}
                 >
@@ -514,11 +514,11 @@ export default function QuickSearch() {
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
                     isHighlighted
                       ? suggestion.type === 'service'
-                        ? 'bg-blue-100'
+                        ? 'bg-blue-100 dark:bg-blue-900/50'
                         : suggestion.type === 'city'
-                          ? 'bg-rose-100'
-                          : 'bg-emerald-100'
-                      : 'bg-gray-100'
+                          ? 'bg-rose-100 dark:bg-rose-900/50'
+                          : 'bg-emerald-100 dark:bg-emerald-900/50'
+                      : 'bg-gray-100 dark:bg-gray-700'
                   }`}>
                     <SuggestionIcon type={suggestion.type} />
                   </div>
@@ -526,7 +526,7 @@ export default function QuickSearch() {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className={`text-sm font-medium truncate transition-colors ${
-                      isHighlighted ? 'text-blue-700' : 'text-gray-900'
+                      isHighlighted ? 'text-blue-700 dark:text-blue-300' : 'text-gray-900 dark:text-gray-100'
                     }`}>
                       {suggestion.type === 'combined' ? (
                         <span>{suggestion.label}</span>
@@ -569,7 +569,7 @@ export default function QuickSearch() {
           </div>
 
           {/* Keyboard hints */}
-          <div className="hidden md:flex items-center gap-3 px-3.5 py-2 bg-gray-50 border-t border-gray-100 text-[10px] text-gray-400">
+          <div className="hidden md:flex items-center gap-3 px-3.5 py-2 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-700 text-[10px] text-gray-400">
             <span className="flex items-center gap-1">
               <kbd className="px-1 py-0.5 bg-white rounded border border-gray-200 font-mono">&#8593;&#8595;</kbd>
               navigate

@@ -1,5 +1,3 @@
-'use client'
-
 import { BadgeCheck, ShieldCheck, AlertTriangle, HelpCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

@@ -71,7 +71,7 @@ export async function POST(
       result: stripeResult,
       message: action === 'cancel' ? 'Subscription cancelled' : 'Subscription reactivated',
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Admin subscription cancel error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Server error' } },

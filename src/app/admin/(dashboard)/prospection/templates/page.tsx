@@ -19,7 +19,7 @@ export default function TemplatesPage() {
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) setTemplates(data.data)
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       setError('Loading error')
     } finally {

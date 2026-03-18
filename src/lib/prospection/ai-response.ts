@@ -123,7 +123,7 @@ async function generateWithClaude(
       provider: 'claude',
       model,
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Claude API error', error as Error)
     throw error
   } finally {
@@ -189,7 +189,7 @@ async function generateWithOpenAI(
       provider: 'openai',
       model,
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('OpenAI API error', error as Error)
     throw error
   } finally {

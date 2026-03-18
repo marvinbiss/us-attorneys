@@ -2,6 +2,12 @@
 // Generates ~4,275 unique guide pages (75 PAs x 57 states/territories)
 
 import { practiceAreas, states } from '@/lib/data/usa'
+import {
+  getStatuteOfLimitations,
+  getStateAvgHourlyRate,
+  getStateAttorneyCount,
+  PA_TO_SOL_CATEGORY,
+} from '@/lib/data/state-legal-data'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -115,16 +121,25 @@ export function generateGuideContent(
       content: `Finding the right ${specialtyName.toLowerCase()} attorney in ${stateName} requires research and due diligence. Start by checking the ${stateName} State Bar Association's lawyer directory, which lists all attorneys licensed to practice in the state along with their disciplinary history. Look for attorneys who specialize in ${specialtyName.toLowerCase()} and have experience handling cases similar to yours. Read client reviews, check their track record, and verify their bar status. Many ${specialtyName.toLowerCase()} attorneys in ${stateName} offer free initial consultations, allowing you to evaluate their expertise and communication style before committing. Ask about their fee structure (hourly, flat fee, or contingency), their caseload, and their approach to your specific situation. The best attorney for your case will have deep knowledge of ${stateName} law, a proven track record, and a communication style that puts you at ease.`,
     },
 
-    // Section 3: Average costs
+    // Section 3: Average costs (with real data)
     {
       heading: `Average Cost of a ${specialtyName} Attorney in ${stateName}`,
-      content: `Attorney fees for ${specialtyName.toLowerCase()} cases in ${stateName} vary based on the attorney's experience, the complexity of your case, and your location within the state. Hourly rates for ${specialtyName.toLowerCase()} attorneys in ${stateName} typically range from $150 to $500 per hour, with more experienced attorneys in major metro areas charging higher rates. Some ${specialtyName.toLowerCase()} attorneys work on a contingency fee basis (typically 33-40% of the recovery), meaning you pay nothing upfront and the attorney takes a percentage of any settlement or verdict. Others charge flat fees for straightforward matters. Many attorneys in ${stateName} also offer payment plans or sliding-scale fees based on income. Always get a written fee agreement before hiring an attorney and make sure you understand all potential costs, including court filing fees, expert witness fees, and other expenses.`,
+      content: (() => {
+        const avgRate = getStateAvgHourlyRate(stateCode)
+        const lowRate = Math.round(avgRate * 0.6)
+        const highRate = Math.round(avgRate * 1.6)
+        return `The average hourly rate for attorneys in ${stateName} is approximately $${avgRate} per hour. For ${specialtyName.toLowerCase()} cases specifically, rates typically range from $${lowRate} to $${highRate} per hour depending on the attorney's experience, reputation, and location within the state. Attorneys in major metropolitan areas tend to charge higher rates than those in rural areas. Some ${specialtyName.toLowerCase()} attorneys work on a contingency fee basis (typically 33-40% of the recovery), meaning you pay nothing upfront and the attorney takes a percentage of any settlement or verdict. Others charge flat fees for straightforward matters. Many attorneys in ${stateName} also offer payment plans or sliding-scale fees based on income. Always get a written fee agreement before hiring an attorney and make sure you understand all potential costs, including court filing fees, expert witness fees, and other expenses.`
+      })(),
     },
 
-    // Section 4: Statute of Limitations
+    // Section 4: Statute of Limitations (with real data)
     {
       heading: `Statute of Limitations for ${specialtyName} in ${stateName}`,
-      content: `${stateName} imposes specific time limits (statutes of limitations) for filing ${specialtyName.toLowerCase()} legal actions. Missing these deadlines can permanently bar your claim. The time limit varies depending on the type of case — for example, personal injury claims, contract disputes, and property damage claims each have different deadlines. Some exceptions may extend or "toll" the deadline, such as when the injured party is a minor, when the defendant is out of state, or when the injury was not immediately discoverable (the "discovery rule"). It is critical to consult a ${specialtyName.toLowerCase()} attorney in ${stateName} as soon as possible to ensure your claim is filed within the applicable time period. An attorney can analyze your specific situation and determine exactly how much time you have to take legal action.`,
+      content: (() => {
+        const sol = getStatuteOfLimitations(specialtySlug, stateCode)
+        const solCategory = PA_TO_SOL_CATEGORY[specialtySlug] ?? 'personal-injury'
+        return `In ${stateName}, the statute of limitations for ${specialtyName.toLowerCase()} cases is ${sol} ${sol === 1 ? 'year' : 'years'} from the date the cause of action accrues. This falls under the "${solCategory.replace(/-/g, ' ')}" category in ${stateName} law. Missing this deadline will almost certainly result in your case being dismissed. Some exceptions may extend or "toll" the deadline, such as: (1) The discovery rule, which starts the clock when you discover or should have discovered the injury. (2) Minority tolling, which pauses the deadline for plaintiffs who are under 18. (3) Defendant absence from the state, which may pause the clock while the defendant is outside ${stateName}. (4) Mental incapacity of the plaintiff. It is critical to consult a ${specialtyName.toLowerCase()} attorney in ${stateName} as soon as possible to ensure your claim is filed within the ${sol}-year deadline. Do not rely on exceptions without professional legal advice.`
+      })(),
     },
 
     // Section 5: Filing Fees
@@ -206,4 +221,85 @@ export function isLegalGuidePASlug(slug: string): boolean {
  */
 export function getPANameBySlug(slug: string): string | undefined {
   return practiceAreas.find(p => p.slug === slug)?.name
+}
+
+// ---------------------------------------------------------------------------
+// FAQ generators — for FAQ schema + rendering
+// ---------------------------------------------------------------------------
+
+/**
+ * Generate state-specific FAQ pairs for a PA x State guide page.
+ * Used in JSON-LD FAQPage schema and on-page rendering.
+ */
+export function getGuideFAQs(
+  specialtySlug: string,
+  specialtyName: string,
+  stateCode: string,
+  stateName: string,
+): { question: string; answer: string }[] {
+  const sol = getStatuteOfLimitations(specialtySlug, stateCode)
+  const rate = getStateAvgHourlyRate(stateCode)
+  const count = getStateAttorneyCount(stateCode)
+  const solCategory = PA_TO_SOL_CATEGORY[specialtySlug] ?? 'personal-injury'
+  const year = new Date().getFullYear()
+
+  return [
+    {
+      question: `What is the statute of limitations for ${specialtyName.toLowerCase()} cases in ${stateName}?`,
+      answer: `In ${stateName}, the statute of limitations for ${specialtyName.toLowerCase()} cases (categorized as "${solCategory.replace(/-/g, ' ')}") is ${sol} ${sol === 1 ? 'year' : 'years'}. This means you must file your claim within ${sol} ${sol === 1 ? 'year' : 'years'} of the date the cause of action accrues. Certain exceptions may extend this deadline, such as the discovery rule, minority tolling, or defendant absence from the state. Consult an attorney immediately to ensure you do not miss your filing deadline.`,
+    },
+    {
+      question: `How much does a ${specialtyName.toLowerCase()} attorney cost in ${stateName}?`,
+      answer: `The average hourly rate for attorneys in ${stateName} is approximately $${rate} per hour as of ${year}. However, ${specialtyName.toLowerCase()} attorney fees vary based on experience, case complexity, and location within the state. Many attorneys offer free initial consultations, and some work on contingency (typically 33-40% of recovery), meaning you pay nothing unless you win. Flat fees are available for simpler matters. Always request a written fee agreement before hiring.`,
+    },
+    {
+      question: `How many ${specialtyName.toLowerCase()} attorneys practice in ${stateName}?`,
+      answer: `${stateName} has approximately ${count.toLocaleString()} active licensed attorneys across all practice areas. While not all specialize in ${specialtyName.toLowerCase()}, many have experience handling these types of cases. Use the ${stateName} State Bar Association directory to find attorneys who specifically practice ${specialtyName.toLowerCase()} law and verify their bar status and disciplinary history.`,
+    },
+    {
+      question: `Do I need a ${specialtyName.toLowerCase()} attorney in ${stateName}, or can I represent myself?`,
+      answer: `While you have the right to represent yourself (pro se) in ${stateName} courts, ${specialtyName.toLowerCase()} cases often involve complex legal procedures, evidence rules, and negotiation tactics that require professional expertise. An experienced attorney understands ${stateName}-specific laws, court procedures, and opposing counsel strategies. Studies show that individuals with legal representation typically achieve better outcomes. Most ${specialtyName.toLowerCase()} attorneys in ${stateName} offer free consultations to help you assess your case.`,
+    },
+    {
+      question: `What should I look for when hiring a ${specialtyName.toLowerCase()} lawyer in ${stateName}?`,
+      answer: `When selecting a ${specialtyName.toLowerCase()} attorney in ${stateName}, consider: (1) Years of experience specifically in ${specialtyName.toLowerCase()} law. (2) Track record with cases similar to yours. (3) Active bar membership in good standing with no disciplinary actions. (4) Positive client reviews and peer recognition. (5) Clear communication about fees, strategy, and timeline. (6) Familiarity with the specific courts and judges in your jurisdiction. (7) Willingness to provide references. Always verify an attorney's credentials through the ${stateName} State Bar before hiring.`,
+    },
+  ]
+}
+
+/**
+ * Generate FAQ pairs for a specialty hub page (national overview).
+ */
+export function getGuideHubFAQs(
+  specialtySlug: string,
+  specialtyName: string,
+): { question: string; answer: string }[] {
+  const solCategory = PA_TO_SOL_CATEGORY[specialtySlug] ?? 'personal-injury'
+
+  return [
+    {
+      question: `What is ${specialtyName.toLowerCase()} law?`,
+      answer: `${specialtyName} law is a practice area that deals with legal matters related to ${specialtyName.toLowerCase()}. It encompasses a wide range of issues including disputes, claims, regulatory compliance, and legal proceedings specific to this area. Each state has its own statutes, case law, and court procedures that govern ${specialtyName.toLowerCase()} matters, making it important to work with an attorney licensed in your state.`,
+    },
+    {
+      question: `Does the statute of limitations for ${specialtyName.toLowerCase()} cases vary by state?`,
+      answer: `Yes, the statute of limitations for ${specialtyName.toLowerCase()} cases varies significantly by state. These deadlines fall under the "${solCategory.replace(/-/g, ' ')}" category and range from 1 to 15 years depending on the state and specific nature of the claim. Missing the filing deadline can permanently bar your claim, so it is critical to consult an attorney in your state as soon as possible.`,
+    },
+    {
+      question: `How much does a ${specialtyName.toLowerCase()} attorney typically charge?`,
+      answer: `Attorney fees for ${specialtyName.toLowerCase()} cases vary by state and range from approximately $200 per hour in lower-cost states to over $400 per hour in major legal markets like New York and California. Fee structures include hourly billing, flat fees, and contingency arrangements (where the attorney takes a percentage of any recovery). Many attorneys offer free initial consultations to evaluate your case.`,
+    },
+    {
+      question: `How do I find the best ${specialtyName.toLowerCase()} attorney in my state?`,
+      answer: `To find a qualified ${specialtyName.toLowerCase()} attorney: (1) Check your state bar association's lawyer directory for licensed attorneys in good standing. (2) Look for attorneys who focus specifically on ${specialtyName.toLowerCase()} law. (3) Read client reviews and check ratings on legal directories. (4) Request consultations with 2-3 attorneys to compare expertise and communication style. (5) Verify their experience with cases similar to yours and ask about outcomes. (6) Confirm fee structures before hiring.`,
+    },
+    {
+      question: `Can I handle a ${specialtyName.toLowerCase()} case without an attorney?`,
+      answer: `While you have the right to represent yourself, ${specialtyName.toLowerCase()} cases often involve complex legal procedures, evidence requirements, and negotiation tactics. An experienced attorney can navigate state-specific laws, protect your rights, and often achieve better outcomes. For complex or high-stakes ${specialtyName.toLowerCase()} matters, legal representation is strongly recommended. Many attorneys offer free consultations to help you assess whether you need representation.`,
+    },
+    {
+      question: `What information should I bring to a ${specialtyName.toLowerCase()} attorney consultation?`,
+      answer: `Prepare for your consultation by gathering: (1) A chronological summary of your situation. (2) All relevant documents, contracts, correspondence, and records. (3) Names and contact information of all parties involved. (4) Photos, videos, or other evidence. (5) Police reports or official records if applicable. (6) Medical records and bills if relevant. (7) Insurance policy information. (8) A list of questions about the attorney's experience, fees, and approach to your case.`,
+    },
+  ]
 }

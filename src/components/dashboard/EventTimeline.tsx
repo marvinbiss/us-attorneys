@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Plus, Send, Eye, FileText, X, Check, XCircle, CheckCircle, Clock, RefreshCw,
 } from 'lucide-react'

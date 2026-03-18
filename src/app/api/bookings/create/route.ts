@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     try {
       const rawBody = await request.json()
       body = createBookingBodySchema.parse(rawBody)
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof z.ZodError) {
         const messages = error.issues.map((e) => `${e.path.join('.')}: ${e.message}`)
         return NextResponse.json(
@@ -248,7 +248,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(responseBody, { status: 201 })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Booking creation error', error as Error)
     return NextResponse.json(
       { error: 'Internal server error' },

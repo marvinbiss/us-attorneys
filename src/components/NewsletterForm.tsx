@@ -38,7 +38,7 @@ export default function NewsletterForm() {
       setIsSubmitted(true)
       toastSuccess('Subscribed!', 'You will receive our latest updates.')
       setEmail('')
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error subscribing')
     } finally {
       setIsLoading(false)

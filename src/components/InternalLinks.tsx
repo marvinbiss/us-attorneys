@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import {
   MapPin, Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat,

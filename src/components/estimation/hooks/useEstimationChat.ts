@@ -118,7 +118,7 @@ export function useEstimationChat(context: EstimationContext): UseEstimationChat
             messages_before_form: updatedMessages.length + 1,
           })
         }
-      } catch (error) {
+      } catch (error: unknown) {
         // Don't show error if it was an abort
         if (error instanceof DOMException && error.name === 'AbortError') return
         console.error('Estimation streaming error:', error)

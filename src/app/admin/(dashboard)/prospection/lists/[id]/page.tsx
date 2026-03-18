@@ -65,7 +65,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
       } else {
         setError(data.error?.message || 'List not found')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       setError('Unable to load list')
     } finally {
@@ -85,7 +85,7 @@ export default function ListDetailPage({ params }: { params: Promise<{ id: strin
         setTotalPages(data.pagination.totalPages)
         setTotalMembers(data.pagination.total)
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       // Members load failure is non-critical
     } finally {

@@ -44,7 +44,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
         const data = await response.json()
         setNotifications(data.notifications || [])
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching notifications:', error)
     } finally {
       setLoading(false)
@@ -59,7 +59,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
       setNotifications((prev) =>
         prev.map((n) => (n.id === notificationId ? { ...n, read: true } : n))
       )
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error marking notification as read:', error)
     }
   }
@@ -68,7 +68,7 @@ export function NotificationBell({ userId }: NotificationBellProps) {
     try {
       await fetch('/api/notifications/read-all', { method: 'POST' })
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })))
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error marking all as read:', error)
     }
   }

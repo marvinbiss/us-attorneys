@@ -91,7 +91,7 @@ async function withTimeout<T>(
     const result = await fn()
     clearTimeout(timeoutId)
     return result
-  } catch (error) {
+  } catch (error: unknown) {
     clearTimeout(timeoutId)
     if (controller.signal.aborted && !signal?.aborted) {
       throw new AppError({
@@ -129,7 +129,7 @@ export async function retry<T>(
         : await fn()
 
       return result
-    } catch (error) {
+    } catch (error: unknown) {
       lastError = error
 
       // Don't retry if aborted
@@ -212,7 +212,7 @@ export class CircuitBreaker {
       const result = await fn()
       this.onSuccess()
       return result
-    } catch (error) {
+    } catch (error: unknown) {
       this.onFailure()
       throw error
     }
@@ -262,7 +262,7 @@ export async function batchRetry<T, R>(
         try {
           const result = await retry(() => fn(item), retryOptions)
           return { success: true as const, result }
-        } catch (error) {
+        } catch (error: unknown) {
           return { success: false as const, error }
         }
       })

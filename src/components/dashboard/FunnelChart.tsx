@@ -1,5 +1,3 @@
-'use client'
-
 interface FunnelStep {
   stage: string
   count: number

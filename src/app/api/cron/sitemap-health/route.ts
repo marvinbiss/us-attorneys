@@ -58,7 +58,7 @@ export async function GET(request: Request) {
           const ok = res.ok && urlCount > 0
           if (!ok) failures.push(url)
           return { url, status: res.status, urls: urlCount, ok }
-        } catch (error) {
+        } catch (error: unknown) {
           const message = error instanceof Error ? error.message : 'Unknown error'
           console.error(`[sitemap-health] Fetch failed for ${url}: ${message}`)
           failures.push(url)

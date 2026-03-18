@@ -45,7 +45,7 @@ export default function BookingPayment({
       if (data.url) {
         window.location.href = data.url
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Payment error:', err)
       setError(err instanceof Error ? err.message : 'Payment error')
     } finally {

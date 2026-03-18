@@ -54,7 +54,7 @@ export function SimilarAttorneys({
           const data = await response.json()
           setAttorneys(data.attorneys || [])
         }
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Error fetching similar attorneys:', error)
       } finally {
         setIsLoading(false)

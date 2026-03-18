@@ -72,7 +72,7 @@ export default function AdminParametresPage() {
         setSettings(merged)
         setOriginalSettings(merged)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to fetch settings:', error)
     } finally {
       setLoading(false)
@@ -93,7 +93,7 @@ export default function AdminParametresPage() {
         setSaveSuccess(true)
         setTimeout(() => setSaveSuccess(false), 3000)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Save failed:', error)
     } finally {
       setSaving(false)
@@ -113,7 +113,7 @@ export default function AdminParametresPage() {
       })
       setActionSuccess(result.message)
       setTimeout(() => setActionSuccess(null), 3000)
-    } catch (err) {
+    } catch (err: unknown) {
       setActionError(err instanceof Error ? err.message : 'Unexpected error')
       setTimeout(() => setActionError(null), 5000)
     } finally {

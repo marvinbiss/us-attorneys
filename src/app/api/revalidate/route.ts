@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
             revalidatePath(path, 'page')
             revalidatedPaths.push(path)
             revalidateLogger.info('Path revalidated', { action: 'revalidate-path', path } as Record<string, unknown>)
-          } catch (err) {
+          } catch (err: unknown) {
             const msg = err instanceof Error ? err.message : String(err)
             errors.push({ item: path, type: 'path', error: msg })
             revalidateLogger.warn('Path revalidation failed', { action: 'revalidate-path', path, error: msg } as Record<string, unknown>)
@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
             revalidateTag(tag)
             revalidatedTags.push(tag)
             revalidateLogger.info('Tag revalidated', { action: 'revalidate-tag', tag } as Record<string, unknown>)
-          } catch (err) {
+          } catch (err: unknown) {
             const msg = err instanceof Error ? err.message : String(err)
             errors.push({ item: tag, type: 'tag', error: msg })
             revalidateLogger.warn('Tag revalidation failed', { action: 'revalidate-tag', tag, error: msg } as Record<string, unknown>)
@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
       path,
       now: Date.now(),
     })
-  } catch (err) {
+  } catch (err: unknown) {
     revalidateLogger.error('Revalidation error', err)
     return NextResponse.json(
       {
@@ -251,7 +251,7 @@ export async function GET(request: NextRequest) {
       paths: commonPaths,
       now: Date.now(),
     })
-  } catch (err) {
+  } catch (err: unknown) {
     revalidateLogger.error('Revalidation GET error', err)
     return NextResponse.json(
       {

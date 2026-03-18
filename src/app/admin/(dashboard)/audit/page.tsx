@@ -115,7 +115,7 @@ export default function AdminAuditPage() {
           setLogsTotalPages(data.totalPages || 1)
           setLogsTotal(data.total || 0)
         }
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Failed to fetch audit logs:', error)
       } finally {
         setLogsLoading(false)
@@ -160,7 +160,7 @@ export default function AdminAuditPage() {
           if (stats.quoted) counts['quoted'] = stats.quoted
           setEventTypeCounts(counts)
         }
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Failed to fetch lead events:', error)
       } finally {
         setEventsLoading(false)

@@ -48,7 +48,7 @@ export async function GET(request: Request) {
       try {
         const batchResult = await processBatch(campaign.id, campaign.batch_size || 100)
         results.push({ campaign_id: campaign.id, name: campaign.name, ...batchResult })
-      } catch (err) {
+      } catch (err: unknown) {
         logger.error(`[Cron] Error processing campaign ${campaign.id}`, err as Error)
         results.push({ campaign_id: campaign.id, name: campaign.name, error: 'processing_failed' })
       }
@@ -58,7 +58,7 @@ export async function GET(request: Request) {
       success: true,
       data: { campaigns_processed: results.length, reconciled, results },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Cron] prospection-process error', error as Error)
     return NextResponse.json({ success: false, error: { message: 'Internal error' } }, { status: 500 })
   }

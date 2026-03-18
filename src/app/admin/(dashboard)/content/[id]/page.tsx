@@ -146,7 +146,7 @@ export default function AdminEditContenuPage() {
       setLocationSlug(data.location_slug || '')
       setSortOrder(data.sort_order ?? 0)
       setIsDirty(false)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error:', err)
       setError('Error loading page')
     } finally {
@@ -218,7 +218,7 @@ export default function AdminEditContenuPage() {
         const err = await response.json().catch(() => ({}))
         showToast(err.error?.message || 'Error saving page', 'error')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error:', err)
       showToast('Error saving page', 'error')
     } finally {
@@ -286,7 +286,7 @@ export default function AdminEditContenuPage() {
         const err = await response.json().catch(() => ({}))
         showToast(err?.error?.message || 'Error publishing page', 'error')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error:', err)
       showToast('Error publishing page', 'error')
     } finally {
@@ -308,7 +308,7 @@ export default function AdminEditContenuPage() {
       } else {
         showToast('Error unpublishing page', 'error')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error:', err)
       showToast('Error unpublishing page', 'error')
     } finally {
@@ -330,7 +330,7 @@ export default function AdminEditContenuPage() {
       } else {
         showToast('Error deleting page', 'error')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error:', err)
       showToast('Error deleting page', 'error')
     } finally {

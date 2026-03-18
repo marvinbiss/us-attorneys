@@ -24,7 +24,7 @@ export default function AnalyticsPage() {
       } else {
         setError(data.error?.message || 'Loading error')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       setError('Loading error')
     } finally {

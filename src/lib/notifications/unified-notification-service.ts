@@ -109,7 +109,7 @@ async function withRetry<T>(
     try {
       const result = await operation()
       return { success: true, result, attempts: attempt + 1 }
-    } catch (error) {
+    } catch (error: unknown) {
       lastError = error instanceof Error ? error : new Error(String(error))
       logger.warn(`[Notification] ${operationName} attempt ${attempt + 1} failed`, { message: lastError.message })
 
@@ -322,7 +322,7 @@ export class UnifiedNotificationService {
       }
       // @ts-expect-error - notification_logs table is not in generated Supabase types; row shape is validated by NotificationLogInsert
       await this.supabase.from('notification_logs').insert(row)
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('[Notification] Failed to log notification', err as Error)
     }
   }

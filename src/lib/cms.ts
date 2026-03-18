@@ -40,7 +40,7 @@ export async function getPageContent(
       const { data, error } = await query.single()
       if (error || !data) return null
       return data as CmsPage
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('[CMS] getPageContent error', err as Error)
       return null
     }
@@ -68,7 +68,7 @@ export async function getCmsBlogArticles(): Promise<CmsPage[]> {
         return []
       }
       return (data || []) as CmsPage[]
-    } catch (err) {
+    } catch (err: unknown) {
       logger.error('[CMS] getCmsBlogArticles error', err as Error)
       return []
     }

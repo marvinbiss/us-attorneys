@@ -287,7 +287,7 @@ export default async function HireAttorneyPage({ params }: PageProps) {
   let cmsPage = null
   try {
     cmsPage = await getPageContent(`hire-${specialtySlug}-${locationSlug}`, 'location', { specialtySlug, locationSlug })
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[CMS] Error fetching page content for', { slug: `hire-${specialtySlug}-${locationSlug}`, error: err })
   }
 

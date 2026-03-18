@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { Users, Briefcase, Calendar, DollarSign, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 

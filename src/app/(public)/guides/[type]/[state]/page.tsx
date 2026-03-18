@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getBreadcrumbSchema, getHowToSchema, getSpeakableSchema } from '@/lib/seo/jsonld'
+import { getBreadcrumbSchema, getHowToSchema, getSpeakableSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import Breadcrumb from '@/components/Breadcrumb'
 import CrossIntentLinks from '@/components/seo/CrossIntentLinks'
 import { getServiceImage } from '@/lib/data/images'
@@ -18,6 +18,7 @@ import {
   isLegalGuidePASlug,
   getPANameBySlug,
   getLegalGuideSeedParams,
+  getGuideFAQs,
 } from '@/lib/data/legal-guides'
 
 function safeJsonStringify(data: unknown): string {
@@ -287,13 +288,18 @@ export default async function GuidePage({ params }: PageProps) {
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Home', url: '/' },
     { name: 'Guides', url: '/guides' },
-    { name: paName, url: `/practice-areas/${typeSlug}` },
+    { name: paName, url: `/guides/${typeSlug}` },
     { name: state.name, url: `/guides/${typeSlug}/${stateSlug}` },
   ])
 
   const speakableSchema = getSpeakableSchema({ url: `${SITE_URL}/guides/${typeSlug}/${stateSlug}`, title: guideContent.title })
 
-  const schemas = [articleSchema, breadcrumbSchema, speakableSchema]
+  // FAQ data + schema
+  const faqs = getGuideFAQs(typeSlug, paName, state.code, state.name)
+  const faqSchema = getFAQSchema(faqs)
+
+  const schemas: Record<string, unknown>[] = [articleSchema, breadcrumbSchema, speakableSchema]
+  if (faqSchema) schemas.push(faqSchema)
 
   // Related guides — other PAs in same state + same PA in other states
   const relatedPAs = staticPracticeAreas.filter(p => p.slug !== typeSlug).slice(0, 8)
@@ -305,7 +311,7 @@ export default async function GuidePage({ params }: PageProps) {
 
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 py-3">
-          <Breadcrumb items={[{ label: 'Guides', href: '/guides' }, { label: paName, href: `/practice-areas/${typeSlug}` }, { label: state.name }]} />
+          <Breadcrumb items={[{ label: 'Guides', href: '/guides' }, { label: paName, href: `/guides/${typeSlug}` }, { label: state.name }]} />
         </div>
       </div>
 
@@ -353,6 +359,26 @@ export default async function GuidePage({ params }: PageProps) {
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">{section.heading}</h2>
                 <p className="text-gray-600 leading-relaxed">{section.content}</p>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-10 bg-gray-50 border-t">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions: {paName} in {state.name}</h2>
+          <div className="space-y-4">
+            {faqs.map((faq, idx) => (
+              <details key={idx} className="group bg-white rounded-xl border border-gray-200 overflow-hidden" open={idx === 0}>
+                <summary className="flex items-center justify-between px-6 py-4 cursor-pointer list-none">
+                  <h3 className="text-base font-medium text-gray-900 pr-4">{faq.question}</h3>
+                  <span className="text-gray-400 group-open:rotate-45 transition-transform flex-shrink-0 text-xl leading-none">+</span>
+                </summary>
+                <div className="px-6 pb-4">
+                  <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                </div>
+              </details>
             ))}
           </div>
         </div>

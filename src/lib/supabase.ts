@@ -200,7 +200,7 @@ export async function getSpecialtyBySlug(slug: string) {
           `getSpecialtyBySlug(${slug})`,
         )
         return data
-      } catch (error) {
+      } catch (error: unknown) {
         const staticService = staticServices[slug]
         if (staticService) return staticService
         throw error
@@ -253,7 +253,7 @@ export async function getLocationBySlug(slug: string) {
           `getLocationBySlug(${slug})`,
         )
         return data
-      } catch (err) {
+      } catch (err: unknown) {
         dbLogger.error(`[getLocationBySlug] DB query failed for slug="${slug}", falling back to static data`, err)
         // Fallback to usa.ts static data when DB table is empty/missing
         const fallbackCity = getCityBySlugImport(slug)
@@ -300,7 +300,7 @@ export async function getAttorneyByStableId(stableId: string) {
           QUERY_TIMEOUT_MS,
           `getAttorneyByStableId(${stableId})`,
         )
-      } catch (err) {
+      } catch (err: unknown) {
         dbLogger.error(`[getAttorneyByStableId] failed for stableId="${stableId}"`, err)
         return null
       }
@@ -322,7 +322,7 @@ export async function getAttorneyById(id: string) {
           QUERY_TIMEOUT_MS,
           `getAttorneyById(${id})`,
         )
-      } catch (err) {
+      } catch (err: unknown) {
         dbLogger.error(`[getAttorneyById] failed for id="${id}"`, err)
         return null
       }
@@ -344,7 +344,7 @@ export async function getAttorneyBySlug(slug: string) {
           QUERY_TIMEOUT_MS,
           `getAttorneyBySlug(${slug})`,
         )
-      } catch (err) {
+      } catch (err: unknown) {
         dbLogger.error(`[getAttorneyBySlug] failed for slug="${slug}"`, err)
         return null
       }
@@ -659,7 +659,7 @@ export async function getAttorneysByServiceAndLocation(
             },
             `getAttorneysByServiceAndLocation:zip(${specialtySlug}, ${zipCode})`,
           )
-        } catch (err) {
+        } catch (err: unknown) {
           dbLogger.error(`[getAttorneysByServiceAndLocation] ZIP query FAILED for ${specialtySlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
           throw err
         }
@@ -700,7 +700,7 @@ export async function getAttorneysByServiceAndLocation(
           },
           `getAttorneysByServiceAndLocation(${specialtySlug}, ${locationSlug})`,
         )
-      } catch (err) {
+      } catch (err: unknown) {
         // Re-throw so ISR keeps stale cached page instead of caching empty results.
         // Page component catches this and renders gracefully on first cold visit.
         dbLogger.error(`[getAttorneysByServiceAndLocation] FAILED for ${specialtySlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
@@ -765,7 +765,7 @@ export async function hasProvidersByServiceAndLocation(
           },
           `hasProvidersByServiceAndLocation(${specialtySlug}, ${locationSlug})`,
         )
-      } catch (err) {
+      } catch (err: unknown) {
         // On any failure, conservatively return false (noindex)
         dbLogger.error(`[hasProvidersByServiceAndLocation] failed for ${specialtySlug}/${locationSlug}`, err)
         return false
@@ -830,7 +830,7 @@ export async function getAttorneyCountByServiceAndLocation(
           },
           `getAttorneyCountByServiceAndLocation(${specialtySlug}, ${locationSlug})`,
         )
-      } catch (err) {
+      } catch (err: unknown) {
         dbLogger.error(`[getAttorneyCountByServiceAndLocation] failed for ${specialtySlug}/${locationSlug}`, err)
         return 0
       }
@@ -868,7 +868,7 @@ export async function getAttorneysByLocation(locationSlug: string) {
             },
             `getAttorneysByLocation:zip(${zipCode})`,
           )
-        } catch (err) {
+        } catch (err: unknown) {
           dbLogger.error(`[getAttorneysByLocation] ZIP FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
           throw err
         }
@@ -907,7 +907,7 @@ export async function getAttorneysByLocation(locationSlug: string) {
           },
           `getAttorneysByLocation(${locationSlug})`,
         )
-      } catch (err) {
+      } catch (err: unknown) {
         dbLogger.error(`[getAttorneysByLocation] FAILED for ${locationSlug}:`, { error: err instanceof Error ? err.message : err })
         throw err
       }
@@ -980,7 +980,7 @@ export async function getAttorneysByService(specialtySlug: string, limit?: numbe
           QUERY_TIMEOUT_MS,
           `getAttorneysByService(${specialtySlug})`,
         )
-      } catch (err) {
+      } catch (err: unknown) {
         dbLogger.error(`[getAttorneysByService] failed for specialty="${specialtySlug}"`, err)
         return []
       }
@@ -1012,7 +1012,7 @@ export async function getAttorneyCountByService(specialtySlug: string): Promise<
           QUERY_TIMEOUT_MS,
           `getAttorneyCountByService(${specialtySlug})`,
         )
-      } catch (err) {
+      } catch (err: unknown) {
         dbLogger.error(`[getAttorneyCountByService] failed for specialty="${specialtySlug}"`, err)
         return 0
       }

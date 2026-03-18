@@ -280,7 +280,7 @@ export default async function AttorneyDirectoryPage({ params }: PageProps) {
   let cmsPage = null
   try {
     cmsPage = await getPageContent(`attorneys-${specialtySlug}-${locationSlug}`, 'location', { specialtySlug, locationSlug })
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[CMS] Error fetching page content for', { slug: `attorneys-${specialtySlug}-${locationSlug}`, error: err })
   }
 

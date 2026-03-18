@@ -73,7 +73,7 @@ export async function DELETE(
     }
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Attorney quote DELETE error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
@@ -171,7 +171,7 @@ export async function PATCH(
     }
 
     return NextResponse.json({ success: true, quote: updated })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Attorney quote PATCH error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }

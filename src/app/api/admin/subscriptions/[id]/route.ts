@@ -47,7 +47,7 @@ export async function GET(
         { status: 503 }
       )
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Admin subscription details error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Server error' } },
@@ -126,7 +126,7 @@ export async function PATCH(
         { status: 503 }
       )
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Admin subscription change error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error changing plan' } },

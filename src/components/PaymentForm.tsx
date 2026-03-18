@@ -66,7 +66,7 @@ export default function PaymentForm(props: PaymentFormProps) {
         amount: data.amount,
         totalAmount: data.totalAmount,
       })
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Payment intent error:', error)
       props.onError?.('Failed to initialize payment')
     } finally {
@@ -349,7 +349,7 @@ function CheckoutForm({
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
         onSuccess?.(paymentIntent.id)
       }
-    } catch (err) {
+    } catch (err: unknown) {
       setErrorMessage('An unexpected error occurred')
       onError?.('An unexpected error occurred')
     } finally {

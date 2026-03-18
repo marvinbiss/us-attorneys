@@ -148,7 +148,7 @@ export async function GET(request: Request) {
       failedCount: result.failed,
       totalBookings: upcomingBookings.length,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Cron 1h] Error in send-reminders-1h:', error)
     return NextResponse.json(
       { error: 'Failed to send 1h reminders' },

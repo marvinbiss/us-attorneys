@@ -12,7 +12,11 @@ const US_STATES = [
   'SD','TN','TX','UT','VT','VA','WA','WV','WI','WY','DC',
 ] as const
 
-export default function AskForm() {
+interface AskFormProps {
+  specialties?: { id: string; name: string }[]
+}
+
+export default function AskForm({ specialties = [] }: AskFormProps) {
   const router = useRouter()
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
@@ -48,7 +52,7 @@ export default function AskForm() {
 
       // Redirect to the new question page
       router.push(`/ask/${result.data.slug}`)
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
@@ -124,7 +128,7 @@ export default function AskForm() {
             className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-900 bg-white disabled:opacity-50"
           >
             <option value="">Select (optional)</option>
-            {specialties.map(s => (
+            {specialties.map((s: { id: string; name: string }) => (
               <option key={s.id} value={s.id}>{s.name}</option>
             ))}
           </select>

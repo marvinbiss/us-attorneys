@@ -29,7 +29,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
         setConversation(data.data)
         setMessages(data.data.messages || [])
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       setError('Loading error')
     } finally {
@@ -65,7 +65,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
       } else {
         setError(data.error?.message || 'Error sending message')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
@@ -92,7 +92,7 @@ export default function ConversationDetailPage({ params }: { params: Promise<{ i
       } else {
         setError(data.error?.message || 'AI error')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
       } else {

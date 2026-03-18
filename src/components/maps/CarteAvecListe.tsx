@@ -35,11 +35,11 @@ export default function CarteAvecListe({
   location: _location
 }: CarteAvecListeProps) {
   const [mapReady, setMapReady] = useState(false)
-  const [L, setL] = useState<any>(null)
+  const [L, setL] = useState<typeof import('leaflet') | null>(null)
   const [providers, setProviders] = useState<MapProvider[]>([])
   const [loading, setLoading] = useState(true)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
-  const mapRef = useRef<any>(null)
+  const mapRef = useRef<import('leaflet').Map | null>(null)
 
   useEffect(() => {
     import('leaflet').then((leaflet) => {
@@ -77,7 +77,7 @@ export default function CarteAvecListe({
           )
           setProviders(validProviders)
         }
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Error:', error)
       } finally {
         setLoading(false)

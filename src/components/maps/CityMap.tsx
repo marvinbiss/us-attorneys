@@ -77,7 +77,7 @@ export default function CityMap({ cityName, citySlug }: CityMapProps) {
           )
           setProviders(validProviders)
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Error fetching providers:', err)
         setError('Unable to load the map')
       } finally {

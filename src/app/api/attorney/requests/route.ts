@@ -107,7 +107,7 @@ export async function GET(request: Request) {
       requests: consultationRequests || [],
       stats
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Attorney requests GET error:', error)
     return NextResponse.json(
       { error: 'Server error' },

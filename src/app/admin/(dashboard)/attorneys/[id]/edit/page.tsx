@@ -141,7 +141,7 @@ export default function EditAttorneyPage() {
       } else {
         setToast({ message: 'Failed to load data', type: 'error' })
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Fetch error:', err)
       setToast({ message: 'Connection error', type: 'error' })
     } finally {
@@ -209,7 +209,7 @@ export default function EditAttorneyPage() {
         const errorMsg = data.error || data.message || 'Failed to save'
         setToast({ message: errorMsg, type: 'error' })
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Save exception:', err)
       setToast({ message: 'Server connection error', type: 'error' })
     } finally {

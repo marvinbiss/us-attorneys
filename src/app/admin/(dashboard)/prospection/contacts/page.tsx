@@ -47,7 +47,7 @@ export default function ContactsPage() {
         setTotalPages(data.pagination.totalPages)
         setTotal(data.pagination.total)
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       setError('Loading error')
     } finally {

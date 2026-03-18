@@ -43,7 +43,7 @@ export default function ReviewPage() {
         if (data.alreadyReviewed) {
           setSubmitted(true)
         }
-      } catch (err) {
+      } catch (err: unknown) {
         setError(err instanceof Error ? err.message : 'Unknown error')
       } finally {
         setLoading(false)
@@ -85,7 +85,7 @@ export default function ReviewPage() {
 
       setSubmitted(true)
       toastSuccess('Review submitted!', 'Thank you for your feedback.')
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
       setSubmitting(false)

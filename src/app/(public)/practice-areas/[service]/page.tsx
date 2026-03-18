@@ -222,7 +222,7 @@ export default async function ServicePage({ params }: PageProps) {
   let totalAttorneyCount = 0
   try {
     service = await getSpecialtyBySlug(specialtySlug)
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Service page DB error (service):', error)
   }
 

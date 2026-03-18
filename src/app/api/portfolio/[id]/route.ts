@@ -77,7 +77,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
     }
 
     return NextResponse.json({ item })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Portfolio item GET error:', error)
     return NextResponse.json(
       { error: 'Server error' },
@@ -165,7 +165,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       item,
       message: 'Item updated',
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Portfolio item PUT error:', error)
     return NextResponse.json(
       { error: 'Server error' },
@@ -240,7 +240,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
       success: true,
       message: 'Item deleted',
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Portfolio item DELETE error:', error)
     return NextResponse.json(
       { error: 'Server error' },

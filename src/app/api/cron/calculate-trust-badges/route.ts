@@ -179,7 +179,7 @@ export async function GET(request: Request) {
       errors: totalErrors,
       mvRefreshed,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Cron] Error in calculate-trust-badges:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error recalculating review metrics' } },

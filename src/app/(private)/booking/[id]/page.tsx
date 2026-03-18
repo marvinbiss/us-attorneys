@@ -79,7 +79,7 @@ export default function BookingPage() {
 
       const data = await response.json()
       setBooking(data.booking)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error fetching booking:', err)
       setError(err instanceof Error ? err.message : 'Error loading data')
     } finally {
@@ -127,7 +127,7 @@ export default function BookingPage() {
         new Date(`${a.date}T${a.start_time}`).getTime() -
         new Date(`${b.date}T${b.start_time}`).getTime()
       ))
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error fetching slots:', err)
     } finally {
       setIsLoadingSlots(false)
@@ -155,7 +155,7 @@ export default function BookingPage() {
       await fetchBooking()
       setShowRescheduleModal(false)
       setSelectedNewSlot(null)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Reschedule error:', err)
       setError(err instanceof Error ? err.message : 'Error rescheduling')
     } finally {

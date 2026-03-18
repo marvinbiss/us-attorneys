@@ -79,7 +79,7 @@ export default function AdminDispatchPage() {
         body: { action: 'replay', assignmentId },
       })
       mutate()
-    } catch (err) {
+    } catch (err: unknown) {
       setMutationError(err instanceof Error ? err.message : 'Error')
     } finally {
       setActionLoading(null)
@@ -96,7 +96,7 @@ export default function AdminDispatchPage() {
       })
       setConfirmDeleteId(null)
       mutate()
-    } catch (err) {
+    } catch (err: unknown) {
       setMutationError(err instanceof Error ? err.message : 'Error')
     } finally {
       setActionLoading(null)

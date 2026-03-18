@@ -92,7 +92,7 @@ export default function AdminClaimsPage() {
       setRejectionReason('')
       if (result?.message) setActionSuccess(result.message)
       mutate()
-    } catch (err) {
+    } catch (err: unknown) {
       setActionError(err instanceof Error ? err.message : 'Error processing request')
     }
   }

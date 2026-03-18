@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       { success: false, error: { message: 'Unknown action' } },
       { status: 400 }
     )
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Admin action error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Server error' } },

@@ -40,7 +40,7 @@ export async function GET(request: Request) {
     if (concurrentError) {
       logger.warn(
         '[Cron] Concurrent refresh failed, falling back to non-concurrent refresh:',
-        concurrentError.message
+        { detail: concurrentError.message }
       )
       concurrent = false
 
@@ -75,7 +75,7 @@ export async function GET(request: Request) {
       duration_ms: durationMs,
       refreshed_at: new Date().toISOString(),
     })
-  } catch (error) {
+  } catch (error: unknown) {
     const durationMs = Date.now() - startTime
     logger.error('[Cron] Error in refresh-mv:', error)
     return NextResponse.json(

@@ -1,5 +1,3 @@
-'use client'
-
 import { forwardRef, HTMLAttributes, ReactNode } from 'react'
 import { clsx } from 'clsx'
 

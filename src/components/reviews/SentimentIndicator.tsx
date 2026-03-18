@@ -1,5 +1,3 @@
-'use client'
-
 import { ThumbsUp, ThumbsDown, Minus, TrendingUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

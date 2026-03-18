@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { Calendar, Star, AlertTriangle, Users, Activity, ArrowRight } from 'lucide-react'
 

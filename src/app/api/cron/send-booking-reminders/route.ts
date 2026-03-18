@@ -154,7 +154,7 @@ export async function POST(request: Request) {
       sent,
       errors,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Cron Booking Reminder] Fatal error:', error)
     return NextResponse.json(
       { error: 'Failed to send booking reminders', sent, errors },

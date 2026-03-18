@@ -34,7 +34,7 @@ export async function getCustomerPayments(customerId: string, limit = 10) {
       created: new Date(pi.created * 1000).toISOString(),
       metadata: pi.metadata,
     }))
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error fetching customer payments', error as Error)
     throw error
   }
@@ -66,7 +66,7 @@ export async function getSubscription(subscriptionId: string) {
         interval: item.price.recurring?.interval,
       })),
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error fetching subscription', error as Error)
     throw error
   }
@@ -100,7 +100,7 @@ export async function processRefund(
       reason: refund.reason,
       created: new Date(refund.created * 1000).toISOString(),
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error processing refund', error as Error)
     throw error
   }
@@ -134,7 +134,7 @@ export async function cancelSubscription(
         currentPeriodEnd: new Date(subscription.current_period_end * 1000).toISOString(),
       }
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error canceling subscription', error as Error)
     throw error
   }
@@ -153,7 +153,7 @@ export async function reactivateSubscription(subscriptionId: string) {
       status: subscription.status,
       cancelAtPeriodEnd: false,
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error reactivating subscription', error as Error)
     throw error
   }
@@ -189,7 +189,7 @@ export async function changeSubscriptionPlan(
       newPriceId,
       currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000).toISOString(),
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error changing subscription plan', error as Error)
     throw error
   }
@@ -224,7 +224,7 @@ export async function createManualCharge(
       status: paymentIntent.status,
       created: new Date(paymentIntent.created * 1000).toISOString(),
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error creating manual charge', error as Error)
     throw error
   }
@@ -255,7 +255,7 @@ export async function getCustomerInvoices(customerId: string, limit = 10) {
         ? new Date(invoice.period_end * 1000).toISOString()
         : null,
     }))
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error fetching customer invoices', error as Error)
     throw error
   }
@@ -304,7 +304,7 @@ export async function listAllSubscriptions(
       })),
       hasMore: subscriptions.has_more,
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error listing subscriptions', error as Error)
     throw error
   }
@@ -345,7 +345,7 @@ export async function getRevenueStats(days = 30) {
       refundsCount: refunds.data.length,
       period: `last ${days} days`,
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error getting revenue stats', error as Error)
     throw error
   }

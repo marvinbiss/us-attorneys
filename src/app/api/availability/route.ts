@@ -103,7 +103,7 @@ export async function POST(request: Request) {
       success: true,
       slots: newSlots,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error updating availability:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error updating availability' } },
@@ -178,7 +178,7 @@ export async function DELETE(request: Request) {
     if (deleteError) throw deleteError
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Error deleting slot:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error deleting slot' } },

@@ -85,7 +85,7 @@ export default function BlogPageClient({ articles, categories, initialTag }: Blo
       }
 
       setIsSubscribed(true)
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error subscribing to newsletter')
     } finally {
       setIsLoading(false)

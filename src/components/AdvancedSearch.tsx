@@ -104,7 +104,7 @@ export default function AdvancedSearch({
           setSuggestions(data.suggestions || [])
           setRecentSearches(data.recentSearches || [])
         }
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Failed to fetch suggestions:', error)
       }
     }

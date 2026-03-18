@@ -95,7 +95,7 @@ export async function logAuditEvent(params: AuditLogParams): Promise<void> {
       },
       created_at: new Date().toISOString(),
     })
-  } catch (error) {
+  } catch (error: unknown) {
     // Log to console but don't throw - audit logging should not break main operations
     logger.error('Failed to log audit event', error as Error)
   }

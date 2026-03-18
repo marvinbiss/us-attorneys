@@ -173,6 +173,23 @@ export default function GuidesPage() {
             })}
           </div>
 
+          {/* Browse by Practice Area Hub */}
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Browse by Practice Area</h2>
+          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
+            <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              {practiceAreas.map(pa => (
+                <Link
+                  key={pa.slug}
+                  href={`/guides/${pa.slug}`}
+                  className="text-sm text-blue-700 hover:text-blue-900 hover:underline py-1"
+                  title={`${pa.name} law guide — all 50 states`}
+                >
+                  {pa.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+
           {/* Browse by State */}
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Browse Guides by State</h2>
           <div className="bg-white rounded-xl border border-gray-200 p-6 mb-16">

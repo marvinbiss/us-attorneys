@@ -54,7 +54,7 @@ export function VoiceRecorder({ onRecorded, onCancel }: VoiceRecorderProps) {
       timerRef.current = setInterval(() => {
         setDuration((prev) => prev + 1)
       }, 1000)
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error accessing microphone:', error)
       onCancel()
     }

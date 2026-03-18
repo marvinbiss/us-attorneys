@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ url: data.url })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('OAuth error', error)
     return NextResponse.json(
       { error: 'Server error' },

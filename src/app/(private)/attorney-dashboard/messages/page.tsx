@@ -64,7 +64,7 @@ export default function MessagesAttorneyPage() {
           setSelectedConversation(data.conversations[0])
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching conversations:', error)
     } finally {
       setLoading(false)
@@ -105,7 +105,7 @@ export default function MessagesAttorneyPage() {
           if (msg) setCurrentUserId(msg.sender_id)
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching messages:', error)
     }
   }, [])
@@ -146,7 +146,7 @@ export default function MessagesAttorneyPage() {
         // Refresh messages
         fetchMessages(selectedConversation.id, selectedConversation.partner.id)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error sending message:', error)
     } finally {
       setSendingMessage(false)

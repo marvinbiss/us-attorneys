@@ -125,7 +125,7 @@ export async function POST(request: Request) {
       success: true,
       message: 'Registration recorded successfully',
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Attorney registration API error', error)
     return NextResponse.json(
       { error: 'Server error' },

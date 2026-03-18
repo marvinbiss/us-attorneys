@@ -187,7 +187,7 @@ export async function GET(request: Request) {
     })
 
     return NextResponse.json({ conversations: conversationsWithMeta })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Messages GET error:', error)
     return NextResponse.json(
       { error: 'Server error' },
@@ -302,7 +302,7 @@ export async function POST(request: Request) {
       success: true,
       message
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Messages POST error:', error)
     return NextResponse.json(
       { error: 'Server error' },

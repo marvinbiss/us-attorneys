@@ -37,7 +37,7 @@ export function LoginForm() {
 
       router.push('/attorney-dashboard')
       router.refresh()
-    } catch (_err) {
+    } catch (_err: unknown) {
       setError('An error occurred')
     } finally {
       setIsLoading(false)

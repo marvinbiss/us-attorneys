@@ -27,7 +27,7 @@ export function FormField({
 
   // Clone child element to add id and aria attributes if it's a valid element
   const childWithProps = isValidElement(children)
-    ? cloneElement(children as React.ReactElement<any>, {
+    ? cloneElement(children as React.ReactElement<Record<string, unknown>>, {
         id: fieldId,
         'aria-invalid': error ? 'true' : undefined,
         'aria-describedby': error ? errorId : hint ? hintId : undefined,

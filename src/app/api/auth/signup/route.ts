@@ -118,7 +118,7 @@ export async function POST(request: Request) {
       }),
       { status: 201 }
     )
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Signup error:', error)
     return NextResponse.json(
       createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error during registration'),

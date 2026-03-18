@@ -138,7 +138,7 @@ export async function POST(request: Request) {
       success: true,
       message: 'Message sent successfully',
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Contact API error', error)
     return NextResponse.json(
       { error: 'Server error' },

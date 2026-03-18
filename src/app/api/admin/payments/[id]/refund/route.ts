@@ -71,7 +71,7 @@ export async function POST(
       refund,
       message: 'Refund processed successfully',
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Admin refund error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error during refund' } },

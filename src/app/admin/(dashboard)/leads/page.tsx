@@ -122,7 +122,7 @@ export default function AdminLeadsPage() {
         body: { leadId },
       })
       revalidateAll()
-    } catch (err) {
+    } catch (err: unknown) {
       setMutationError(err instanceof Error ? err.message : 'Dispatch error')
     } finally {
       setDispatchLoading(false)

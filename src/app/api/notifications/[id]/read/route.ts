@@ -33,7 +33,7 @@ export async function POST(
     }
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Notification read POST error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }

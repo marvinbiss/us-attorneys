@@ -86,7 +86,7 @@ export async function GET() {
       userId: user.id,
       preferences: prefs || null,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Get preferences error:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error retrieving preferences' } },
@@ -149,7 +149,7 @@ export async function PUT(request: Request) {
     if (error) throw error
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Update preferences error:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error updating preferences' } },

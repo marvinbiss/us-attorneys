@@ -33,7 +33,7 @@ async function redisCommand<T = unknown>(command: (string | number)[]): Promise<
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const json = await res.json()
     return json.result as T
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Idempotency Redis error', err as Error)
     return null
   }

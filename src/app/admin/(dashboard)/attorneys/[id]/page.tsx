@@ -87,7 +87,7 @@ export default function AdminAttorneyDetailPage() {
       } else {
         router.push('/admin/attorneys')
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to fetch attorney:', error)
       router.push('/admin/attorneys')
     } finally {
@@ -111,7 +111,7 @@ export default function AdminAttorneyDetailPage() {
       } else {
         setToast({ type: 'error', message: data.error || 'Verification failed' })
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Verify failed:', error)
       setToast({ type: 'error', message: 'Connection error' })
     }
@@ -133,7 +133,7 @@ export default function AdminAttorneyDetailPage() {
       } else {
         setToast({ type: 'error', message: data.error || 'Action failed' })
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Suspend failed:', error)
       setToast({ type: 'error', message: 'Connection error' })
     }
@@ -152,7 +152,7 @@ export default function AdminAttorneyDetailPage() {
       } else {
         setToast({ type: 'error', message: data.error || 'Deletion failed' })
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Delete failed:', error)
       setToast({ type: 'error', message: 'Connection error' })
     }

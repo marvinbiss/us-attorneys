@@ -109,7 +109,7 @@ export function ConfirmationModal({
     try {
       await onConfirm()
       onClose()
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Confirmation action failed:', error)
     } finally {
       setLoading(false)

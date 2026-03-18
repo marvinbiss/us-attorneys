@@ -214,7 +214,7 @@ export default function BookingWidget({
       setBookingResult(data)
       setStep('success')
       toastSuccess('Booking confirmed!', 'A confirmation email has been sent.')
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
       setSubmitting(false)

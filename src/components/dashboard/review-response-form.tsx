@@ -34,7 +34,7 @@ export function ReviewResponseForm({ reviewId }: ReviewResponseFormProps) {
 
       router.refresh()
       setIsOpen(false)
-    } catch (err) {
+    } catch (err: unknown) {
       setError((err as Error).message)
     } finally {
       setIsLoading(false)

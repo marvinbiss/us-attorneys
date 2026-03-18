@@ -20,9 +20,9 @@ export function Skeleton({ className, shimmer = true }: SkeletonProps) {
 // Card skeleton for attorney/service cards
 export function CardSkeleton() {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div className="bg-white rounded-xl border border-gray-200 p-6 min-h-[196px]">
       <div className="flex items-center gap-4 mb-4">
-        <Skeleton className="w-14 h-14 rounded-full" />
+        <Skeleton className="w-14 h-14 rounded-full flex-shrink-0" />
         <div className="flex-1">
           <Skeleton className="h-5 w-32 mb-2" />
           <Skeleton className="h-4 w-24" />
@@ -43,14 +43,14 @@ export function ListSkeleton({ count = 5 }: { count?: number }) {
   return (
     <div className="space-y-4">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="bg-white rounded-xl p-4 border border-gray-200">
+        <div key={i} className="bg-white rounded-xl p-4 border border-gray-200 min-h-[76px]">
           <div className="flex items-center gap-4">
-            <Skeleton className="w-12 h-12 rounded-lg" />
+            <Skeleton className="w-12 h-12 rounded-lg flex-shrink-0" />
             <div className="flex-1">
               <Skeleton className="h-5 w-48 mb-2" />
               <Skeleton className="h-4 w-32" />
             </div>
-            <Skeleton className="h-10 w-24 rounded-lg" />
+            <Skeleton className="h-10 w-24 rounded-lg flex-shrink-0" />
           </div>
         </div>
       ))}
@@ -59,9 +59,16 @@ export function ListSkeleton({ count = 5 }: { count?: number }) {
 }
 
 // Grid skeleton
+const gridColsMap: Record<number, string> = {
+  2: 'grid-cols-2 md:grid-cols-2',
+  3: 'grid-cols-2 md:grid-cols-3',
+  4: 'grid-cols-2 md:grid-cols-4',
+}
+
 export function GridSkeleton({ count = 8, cols = 4 }: { count?: number; cols?: number }) {
+  const gridCls = gridColsMap[cols ?? 4] ?? gridColsMap[4]
   return (
-    <div className={`grid grid-cols-2 md:grid-cols-${cols} gap-4`}>
+    <div className={`grid ${gridCls} gap-4`}>
       {Array.from({ length: count }).map((_, i) => (
         <CardSkeleton key={i} />
       ))}
@@ -73,11 +80,11 @@ export function GridSkeleton({ count = 8, cols = 4 }: { count?: number; cols?: n
 export function PageSkeleton() {
   return (
     <div className="min-h-screen">
-      {/* Hero skeleton */}
-      <div className="bg-gradient-to-r from-gray-200 to-gray-300 py-16">
+      {/* Hero skeleton - fixed height to prevent CLS */}
+      <div className="bg-gradient-to-r from-gray-200 to-gray-300 min-h-[160px] py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <Skeleton className="h-10 w-96 mb-4 bg-gray-300" />
-          <Skeleton className="h-6 w-72 bg-gray-300" />
+          <Skeleton className="h-10 w-96 max-w-full mb-4 bg-gray-300" />
+          <Skeleton className="h-6 w-72 max-w-full bg-gray-300" />
         </div>
       </div>
 
@@ -115,7 +122,7 @@ export function FormSkeleton() {
 export function AttorneyCardSkeleton() {
   return (
     <div
-      className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm"
+      className="bg-white rounded-2xl border border-gray-200 p-4 shadow-sm min-h-[248px]"
       role="article"
       aria-busy="true"
       aria-label="Loading attorney"

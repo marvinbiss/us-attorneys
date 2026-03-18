@@ -71,7 +71,7 @@ export default function VideoConsultationButton({
       }
       const data: { room_url: string } = await res.json()
       window.open(data.room_url, '_blank')
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'An error occurred')
     } finally {
       setJoining(false)

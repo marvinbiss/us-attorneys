@@ -37,7 +37,7 @@ export async function sendProspectionEmail(params: EmailProspectionParams): Prom
     })
 
     return { success: true, id: result.id }
-  } catch (error) {
+  } catch (error: unknown) {
     const errMsg = error instanceof Error ? error.message : 'Unknown error'
     logger.error('Prospection email error', error as Error)
     return { success: false, error: errMsg }
@@ -69,7 +69,7 @@ export async function sendProspectionEmailBatch(
       failed: emails.length - results.length,
       results: results.map(r => ({ success: true, id: r.id })),
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Prospection email batch error', error as Error)
     return {
       sent: 0,

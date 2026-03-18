@@ -219,7 +219,7 @@ export async function middleware(request: NextRequest) {
           return NextResponse.redirect(new URL('/attorney-dashboard', request.url))
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Middleware auth error:', error)
       const loginUrl = new URL('/login', request.url)
       loginUrl.searchParams.set('redirect', request.nextUrl.pathname)
@@ -252,7 +252,7 @@ export async function middleware(request: NextRequest) {
           }
         )
       }
-    } catch (error) {
+    } catch (error: unknown) {
       // Fail open: if rate limiter errors, allow the request through
       logger.error('Rate limiter error:', error)
     }

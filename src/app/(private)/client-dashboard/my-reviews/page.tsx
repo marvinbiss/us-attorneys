@@ -50,7 +50,7 @@ export default function MyReviewsPage() {
         setPublishedReviews(data.publishedReviews || [])
         setPendingReview(data.pendingReviews || [])
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching reviews:', error)
     } finally {
       setLoading(false)
@@ -99,7 +99,7 @@ export default function MyReviewsPage() {
           setSelectedReview(null)
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error submitting review:', error)
     } finally {
       setSubmitting(false)
@@ -119,7 +119,7 @@ export default function MyReviewsPage() {
       if (response.ok) {
         await fetchReviews()
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error deleting review:', error)
     }
   }

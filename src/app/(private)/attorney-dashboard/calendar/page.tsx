@@ -177,7 +177,7 @@ export default function CalendarPage() {
             address_city: statsData.provider.address_city ?? null,
           })
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Error fetching profile:', err)
       } finally {
         setIsLoading(false)
@@ -238,7 +238,7 @@ export default function CalendarPage() {
       }))
 
       setSchedule(scheduleArray)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error fetching schedule:', err)
       setError('Unable to load calendar')
     } finally {
@@ -270,7 +270,7 @@ export default function CalendarPage() {
 
         setStats(prev => ({ ...prev, monthlyBookings }))
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error fetching bookings:', err)
     }
   }, [profile])
@@ -315,7 +315,7 @@ export default function CalendarPage() {
       setNewSlotStart('08:00')
       setNewSlotEnd('10:00')
       setRepeatWeekly(false)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error adding slot:', err)
       setError(err instanceof Error ? err.message : 'Error adding slot')
     } finally {
@@ -339,7 +339,7 @@ export default function CalendarPage() {
 
       // Refresh schedule
       await fetchSchedule(currentDate.getFullYear(), currentDate.getMonth())
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error deleting slot:', err)
       setError(err instanceof Error ? err.message : 'Error deleting slot')
     }
@@ -363,7 +363,7 @@ export default function CalendarPage() {
       setSettingsSaved(true)
       setTimeout(() => setSettingsSaved(false), 3000)
       setShowSettingsModal(false)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error saving settings:', err)
       setError(err instanceof Error ? err.message : 'Error saving settings')
     } finally {

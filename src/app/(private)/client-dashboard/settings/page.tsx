@@ -145,7 +145,7 @@ export default function ClientSettingsPage() {
           }))
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to load user data:', error)
     } finally {
       setIsLoading(false)
@@ -159,7 +159,7 @@ export default function ClientSettingsPage() {
         const data = await response.json()
         setDeletionStatus(data.deletionRequest)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to load deletion status:', error)
     }
   }
@@ -179,7 +179,7 @@ export default function ClientSettingsPage() {
         setSaveSuccess(true)
         setTimeout(() => setSaveSuccess(false), 3000)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to save preferences:', error)
     } finally {
       setIsSaving(false)
@@ -204,7 +204,7 @@ export default function ClientSettingsPage() {
         setSaveSuccess(true)
         setTimeout(() => setSaveSuccess(false), 3000)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to update profile:', error)
     } finally {
       setIsSaving(false)
@@ -244,7 +244,7 @@ export default function ClientSettingsPage() {
         a.click()
         URL.revokeObjectURL(url)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to export data:', error)
     } finally {
       setIsExporting(false)
@@ -274,7 +274,7 @@ export default function ClientSettingsPage() {
         const error = await response.json()
         alert(error.error)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to request deletion:', error)
     }
   }
@@ -285,7 +285,7 @@ export default function ClientSettingsPage() {
       if (response.ok) {
         setDeletionStatus(null)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to cancel deletion:', error)
     }
   }

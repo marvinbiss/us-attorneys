@@ -64,7 +64,7 @@ export async function GET() {
       requests: requests || [],
       stats
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Client requests GET error:', error)
     return NextResponse.json(
       { error: 'Server error' },

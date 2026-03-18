@@ -68,7 +68,7 @@ export async function POST(
     }
 
     return NextResponse.json(data)
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Archive error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Server error' } },

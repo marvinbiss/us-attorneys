@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     try {
       const rawBody = await request.json()
       body = confirmBookingSchema.parse(rawBody)
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof z.ZodError) {
         const messages = error.issues.map((e) => `${e.path.join('.')}: ${e.message}`)
         return NextResponse.json(
@@ -178,7 +178,7 @@ export async function POST(request: NextRequest) {
         updated_at: updatedBooking.updated_at,
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Booking confirm error', error as Error)
     return NextResponse.json(
       { error: 'Internal server error' },

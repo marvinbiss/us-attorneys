@@ -1,5 +1,3 @@
-'use client'
-
 import { CheckCircle, Shield, Award, Star, Building2, FileCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

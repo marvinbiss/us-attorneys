@@ -29,7 +29,7 @@ export default function ForgotPasswordPage() {
       }
 
       setIsSubmitted(true)
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error sending email')
     } finally {
       setIsLoading(false)

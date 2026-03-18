@@ -56,7 +56,7 @@ export async function sendEmail(options: EmailOptions): Promise<{ success: boole
     }
 
     return { success: true, id: data.id }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Email Service] Error:', error)
     return {
       success: false,

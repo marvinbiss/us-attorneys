@@ -58,7 +58,7 @@ export default function SignInPage() {
       } else {
         router.push('/client-dashboard')
       }
-    } catch (_err) {
+    } catch (_err: unknown) {
       setError('Unable to connect to server')
     } finally {
       setIsLoading(false)

@@ -144,7 +144,7 @@ export function ClayHeroSearch() {
     <form onSubmit={handleSubmit} className="flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-3" role="search" aria-label="Search for an attorney" onKeyDown={handleKeyDown}>
       {/* Service input */}
       <div ref={serviceRef} className="relative flex-1 min-w-0">
-        <div className="flex items-center gap-2.5 bg-white border border-stone-200 rounded-2xl px-4 h-[48px] md:h-[60px] focus-within:border-clay-400 focus-within:ring-2 focus-within:ring-clay-400/20 transition-all">
+        <div className="flex items-center gap-2.5 bg-white dark:bg-gray-800 border border-stone-200 dark:border-gray-600 rounded-2xl px-4 h-[48px] md:h-[60px] focus-within:border-clay-400 focus-within:ring-2 focus-within:ring-clay-400/20 transition-all">
           <svg className="w-5 h-5 text-clay-400 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z" />
           </svg>
@@ -155,7 +155,7 @@ export function ClayHeroSearch() {
             onChange={e => handleServiceChange(e.target.value)}
             onFocus={() => { setActiveField('service'); setHighlightedIndex(-1); setServiceSuggestions(searchServices(service)) }}
             placeholder="What service?"
-            className="w-0 flex-1 bg-transparent text-stone-800 placeholder-stone-400 text-base outline-none"
+            className="w-0 flex-1 bg-transparent text-stone-800 dark:text-stone-200 placeholder-stone-400 dark:placeholder-stone-500 text-base outline-none"
             role="combobox"
             aria-expanded={activeField === 'service' && serviceSuggestions.length > 0}
             aria-autocomplete="list"
@@ -164,13 +164,13 @@ export function ClayHeroSearch() {
           />
         </div>
         {activeField === 'service' && serviceSuggestions.length > 0 && (
-          <ul id="service-suggestions" role="listbox" aria-label="Suggested services" className="absolute z-50 top-full mt-1 left-0 right-0 bg-white rounded-xl shadow-lg border border-stone-200 overflow-hidden max-h-64 overflow-y-auto">
+          <ul id="service-suggestions" role="listbox" aria-label="Suggested services" className="absolute z-50 top-full mt-1 left-0 right-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-stone-200 dark:border-gray-600 overflow-hidden max-h-64 overflow-y-auto">
             {serviceSuggestions.map((s, i) => (
               <li
                 key={s.slug}
                 role="option"
                 aria-selected={i === highlightedIndex}
-                className={`flex items-center gap-2.5 px-3 py-2.5 text-sm cursor-pointer transition-colors ${i === highlightedIndex ? 'bg-clay-50 text-clay-600' : 'text-stone-700 hover:bg-stone-50'}`}
+                className={`flex items-center gap-2.5 px-3 py-2.5 text-sm cursor-pointer transition-colors ${i === highlightedIndex ? 'bg-clay-50 dark:bg-clay-900/30 text-clay-600 dark:text-clay-400' : 'text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-gray-700'}`}
                 onMouseDown={(e) => { e.preventDefault(); selectService(s) }}
                 onMouseEnter={() => setHighlightedIndex(i)}
               >
@@ -184,7 +184,7 @@ export function ClayHeroSearch() {
 
       {/* City input */}
       <div ref={cityRef} className="relative flex-1 min-w-0">
-        <div className="flex items-center gap-2.5 bg-white border border-stone-200 rounded-2xl px-4 h-[48px] md:h-[60px] focus-within:border-clay-400 focus-within:ring-2 focus-within:ring-clay-400/20 transition-all">
+        <div className="flex items-center gap-2.5 bg-white dark:bg-gray-800 border border-stone-200 dark:border-gray-600 rounded-2xl px-4 h-[48px] md:h-[60px] focus-within:border-clay-400 focus-within:ring-2 focus-within:ring-clay-400/20 transition-all">
           <svg className="w-5 h-5 text-clay-400 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 0 1 15 0Z" />
@@ -196,7 +196,7 @@ export function ClayHeroSearch() {
             onChange={e => handleCityChange(e.target.value)}
             onFocus={() => { setActiveField('city'); setHighlightedIndex(-1); setCitySuggestions(searchCities(cityInput)) }}
             placeholder="City or ZIP code"
-            className="w-0 flex-1 bg-transparent text-stone-800 placeholder-stone-400 text-base outline-none"
+            className="w-0 flex-1 bg-transparent text-stone-800 dark:text-stone-200 placeholder-stone-400 dark:placeholder-stone-500 text-base outline-none"
             role="combobox"
             aria-expanded={activeField === 'city' && citySuggestions.length > 0}
             aria-autocomplete="list"
@@ -205,13 +205,13 @@ export function ClayHeroSearch() {
           />
         </div>
         {activeField === 'city' && citySuggestions.length > 0 && (
-          <ul id="city-suggestions" role="listbox" aria-label="Suggested cities" className="absolute z-50 top-full mt-1 left-0 right-0 bg-white rounded-xl shadow-lg border border-stone-200 overflow-hidden max-h-64 overflow-y-auto">
+          <ul id="city-suggestions" role="listbox" aria-label="Suggested cities" className="absolute z-50 top-full mt-1 left-0 right-0 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-stone-200 dark:border-gray-600 overflow-hidden max-h-64 overflow-y-auto">
             {citySuggestions.map((v, i) => (
               <li
                 key={v.slug}
                 role="option"
                 aria-selected={i === highlightedIndex}
-                className={`flex items-center justify-between px-3 py-2.5 text-sm cursor-pointer transition-colors ${i === highlightedIndex ? 'bg-clay-50 text-clay-600' : 'text-stone-700 hover:bg-stone-50'}`}
+                className={`flex items-center justify-between px-3 py-2.5 text-sm cursor-pointer transition-colors ${i === highlightedIndex ? 'bg-clay-50 dark:bg-clay-900/30 text-clay-600 dark:text-clay-400' : 'text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-gray-700'}`}
                 onMouseDown={(e) => { e.preventDefault(); selectCity(v) }}
                 onMouseEnter={() => setHighlightedIndex(i)}
               >

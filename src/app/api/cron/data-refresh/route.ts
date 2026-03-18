@@ -78,7 +78,7 @@ export async function GET(request: Request) {
           cutoffDate: staleDateStr,
         },
       })
-    } catch (err) {
+    } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error'
       logger.error('[Cron] Error flagging stale records:', err)
       results.push({
@@ -154,7 +154,7 @@ export async function GET(request: Request) {
           totalMapped: stateCounts?.length || 0,
         },
       })
-    } catch (err) {
+    } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error'
       logger.error('[Cron] Error calculating attorney counts:', err)
       results.push({
@@ -228,7 +228,7 @@ export async function GET(request: Request) {
       },
       steps: results,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Cron] Error in data-refresh:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error during data refresh' } },

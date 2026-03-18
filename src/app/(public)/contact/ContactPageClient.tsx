@@ -40,7 +40,7 @@ export default function ContactPageClient() {
 
       setIsSubmitted(true)
       toastSuccess('Message sent!', 'We will respond as soon as possible.')
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error sending message')
     } finally {
       setIsLoading(false)

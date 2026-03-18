@@ -67,7 +67,7 @@ export async function verifyAuth(request: NextRequest): Promise<AuthResult> {
         role,
       },
     }
-  } catch (error) {
+  } catch (error: unknown) {
     authLogger.error('Auth verification error', error as Error)
     return { success: false, error: 'Authentication failed' }
   }

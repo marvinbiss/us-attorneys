@@ -102,7 +102,7 @@ export function PendingReports({ reports, loading, onMutate }: PendingReportsPro
         type: 'success',
       })
       onMutate()
-    } catch (err) {
+    } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Error processing report'
       setToast({ message, type: 'error' })
     } finally {

@@ -104,7 +104,7 @@ export function useLeadSubmit(
           : `Your request has been submitted. A qualified ${context.metier.toLowerCase()} attorney in ${context.ville} will contact you as soon as possible.`
 
         onLeadSubmitted?.(confirmationMsg)
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Lead submission error:', error)
         setLeadError(true)
       } finally {
@@ -153,7 +153,7 @@ export function useLeadSubmit(
 
         setCallbackSubmitted(true)
         onCallbackSubmitted?.()
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Callback submission error:', error)
         setCallbackError(true)
       } finally {

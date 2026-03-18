@@ -143,7 +143,7 @@ export async function submitLead(
     }
 
     return { success: true }
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Lead action error:', err)
     return { success: false, error: 'Server error. Please try again.' }
   }

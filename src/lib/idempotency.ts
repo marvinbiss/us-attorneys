@@ -46,7 +46,7 @@ export async function checkIdempotency(key: string): Promise<NextResponse | null
       logger.info('[idempotency] Returning cached response', { key })
       return NextResponse.json(cached.body, { status: cached.status })
     }
-  } catch (err) {
+  } catch (err: unknown) {
     // Fail open: if Redis is down, proceed with the request
     logger.warn('[idempotency] Redis check failed, proceeding', {
       key,

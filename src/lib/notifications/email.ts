@@ -487,7 +487,7 @@ export async function sendEmail({
     }
 
     return { success: true, messageId: data?.id }
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Email error', err as Error)
     return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
   }

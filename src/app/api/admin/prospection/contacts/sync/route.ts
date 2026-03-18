@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       success: true,
       data: result,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Sync attorneys error', error as Error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }

@@ -145,7 +145,7 @@ export async function POST(request: Request) {
     })
 
     return response
-  } catch (error) {
+  } catch (error: unknown) {
     authLogger.error('Signin error:', error)
     return NextResponse.json(
       createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error during connection'),

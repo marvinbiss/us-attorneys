@@ -56,7 +56,7 @@ export async function GET() {
       .single()
 
     return NextResponse.json({ profile, provider })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Profile GET error:', error)
     return NextResponse.json(
       { error: 'Server error' },
@@ -178,7 +178,7 @@ export async function PUT(request: Request) {
       provider,
       message: 'Profile updated successfully'
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Profile PUT error:', error)
     return NextResponse.json(
       { error: 'Server error' },

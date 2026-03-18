@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
       path: uploadData.path,
       type: fileType || (isVideo ? 'video' : 'image'),
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Portfolio upload error:', error)
     return NextResponse.json(
       { error: 'Server error during upload' },

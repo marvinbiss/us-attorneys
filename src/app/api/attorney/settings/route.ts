@@ -36,7 +36,7 @@ export async function GET() {
       profile: profile || null,
       provider: provider || null,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Settings GET error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
@@ -96,7 +96,7 @@ export async function PUT(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Settings PUT error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }

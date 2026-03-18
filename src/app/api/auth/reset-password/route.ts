@@ -64,7 +64,7 @@ export async function POST(request: Request) {
       success: true,
       message: 'If an account exists with this email, you will receive a reset link.',
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Reset password API error', error)
     return NextResponse.json(
       { error: 'Server error' },

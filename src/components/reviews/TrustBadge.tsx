@@ -1,5 +1,3 @@
-'use client'
-
 import { Shield, Award, Star, Clock, Leaf } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

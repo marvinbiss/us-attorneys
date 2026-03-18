@@ -32,7 +32,7 @@ function ensureVapidConfigured(): boolean {
     )
     vapidConfigured = true
     return true
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Failed to configure VAPID', err as Error)
     return false
   }
@@ -178,7 +178,7 @@ export async function sendPushNotification(
     )
 
     return { success: true }
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Push notification error', err as Error)
 
     // Handle expired subscriptions

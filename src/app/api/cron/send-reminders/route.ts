@@ -132,7 +132,7 @@ export async function GET(request: Request) {
       failedCount,
       totalBookings: tomorrowBookings.length,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Cron] Error in send-reminders:', error)
     return NextResponse.json(
       { error: 'Failed to send reminders' },

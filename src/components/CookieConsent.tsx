@@ -81,7 +81,7 @@ export default function CookieConsent() {
           userAgent: navigator.userAgent,
         }),
       })
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to save consent to server:', error)
     }
 
@@ -153,7 +153,7 @@ export default function CookieConsent() {
         transition={reducedMotion ? { duration: 0 } : undefined}
         className="fixed bottom-20 md:bottom-0 left-0 right-0 z-50 p-4 md:p-6"
       >
-        <div className="mx-auto max-w-4xl rounded-2xl bg-white shadow-2xl border border-gray-100" role="dialog" aria-label="Cookie management" aria-modal="false">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white dark:bg-gray-800 shadow-2xl border border-gray-100 dark:border-gray-700" role="dialog" aria-label="Cookie management" aria-modal="false">
           <div className="p-6">
             {/* Header */}
             <div className="flex items-start justify-between gap-4">

@@ -23,7 +23,7 @@ export function verifyTwilioSignature(
 
   try {
     return twilio.validateRequest(authToken, signature, url, params)
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Twilio signature verification error', error as Error)
     return false
   }
@@ -87,7 +87,7 @@ export function verifyResendSignature(
         return false
       }
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Resend signature verification error', error as Error)
     return false
   }

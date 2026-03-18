@@ -1,5 +1,3 @@
-'use client'
-
 import { Clock, Zap, Timer, TrendingUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

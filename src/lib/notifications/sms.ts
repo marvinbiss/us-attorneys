@@ -123,7 +123,7 @@ export async function sendSMS(
 
     logger.info('SMS sent', { to: formattedTo, sid: result.sid })
     return { success: true, messageId: result.sid }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('SMS send error', error as Error)
     return {
       success: false,

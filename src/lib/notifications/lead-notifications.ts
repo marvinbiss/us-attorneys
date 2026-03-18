@@ -182,7 +182,7 @@ async function deliverNotification(
         metadata: { event_id: eventId },
       })
     }
-  } catch (err) {
+  } catch (err: unknown) {
     status = 'failed'
     errorMessage = err instanceof Error ? err.message : String(err)
     logger.error(`Notification delivery failed [${channel}/${spec.type}]:`, { error: errorMessage })

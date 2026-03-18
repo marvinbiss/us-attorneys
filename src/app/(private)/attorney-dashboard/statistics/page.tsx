@@ -77,7 +77,7 @@ export default function StatisticsPage() {
         }
 
         setStats(data.stats)
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Error fetching stats:', err)
       } finally {
         setIsLoading(false)

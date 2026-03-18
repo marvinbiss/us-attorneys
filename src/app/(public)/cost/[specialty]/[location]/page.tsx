@@ -542,7 +542,7 @@ export default async function CostGuidePage({ params }: PageProps) {
   let cmsPage = null
   try {
     cmsPage = await getPageContent(`cost-${specialtySlug}-${locationSlug}`, 'location', { specialtySlug, locationSlug })
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[CMS] Error fetching page content for', { slug: `cost-${specialtySlug}-${locationSlug}`, error: err })
   }
 

@@ -94,7 +94,7 @@ export async function GET(request: NextRequest) {
       limit,
       offset,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Portfolio GET error:', error)
     return NextResponse.json(
       { error: 'Server error' },
@@ -205,7 +205,7 @@ export async function POST(request: NextRequest) {
       item,
       message: 'Item added to portfolio',
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Portfolio POST error:', error)
     return NextResponse.json(
       { error: 'Server error' },

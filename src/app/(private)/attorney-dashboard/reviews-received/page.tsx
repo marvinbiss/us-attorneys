@@ -46,7 +46,7 @@ export default function ReviewsReceivedPage() {
         setReviews(data.reviews || [])
         setStats(data.stats || stats)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching reviews:', error)
     } finally {
       setLoading(false)

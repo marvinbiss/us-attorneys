@@ -28,7 +28,7 @@ const adminFetcher = async (url: string) => {
       throw error
     }
     return res.json()
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof DOMException && err.name === 'AbortError') {
       throw new Error('Request timed out (30s). Please try again.')
     }
@@ -122,7 +122,7 @@ export async function adminMutate<T = unknown>(
     }
 
     return data as T
-  } catch (err) {
+  } catch (err: unknown) {
     if (err instanceof DOMException && err.name === 'AbortError') {
       throw new Error('Request timed out (30s). Please try again.')
     }

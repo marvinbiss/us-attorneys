@@ -256,7 +256,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       // included for forward-compatibility when they are created.
     ]
 
-    // Guide pages
+    // Guide pages (editorial)
     const guideSlugs = [
       'certified-attorney',
       'avoid-scams',
@@ -265,6 +265,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     ]
     const guidePages: MetadataRoute.Sitemap = guideSlugs.map(slug => ({
       url: `${SITE_URL}/guides/${slug}`,
+      lastModified: BUILD_DATE,
+    }))
+
+    // Guide specialty hub pages (75 practice areas)
+    const guideHubPages: MetadataRoute.Sitemap = practiceAreas.map(pa => ({
+      url: `${SITE_URL}/guides/${pa.slug}`,
       lastModified: BUILD_DATE,
     }))
 
@@ -295,7 +301,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
 
     return [
-      ...homepage, ...staticPages, ...guidePages, ...questionPages,
+      ...homepage, ...staticPages, ...guidePages, ...guideHubPages, ...questionPages,
       ...servicesIndex, ...servicePages,
       ...emergencyPages, ...pricingPages,
     ]

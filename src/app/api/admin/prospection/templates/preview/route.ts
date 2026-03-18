@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         variables,
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Template preview error', error as Error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }

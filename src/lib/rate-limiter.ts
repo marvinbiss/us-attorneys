@@ -130,7 +130,7 @@ return {count, 1}
       const resetTime = now + windowMs
 
       return { allowed, remaining, resetTime }
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('Redis rate limit error:', error)
 
       // Fail-close by default: deny requests when Redis is unavailable.
@@ -364,7 +364,7 @@ export async function rateLimit(
       remaining: result.remaining,
       reset: result.resetTime,
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('rateLimit() unexpected error:', error)
     // Fail-open by default (config.failOpen !== false means open)
     const failOpen = config.failOpen !== false

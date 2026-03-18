@@ -27,7 +27,7 @@ export function UpgradeButton({ planId, className }: UpgradeButtonProps) {
       if (data.url) {
         window.location.href = data.url
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Upgrade error:', error)
     } finally {
       setIsLoading(false)

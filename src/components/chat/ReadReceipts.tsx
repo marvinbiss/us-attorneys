@@ -1,5 +1,3 @@
-'use client'
-
 import { ReadReceipt } from '@/lib/realtime/chat-service'
 import { Check, CheckCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'

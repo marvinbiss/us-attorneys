@@ -264,7 +264,7 @@ export async function GET(request: Request) {
       failedCount,
       markedCompleted: confirmedIds.length,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Review Cron] Error:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error sending review requests' } },

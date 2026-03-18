@@ -61,7 +61,7 @@ export default function ImportPage() {
       } else {
         setError(data.error?.message || 'Error')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
@@ -93,7 +93,7 @@ export default function ImportPage() {
       } else {
         setError(data.error?.message || 'Error')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
       } else {

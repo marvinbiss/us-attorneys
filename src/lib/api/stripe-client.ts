@@ -94,7 +94,7 @@ export async function createCustomer(params: CreateCustomerParams): Promise<Stri
     })
 
     return customer
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to create customer', error as Error, { email: params.email })
     throw normalizeStripeError(error)
   }
@@ -113,7 +113,7 @@ export async function getCustomer(customerId: string): Promise<Stripe.Customer |
     }
 
     return customer as Stripe.Customer
-  } catch (error) {
+  } catch (error: unknown) {
     if ((error as Stripe.errors.StripeError).code === 'resource_missing') {
       return null
     }
@@ -136,7 +136,7 @@ export async function updateCustomer(
       phone: params.phone,
       metadata: params.metadata,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     throw normalizeStripeError(error)
   }
 }
@@ -153,7 +153,7 @@ export async function findCustomerByEmail(email: string): Promise<Stripe.Custome
     })
 
     return customers.data[0] || null
-  } catch (error) {
+  } catch (error: unknown) {
     throw normalizeStripeError(error)
   }
 }
@@ -198,7 +198,7 @@ export async function createSubscription(
     })
 
     return subscription
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to create subscription', error as Error, {
       customerId: params.customerId,
     })
@@ -215,7 +215,7 @@ export async function getSubscription(subscriptionId: string): Promise<Stripe.Su
     return await stripe.subscriptions.retrieve(subscriptionId, {
       expand: ['default_payment_method', 'latest_invoice'],
     })
-  } catch (error) {
+  } catch (error: unknown) {
     if ((error as Stripe.errors.StripeError).code === 'resource_missing') {
       return null
     }
@@ -260,7 +260,7 @@ export async function cancelSubscription(
     })
 
     return subscription
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to cancel subscription', error as Error, { subscriptionId })
     throw normalizeStripeError(error)
   }
@@ -298,7 +298,7 @@ export async function updateSubscription(
     })
 
     return updated
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to update subscription', error as Error, { subscriptionId })
     throw normalizeStripeError(error)
   }
@@ -320,7 +320,7 @@ export async function listSubscriptions(
     })
 
     return subscriptions.data
-  } catch (error) {
+  } catch (error: unknown) {
     throw normalizeStripeError(error)
   }
 }
@@ -358,7 +358,7 @@ export async function createPaymentIntent(
     })
 
     return intent
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to create payment intent', error as Error, {
       amount: params.amount,
     })
@@ -375,7 +375,7 @@ export async function getPaymentIntent(
   try {
     const stripe = getStripeClient()
     return await stripe.paymentIntents.retrieve(paymentIntentId)
-  } catch (error) {
+  } catch (error: unknown) {
     if ((error as Stripe.errors.StripeError).code === 'resource_missing') {
       return null
     }
@@ -395,7 +395,7 @@ export async function confirmPaymentIntent(
     return await stripe.paymentIntents.confirm(paymentIntentId, {
       payment_method: paymentMethodId,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     throw normalizeStripeError(error)
   }
 }
@@ -429,7 +429,7 @@ export async function createRefund(
     })
 
     return refund
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to create refund', error as Error, { paymentIntentId })
     throw normalizeStripeError(error)
   }
@@ -446,7 +446,7 @@ export async function getInvoice(invoiceId: string): Promise<Stripe.Invoice | nu
   try {
     const stripe = getStripeClient()
     return await stripe.invoices.retrieve(invoiceId)
-  } catch (error) {
+  } catch (error: unknown) {
     if ((error as Stripe.errors.StripeError).code === 'resource_missing') {
       return null
     }
@@ -470,7 +470,7 @@ export async function listInvoices(
     })
 
     return invoices.data
-  } catch (error) {
+  } catch (error: unknown) {
     throw normalizeStripeError(error)
   }
 }
@@ -525,7 +525,7 @@ export async function createCheckoutSession(params: {
     })
 
     return session
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to create checkout session', error as Error)
     throw normalizeStripeError(error)
   }
@@ -548,7 +548,7 @@ export async function createPortalSession(
       customer: customerId,
       return_url: returnUrl,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     throw normalizeStripeError(error)
   }
 }

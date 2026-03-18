@@ -1,5 +1,3 @@
-'use client'
-
 import { clsx } from 'clsx'
 
 export type BadgeVariant = 'success' | 'warning' | 'error' | 'info' | 'default' | 'purple'

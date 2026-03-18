@@ -63,7 +63,7 @@ export default function BookingConfirmationPage() {
             colors: ['#8b5cf6', '#a78bfa', '#c4b5fd'],
           })
         }, 500)
-      } catch (err) {
+      } catch (err: unknown) {
         setError(err instanceof Error ? err.message : 'Unknown error')
       } finally {
         setLoading(false)

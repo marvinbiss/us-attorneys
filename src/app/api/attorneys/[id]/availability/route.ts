@@ -263,7 +263,7 @@ export async function GET(
       slots,
       generated_at: new Date().toISOString(),
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Availability API error', error as Error)
     return NextResponse.json(
       { error: 'Internal server error' },

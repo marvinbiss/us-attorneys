@@ -23,7 +23,7 @@ export async function GET(_request: NextRequest) {
       totalPages: 1,
       message: 'GDPR request feature disabled — table not available',
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Admin GDPR requests error', error)
     return NextResponse.json(
       { success: false, error: { message: 'Server error' } },

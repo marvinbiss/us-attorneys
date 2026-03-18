@@ -109,7 +109,7 @@ export default function ReceivedCasesPage() {
           setPagination(data.pagination)
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching leads:', error)
     } finally {
       setLoading(false)
@@ -262,7 +262,7 @@ export default function ReceivedCasesPage() {
           setToast({ message: errorMsg, type: 'error' })
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error sending quote:', error)
       setToast({ message: 'Error sending quote', type: 'error' })
     } finally {

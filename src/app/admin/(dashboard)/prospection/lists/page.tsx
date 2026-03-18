@@ -28,7 +28,7 @@ export default function ListsPage() {
       } else {
         setError(data.error?.message || 'Unknown error')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       setError('Unable to load lists')
     } finally {

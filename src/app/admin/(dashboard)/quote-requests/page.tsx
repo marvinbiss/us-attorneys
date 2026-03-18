@@ -129,7 +129,7 @@ export default function AdminQuoteRequestsPage() {
       setConfirmDeleteId(null)
       setExpandedId(null)
       mutate()
-    } catch (err) {
+    } catch (err: unknown) {
       alert(err instanceof Error ? err.message : 'Error deleting request')
     } finally {
       setDeletingId(null)

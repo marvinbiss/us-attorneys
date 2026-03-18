@@ -53,7 +53,7 @@ export default function DesktopMegaMenus({
       {openMenu === 'services' && (
         <div
           data-menu-content="services" role="menu" aria-label="Attorney services"
-          className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
+          className="absolute left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-700 shadow-2xl rounded-b-xl"
           style={{ zIndex: 9995 }}
           onMouseEnter={() => openMenuOnHover('services')}
           onMouseLeave={closeMenusWithDelay}
@@ -151,7 +151,7 @@ export default function DesktopMegaMenus({
       {openMenu === 'cities' && (
         <div
           data-menu-content="cities" role="menu" aria-label="Cities"
-          className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
+          className="absolute left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-700 shadow-2xl rounded-b-xl"
           style={{ zIndex: 9995 }}
           onMouseEnter={() => openMenuOnHover('cities')}
           onMouseLeave={closeMenusWithDelay}
@@ -239,7 +239,7 @@ export default function DesktopMegaMenus({
       {openMenu === 'regions' && (
         <div
           data-menu-content="regions" role="menu" aria-label="States"
-          className="absolute left-0 right-0 bg-white border-t border-gray-100 shadow-2xl rounded-b-xl"
+          className="absolute left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-700 shadow-2xl rounded-b-xl"
           style={{ zIndex: 9995 }}
           onMouseEnter={() => openMenuOnHover('regions')}
           onMouseLeave={closeMenusWithDelay}

@@ -142,7 +142,7 @@ export function AttorneyPageSkeleton() {
 
 export function AttorneyPhotoGridSkeleton() {
   return (
-    <div className="rounded-2xl overflow-hidden">
+    <div className="rounded-2xl overflow-hidden min-h-[320px]">
       <div className="grid grid-cols-4 grid-rows-2 gap-2 h-80">
         {/* Main hero */}
         <Shimmer className="col-span-2 row-span-2 rounded-l-2xl" />
@@ -158,7 +158,7 @@ export function AttorneyPhotoGridSkeleton() {
 
 export function AttorneyHeroSkeleton() {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 min-h-[200px]">
       <div className="flex flex-col md:flex-row gap-6">
         <Shimmer className="w-24 h-24 md:w-32 md:h-32 rounded-2xl flex-shrink-0" />
         <div className="flex-1">
@@ -182,7 +182,7 @@ export function AttorneyHeroSkeleton() {
 
 export function AttorneySidebarSkeleton() {
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sticky top-24">
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sticky top-24 min-h-[380px]">
       <Shimmer className="w-40 h-4 rounded mb-4" />
       <Shimmer className="w-24 h-10 rounded mb-6" />
       <div className="space-y-3 mb-6">

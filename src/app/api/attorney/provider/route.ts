@@ -62,7 +62,7 @@ export async function GET() {
     }
 
     return NextResponse.json({ provider })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Provider GET error:', error)
     return NextResponse.json(
       { error: 'Server error' },
@@ -203,7 +203,7 @@ export async function PUT(request: Request) {
       success: true,
       provider: updated,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Provider PUT error:', error)
     return NextResponse.json(
       { error: 'Server error' },

@@ -79,7 +79,7 @@ export default function TeamPage() {
 
         const data = await res.json()
         setMembers(data.members ?? [])
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Error fetching team:', err)
         setError('Unable to load team')
       } finally {
@@ -154,7 +154,7 @@ export default function TeamPage() {
         role: '',
         color: COLORS[0].value,
       })
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error saving member:', err)
       setError('Error saving member')
     } finally {
@@ -177,7 +177,7 @@ export default function TeamPage() {
       }
 
       setMembers(members.filter(m => m.id !== memberId))
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error deleting member:', err)
       setError('Error deleting member')
     }
@@ -209,7 +209,7 @@ export default function TeamPage() {
           ? { ...m, is_active: !m.is_active }
           : m
       ))
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error toggling member:', err)
     }
   }

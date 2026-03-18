@@ -21,7 +21,7 @@ export const GET = createApiHandler(async () => {
   try {
     env = (await import('@/lib/env')).env as unknown as Record<string, string | undefined>
     checks.environment = { status: 'healthy' }
-  } catch (err) {
+  } catch (err: unknown) {
     checks.environment = {
       status: 'unhealthy',
       error: err instanceof Error ? err.message : 'Env validation failed',
@@ -43,7 +43,7 @@ export const GET = createApiHandler(async () => {
     } else {
       checks.database = { status: 'healthy', latency: dbLatency }
     }
-  } catch (err) {
+  } catch (err: unknown) {
     checks.database = {
       status: 'unhealthy',
       error: err instanceof Error ? err.message : 'Unknown database error',
@@ -70,7 +70,7 @@ export const GET = createApiHandler(async () => {
       checks.redis = res.ok
         ? { status: 'healthy', latency: redisLatency }
         : { status: 'degraded', error: `HTTP ${res.status}`, latency: redisLatency }
-    } catch (err) {
+    } catch (err: unknown) {
       checks.redis = {
         status: 'degraded',
         error: err instanceof Error ? err.message : 'Redis unreachable',

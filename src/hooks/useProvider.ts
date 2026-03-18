@@ -119,7 +119,7 @@ export function useProvider(): UseProviderReturn {
           responseTime: 2, // Mock - hours
         })
       }
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err : new Error('Failed to fetch provider'))
     } finally {
       setIsLoading(false)
@@ -138,7 +138,7 @@ export function useProvider(): UseProviderReturn {
       if (updateError) throw updateError
 
       setProvider(prev => prev ? { ...prev, ...data } : null)
-    } catch (err) {
+    } catch (err: unknown) {
       throw err instanceof Error ? err : new Error('Failed to update provider')
     }
   }, [provider, supabase])

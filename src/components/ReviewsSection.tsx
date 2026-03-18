@@ -47,7 +47,7 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
         const data = await response.json()
         setReviews(data.reviews || [])
         setStats(data.stats || null)
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Error fetching reviews:', error)
       } finally {
         setLoading(false)
@@ -73,7 +73,7 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
           r.id === reviewId ? { ...r, helpful_count: r.helpful_count + 1 } : r
         )
       )
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error voting:', error)
     }
   }

@@ -32,7 +32,7 @@ export async function GET(
       success: true,
       data: { ...stats, queue: queueStats },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Campaign stats error', error as Error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }

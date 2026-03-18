@@ -103,7 +103,7 @@ export async function resolveZipToCity(slug: string): Promise<City | null> {
           longitude: row.longitude || 0,
           metroArea: '',
         } satisfies City
-      } catch (err) {
+      } catch (err: unknown) {
         dbLogger.warn('[resolveZipToCity] Failed for', { slug, error: err instanceof Error ? err.message : err })
         return null
       }
@@ -190,7 +190,7 @@ export async function getNearbyZipCodes(slug: string, limit: number = 8): Promis
             longitude: z.longitude || 0,
             metroArea: '',
           })) satisfies City[]
-      } catch (err) {
+      } catch (err: unknown) {
         dbLogger.warn('[getNearbyZipCodes] Failed', { error: err instanceof Error ? err.message : err })
         return []
       }

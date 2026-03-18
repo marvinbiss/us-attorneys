@@ -70,7 +70,7 @@ export async function sendWhatsApp(params: WhatsAppSendParams): Promise<WhatsApp
 
     logger.info('WhatsApp sent', { to: params.to, sid: result.sid })
     return { success: true, sid: result.sid }
-  } catch (error) {
+  } catch (error: unknown) {
     const errMsg = error instanceof Error ? error.message : 'Unknown error'
     const errCode = (error as { code?: number })?.code?.toString()
     logger.error('WhatsApp send error', error as Error)

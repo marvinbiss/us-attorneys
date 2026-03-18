@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { Clock, MapPin, ChevronRight } from 'lucide-react'
 import { URGENCY_META, STATUS_META } from '@/types/leads'

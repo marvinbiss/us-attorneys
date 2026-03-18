@@ -62,7 +62,7 @@ export async function GET(
     }
 
     return NextResponse.json({ assignment })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Lead detail GET error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }

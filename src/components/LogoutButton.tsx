@@ -31,7 +31,7 @@ export default function LogoutButton({ className = '' }: LogoutButtonProps) {
       // Redirect to login page
       router.push('/login')
       router.refresh()
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Logout error:', error)
       // Still redirect even on error
       router.push('/login')

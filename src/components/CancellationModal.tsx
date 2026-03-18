@@ -47,7 +47,7 @@ export default function CancellationModal({
       }
 
       onCancelled()
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Cancellation error:', err)
       setError(err instanceof Error ? err.message : 'Error during cancellation')
     } finally {

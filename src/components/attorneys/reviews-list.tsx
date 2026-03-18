@@ -1,5 +1,3 @@
-'use client'
-
 import { formatRelativeDate } from '@/lib/utils/format'
 
 interface Review {

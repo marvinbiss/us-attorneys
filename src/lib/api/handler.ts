@@ -50,7 +50,7 @@ export function createApiHandler<T = unknown>(
         try {
           const rawBody = await request.json()
           context.body = options.bodySchema.parse(rawBody)
-        } catch (error) {
+        } catch (error: unknown) {
           if (error instanceof ZodError) {
             const messages = error.issues.map((e) => `${e.path.join('.')}: ${e.message}`)
             throw new ValidationError(messages.join(', '))
@@ -103,7 +103,7 @@ export function createApiHandler<T = unknown>(
       }
 
       return await handler(context as HandlerContext & { body: T })
-    } catch (error) {
+    } catch (error: unknown) {
       logger.error('API Error', error as Error)
 
       if (error instanceof AppError) {

@@ -61,7 +61,7 @@ export default function AdminServicesPage() {
       } else {
         setError('Error loading services')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to fetch services:', err)
       setError('Connection error')
     } finally {
@@ -90,7 +90,7 @@ export default function AdminServicesPage() {
       setEditModal({ open: false, service: null })
       setFormData({ name: '', description: '', icon: '' })
       fetchSpecialties()
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to save service:', err)
       setError('Connection error')
     }
@@ -108,7 +108,7 @@ export default function AdminServicesPage() {
 
       setDeleteModal({ open: false, specialtyId: '', specialtyName: '' })
       fetchSpecialties()
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to delete service:', err)
       setError('Connection error')
     }

@@ -248,7 +248,7 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
         permissions: DEFAULT_PERMISSIONS[adminRole],
       },
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Admin auth error', error as Error)
     return {
       success: false,
@@ -324,7 +324,7 @@ export async function logAdminAction(
       resource_id: entityId,
       new_value: details || {},
     })
-  } catch (error) {
+  } catch (error: unknown) {
     // Audit logging should not break the main operation
     logger.error('Audit log error', error as Error)
   }

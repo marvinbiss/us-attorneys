@@ -42,7 +42,7 @@ export default function PortfolioPage() {
       } else {
         setError(data.error || 'Error loading portfolio')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error fetching portfolio:', err)
       setError('Connection error')
     } finally {
@@ -73,7 +73,7 @@ export default function PortfolioPage() {
         const data = await response.json()
         alert(data.error || 'Error deleting item')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error deleting item:', err)
       alert('Error deleting item')
     }
@@ -92,7 +92,7 @@ export default function PortfolioPage() {
           prev.map((i) => (i.id === item.id ? data.item : i))
         )
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error toggling visibility:', err)
     }
   }
@@ -110,7 +110,7 @@ export default function PortfolioPage() {
           prev.map((i) => (i.id === item.id ? data.item : i))
         )
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Error toggling featured:', err)
     }
   }

@@ -101,7 +101,7 @@ export function useAttorneyForm(provider: ProviderData, fields: readonly (keyof 
       successTimeoutRef.current = setTimeout(() => setSuccess(null), 3000)
 
       return data.provider
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof DOMException && err.name === 'AbortError') {
         setError('Request timed out. Check your connection and try again.')
       } else if (err instanceof TypeError && err.message === 'Failed to fetch') {

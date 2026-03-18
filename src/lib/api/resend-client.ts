@@ -141,7 +141,7 @@ export async function sendEmail(params: EmailParams): Promise<EmailResult> {
       to: Array.isArray(params.to) ? params.to : [params.to],
       createdAt: new Date(),
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to send email', error as Error, {
       to: params.to,
       subject: params.subject,
@@ -197,7 +197,7 @@ export async function sendBatchEmails(params: BatchEmailParams): Promise<EmailRe
         : [params.emails[index].to as string],
       createdAt: new Date(),
     }))
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Failed to send batch emails', error as Error, {
       count: params.emails.length,
     })

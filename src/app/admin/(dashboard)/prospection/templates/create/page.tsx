@@ -48,7 +48,7 @@ export default function CreateTemplatePage() {
       if (!res.ok) throw new Error(`Server error (${res.status})`)
       const data = await res.json()
       if (data.success) setPreview(data.data.rendered_body)
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
       } else {
@@ -80,7 +80,7 @@ export default function CreateTemplatePage() {
       } else {
         setError(data.error?.message || 'Error')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
       } else {

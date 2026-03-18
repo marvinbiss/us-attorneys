@@ -1,12 +1,13 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { MessageSquare, ThumbsUp, CheckCircle, ArrowLeft, User, Clock } from 'lucide-react'
+import { MessageSquare, ArrowLeft, User, Clock, MapPin, Eye, ThumbsUp } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { createAdminClient } from '@/lib/supabase/admin'
+import AnswerCard from '@/components/qa/AnswerCard'
 
 export const revalidate = 3600
 
@@ -22,6 +23,7 @@ interface QuestionRow {
   status: string
   view_count: number
   answer_count: number
+  vote_count: number
   is_featured: boolean
   created_at: string
   updated_at: string
@@ -47,7 +49,7 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-async function getQuestion(slug: string): Promise<QuestionRow | null> {
+async function getQuestion(slug: string): Promise<(QuestionRow & { specialty_name: string | null }) | null> {
   try {
     const supabase = createAdminClient()
     const { data } = await supabase
@@ -57,7 +59,26 @@ async function getQuestion(slug: string): Promise<QuestionRow | null> {
       .neq('status', 'flagged')
       .single()
 
-    return data as QuestionRow | null
+    if (!data) return null
+
+    let specialtyName: string | null = null
+    if (data.specialty_id) {
+      const { data: spec } = await supabase
+        .from('specialties')
+        .select('name')
+        .eq('id', data.specialty_id)
+        .single()
+      specialtyName = spec?.name || null
+    }
+
+    // Increment view count (fire-and-forget)
+    supabase
+      .from('legal_questions')
+      .update({ view_count: (data.view_count || 0) + 1 })
+      .eq('id', data.id)
+      .then(() => {})
+
+    return { ...(data as QuestionRow), specialty_name: specialtyName }
   } catch {
     return null
   }
@@ -120,12 +141,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     ? question.body.slice(0, 155) + '...'
     : question.body
 
-  const location = question.city && question.state_code
-    ? ` in ${question.city}, ${question.state_code}`
-    : question.state_code
-      ? ` in ${question.state_code}`
-      : ''
-
   return {
     title: `${question.title} | Ask a Lawyer`,
     description,
@@ -145,7 +160,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
     },
     other: {
-      ...(location ? { 'geo.region': question.state_code || '' } : {}),
+      ...(question.state_code ? { 'geo.region': question.state_code } : {}),
     },
   }
 }
@@ -158,20 +173,6 @@ function formatDate(dateStr: string): string {
   })
 }
 
-function formatRelativeDate(dateStr: string): string {
-  const date = new Date(dateStr)
-  const now = new Date()
-  const diffMs = now.getTime() - date.getTime()
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
-
-  if (diffHours < 1) return 'Just now'
-  if (diffHours < 24) return `${diffHours} hours ago`
-  const diffDays = Math.floor(diffHours / 24)
-  if (diffDays === 1) return 'Yesterday'
-  if (diffDays < 30) return `${diffDays} days ago`
-  return formatDate(dateStr)
-}
-
 export default async function QuestionPage({ params }: PageProps) {
   const { slug } = await params
   const question = await getQuestion(slug)
@@ -181,10 +182,9 @@ export default async function QuestionPage({ params }: PageProps) {
   }
 
   const answers = await getAnswers(question.id)
-
   const acceptedAnswer = answers.find(a => a.is_accepted)
 
-  // JSON-LD QAPage schema
+  // JSON-LD QAPage schema for rich snippets
   const qaJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'QAPage',
@@ -194,6 +194,7 @@ export default async function QuestionPage({ params }: PageProps) {
       text: question.body,
       dateCreated: question.created_at,
       answerCount: answers.length,
+      upvoteCount: question.vote_count || 0,
       ...(acceptedAnswer
         ? {
             acceptedAnswer: {
@@ -229,6 +230,9 @@ export default async function QuestionPage({ params }: PageProps) {
                       author: {
                         '@type': 'Person',
                         name: a.attorney.name,
+                        ...(a.attorney.slug
+                          ? { url: `${SITE_URL}/attorneys/${a.attorney.slug}` }
+                          : {}),
                       },
                     }
                   : {}),
@@ -273,8 +277,14 @@ export default async function QuestionPage({ params }: PageProps) {
               {formatDate(question.created_at)}
             </span>
             {question.state_code && (
-              <span>
+              <span className="flex items-center gap-1">
+                <MapPin className="w-4 h-4" />
                 {question.city ? `${question.city}, ` : ''}{question.state_code}
+              </span>
+            )}
+            {question.specialty_name && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-xs font-medium">
+                {question.specialty_name}
               </span>
             )}
             <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
@@ -297,7 +307,14 @@ export default async function QuestionPage({ params }: PageProps) {
             {question.body}
           </div>
           <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-4 text-sm text-gray-500">
-            <span>{question.view_count} views</span>
+            <span className="flex items-center gap-1">
+              <Eye className="w-4 h-4" />
+              {question.view_count} views
+            </span>
+            <span className="flex items-center gap-1">
+              <ThumbsUp className="w-4 h-4" />
+              {question.vote_count || 0} votes
+            </span>
             <span className="flex items-center gap-1">
               <MessageSquare className="w-4 h-4" />
               {question.answer_count} {question.answer_count === 1 ? 'answer' : 'answers'}
@@ -326,69 +343,7 @@ export default async function QuestionPage({ params }: PageProps) {
           ) : (
             <div className="space-y-4">
               {answers.map((answer) => (
-                <div
-                  key={answer.id}
-                  className={`bg-white rounded-xl border p-6 ${
-                    answer.is_accepted
-                      ? 'border-green-300 ring-1 ring-green-100'
-                      : 'border-gray-200'
-                  }`}
-                >
-                  {answer.is_accepted && (
-                    <div className="flex items-center gap-1.5 text-green-700 text-sm font-medium mb-3">
-                      <CheckCircle className="w-4 h-4" />
-                      Accepted Answer
-                    </div>
-                  )}
-
-                  <div className="prose prose-gray max-w-none text-gray-800 whitespace-pre-wrap">
-                    {answer.body}
-                  </div>
-
-                  <div className="mt-4 pt-4 border-t border-gray-100 flex items-center gap-4">
-                    {/* Attorney info */}
-                    <div className="flex items-center gap-3">
-                      {answer.attorney?.photo_url ? (
-                        <img
-                          src={answer.attorney.photo_url}
-                          alt={answer.attorney.name}
-                          className="w-8 h-8 rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                          <User className="w-4 h-4 text-blue-600" />
-                        </div>
-                      )}
-                      <div>
-                        {answer.attorney?.slug ? (
-                          <Link
-                            href={`/attorneys/${answer.attorney.slug}`}
-                            className="text-sm font-semibold text-blue-600 hover:underline"
-                          >
-                            {answer.attorney.name}
-                          </Link>
-                        ) : (
-                          <span className="text-sm font-semibold text-gray-900">
-                            {answer.attorney?.name || 'Attorney'}
-                          </span>
-                        )}
-                        {answer.attorney?.trust_score != null && (
-                          <span className="ml-2 text-xs text-gray-500">
-                            Trust Score: {answer.attorney.trust_score}%
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="ml-auto flex items-center gap-3 text-sm text-gray-500">
-                      <span className="flex items-center gap-1">
-                        <ThumbsUp className="w-3.5 h-3.5" />
-                        {answer.upvotes}
-                      </span>
-                      <span>{formatRelativeDate(answer.created_at)}</span>
-                    </div>
-                  </div>
-                </div>
+                <AnswerCard key={answer.id} answer={answer} />
               ))}
             </div>
           )}

@@ -37,7 +37,7 @@ export async function GET() {
       attorneyName: provider?.name ?? null,
       hasUpgradePlans,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Subscription GET error:', error)
     return NextResponse.json(
       { error: 'Server error' },

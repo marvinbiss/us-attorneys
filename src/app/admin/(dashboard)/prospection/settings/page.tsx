@@ -25,7 +25,7 @@ export default function SettingsPage() {
         initialSettingsRef.current = JSON.stringify(data.data)
         setHasUnsavedChanges(false)
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       setError('Loading error')
     } finally {
@@ -83,7 +83,7 @@ export default function SettingsPage() {
       } else {
         setError(data.error?.message || 'Error saving settings')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
       } else {

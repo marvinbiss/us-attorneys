@@ -229,7 +229,7 @@ export async function withRetry<T>(
   for (let attempt = 0; attempt < finalConfig.maxRetries; attempt++) {
     try {
       return await operation()
-    } catch (error) {
+    } catch (error: unknown) {
       lastError = createBookingError(error, { attempt })
 
       // Don't retry non-retryable errors
@@ -314,7 +314,7 @@ export async function safeFetch<T>(
 
     const data = await response.json()
     return { data, error: null }
-  } catch (error) {
+  } catch (error: unknown) {
     return {
       data: null,
       error: createBookingError(error, { url }),

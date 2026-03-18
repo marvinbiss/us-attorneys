@@ -144,7 +144,7 @@ export default function SignUpPage() {
       }
 
       setIsSubmitted(true)
-    } catch (_error) {
+    } catch (_error: unknown) {
       setGeneralError('Unable to connect to server')
     } finally {
       setIsLoading(false)

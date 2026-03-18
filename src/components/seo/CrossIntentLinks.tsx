@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { DollarSign, Star, Search, AlertTriangle, FileText } from 'lucide-react'
+import { DollarSign, Star, Search, AlertTriangle, FileText, BookOpen } from 'lucide-react'
 
 interface CrossIntentLinksProps {
   service: string
@@ -15,6 +15,7 @@ const intents = [
   { key: 'services', label: 'Attorneys', icon: Search, href: (s: string, v?: string) => v ? `/practice-areas/${s}/${v}` : `/practice-areas/${s}` },
   { key: 'emergency', label: 'Emergency', icon: AlertTriangle, href: (s: string, v?: string) => v ? `/emergency/${s}/${v}` : `/emergency/${s}` },
   { key: 'quotes', label: 'Consultation', icon: FileText, href: (s: string, v?: string) => v ? `/quotes/${s}/${v}` : `/quotes/${s}` },
+  { key: 'guide', label: 'Legal Guide', icon: BookOpen, href: (s: string) => `/guides/${s}` },
 ] as const
 
 export default function CrossIntentLinks({

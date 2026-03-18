@@ -86,7 +86,7 @@ export default function AttorneyResultCard({
           setLocalAvailability(data.availability[attorney.id])
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to load availability:', error)
     }
   }

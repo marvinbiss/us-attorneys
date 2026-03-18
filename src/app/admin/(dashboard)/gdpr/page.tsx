@@ -76,7 +76,7 @@ export default function AdminRgpdPage() {
         setTotalPages(data.totalPages || 1)
         setTotal(data.total || 0)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to fetch GDPR requests:', error)
     } finally {
       setLoading(false)
@@ -97,7 +97,7 @@ export default function AdminRgpdPage() {
           setToast({ type: 'error', message: 'User not found' })
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Search failed:', error)
     } finally {
       setSearching(false)
@@ -121,7 +121,7 @@ export default function AdminRgpdPage() {
         a.click()
         URL.revokeObjectURL(url)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Export failed:', error)
     } finally {
       setExportingUser(null)
@@ -141,7 +141,7 @@ export default function AdminRgpdPage() {
         setSearchEmail('')
         fetchRequests()
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Delete failed:', error)
     }
   }

@@ -47,7 +47,7 @@ export default function CreateCampaignPage() {
       const [templatesData, listsData] = await Promise.all([templatesRes.json(), listsRes.json()])
       if (templatesData.success) setTemplates(templatesData.data)
       if (listsData.success) setLists(listsData.data)
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return
       if (err instanceof Error) {
         setError(err.message)
@@ -109,7 +109,7 @@ export default function CreateCampaignPage() {
       } else {
         setError(data.error?.message || 'Error')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
       } else {

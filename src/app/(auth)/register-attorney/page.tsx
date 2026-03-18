@@ -95,7 +95,7 @@ export default function AttorneyRegistrationPage() {
       }
 
       setIsSubmitted(true)
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Registration error')
     } finally {
       setIsLoading(false)

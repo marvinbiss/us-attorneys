@@ -58,7 +58,7 @@ export default function AdminUserDetailPage() {
       } else {
         router.push('/admin/users')
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to fetch user:', error)
       router.push('/admin/users')
     } finally {
@@ -79,7 +79,7 @@ export default function AdminUserDetailPage() {
         setUser(data.user)
         setEditMode(false)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Failed to save user:', error)
     } finally {
       setSaving(false)
@@ -92,7 +92,7 @@ export default function AdminUserDetailPage() {
         method: 'DELETE',
       })
       router.push('/admin/users')
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Delete failed:', error)
     }
   }

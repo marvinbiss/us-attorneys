@@ -77,7 +77,7 @@ export async function PATCH(
     }
 
     return NextResponse.json({ member: data })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Team PATCH error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
@@ -121,7 +121,7 @@ export async function DELETE(
     }
 
     return new NextResponse(null, { status: 204 })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Team DELETE error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }

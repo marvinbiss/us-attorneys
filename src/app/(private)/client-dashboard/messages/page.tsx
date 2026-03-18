@@ -65,7 +65,7 @@ export default function MessagesClientPage() {
           setSelectedConversation(data.conversations[0])
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching conversations:', error)
     } finally {
       setLoading(false)
@@ -83,7 +83,7 @@ export default function MessagesClientPage() {
           setCurrentUserId(data.currentUserId)
         }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error fetching messages:', error)
     }
   }
@@ -107,7 +107,7 @@ export default function MessagesClientPage() {
         setNewMessage('')
         fetchMessages(selectedConversation.id)
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error sending message:', error)
     } finally {
       setSendingMessage(false)

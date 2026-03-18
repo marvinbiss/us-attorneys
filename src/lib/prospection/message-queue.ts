@@ -394,7 +394,7 @@ export async function processBatch(
           result.errors.push({ messageId: msg.id, error: errMsg })
           await updateMessageFailed(supabase, msg.id, errMsg)
         }
-      } catch (err) {
+      } catch (err: unknown) {
         result.failed++
         const errMsg = err instanceof Error ? err.message : 'Unknown error'
         result.errors.push({ messageId: msg.id, error: errMsg })
@@ -409,7 +409,7 @@ export async function processBatch(
   // Update campaign stats
   try {
     await updateCampaignStats(supabase, campaignId)
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Failed to update campaign stats', {
       campaignId,
       error: err instanceof Error ? err.message : 'Unknown error',
@@ -419,7 +419,7 @@ export async function processBatch(
   // Check if campaign is complete
   try {
     await checkCampaignCompletion(supabase, campaignId)
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Failed to check campaign completion', {
       campaignId,
       error: err instanceof Error ? err.message : 'Unknown error',

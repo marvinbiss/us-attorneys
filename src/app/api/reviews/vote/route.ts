@@ -107,7 +107,7 @@ export const POST = createApiHandler(async ({ request }) => {
       if (updateError) throw updateError
 
       return NextResponse.json({ success: true, helpful_count: newCount })
-    } catch (err) {
+    } catch (err: unknown) {
       // Fallback: review_votes table doesn't exist yet
       const msg = err instanceof Error ? err.message : ''
       if (msg === 'TABLE_NOT_FOUND') {

@@ -34,7 +34,7 @@ export function QuoteResponseForm({ quoteId, currentStatus }: QuoteResponseFormP
       }
 
       router.refresh()
-    } catch (err) {
+    } catch (err: unknown) {
       setError((err as Error).message)
     } finally {
       setIsLoading(false)

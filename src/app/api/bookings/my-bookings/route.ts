@@ -74,7 +74,7 @@ export async function GET() {
     }))
 
     return NextResponse.json({ success: true, data: { bookings: enrichedBookings } })
-  } catch (err) {
+  } catch (err: unknown) {
     apiLogger.error('Unexpected error in my-bookings', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }

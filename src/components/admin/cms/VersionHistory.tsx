@@ -35,7 +35,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
       if (!res.ok) throw new Error('Error loading versions')
       const json = await res.json() as { success: boolean; data: VersionData[] }
       setVersions(json.data || [])
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
       setLoading(false)
@@ -74,7 +74,7 @@ export function VersionHistory({ pageId, onClose, onRestore }: VersionHistoryPro
         const json = await res.json().catch(() => null)
         setError(json?.error?.message || 'Error during restoration')
       }
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error during restoration')
     } finally {
       setRestoringId(null)

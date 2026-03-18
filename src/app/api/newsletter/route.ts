@@ -61,7 +61,7 @@ export async function POST(request: Request) {
       success: true,
       message: 'Subscription confirmed',
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Newsletter API error', error)
     return NextResponse.json(
       { error: 'Server error' },

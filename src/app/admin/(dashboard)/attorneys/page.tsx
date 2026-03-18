@@ -116,7 +116,7 @@ export default function AdminProvidersPage() {
       setToast({ message: `Attorney ${actionText} successfully!`, type: 'success' })
 
       mutate()
-    } catch (err) {
+    } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Action failed'
       setToast({ message: `Error: ${message}`, type: 'error' })
     } finally {

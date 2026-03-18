@@ -133,7 +133,7 @@ export async function GET(request: Request) {
         status: noSpecCount > THRESHOLDS.noPracticeAreas ? 'warning' : 'ok',
         durationMs: Date.now() - specStart,
       })
-    } catch (err) {
+    } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error'
       metrics.push({
         metric: 'no_practice_areas',
@@ -182,7 +182,7 @@ export async function GET(request: Request) {
         status: dupeCount > THRESHOLDS.duplicateCandidates ? 'warning' : 'ok',
         durationMs: Date.now() - dupeStart,
       })
-    } catch (err) {
+    } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error'
       metrics.push({
         metric: 'duplicate_candidates',
@@ -231,7 +231,7 @@ export async function GET(request: Request) {
         status: emptyLocs > THRESHOLDS.emptyLocations ? 'warning' : 'ok',
         durationMs: Date.now() - locStart,
       })
-    } catch (err) {
+    } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unknown error'
       metrics.push({
         metric: 'locations_without_attorneys',
@@ -276,7 +276,7 @@ export async function GET(request: Request) {
       },
       metrics,
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('[Cron] Error in data-quality:', error)
     return NextResponse.json(
       { success: false, error: { message: 'Error during data quality checks' } },

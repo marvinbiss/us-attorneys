@@ -51,12 +51,12 @@ export default function MobileMenu({
   return (
     <div
       data-menu-content="mobile-menu"
-      className="lg:hidden border-t border-gray-100/50 max-h-[calc(100vh-120px)] overflow-y-auto bg-white/95 backdrop-blur-xl"
+      className="lg:hidden border-t border-gray-100/50 dark:border-gray-700/50 max-h-[calc(100vh-120px)] overflow-y-auto bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
         {/* Search Mobile - Dual Field */}
         <form onSubmit={handleSearch} className="mb-4">
-          <div className="flex items-center bg-white border-2 border-gray-200 rounded-2xl overflow-hidden focus-within:border-clay-400 focus-within:shadow-lg focus-within:shadow-clay-400/10 transition-all duration-200">
+          <div className="flex items-center bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-2xl overflow-hidden focus-within:border-clay-400 focus-within:shadow-lg focus-within:shadow-clay-400/10 transition-all duration-200">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <label htmlFor="mobile-search-service" className="sr-only">Search service</label>
@@ -66,7 +66,7 @@ export default function MobileMenu({
                 placeholder="Service..."
                 value={serviceQuery}
                 onChange={(e) => setServiceQuery(e.target.value)}
-                className="w-full h-12 pl-9 pr-2 bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none text-sm"
+                className="w-full h-12 pl-9 pr-2 bg-transparent text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none text-sm"
               />
             </div>
             <div className="w-px h-7 bg-gray-200" />
@@ -79,7 +79,7 @@ export default function MobileMenu({
                 placeholder="City..."
                 value={locationQuery}
                 onChange={(e) => setLocationQuery(e.target.value)}
-                className="w-full h-12 pl-9 pr-10 bg-transparent text-gray-900 placeholder:text-gray-400 focus:outline-none text-sm"
+                className="w-full h-12 pl-9 pr-10 bg-transparent text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none text-sm"
               />
               <button
                 type="button"

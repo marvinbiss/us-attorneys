@@ -72,7 +72,7 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
       setPreviewUrl(null)
       setSuccess('Photo updated')
       setTimeout(() => setSuccess(null), 3000)
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Upload error')
       setPreviewUrl(null)
     } finally {
@@ -104,7 +104,7 @@ export function AvatarSection({ provider, onSaved }: AvatarSectionProps) {
       setPreviewUrl(null)
       setSuccess('Photo deleted')
       setTimeout(() => setSuccess(null), 3000)
-    } catch (err) {
+    } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Deletion error')
     } finally {
       setDeleting(false)

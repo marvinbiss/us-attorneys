@@ -93,7 +93,7 @@ export default function AddPortfolioModal({
       } else {
         setAfterFile(uploaded)
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Upload error:', err)
       setError(err instanceof Error ? err.message : 'Error uploading file')
     } finally {
@@ -149,7 +149,7 @@ export default function AddPortfolioModal({
 
       const data = await response.json()
       onCreated(data.item)
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Save error:', err)
       setError(err instanceof Error ? err.message : 'Error saving')
     } finally {

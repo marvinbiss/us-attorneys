@@ -58,7 +58,7 @@ export function RefundModal({
       const finalReason = reason === 'other' ? customReason : reason
       await onConfirm(refundAmount, finalReason)
       onClose()
-    } catch (err) {
+    } catch (err: unknown) {
       setError('Refund failed. Please try again.')
       console.error('Refund error:', err)
     } finally {

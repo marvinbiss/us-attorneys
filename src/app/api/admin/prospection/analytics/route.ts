@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
         channels: channelPerf,
       },
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Analytics error', error as Error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }

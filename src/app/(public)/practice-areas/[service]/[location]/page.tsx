@@ -300,7 +300,7 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   let cmsPage = null
   try {
     cmsPage = await getPageContent(`${specialtySlug}-${locationSlug}`, 'location', { specialtySlug, locationSlug })
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('[CMS] Error fetching page content for', { slug: `${specialtySlug}-${locationSlug}`, error: err })
   }
 

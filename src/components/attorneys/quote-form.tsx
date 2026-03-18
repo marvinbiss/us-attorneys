@@ -46,7 +46,7 @@ export function QuoteForm({ attorneyId, specialtySlug, onSuccess }: QuoteFormPro
 
       setIsSuccess(true)
       onSuccess?.()
-    } catch (err) {
+    } catch (err: unknown) {
       setError((err as Error).message)
     } finally {
       setIsLoading(false)

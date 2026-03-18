@@ -52,7 +52,7 @@ export async function logAudit(entry: AuditLogEntry): Promise<void> {
       user_agent: entry.userAgent,
       created_at: new Date().toISOString(),
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Audit logging error', error as Error)
   }
 }

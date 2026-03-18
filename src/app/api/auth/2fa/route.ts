@@ -44,7 +44,7 @@ export async function GET() {
     const status = await twoFactorAuth.getStatus(user.id)
 
     return NextResponse.json({ status })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('2FA status error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
@@ -142,7 +142,7 @@ export async function POST(request: Request) {
       default:
         return NextResponse.json({ success: false, error: { message: 'Action non reconnue' } }, { status: 400 })
     }
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('2FA error:', error)
     const message = error instanceof Error ? error.message : 'Server error'
     return NextResponse.json({ success: false, error: { message } }, { status: 500 })

@@ -68,7 +68,7 @@ export async function dispatchLead(
     }
 
     return assignedIds
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error('Dispatch action error', err)
     return []
   }

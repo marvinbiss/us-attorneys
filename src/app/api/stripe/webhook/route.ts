@@ -151,7 +151,7 @@ export const POST = createApiHandler(async ({ request }) => {
       signature,
       env.STRIPE_WEBHOOK_SECRET
     )
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Webhook signature verification failed:', error)
     return NextResponse.json(
       { error: 'Webhook signature verification failed' },
@@ -205,7 +205,7 @@ export const POST = createApiHandler(async ({ request }) => {
     await markEventCompleted(event.id, event.type)
 
     return NextResponse.json({ received: true })
-  } catch (error) {
+  } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     logger.error('Webhook handler error:', error)
 

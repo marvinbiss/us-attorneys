@@ -30,7 +30,7 @@ export async function sendProspectionSMS(params: SMSProspectionParams): Promise<
     }
 
     return { success: false, error: result.error }
-  } catch (error) {
+  } catch (error: unknown) {
     const errMsg = error instanceof Error ? error.message : 'Unknown error'
     logger.error('Prospection SMS error', error as Error)
     return { success: false, error: errMsg }

@@ -67,7 +67,7 @@ export async function GET() {
     }
 
     return NextResponse.json({ quotes: quotes || [] })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Attorney quote GET error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
@@ -174,7 +174,7 @@ export async function POST(request: Request) {
       quote: quote,
       message: 'Consultation sent successfully',
     })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Attorney quote POST error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
@@ -268,7 +268,7 @@ export async function PUT(request: Request) {
     }
 
     return NextResponse.json({ success: true, quote: quote })
-  } catch (error) {
+  } catch (error: unknown) {
     logger.error('Attorney quote PUT error:', error)
     return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
   }
