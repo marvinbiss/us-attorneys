@@ -35,6 +35,7 @@ export type { ModalProps, ConfirmModalProps } from './Modal'
 export { Toast, ToastContainer } from './Toast'
 
 export { Pagination } from './Pagination'
+export { PaginationNav } from './PaginationNav'
 
 // --- Loading & Skeleton ---
 export { Loading, LoadingPage, LoadingOverlay, LoadingButton } from './Loading'

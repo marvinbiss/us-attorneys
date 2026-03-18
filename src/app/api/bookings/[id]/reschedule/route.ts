@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { createApiHandler, apiSuccess, apiError } from '@/lib/api/handler'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendBookingConfirmation, logNotification } from '@/lib/notifications/email'
+import { sendPushToUser } from '@/lib/push/send'
+import { NOTIFICATION_TEMPLATES } from '@/lib/push/notifications'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -83,7 +85,7 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
     return apiError('VALIDATION_ERROR', 'The new slot must be in the future', 400)
   }
 
-  // Update booking with new slot
+  // Update booking with new slot — reset reminder flags since time changed
   const { error: updateError } = await supabase
     .from('bookings')
     .update({
@@ -92,6 +94,8 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
         : newSlot.date,
       rescheduled_at: new Date().toISOString(),
       rescheduled_from_slot_id: bookingSlot?.id,
+      reminder_24h_sent: false,
+      reminder_1h_sent: false,
     })
     .eq('id', bookingId)
 
@@ -151,6 +155,46 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
     }).catch((err) => {
       logger.error('Failed to send reschedule notifications:', err)
     })
+  }
+
+  // Send push notification to client (non-blocking)
+  const attorneyDisplayName = attorneyProfile?.full_name || 'Attorney'
+
+  if (booking.client_id) {
+    const pushPayload = NOTIFICATION_TEMPLATES.BOOKING_RESCHEDULED(
+      attorneyDisplayName,
+      formattedDate,
+      newSlot.start_time,
+    )
+    sendPushToUser(booking.client_id, pushPayload).catch((err) => {
+      logger.error('Failed to send reschedule push to client', err)
+    })
+  }
+
+  // Send push notification to attorney
+  if (bookingSlot?.attorney_id) {
+    const { data: attorneyRecord } = await adminSupabase
+      .from('attorneys')
+      .select('user_id')
+      .eq('id', bookingSlot.attorney_id)
+      .single()
+
+    if (attorneyRecord?.user_id && attorneyRecord.user_id !== user!.id) {
+      // Only notify the attorney if THEY didn't initiate the reschedule
+      const pushPayload = NOTIFICATION_TEMPLATES.BOOKING_RESCHEDULED(
+        booking.client_name,
+        formattedDate,
+        newSlot.start_time,
+      )
+      sendPushToUser(attorneyRecord.user_id, {
+        ...pushPayload,
+        title: 'Booking Rescheduled',
+        body: `${booking.client_name} rescheduled to ${formattedDate} at ${newSlot.start_time}`,
+        data: { url: '/attorney-dashboard/bookings' },
+      }).catch((err) => {
+        logger.error('Failed to send reschedule push to attorney', err)
+      })
+    }
   }
 
   return apiSuccess({

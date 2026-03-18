@@ -4,9 +4,12 @@ import { Provider } from '@/types'
 import { getAttorneyUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
 import { TrustScore } from '@/components/attorney/TrustScore'
+import { AvailabilityBadge } from '@/components/ui/AvailabilityBadge'
+import type { AvailabilitySlot } from '@/lib/availability'
 
 type AttorneyCardProvider = Partial<Provider> & Pick<Provider, 'id' | 'name'> & {
   trust_score?: number | null
+  availability?: AvailabilitySlot | null
 }
 
 function isValidPhone(phone: string | undefined | null): boolean {
@@ -144,6 +147,13 @@ export default function AttorneyCard({
       {provider.trust_score != null && provider.trust_score > 0 && (
         <div className="mb-3 ml-6">
           <TrustScore score={provider.trust_score} variant="badge" />
+        </div>
+      )}
+
+      {/* Availability Badge — Doctolib-inspired inline display */}
+      {'availability' in provider && (
+        <div className="mb-3 ml-6">
+          <AvailabilityBadge slot={provider.availability} size="sm" />
         </div>
       )}
 

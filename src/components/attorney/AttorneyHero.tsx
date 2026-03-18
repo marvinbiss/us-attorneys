@@ -21,12 +21,34 @@ import type { LegacyAttorney } from '@/types/legacy'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   VerificationLevelBadge,
-  VerifiedBadge,
 } from '@/components/reviews/VerifiedBadge'
+import { VerifiedAttorneyBadge } from '@/components/ui/VerifiedBadge'
+import { TrustBar } from '@/components/ui/TrustBar'
+import { SocialProof } from '@/components/ui/SocialProof'
+import { BarVerificationLink } from '@/components/attorney/BarVerificationLink'
 import { BookingFunnel } from '@/lib/analytics/tracking'
+import { ConsultationModal } from '@/components/booking/ConsultationModal'
+import { AvailabilityBadge } from '@/components/ui/AvailabilityBadge'
+import type { AvailabilitySlot } from '@/lib/availability'
 
 interface AttorneyHeroProps {
   attorney: LegacyAttorney
+  /** Bar association URL from states table (for verification link) */
+  barAssociationUrl?: string | null
+  /** Attorney's bar state abbreviation */
+  barState?: string | null
+  /** Verification date from bar_admissions (ISO string) */
+  verificationDate?: string | null
+  /** Average response time in hours (from actual data) */
+  responseTimeHours?: number | null
+  /** Years of experience */
+  yearsExperience?: number | null
+  /** Number of consultations this month (from bookings table) */
+  consultationsThisMonth?: number | null
+  /** ISO date of last booking */
+  lastBookedAt?: string | null
+  /** Real availability slot from server (replaces pseudo-random fallback) */
+  availability?: AvailabilitySlot | null
 }
 
 // Determine verification level based on attorney data
@@ -53,19 +75,26 @@ function getNextAvailableDate(attorneyId: string): string {
   return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
 }
 
-export function AttorneyHero({ attorney }: AttorneyHeroProps) {
+export function AttorneyHero({
+  attorney,
+  barAssociationUrl,
+  barState,
+  verificationDate,
+  responseTimeHours,
+  yearsExperience,
+  consultationsThisMonth,
+  lastBookedAt,
+  availability,
+}: AttorneyHeroProps) {
   const displayName = getDisplayName(attorney)
   const verificationLevel = getVerificationLevel(attorney)
   const [showPhone, setShowPhone] = useState(false)
+  const [showConsultationModal, setShowConsultationModal] = useState(false)
   const reducedMotion = useReducedMotion()
   const noMotion = { duration: 0 }
 
   const hasPortfolioImage = attorney.portfolio && attorney.portfolio.length > 0 && attorney.portfolio[0].imageUrl
   const nextAvailable = getNextAvailableDate(attorney.id)
-
-  const openEstimationWidget = () => {
-    window.dispatchEvent(new Event('sa:open-estimation'))
-  }
 
   return (
     <motion.div
@@ -140,10 +169,14 @@ export function AttorneyHero({ attorney }: AttorneyHeroProps) {
             <div className="flex flex-wrap items-center gap-2 mb-3" role="list" aria-label="Badges and availability">
               <VerificationLevelBadge level={verificationLevel} size="sm" />
               {/* Next available badge -- Doctolib-inspired */}
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-semibold border border-emerald-200 dark:border-emerald-700">
-                <CalendarDays className="w-3.5 h-3.5" aria-hidden="true" />
-                Next available: {nextAvailable}
-              </span>
+              {availability !== undefined ? (
+                <AvailabilityBadge slot={availability} size="md" />
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-semibold border border-emerald-200 dark:border-emerald-700">
+                  <CalendarDays className="w-3.5 h-3.5" aria-hidden="true" />
+                  Next available: {nextAvailable}
+                </span>
+              )}
             </div>
 
             {/* Name & Specialty */}
@@ -206,7 +239,11 @@ export function AttorneyHero({ attorney }: AttorneyHeroProps) {
             {/* Verification + urgency badges */}
             <div className="flex flex-wrap items-center gap-2 mb-5">
               {attorney.is_verified && (
-                <VerifiedBadge type="identity" size="sm" />
+                <VerifiedAttorneyBadge
+                  isVerified={attorney.is_verified}
+                  verificationDate={verificationDate}
+                  size="sm"
+                />
               )}
               {attorney.accepts_new_clients === true && (
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-medium border border-emerald-200 dark:border-emerald-700">
@@ -231,12 +268,38 @@ export function AttorneyHero({ attorney }: AttorneyHeroProps) {
               )}
             </div>
 
+            {/* Trust bar — aggregated trust signals */}
+            <TrustBar
+              isVerified={attorney.is_verified}
+              responseTimeHours={responseTimeHours}
+              ratingAverage={attorney.average_rating}
+              reviewCount={attorney.review_count}
+              yearsExperience={yearsExperience}
+              className="mb-4"
+            />
+
+            {/* Social proof from real booking data */}
+            <SocialProof
+              consultationsThisMonth={consultationsThisMonth}
+              lastBookedAt={lastBookedAt}
+              className="mb-4"
+            />
+
+            {/* Independent bar verification link */}
+            <div className="mb-5">
+              <BarVerificationLink
+                barState={barState || attorney.department_code}
+                barNumber={attorney.bar_number}
+                barAssociationUrl={barAssociationUrl}
+              />
+            </div>
+
             {/* Primary CTA row */}
             <div className="flex flex-wrap gap-3">
               <motion.button
                 whileHover={reducedMotion ? undefined : { scale: 1.02 }}
                 whileTap={reducedMotion ? undefined : { scale: 0.98 }}
-                onClick={openEstimationWidget}
+                onClick={() => setShowConsultationModal(true)}
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-clay-400 to-clay-500 text-white font-semibold flex items-center gap-2 shadow-lg shadow-glow-clay hover:from-clay-500 hover:to-clay-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-clay-400 focus:ring-offset-2"
                 aria-label="Request a free consultation"
               >
@@ -269,6 +332,17 @@ export function AttorneyHero({ attorney }: AttorneyHeroProps) {
           </div>
         </div>
       </div>
+      {/* Consultation Request Modal */}
+      <ConsultationModal
+        isOpen={showConsultationModal}
+        onClose={() => setShowConsultationModal(false)}
+        attorney={{
+          id: attorney.id,
+          name: displayName,
+          slug: attorney.slug || attorney.id,
+          specialty: attorney.specialty,
+        }}
+      />
     </motion.div>
   )
 }

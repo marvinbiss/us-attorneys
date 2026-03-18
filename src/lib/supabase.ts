@@ -67,6 +67,10 @@ export interface AttorneyListRow {
   updated_at: string | null
   is_featured: boolean | null
   boost_level: number | null
+  // Trust signal fields
+  years_experience: number | null
+  consultation_fee: number | null
+  languages: string[] | null
 }
 
 /** Shape returned by Supabase join on states table (state:states!state_id(...)). */
@@ -184,6 +188,8 @@ const PROVIDER_LIST_SELECT = [
   'latitude', 'longitude',
   'created_at', 'updated_at',
   'is_featured', 'boost_level',
+  // Trust signal columns (migration 400)
+  'years_experience', 'consultation_fee', 'languages',
 ].join(',') + ',specialty:specialties!primary_specialty_id(slug,name)'
 
 

@@ -247,37 +247,76 @@ describe('getBookingsSchema', () => {
 // ============================================
 
 describe('createReviewSchema', () => {
-  const validReview = {
+  const validReviewWithOverall = {
     bookingId: validUUID,
     rating: 5,
-    comment: 'Excellent work, highly recommended!',
+    comment: 'Excellent work, highly recommended by everyone!',
   }
 
-  it('should accept a valid review', () => {
-    expect(createReviewSchema.safeParse(validReview).success).toBe(true)
+  const validReviewWithSubRatings = {
+    bookingId: validUUID,
+    ratingCommunication: 5,
+    ratingResult: 4,
+    ratingResponsiveness: 5,
+    comment: 'Excellent work, highly recommended by everyone!',
+  }
+
+  it('should accept a valid review with overall rating', () => {
+    expect(createReviewSchema.safeParse(validReviewWithOverall).success).toBe(true)
   })
 
-  it('should accept ratings 1-5', () => {
+  it('should accept a valid review with 3 sub-ratings', () => {
+    expect(createReviewSchema.safeParse(validReviewWithSubRatings).success).toBe(true)
+  })
+
+  it('should accept overall ratings 1-5', () => {
     for (let i = 1; i <= 5; i++) {
-      expect(createReviewSchema.safeParse({ ...validReview, rating: i }).success).toBe(true)
+      expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: i }).success).toBe(true)
+    }
+  })
+
+  it('should accept sub-ratings 1-5', () => {
+    for (let i = 1; i <= 5; i++) {
+      expect(createReviewSchema.safeParse({
+        ...validReviewWithSubRatings,
+        ratingCommunication: i,
+        ratingResult: i,
+        ratingResponsiveness: i,
+      }).success).toBe(true)
     }
   })
 
   it('should reject rating out of range', () => {
-    expect(createReviewSchema.safeParse({ ...validReview, rating: 0 }).success).toBe(false)
-    expect(createReviewSchema.safeParse({ ...validReview, rating: 6 }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 0 }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 6 }).success).toBe(false)
   })
 
   it('should reject non-integer ratings', () => {
-    expect(createReviewSchema.safeParse({ ...validReview, rating: 3.5 }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 3.5 }).success).toBe(false)
+  })
+
+  it('should reject review with no overall rating and incomplete sub-ratings', () => {
+    expect(createReviewSchema.safeParse({
+      bookingId: validUUID,
+      ratingCommunication: 5,
+      comment: 'Excellent work, highly recommended by everyone!',
+    }).success).toBe(false)
   })
 
   it('should reject short comments', () => {
-    expect(createReviewSchema.safeParse({ ...validReview, comment: 'Bien' }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, comment: 'Good' }).success).toBe(false)
   })
 
   it('should reject long comments', () => {
-    expect(createReviewSchema.safeParse({ ...validReview, comment: 'a'.repeat(501) }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, comment: 'a'.repeat(2001) }).success).toBe(false)
+  })
+
+  it('should accept optional wouldRecommend and isAnonymous', () => {
+    expect(createReviewSchema.safeParse({
+      ...validReviewWithSubRatings,
+      wouldRecommend: true,
+      isAnonymous: true,
+    }).success).toBe(true)
   })
 })
 

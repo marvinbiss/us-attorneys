@@ -78,10 +78,23 @@ export const getBookingsSchema = z.object({
 
 export const createReviewSchema = z.object({
   bookingId: uuidSchema,
-  rating: z.number().int().min(1).max(5),
-  comment: z.string().min(10, 'Comment too short').max(500, 'Comment too long'),
+  rating: z.number().int().min(1).max(5).optional(),
+  ratingCommunication: z.number().int().min(1, 'Communication rating required').max(5).optional(),
+  ratingResult: z.number().int().min(1, 'Results rating required').max(5).optional(),
+  ratingResponsiveness: z.number().int().min(1, 'Responsiveness rating required').max(5).optional(),
+  comment: z.string().min(20, 'Comment must be at least 20 characters').max(2000, 'Comment too long'),
+  wouldRecommend: z.boolean().optional(),
+  isAnonymous: z.boolean().optional(),
   reviewToken: z.string().optional(),
-})
+}).refine(
+  (data) => {
+    // Either all 3 sub-ratings provided, or a single overall rating
+    const hasSubRatings = data.ratingCommunication && data.ratingResult && data.ratingResponsiveness
+    const hasOverall = data.rating
+    return hasSubRatings || hasOverall
+  },
+  { message: 'Please provide either 3 sub-ratings or an overall rating' }
+)
 
 export const getReviewsSchema = z.object({
   attorneyId: uuidSchema.optional(),

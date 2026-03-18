@@ -157,27 +157,55 @@ describe('createBookingSchema', () => {
 })
 
 describe('createReviewSchema', () => {
-  const validReview = {
+  const validReviewWithOverall = {
     bookingId: '550e8400-e29b-41d4-a716-446655440000',
     rating: 4,
-    comment: 'Très bon travail, rapide et propre.',
+    comment: 'Excellent attorney work, very professional and responsive.',
   }
 
-  it('accepts valid review', () => {
-    expect(createReviewSchema.safeParse(validReview).success).toBe(true)
+  const validReviewWithSubRatings = {
+    bookingId: '550e8400-e29b-41d4-a716-446655440000',
+    ratingCommunication: 5,
+    ratingResult: 4,
+    ratingResponsiveness: 5,
+    comment: 'Excellent attorney work, very professional and responsive.',
+  }
+
+  it('accepts valid review with overall rating', () => {
+    expect(createReviewSchema.safeParse(validReviewWithOverall).success).toBe(true)
+  })
+
+  it('accepts valid review with 3 sub-ratings', () => {
+    expect(createReviewSchema.safeParse(validReviewWithSubRatings).success).toBe(true)
   })
 
   it('rejects rating out of range', () => {
-    expect(createReviewSchema.safeParse({ ...validReview, rating: 0 }).success).toBe(false)
-    expect(createReviewSchema.safeParse({ ...validReview, rating: 6 }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 0 }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 6 }).success).toBe(false)
   })
 
   it('rejects comment too short', () => {
-    expect(createReviewSchema.safeParse({ ...validReview, comment: 'Court' }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, comment: 'Short' }).success).toBe(false)
   })
 
   it('accepts optional reviewToken', () => {
-    expect(createReviewSchema.safeParse({ ...validReview, reviewToken: 'abc123' }).success).toBe(true)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, reviewToken: 'abc123' }).success).toBe(true)
+  })
+
+  it('rejects review with no rating and incomplete sub-ratings', () => {
+    expect(createReviewSchema.safeParse({
+      bookingId: '550e8400-e29b-41d4-a716-446655440000',
+      ratingCommunication: 5,
+      comment: 'Excellent attorney work, very professional and responsive.',
+    }).success).toBe(false)
+  })
+
+  it('accepts optional wouldRecommend and isAnonymous', () => {
+    expect(createReviewSchema.safeParse({
+      ...validReviewWithSubRatings,
+      wouldRecommend: true,
+      isAnonymous: false,
+    }).success).toBe(true)
   })
 })
 

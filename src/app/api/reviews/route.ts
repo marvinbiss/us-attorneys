@@ -39,6 +39,9 @@ interface BookingWithRelations {
 interface Review {
   id: string
   rating: number
+  rating_communication: number | null
+  rating_result: number | null
+  rating_responsiveness: number | null
   comment: string | null
   would_recommend: boolean
   client_name: string
@@ -151,6 +154,9 @@ export const GET = createApiHandler(async ({ request }) => {
           .select(`
             id,
             rating,
+            rating_communication,
+            rating_result,
+            rating_responsiveness,
             comment,
             would_recommend,
             client_name,
@@ -212,8 +218,22 @@ export const POST = createApiHandler(async ({ request }) => {
       return apiError('VALIDATION_ERROR', 'Invalid data', 400)
     }
 
-    const { bookingId, rating, comment, reviewToken } = validation.data
-    const wouldRecommend = body.wouldRecommend ?? true
+    const {
+      bookingId,
+      comment,
+      reviewToken,
+      ratingCommunication,
+      ratingResult,
+      ratingResponsiveness,
+      isAnonymous,
+    } = validation.data
+
+    // Compute overall rating: prefer sub-ratings average, fallback to single rating
+    const hasSubRatings = ratingCommunication && ratingResult && ratingResponsiveness
+    const rating = hasSubRatings
+      ? Math.round((ratingCommunication + ratingResult + ratingResponsiveness) / 3)
+      : validation.data.rating ?? 3
+    const wouldRecommend = validation.data.wouldRecommend ?? body.wouldRecommend ?? true
 
     // Validate HMAC review token (prevents fake reviews)
     if (!reviewToken) {
@@ -292,9 +312,12 @@ export const POST = createApiHandler(async ({ request }) => {
       .insert({
         booking_id: booking.id,
         attorney_id: booking.attorney_id,
-        client_name: clientInfo.name,
+        client_name: isAnonymous ? 'Verified Client' : clientInfo.name,
         client_email: clientInfo.email,
         rating,
+        rating_communication: ratingCommunication || null,
+        rating_result: ratingResult || null,
+        rating_responsiveness: ratingResponsiveness || null,
         comment: cleanComment,
         would_recommend: wouldRecommend,
         status: fraudIndicators.length > 0 ? 'pending_review' : 'published',

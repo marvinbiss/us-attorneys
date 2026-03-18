@@ -10,6 +10,7 @@ import {
   SearchX,
   Scale,
   ArrowRight,
+  ArrowUpDown,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { SearchResultCard, type SearchAttorney } from './SearchResultCard'
@@ -28,8 +29,21 @@ interface SearchResultsProps {
     city?: string
     rating?: string
     sort?: string
+    free_consultation?: string
+    verified?: string
+    radius?: string
+    available?: string
+    lang?: string
   }
 }
+
+const INLINE_SORT_OPTIONS = [
+  { value: 'relevance', label: 'Best match' },
+  { value: 'rating', label: 'Highest rated' },
+  { value: 'reviews', label: 'Most reviewed' },
+  { value: 'experience', label: 'Most experienced' },
+  { value: 'available', label: 'Available soonest' },
+]
 
 function Pagination({
   page,
@@ -175,6 +189,57 @@ function EmptyState({ query }: { query: string }) {
   )
 }
 
+function SortBar({ currentSort }: { currentSort: string }) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const [isPending, startTransition] = useTransition()
+
+  const handleSort = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      if (value && value !== 'relevance') {
+        params.set('sort', value)
+      } else {
+        params.delete('sort')
+      }
+      params.delete('page')
+      startTransition(() => {
+        router.push(`${pathname}?${params.toString()}`, { scroll: false })
+      })
+    },
+    [router, pathname, searchParams]
+  )
+
+  return (
+    <div
+      className={cn(
+        'flex items-center gap-2 mb-4 pb-4 border-b border-gray-100 dark:border-gray-700 overflow-x-auto scrollbar-hide',
+        isPending && 'opacity-60 pointer-events-none'
+      )}
+    >
+      <ArrowUpDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
+      <span className="text-xs font-medium text-gray-500 dark:text-gray-400 flex-shrink-0 hidden sm:inline">
+        Sort:
+      </span>
+      {INLINE_SORT_OPTIONS.map((opt) => (
+        <button
+          key={opt.value}
+          onClick={() => handleSort(opt.value)}
+          className={cn(
+            'flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap',
+            currentSort === opt.value
+              ? 'bg-blue-600 text-white shadow-sm'
+              : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+          )}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
 export function SearchResults({
   attorneys,
   total,
@@ -191,6 +256,11 @@ export function SearchResults({
     filters.state,
     filters.city,
     filters.rating,
+    filters.free_consultation,
+    filters.verified,
+    filters.radius,
+    filters.available,
+    filters.lang,
   ].filter(Boolean).length
 
   return (
@@ -250,6 +320,8 @@ export function SearchResults({
           <main className="flex-1 min-w-0">
             {attorneys.length > 0 ? (
               <>
+                {/* Inline sort bar */}
+                <SortBar currentSort={filters.sort || 'relevance'} />
                 <div className="space-y-4">
                   {attorneys.map((attorney, index) => (
                     <SearchResultCard

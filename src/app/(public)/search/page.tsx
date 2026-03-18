@@ -8,6 +8,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import { SearchResults } from '@/components/search/SearchResults'
 import { HeroSearch } from '@/components/search/HeroSearch'
 import type { SearchAttorney } from '@/components/search/SearchResultCard'
+import { getNextAvailableBatch } from '@/lib/availability'
 
 // ISR: revalidate every hour (search results change frequently)
 export const revalidate = 3600
@@ -111,6 +112,10 @@ function mapToSearchAttorney(row: AttorneyListRow & { distance_miles?: number | 
     bar_number: row.bar_number,
     is_featured: row.is_featured,
     distance_miles: (row as { distance_miles?: number | null }).distance_miles ?? null,
+    // Trust signal fields
+    years_experience: row.years_experience ?? null,
+    consultation_fee: row.consultation_fee ?? null,
+    languages: row.languages ?? null,
   }
 }
 
@@ -124,6 +129,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const city = getParam(params, 'city')
   const rating = getParam(params, 'rating')
   const sort = getParam(params, 'sort') as SearchFilters['sort'] || 'relevance'
+  const free_consultation = getParam(params, 'free_consultation')
+  const verified = getParam(params, 'verified')
+  const radius = getParam(params, 'radius')
+  const available = getParam(params, 'available')
+  const lang = getParam(params, 'lang')
   const page = Math.max(1, parseInt(getParam(params, 'page') || '1', 10))
   const limit = 20
 
@@ -141,7 +151,17 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   // Execute search
   const result = await searchAttorneys(filters)
-  const attorneys = result.attorneys.map(mapToSearchAttorney)
+  const baseAttorneys = result.attorneys.map(mapToSearchAttorney)
+
+  // Fetch availability for all attorneys in a single batch query (no N+1)
+  const attorneyIds = baseAttorneys.map((a) => a.id)
+  const availabilityMap = await getNextAvailableBatch(attorneyIds)
+
+  // Merge availability into attorney data
+  const attorneys = baseAttorneys.map((a) => ({
+    ...a,
+    availability: availabilityMap.get(a.id) ?? null,
+  }))
 
   // Breadcrumb items
   const breadcrumbItems: { label: string; href?: string }[] = [{ label: 'Search', href: '/search' }]
@@ -211,7 +231,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           limit={limit}
           hasMore={result.has_more}
           query={q}
-          filters={{ pa, state, city, rating, sort }}
+          filters={{ pa, state, city, rating, sort, free_consultation, verified, radius, available, lang }}
         />
       </Suspense>
     </div>

@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { createApiHandler, apiSuccess, apiError } from '@/lib/api/handler'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendCancellationNotification, logNotification } from '@/lib/notifications/email'
+import { sendPushToUser } from '@/lib/push/send'
+import { NOTIFICATION_TEMPLATES } from '@/lib/push/notifications'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -111,6 +113,46 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
     }).catch((err) => {
       logger.error('Failed to send cancellation notifications:', err)
     })
+  }
+
+  // Send push notification to the OTHER party (non-blocking)
+  const attorneyDisplayName = attorneyProfile?.full_name || 'Attorney'
+
+  if (cancelledBy === 'client') {
+    // Notify attorney: look up their user_id
+    const { data: attorneyRecord } = await adminSupabase
+      .from('attorneys')
+      .select('user_id')
+      .eq('id', booking.attorney_id)
+      .single()
+
+    if (attorneyRecord?.user_id) {
+      const pushPayload = NOTIFICATION_TEMPLATES.BOOKING_CANCELLED(
+        booking.client_name,
+        formattedDate,
+        'client',
+      )
+      sendPushToUser(attorneyRecord.user_id, {
+        ...pushPayload,
+        title: 'Client Cancelled',
+        body: `${booking.client_name} cancelled their appointment on ${formattedDate}`,
+        data: { url: '/attorney-dashboard/bookings' },
+      }).catch((err) => {
+        logger.error('Failed to send cancellation push to attorney', err)
+      })
+    }
+  } else {
+    // Notify client
+    if (booking.client_id) {
+      const pushPayload = NOTIFICATION_TEMPLATES.BOOKING_CANCELLED(
+        attorneyDisplayName,
+        formattedDate,
+        'attorney',
+      )
+      sendPushToUser(booking.client_id, pushPayload).catch((err) => {
+        logger.error('Failed to send cancellation push to client', err)
+      })
+    }
   }
 
   return apiSuccess({ message: 'Booking cancelled successfully' })

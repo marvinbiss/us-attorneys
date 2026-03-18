@@ -41,6 +41,7 @@ import NearbyCities from '@/components/seo/NearbyCities'
 import dynamic from 'next/dynamic'
 import type { Service, Location as LocationType, Provider } from '@/types'
 import { REVALIDATE } from '@/lib/cache'
+import PaginationNav from '@/components/ui/PaginationNav'
 
 const EstimationWidget = dynamic(
   () => import('@/components/estimation/EstimationWidget'),
@@ -113,11 +114,22 @@ async function resolveCityData(slug: string) {
 
 // slugify imported from '@/lib/utils'
 
+const ATTORNEYS_PER_PAGE = 20
+
 interface PageProps {
   params: Promise<{
     service: string
     location: string
   }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+function getParam(
+  params: { [key: string]: string | string[] | undefined },
+  key: string,
+): string {
+  const v = params[key]
+  return typeof v === 'string' ? v : ''
 }
 
 /** Truncate title to ~42 chars to leave room for " | US Attorneys" suffix (15 chars → total ~57, Google's display limit) */
@@ -126,8 +138,10 @@ function truncateTitle(title: string, maxLen = 42): string {
   return title.slice(0, maxLen - 1).replace(/\s+\S*$/, '') + '…'
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
   const { service: specialtySlug, location: locationSlug } = await params
+  const sp = await searchParams
+  const page = Math.max(1, parseInt(getParam(sp, 'page') || '1', 10))
 
   let specialtyName = ''
   let locationName = ''
@@ -192,7 +206,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         { title: `${specialtyName} ${locationName}: directory`, h1: `Best ${naturalTerm.plural} in ${locationName}` },
       ]
 
-  const title = truncateTitle(seoPairs[seoHash % seoPairs.length].title)
+  const baseTitle = truncateTitle(seoPairs[seoHash % seoPairs.length].title)
+  const title = page > 1 ? `${baseTitle} - Page ${page}` : baseTitle
 
   // Unique meta descriptions with provider count, department and regional context
   const descHash = Math.abs(hashCode(`desc-${specialtySlug}-${locationSlug}`))
@@ -214,11 +229,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ]
   const description = descTemplates[descHash % descTemplates.length]
 
+  // Canonical: self-referencing with ?page=N when N > 1
+  const canonicalBase = `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}`
+  const canonical = page > 1 ? `${canonicalBase}?page=${page}` : canonicalBase
+
+  // Noindex: thin content (0 attorneys), or deep pagination beyond page 50
+  const shouldIndex = attorneyCount > 0 && page <= 50
+
   return {
     title,
     description,
-    // Noindex thin-content pages (0 attorneys) — fail-open: attorneyCount defaults to 1 if DB is down
-    robots: attorneyCount > 0
+    robots: shouldIndex
       ? { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const }
       : { index: false, follow: true },
     openGraph: {
@@ -235,9 +256,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       images: [getServiceImage(specialtySlug).src],
     },
     alternates: {
-      // Always self-referencing: if noindex, canonical is irrelevant; if indexed, it must point to self
-      canonical: `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}`,
-      languages: getAlternateLanguages(`/practice-areas/${specialtySlug}/${locationSlug}`),
+      canonical,
+      languages: page <= 1 ? getAlternateLanguages(`/practice-areas/${specialtySlug}/${locationSlug}`) : undefined,
+    },
+    // rel prev/next for crawl discovery (still helps Bing + crawl efficiency)
+    other: {
+      ...(page > 1 ? { 'link-prev': `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}${page > 2 ? `?page=${page - 1}` : ''}` } : {}),
+      ...(attorneyCount > page * ATTORNEYS_PER_PAGE ? { 'link-next': `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}?page=${page + 1}` } : {}),
     },
   }
 }
@@ -297,8 +322,12 @@ function generateJsonLd(
   return [collectionPageSchema, serviceSchema, breadcrumbSchema]
 }
 
-export default async function ServiceLocationPage({ params }: PageProps) {
+export default async function ServiceLocationPage({ params, searchParams }: PageProps) {
   const { service: specialtySlug, location: locationSlug } = await params
+  const sp = await searchParams
+  const page = Math.max(1, parseInt(getParam(sp, 'page') || '1', 10))
+  const limit = ATTORNEYS_PER_PAGE
+  const offset = (page - 1) * limit
 
   // CMS override — if admin published content for this specific service+city page
   let cmsPage = null
@@ -359,12 +388,14 @@ export default async function ServiceLocationPage({ params }: PageProps) {
     location = fallback
   }
 
-  // 3. Fetch providers + total count in parallel
+  // 3. Fetch providers (paginated) + total count in parallel
   // (throw on providers failure so ISR keeps stale cache)
   const [providers, totalAttorneyCount] = await Promise.all([
-    getAttorneysByServiceAndLocation(specialtySlug, locationSlug),
+    getAttorneysByServiceAndLocation(specialtySlug, locationSlug, { limit, offset }),
     getAttorneyCountByServiceAndLocation(specialtySlug, locationSlug).catch(() => 0),
   ])
+
+  const totalPages = Math.max(1, Math.ceil(totalAttorneyCount / limit))
 
   const trade = getTradeContent(specialtySlug)
 
@@ -485,6 +516,8 @@ export default async function ServiceLocationPage({ params }: PageProps) {
   })
   jsonLdSchemas.push(speakableSchema)
 
+  const paginationBase = `/practice-areas/${specialtySlug}/${locationSlug}`
+
   return (
     <>
       {/* JSON-LD Structured Data */}
@@ -533,7 +566,21 @@ export default async function ServiceLocationPage({ params }: PageProps) {
         specialtySlug={specialtySlug}
         locationSlug={locationSlug}
         recentQuoteCount={recentQuoteCount}
+        currentPage={page}
+        totalPages={totalPages}
       />
+
+      {/* Server-rendered pagination */}
+      {totalAttorneyCount > limit && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <PaginationNav
+            currentPage={page}
+            totalItems={totalAttorneyCount}
+            perPage={limit}
+            basePath={paginationBase}
+          />
+        </div>
+      )}
 
       {trade && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">

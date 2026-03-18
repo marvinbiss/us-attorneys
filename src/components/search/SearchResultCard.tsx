@@ -1,16 +1,26 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import {
   Star,
   MapPin,
   Phone,
   Shield,
-  CheckCircle,
   Briefcase,
   ChevronRight,
+  Award,
+  GraduationCap,
+  ChevronDown,
+  Globe,
+  MessageCircle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { AvailabilityBadge } from '@/components/ui/AvailabilityBadge'
+import { VerifiedAttorneyBadge } from '@/components/ui/VerifiedBadge'
+import { ResponseTimeBadge } from '@/components/ui/ResponseTimeBadge'
+import { ConsultationModal } from '@/components/booking/ConsultationModal'
+import type { AvailabilitySlot } from '@/lib/availability'
 
 export interface SearchAttorney {
   id: string
@@ -29,6 +39,14 @@ export interface SearchAttorney {
   bar_number: string | null
   is_featured: boolean | null
   distance_miles?: number | null
+  /** Next available booking slot (from getNextAvailableBatch) */
+  availability?: AvailabilitySlot | null
+  // ── Trust signal fields ──────────────────────────────────────────
+  years_experience?: number | null
+  consultation_fee?: number | null // 0 = free consultation
+  languages?: string[] | null
+  response_time_hours?: number | null // avg response time in hours
+  practice_areas?: { slug: string; name: string }[] | null
 }
 
 interface SearchResultCardProps {
@@ -68,10 +86,19 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
 }
 
 export function SearchResultCard({ attorney }: SearchResultCardProps) {
+  const [showAllPAs, setShowAllPAs] = useState(false)
+  const [showConsultation, setShowConsultation] = useState(false)
+
   const specialtyName = attorney.specialty_name || attorney.specialty?.name || null
   const locationParts = [attorney.address_city, attorney.address_state].filter(Boolean)
   const locationText = locationParts.join(', ')
   const profileHref = `/attorneys/${attorney.slug}`
+  const isFreeConsultation = attorney.consultation_fee != null && attorney.consultation_fee === 0
+
+  // Practice areas: show top 3, expandable
+  const practiceAreas = attorney.practice_areas || []
+  const visiblePAs = showAllPAs ? practiceAreas : practiceAreas.slice(0, 3)
+  const hiddenCount = practiceAreas.length - 3
 
   // Generate initials for avatar
   const initials = attorney.name
@@ -134,19 +161,35 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate">
                   {attorney.name}
                 </h3>
-                {/* Verified + Bar */}
-                <div className="flex flex-wrap items-center gap-2 mt-1">
+                {/* Badges row: Verified + Bar + Free consultation + Response time + Availability */}
+                <div className="flex flex-wrap items-center gap-1.5 mt-1">
                   {attorney.is_verified && (
-                    <span className="inline-flex items-center gap-1 text-xs font-medium text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-full">
-                      <CheckCircle className="w-3 h-3" />
-                      Verified
-                    </span>
+                    <VerifiedAttorneyBadge
+                      isVerified={!!attorney.is_verified}
+                      size="sm"
+                    />
                   )}
                   {attorney.bar_number && (
                     <span className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
                       <Shield className="w-3 h-3" />
                       Bar #{attorney.bar_number}
                     </span>
+                  )}
+                  {isFreeConsultation && (
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2 py-0.5 rounded-full">
+                      <Award className="w-3 h-3" />
+                      Free consultation
+                    </span>
+                  )}
+                  {attorney.response_time_hours != null && attorney.response_time_hours > 0 && (
+                    <ResponseTimeBadge
+                      responseTimeHours={attorney.response_time_hours}
+                      size="sm"
+                    />
+                  )}
+                  {/* Availability badge -- Doctolib-inspired inline display */}
+                  {'availability' in attorney && (
+                    <AvailabilityBadge slot={attorney.availability} size="sm" />
                   )}
                 </div>
               </div>
@@ -163,7 +206,7 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
               </div>
             )}
 
-            {/* Practice area + location */}
+            {/* Practice area + location + experience + distance + languages */}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-3 text-sm">
               {specialtyName && (
                 <span className="inline-flex items-center gap-1.5 text-gray-700 dark:text-gray-300">
@@ -178,11 +221,54 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
                 </span>
               )}
               {attorney.distance_miles != null && (
-                <span className="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
+                <span className="inline-flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-medium">
+                  <MapPin className="w-3.5 h-3.5" />
                   {attorney.distance_miles.toFixed(1)} mi away
                 </span>
               )}
+              {attorney.years_experience != null && attorney.years_experience > 0 && (
+                <span className="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
+                  <GraduationCap className="w-3.5 h-3.5" />
+                  {attorney.years_experience} yr{attorney.years_experience !== 1 ? 's' : ''} experience
+                </span>
+              )}
+              {attorney.languages && attorney.languages.length > 1 && (
+                <span className="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
+                  <Globe className="w-3.5 h-3.5" />
+                  {attorney.languages.slice(0, 3).join(', ')}
+                  {attorney.languages.length > 3 && ` +${attorney.languages.length - 3}`}
+                </span>
+              )}
             </div>
+
+            {/* Practice area tags (top 3, expandable) */}
+            {practiceAreas.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
+                {visiblePAs.map((pa) => (
+                  <span
+                    key={pa.slug}
+                    className="inline-block text-xs font-medium text-violet-700 dark:text-violet-300 bg-violet-50 dark:bg-violet-900/20 px-2 py-0.5 rounded-full"
+                  >
+                    {pa.name}
+                  </span>
+                ))}
+                {hiddenCount > 0 && !showAllPAs && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      setShowAllPAs(true)
+                    }}
+                    className="inline-flex items-center gap-0.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full transition-colors"
+                    aria-label={`Show ${hiddenCount} more practice areas`}
+                  >
+                    +{hiddenCount} more
+                    <ChevronDown className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+            )}
 
             {/* Phone + CTA on desktop */}
             <div className="hidden sm:flex items-center gap-4 mt-4">
@@ -192,6 +278,19 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
                   {attorney.phone}
                 </span>
               )}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  setShowConsultation(true)
+                }}
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 rounded-full hover:bg-emerald-100 dark:hover:bg-emerald-900/30"
+                aria-label={`Request consultation with ${attorney.name}`}
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                Consultation
+              </button>
               <span className="ml-auto inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 dark:text-blue-400 group-hover:underline">
                 View profile
                 <ChevronRight className="w-4 h-4" />
@@ -202,18 +301,39 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
 
         {/* Mobile CTA bar */}
         <div className="sm:hidden mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
-          {attorney.phone && (
-            <span className="inline-flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
-              <Phone className="w-3.5 h-3.5" />
-              {attorney.phone}
-            </span>
-          )}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              setShowConsultation(true)
+            }}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 px-2.5 py-1 rounded-full"
+            aria-label={`Request consultation with ${attorney.name}`}
+          >
+            <MessageCircle className="w-3 h-3" />
+            Consultation
+          </button>
           <span className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400">
             View profile
             <ChevronRight className="w-4 h-4" />
           </span>
         </div>
       </Link>
+
+      {/* Consultation Modal */}
+      {showConsultation && (
+        <ConsultationModal
+          isOpen={showConsultation}
+          onClose={() => setShowConsultation(false)}
+          attorney={{
+            id: attorney.id,
+            name: attorney.name,
+            slug: attorney.slug,
+            specialty: specialtyName,
+          }}
+        />
+      )}
     </article>
   )
 }

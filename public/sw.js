@@ -129,44 +129,73 @@ self.addEventListener('push', (event) => {
     const data = event.data.json()
 
     const options = {
-      body: data.body,
-      icon: '/icons/icon-192x192.png',
-      badge: '/icons/badge-72x72.png',
-      vibrate: [100, 50, 100],
+      body: data.body || '',
+      icon: data.icon || '/icons/icon-192x192.png',
+      badge: data.badge || '/icons/badge-72x72.png',
+      vibrate: [200, 100, 200],
+      tag: data.tag || undefined,
+      renotify: !!data.tag, // Re-alert if same tag replaces an existing notification
       data: {
         url: data.url || '/',
+        timestamp: Date.now(),
       },
       actions: data.actions || [],
+      requireInteraction: false,
     }
 
     event.waitUntil(
-      self.registration.showNotification(data.title, options)
+      self.registration.showNotification(data.title || 'US Attorneys', options)
     )
   } catch (error) {
     console.error('[ServiceWorker] Push notification error:', error)
+    // Fallback: show a generic notification so the user sees something
+    event.waitUntil(
+      self.registration.showNotification('US Attorneys', {
+        body: 'You have a new notification',
+        icon: '/icons/icon-192x192.png',
+        badge: '/icons/badge-72x72.png',
+      })
+    )
   }
 })
 
-// Handle notification click
+// Handle notification click (main body or action buttons)
 self.addEventListener('notificationclick', (event) => {
   event.notification.close()
 
-  const url = event.notification.data?.url || '/'
+  // If an action button was clicked, use its action as a URL path if it starts with /
+  let targetUrl = event.notification.data?.url || '/'
+  if (event.action && event.action.startsWith('/')) {
+    targetUrl = event.action
+  }
 
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
-      // If a window is already open, focus it
+      // Try to find an existing window on the same origin and navigate it
       for (const client of clientList) {
-        if (client.url === url && 'focus' in client) {
-          return client.focus()
+        try {
+          const clientUrl = new URL(client.url)
+          if (clientUrl.origin === self.location.origin && 'focus' in client) {
+            // Navigate the existing window to the target URL
+            client.navigate(targetUrl)
+            return client.focus()
+          }
+        } catch (_e) {
+          // Ignore URL parsing errors
         }
       }
-      // Otherwise open a new window
+      // No matching window — open a new one
       if (clients.openWindow) {
-        return clients.openWindow(url)
+        return clients.openWindow(targetUrl)
       }
     })
   )
+})
+
+// Handle notification close (analytics tracking)
+self.addEventListener('notificationclose', (event) => {
+  // Could be used for analytics — track dismissed notifications
+  console.log('[ServiceWorker] Notification closed:', event.notification.tag || 'untagged')
 })
 
 // Background sync for offline bookings

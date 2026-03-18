@@ -79,6 +79,9 @@ export interface Review {
   id: string
   author: string
   rating: number
+  rating_communication?: number
+  rating_result?: number
+  rating_responsiveness?: number
   date: string
   dateISO?: string
   comment: string
@@ -86,6 +89,9 @@ export interface Review {
   hasPhoto?: boolean
   photoUrl?: string
   verified?: boolean
+  helpful_count?: number
+  attorney_response?: string
+  attorney_responded_at?: string
 }
 
 export function getDisplayName(attorney: Artisan): string {

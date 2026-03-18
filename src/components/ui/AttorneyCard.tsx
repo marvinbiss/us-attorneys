@@ -9,6 +9,8 @@ import { useState } from 'react'
 import { getAttorneyUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { AvailabilityBadge } from '@/components/ui/AvailabilityBadge'
+import type { AvailabilitySlot } from '@/lib/availability'
 
 interface AttorneyCardProps {
   id: string
@@ -25,6 +27,8 @@ interface AttorneyCardProps {
   isFeatured?: boolean
   isAvailableNow?: boolean
   nextAvailable?: string
+  /** Structured availability slot from getNextAvailableBatch */
+  availability?: AvailabilitySlot | null
   specialties?: string[]
   priceRange?: string
   responseTime?: string
@@ -47,6 +51,7 @@ export function AttorneyCard({
   isFeatured = false,
   isAvailableNow = false,
   nextAvailable,
+  availability,
   specialties = [],
   priceRange,
   responseTime,
@@ -139,6 +144,13 @@ export function AttorneyCard({
               <MapPin className="w-4 h-4" />
               {location}
             </div>
+
+            {/* Availability badge — Doctolib pattern */}
+            {availability !== undefined && (
+              <div className="mb-3">
+                <AvailabilityBadge slot={availability} size="sm" />
+              </div>
+            )}
 
             {/* Specialties */}
             {specialties.length > 0 && (
@@ -275,8 +287,15 @@ export function AttorneyCard({
             className="absolute top-3 right-3 z-10"
           />
 
-          {/* Availability */}
-          {isAvailableNow ? (
+          {/* Availability — image overlay (legacy props or structured) */}
+          {availability !== undefined ? (
+            availability && availability.isToday ? (
+              <div className="absolute bottom-3 left-3 bg-emerald-500 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+                <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                Available today
+              </div>
+            ) : null
+          ) : isAvailableNow ? (
             <div className="absolute bottom-3 left-3 bg-green-500 text-white text-xs font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
               <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
               Available now
@@ -316,6 +335,13 @@ export function AttorneyCard({
             <MapPin className="w-3.5 h-3.5" />
             {location}
           </div>
+
+          {/* Availability badge — Doctolib pattern (below location) */}
+          {availability !== undefined && (
+            <div className="pt-0.5">
+              <AvailabilityBadge slot={availability} size="sm" />
+            </div>
+          )}
 
           {/* Specialties */}
           {specialties.length > 0 && (

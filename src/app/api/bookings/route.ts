@@ -13,6 +13,8 @@ import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/err
 import { apiLogger } from '@/lib/logger'
 import { getIdempotentResponse, setIdempotentResponse } from '@/lib/api/idempotency'
 import { withTimeout } from '@/lib/api/timeout'
+import { sendPushToUser } from '@/lib/push/send'
+import { NOTIFICATION_TEMPLATES } from '@/lib/push/notifications'
 import { z } from 'zod'
 
 // Schema for GET request query params
@@ -263,10 +265,46 @@ export const POST = createApiHandler(async ({ request }) => {
     message: serviceDescription,
   }
 
-  // Send notifications asynchronously (don't block response)
+  // Send email/SMS notifications asynchronously (don't block response)
   sendBookingNotifications(notificationPayload).catch((err) => {
     apiLogger.error('Failed to send booking confirmation notifications', err)
   })
+
+  // Send push notification to client (best-effort, never blocks)
+  const supabaseAuth = await createClient()
+  const { data: { user: authUser } } = await supabaseAuth.auth.getUser()
+  if (authUser?.id) {
+    const pushPayload = NOTIFICATION_TEMPLATES.BOOKING_CONFIRMED(
+      attorneyDisplayName,
+      formattedDate,
+      slot.start_time,
+    )
+    sendPushToUser(authUser.id, pushPayload).catch((err) => {
+      apiLogger.error('Failed to send booking confirmation push', err)
+    })
+  }
+
+  // Send push notification to attorney (new lead alert)
+  if (attorneyProfile) {
+    // Look up the attorney's user_id from attorneys table
+    const { data: attorneyRecord } = await adminSupabase
+      .from('attorneys')
+      .select('user_id')
+      .eq('id', attorneyId)
+      .single()
+
+    if (attorneyRecord?.user_id) {
+      const attorneyPush = NOTIFICATION_TEMPLATES.ATTORNEY_NEW_LEAD(
+        clientName,
+        serviceDescription || 'Consultation',
+        formattedDate,
+        slot.start_time,
+      )
+      sendPushToUser(attorneyRecord.user_id, attorneyPush).catch((err) => {
+        apiLogger.error('Failed to send attorney new lead push', err)
+      })
+    }
+  }
 
   const response = NextResponse.json(
     createSuccessResponse({

@@ -4,12 +4,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { MapPin, List, Map as MapIcon, Search, ChevronDown, ArrowRight, FileText, SearchX } from 'lucide-react'
+import { MapPin, List, Map as MapIcon, Search, ArrowRight, FileText, SearchX } from 'lucide-react'
 import { Provider, Service, Location } from '@/types'
 import AttorneyList from '@/components/AttorneyList'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
-
-const PAGE_SIZE = 50
 
 // Import GeographicMap (world-class version) dynamically to avoid SSR issues with Leaflet
 const GeographicMap = dynamic(() => import('@/components/maps/GeographicMap'), {
@@ -33,6 +31,8 @@ interface ServiceLocationPageClientProps {
   specialtySlug?: string
   locationSlug?: string
   recentQuoteCount?: number
+  currentPage?: number
+  totalPages?: number
 }
 
 export default function ServiceLocationPageClient({
@@ -44,12 +44,13 @@ export default function ServiceLocationPageClient({
   specialtySlug,
   locationSlug,
   recentQuoteCount = 0,
+  currentPage = 1,
+  totalPages = 1,
 }: ServiceLocationPageClientProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const [allProviders, setAllProviders] = useState<Provider[]>(initialProviders)
-  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [allProviders] = useState<Provider[]>(initialProviders)
   const [selectedProvider, setSelectedProvider] = useState<Provider | null>(null)
   const [viewMode, setViewMode] = useState<'split' | 'list' | 'map'>('split')
   const [_isMobile, setIsMobile] = useState(false)
@@ -88,27 +89,6 @@ export default function ServiceLocationPageClient({
     setSortOrder(value)
     updateUrlParams(searchQuery, value)
   }, [searchQuery, updateUrlParams])
-
-  const hasMore = allProviders.length < totalCount
-
-  const loadMore = useCallback(async () => {
-    if (isLoadingMore || !hasMore || !specialtySlug || !locationSlug) return
-    setIsLoadingMore(true)
-    try {
-      const res = await fetch(
-        `/api/attorneys/listing?service=${specialtySlug}&location=${locationSlug}&offset=${allProviders.length}&limit=${PAGE_SIZE}`
-      )
-      if (!res.ok) throw new Error('fetch error')
-      const data = await res.json()
-      if (data.providers?.length) {
-        setAllProviders(prev => [...prev, ...data.providers])
-      }
-    } catch {
-      // silently fail — user can retry by clicking again
-    } finally {
-      setIsLoadingMore(false)
-    }
-  }, [isLoadingMore, hasMore, specialtySlug, locationSlug, allProviders.length])
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -375,22 +355,11 @@ export default function ServiceLocationPageClient({
                   sortOrder={sortOrder}
                   highlightedProviderId={mapHoveredProviderId}
                 />
-                {hasMore && (
-                  <div className="p-4 border-t border-gray-100 bg-white sticky bottom-0">
-                    <button
-                      onClick={loadMore}
-                      disabled={isLoadingMore}
-                      className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-clay-50 hover:bg-clay-100 text-clay-600 font-semibold rounded-xl transition-colors disabled:opacity-60"
-                    >
-                      {isLoadingMore ? (
-                        <span className="w-4 h-4 border-2 border-clay-400 border-t-transparent rounded-full animate-spin" />
-                      ) : (
-                        <ChevronDown className="w-4 h-4" />
-                      )}
-                      {isLoadingMore
-                        ? 'Loading...'
-                        : `Show more (${allProviders.length} / ${totalCount.toLocaleString('en-US')})`}
-                    </button>
+                {totalPages > 1 && (
+                  <div className="p-4 border-t border-gray-100 bg-white text-center">
+                    <p className="text-sm text-gray-500">
+                      Page {currentPage} of {totalPages} — {totalCount.toLocaleString('en-US')} attorneys total
+                    </p>
                   </div>
                 )}
               </>
