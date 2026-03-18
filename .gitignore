@@ -53,3 +53,4 @@ scripts/output/
 .agents/
 .sb-pentest-*
 .cursor/skills/supabase-*
+.claude/worktrees/
