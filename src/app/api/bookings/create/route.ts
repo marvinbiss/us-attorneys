@@ -9,6 +9,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { sendEmail, emailTemplates } from '@/lib/services/email-service'
 import { logger } from '@/lib/logger'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
+import { handleIdempotency, cacheIdempotencyResult } from '@/lib/idempotency'
 
 const createBookingBodySchema = z.object({
   attorney_id: z.string().uuid(),
@@ -26,6 +27,11 @@ type CreateBookingBody = z.infer<typeof createBookingBodySchema>
 
 export async function POST(request: NextRequest) {
   try {
+    // Idempotency check — prevent double bookings
+    const idempotency = await handleIdempotency(request)
+    if (idempotency && 'cached' in idempotency) return idempotency.cached
+    const idempotencyKey = idempotency && 'key' in idempotency ? idempotency.key : null
+
     // Rate limiting — booking category (10/min)
     const rl = await rateLimit(request, RATE_LIMITS.booking)
     if (!rl.success) {
@@ -221,23 +227,27 @@ export async function POST(request: NextRequest) {
     }
 
     // 8. Return created booking
-    return NextResponse.json(
-      {
-        success: true,
-        booking: {
-          id: booking.id,
-          attorney_id: booking.attorney_id,
-          scheduled_at: booking.scheduled_at,
-          duration_minutes: booking.duration_minutes,
-          status: booking.status,
-          daily_room_url: booking.daily_room_url,
-          client_name: booking.client_name,
-          client_email: booking.client_email,
-          created_at: booking.created_at,
-        },
+    const responseBody = {
+      success: true,
+      booking: {
+        id: booking.id,
+        attorney_id: booking.attorney_id,
+        scheduled_at: booking.scheduled_at,
+        duration_minutes: booking.duration_minutes,
+        status: booking.status,
+        daily_room_url: booking.daily_room_url,
+        client_name: booking.client_name,
+        client_email: booking.client_email,
+        created_at: booking.created_at,
       },
-      { status: 201 }
-    )
+    }
+
+    // Cache result for idempotency (fire-and-forget)
+    if (idempotencyKey) {
+      cacheIdempotencyResult(idempotencyKey, 201, responseBody)
+    }
+
+    return NextResponse.json(responseBody, { status: 201 })
   } catch (error) {
     logger.error('Booking creation error', error as Error)
     return NextResponse.json(

@@ -5,16 +5,39 @@ import { sanitizeSearchQuery } from '@/lib/sanitize'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { createApiHandler } from '@/lib/api/handler'
+import { parseCursorParams, decodeCursor, buildCursorResponse } from '@/lib/pagination'
 
-// GET query params schema
+// GET query params schema (legacy page-based + new cursor-based)
 const providersQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
   filter: z.enum(['all', 'verified', 'pending', 'suspended']).optional().default('all'),
   search: z.string().max(100).optional().default(''),
+  cursor: z.string().optional(),
 })
 
 export const dynamic = 'force-dynamic'
+
+/** Transform a raw DB row into the frontend provider shape */
+function transformProvider(p: Record<string, unknown>) {
+  return {
+    id: p.id,
+    name: p.name,
+    slug: p.slug,
+    email: p.email || '',
+    phone: p.phone || '',
+    address_city: p.address_city || '',
+    address_state: p.address_state || '',
+    specialty: (p.specialty as string) || 'Attorney',
+    is_verified: p.is_verified,
+    is_active: p.is_active,
+    rating_average: Number(p.rating_average) || 0,
+    review_count: Number(p.review_count) || 0,
+    created_at: p.created_at,
+    source: p.source,
+    bar_number: p.bar_number,
+  }
+}
 
 // Define the select columns once
 const SELECT_COLUMNS = `
@@ -24,8 +47,8 @@ const SELECT_COLUMNS = `
   email,
   phone,
   address_city,
-  address_region,
-  siret,
+  address_state,
+  bar_number,
   specialty,
   is_verified,
   is_active,
@@ -45,11 +68,12 @@ export const GET = createApiHandler(async ({ request }) => {
   const supabase = createAdminClient()
 
   const searchParams = new URL(request.url).searchParams
-  const queryParams = {
+  const queryParams: Record<string, string | undefined> = {
     page: searchParams.get('page') || '1',
     limit: searchParams.get('limit') || '20',
     filter: searchParams.get('filter') || 'all',
     search: searchParams.get('search') || '',
+    cursor: searchParams.get('cursor') || undefined,
   }
   const result = providersQuerySchema.safeParse(queryParams)
   if (!result.success) {
@@ -60,69 +84,102 @@ export const GET = createApiHandler(async ({ request }) => {
   }
   const { page, limit, filter, search } = result.data
 
-  const offset = (page - 1) * limit
+  // Determine pagination mode: cursor-based (O(1)) or legacy offset-based (O(n))
+  const cursorParams = parseCursorParams(searchParams, { defaultLimit: limit, maxLimit: 100 })
+  const useCursorMode = cursorParams.useCursor
+  const effectiveLimit = cursorParams.limit
 
-  // Build query with filters
-  let query = supabase
-    .from('attorneys')
-    .select(SELECT_COLUMNS, { count: 'exact' })
-
-  // Apply filters using in() for reliable boolean comparison
-  if (filter === 'verified') {
-    query = query.in('is_verified', [true]).in('is_active', [true])
-  } else if (filter === 'pending') {
-    query = query.in('is_verified', [false]).in('is_active', [true])
-  } else if (filter === 'suspended') {
-    query = query.in('is_active', [false])
-  }
-
-  // Apply search (sanitized to prevent injection)
-  if (search) {
-    const sanitized = sanitizeSearchQuery(search)
-    if (sanitized) {
-      query = query.or(`name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,address_city.ilike.%${sanitized}%,siret.ilike.%${sanitized}%`)
+  // Build base query with filters
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const applyFilters = (q: any) => {
+    let filtered = q
+    if (filter === 'verified') {
+      filtered = filtered.in('is_verified', [true]).in('is_active', [true])
+    } else if (filter === 'pending') {
+      filtered = filtered.in('is_verified', [false]).in('is_active', [true])
+    } else if (filter === 'suspended') {
+      filtered = filtered.in('is_active', [false])
     }
+    if (search) {
+      const sanitized = sanitizeSearchQuery(search)
+      if (sanitized) {
+        filtered = filtered.or(`name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,address_city.ilike.%${sanitized}%,bar_number.ilike.%${sanitized}%`)
+      }
+    }
+    return filtered
   }
 
-  // Execute query with ordering and pagination
-  const { data: providers, count, error } = await query
-    .order('created_at', { ascending: false })
-    .range(offset, offset + limit - 1)
+  let response: NextResponse
 
-  if (error) {
-    logger.warn('Providers query failed', { code: error.code, message: error.message })
-    return NextResponse.json(
-      { success: false, error: { message: 'Error retrieving attorneys', code: error.code } },
-      { status: 502 }
+  if (useCursorMode) {
+    // ── Cursor-based pagination (O(1)) ──
+    // Fetch limit + 1 to detect hasMore
+    let query = applyFilters(
+      supabase.from('attorneys').select(SELECT_COLUMNS)
     )
+
+    // Apply cursor: filter rows with created_at < cursor value (descending order)
+    if (cursorParams.cursor) {
+      const decoded = decodeCursor(cursorParams.cursor)
+      query = query.lt('created_at', decoded)
+    }
+
+    const { data: providers, error } = await query
+      .order('created_at', { ascending: false })
+      .limit(effectiveLimit + 1)
+
+    if (error) {
+      logger.warn('Providers cursor query failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Error retrieving attorneys', code: error.code } },
+        { status: 502 }
+      )
+    }
+
+    const cursorResult = buildCursorResponse(
+      (providers || []) as Record<string, unknown>[],
+      effectiveLimit,
+      'created_at',
+    )
+
+    const transformedProviders = cursorResult.data.map(transformProvider)
+
+    response = NextResponse.json({
+      success: true,
+      providers: transformedProviders,
+      nextCursor: cursorResult.nextCursor,
+      hasMore: cursorResult.hasMore,
+    })
+  } else {
+    // ── Legacy offset-based pagination (backwards compatible) ──
+    const offset = (page - 1) * limit
+
+    let query = applyFilters(
+      supabase.from('attorneys').select(SELECT_COLUMNS, { count: 'exact' })
+    )
+
+    const { data: providers, count, error } = await query
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1)
+
+    if (error) {
+      logger.warn('Providers query failed', { code: error.code, message: error.message })
+      return NextResponse.json(
+        { success: false, error: { message: 'Error retrieving attorneys', code: error.code } },
+        { status: 502 }
+      )
+    }
+
+    const transformedProviders = (providers || []).map(transformProvider)
+
+    response = NextResponse.json({
+      success: true,
+      providers: transformedProviders,
+      total: count || 0,
+      page,
+      totalPages: Math.ceil((count || 0) / limit),
+    })
   }
-
-  // Transform data for frontend
-  const transformedProviders = (providers || []).map((p: Record<string, unknown>) => ({
-    id: p.id,
-    name: p.name,
-    slug: p.slug,
-    email: p.email || '',
-    phone: p.phone || '',
-    address_city: p.address_city || '',
-    address_region: p.address_region || '',
-    specialty: (p.specialty as string) || 'Attorney',
-    is_verified: p.is_verified,
-    is_active: p.is_active,
-    rating_average: Number(p.rating_average) || 0,
-    review_count: Number(p.review_count) || 0,
-    created_at: p.created_at,
-    source: p.source,
-    siret: p.siret,
-  }))
-
-  const response = NextResponse.json({
-    success: true,
-    providers: transformedProviders,
-    total: count || 0,
-    page,
-    totalPages: Math.ceil((count || 0) / limit),
-  })
 
   // Prevent caching
   response.headers.set('Cache-Control', 'private, no-store, no-cache, must-revalidate, max-age=0')

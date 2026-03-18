@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
 import { validateStripePriceIds } from '@/lib/stripe-admin'
 import { z } from 'zod'
+import { handleIdempotency, cacheIdempotencyResult } from '@/lib/idempotency'
 
 // Accept both plan_id (from UpgradeButton) and planId (legacy)
 const checkoutSchema = z.object({
@@ -21,6 +22,11 @@ const checkoutSchema = z.object({
 )
 
 export async function POST(request: Request) {
+  // Idempotency check — prevent double checkout sessions
+  const idempotency = await handleIdempotency(request)
+  if (idempotency && 'cached' in idempotency) return idempotency.cached
+  const idempotencyKey = idempotency && 'key' in idempotency ? idempotency.key : null
+
   // Validate price IDs on first request (logs warning if missing, does not crash)
   validateStripePriceIds()
 
@@ -94,7 +100,14 @@ export async function POST(request: Request) {
       },
     })
 
-    return NextResponse.json({ sessionId: session.id, url: session.url })
+    const responseBody = { sessionId: session.id, url: session.url }
+
+    // Cache result for idempotency (fire-and-forget)
+    if (idempotencyKey) {
+      cacheIdempotencyResult(idempotencyKey, 200, responseBody)
+    }
+
+    return NextResponse.json(responseBody)
   } catch (error) {
     logger.error('Stripe checkout error:', error)
     return NextResponse.json(
