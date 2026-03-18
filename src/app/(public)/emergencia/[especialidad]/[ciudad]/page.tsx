@@ -9,6 +9,7 @@ import {
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { practiceAreas as staticPracticeAreas, getCityBySlug, getStateByCode } from '@/lib/data/usa'
 import { SITE_URL } from '@/lib/seo/config'
+import { getAlternateLanguages } from '@/lib/seo/hreflang'
 import { hashCode } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
 import { getAttorneyUrl } from '@/lib/utils'
@@ -161,7 +162,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(enSlug).src] },
     alternates: {
       canonical: `${SITE_URL}/emergencia/${especialidad}/${ciudad}`,
-      languages: { 'en': `${SITE_URL}/emergency/${enSlug}/${ciudad}`, 'es': `${SITE_URL}/emergencia/${especialidad}/${ciudad}`, 'x-default': `${SITE_URL}/emergency/${enSlug}/${ciudad}` },
+      languages: getAlternateLanguages(`/emergencia/${especialidad}/${ciudad}`),
     },
   }
 }

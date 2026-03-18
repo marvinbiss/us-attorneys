@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { Shield, Copy, Check, Code, Globe, ExternalLink, ChevronDown, Search, Sparkles, TrendingUp, Users } from 'lucide-react'
 import { SITE_URL } from '@/lib/seo/config'
 
@@ -306,13 +307,13 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
             <div>
               <p className="text-sm font-medium text-gray-700 mb-3">Live preview</p>
               <div className={`rounded-xl border p-8 flex items-center justify-center min-h-[160px] ${style === 'dark' ? 'bg-gray-800 border-gray-700' : 'bg-gray-100 border-gray-200'}`}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={previewBadgeUrl}
                   alt={`Badge ${displayName}`}
                   width={parseInt(badgeW)}
                   height={parseInt(badgeH)}
                   className="max-w-full h-auto"
+                  unoptimized
                 />
               </div>
               {isVerifiedBadge && (

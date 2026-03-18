@@ -44,13 +44,13 @@ const SPANISH_PA_SLUGS: Record<string, string> = {
   'personal-injury': 'lesiones-personales',
   'car-accidents': 'accidentes-de-auto',
   'truck-accidents': 'accidentes-de-camion',
-  'motorcycle-accidents': 'accidentes-de-motocicleta',
-  'slip-and-fall': 'resbalones-y-caidas',
+  'motorcycle-accidents': 'accidentes-de-moto',
+  'slip-and-fall': 'caidas-y-resbalones',
   'medical-malpractice': 'negligencia-medica',
   'wrongful-death': 'muerte-injusta',
-  'product-liability': 'responsabilidad-por-productos',
+  'product-liability': 'responsabilidad-del-producto',
   'workers-compensation': 'compensacion-laboral',
-  'nursing-home-abuse': 'abuso-en-hogares-de-ancianos',
+  'nursing-home-abuse': 'abuso-en-asilos',
   'bicycle-accidents': 'accidentes-de-bicicleta',
   'pedestrian-accidents': 'accidentes-de-peatones',
   'brain-injury': 'lesion-cerebral',
@@ -68,7 +68,7 @@ const SPANISH_PA_SLUGS: Record<string, string> = {
   'swimming-pool-accidents': 'accidentes-en-piscinas',
   // CRIMINAL DEFENSE (20)
   'criminal-defense': 'defensa-criminal',
-  'dui-dwi': 'dui-y-dwi',
+  'dui-dwi': 'dui-dwi',
   'drug-crimes': 'delitos-de-drogas',
   'white-collar-crime': 'delitos-de-cuello-blanco',
   'federal-crimes': 'delitos-federales',
@@ -130,9 +130,9 @@ const SPANISH_PA_SLUGS: Record<string, string> = {
   'software-ip': 'propiedad-intelectual-de-software',
   // REAL ESTATE (10)
   'real-estate-law': 'derecho-inmobiliario',
-  'landlord-tenant': 'propietarios-e-inquilinos',
+  'landlord-tenant': 'propietario-inquilino',
   'foreclosure': 'ejecucion-hipotecaria',
-  'zoning-land-use': 'zonificacion-y-uso-del-suelo',
+  'zoning-land-use': 'zonificacion-uso-de-suelo',
   'construction-law': 'derecho-de-construccion',
   'commercial-real-estate': 'bienes-raices-comerciales',
   'title-disputes': 'disputas-de-titulo',
@@ -140,12 +140,12 @@ const SPANISH_PA_SLUGS: Record<string, string> = {
   'hoa-disputes': 'disputas-de-hoa',
   'eminent-domain': 'dominio-eminente',
   // IMMIGRATION (12)
-  'immigration-law': 'derecho-migratorio',
-  'green-cards': 'tarjetas-verdes',
-  'visa-applications': 'solicitudes-de-visa',
+  'immigration-law': 'inmigracion',
+  'green-cards': 'residencia-permanente',
+  'visa-applications': 'solicitud-de-visa',
   'deportation-defense': 'defensa-contra-deportacion',
   'asylum': 'asilo',
-  'citizenship-naturalization': 'ciudadania-y-naturalizacion',
+  'citizenship-naturalization': 'ciudadania-naturalizacion',
   'daca': 'daca',
   'work-permits': 'permisos-de-trabajo',
   'investor-visas': 'visas-de-inversionista',
@@ -154,9 +154,9 @@ const SPANISH_PA_SLUGS: Record<string, string> = {
   'immigration-detention': 'detencion-migratoria',
   // ESTATE PLANNING (10)
   'estate-planning': 'planificacion-patrimonial',
-  'wills-trusts': 'testamentos-y-fideicomisos',
-  'probate': 'sucesion-testamentaria',
-  'elder-law': 'derecho-de-adultos-mayores',
+  'wills-trusts': 'testamentos-fideicomisos',
+  'probate': 'sucesiones',
+  'elder-law': 'derecho-de-ancianos',
   'guardianship': 'tutela-legal',
   'living-trusts': 'fideicomisos-en-vida',
   'power-of-attorney': 'poder-notarial',
@@ -168,7 +168,7 @@ const SPANISH_PA_SLUGS: Record<string, string> = {
   'wrongful-termination': 'despido-injustificado',
   'workplace-discrimination': 'discriminacion-laboral',
   'sexual-harassment': 'acoso-sexual',
-  'wage-hour-claims': 'reclamos-de-salarios-y-horas',
+  'wage-hour-claims': 'reclamos-salariales',
   'fmla-violations': 'violaciones-de-fmla',
   'whistleblower': 'denunciante',
   'non-compete-employment': 'no-competencia-laboral',
@@ -187,7 +187,7 @@ const SPANISH_PA_SLUGS: Record<string, string> = {
   'student-loan-debt': 'deuda-de-prestamos-estudiantiles',
   // TAX (7)
   'tax-law': 'derecho-fiscal',
-  'irs-disputes': 'disputas-con-el-irs',
+  'irs-disputes': 'disputas-con-irs',
   'tax-planning': 'planificacion-fiscal',
   'back-taxes': 'impuestos-atrasados',
   'tax-fraud-defense': 'defensa-por-fraude-fiscal',
@@ -200,11 +200,11 @@ const SPANISH_PA_SLUGS: Record<string, string> = {
   'insurance-law': 'derecho-de-seguros',
   'civil-rights': 'derechos-civiles',
   'consumer-protection': 'proteccion-al-consumidor',
-  'social-security-disability': 'discapacidad-del-seguro-social',
+  'social-security-disability': 'seguro-social-discapacidad',
   'veterans-benefits': 'beneficios-para-veteranos',
   'class-action': 'demanda-colectiva',
   'appeals': 'apelaciones',
-  'mediation-arbitration': 'mediacion-y-arbitraje',
+  'mediation-arbitration': 'mediacion-arbitraje',
   'military-law': 'derecho-militar',
   'maritime-law': 'derecho-maritimo',
   'aviation-law': 'derecho-aeronautico',
@@ -259,9 +259,13 @@ const SPANISH_PA_SLUGS: Record<string, string> = {
 }
 
 // Reverse mapping: Spanish slug -> English slug
-const ENGLISH_PA_SLUGS: Record<string, string> = Object.fromEntries(
-  Object.entries(SPANISH_PA_SLUGS).map(([en, es]) => [es, en])
-)
+const ENGLISH_PA_SLUGS: Record<string, string> = {
+  ...Object.fromEntries(
+    Object.entries(SPANISH_PA_SLUGS).map(([en, es]) => [es, en])
+  ),
+  // Extra route alias not in SPANISH_PA_SLUGS (no family-law entry in specialties table)
+  'derecho-familiar': 'family-law',
+}
 
 /**
  * Generate hreflang links for a given URL

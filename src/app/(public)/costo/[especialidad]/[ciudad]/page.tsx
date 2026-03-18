@@ -8,6 +8,7 @@ import {
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { practiceAreas as staticPracticeAreas, getCityBySlug, getStateByCode } from '@/lib/data/usa'
 import { SITE_URL } from '@/lib/seo/config'
+import { getAlternateLanguages } from '@/lib/seo/hreflang'
 import { hashCode } from '@/lib/seo/location-content'
 import { getServiceImage } from '@/lib/data/images'
 import type { Location as LocationType } from '@/types'
@@ -160,7 +161,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     twitter: { card: 'summary_large_image', title, description, images: [getServiceImage(enSlug).src] },
     alternates: {
       canonical: `${SITE_URL}/costo/${especialidad}/${ciudad}`,
-      languages: { 'en': `${SITE_URL}/cost/${enSlug}/${ciudad}`, 'es': `${SITE_URL}/costo/${especialidad}/${ciudad}`, 'x-default': `${SITE_URL}/cost/${enSlug}/${ciudad}` },
+      languages: getAlternateLanguages(`/costo/${especialidad}/${ciudad}`),
     },
   }
 }

@@ -38,7 +38,7 @@ function buildCSP(nonce: string): string {
   return [
     "default-src 'self'",
     `script-src ${scriptSrc}`,
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    `style-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://fonts.googleapis.com`,
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: blob: https: http:",
     "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.sentry.io https://connect.facebook.net https://t.contentsquare.net https://nominatim.openstreetmap.org https://*.tile.openstreetmap.org" + (IS_DEV ? ' ws://localhost:* http://localhost:*' : ''),

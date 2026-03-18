@@ -22,11 +22,11 @@
     },
     {
       "path": "/api/cron/send-reminders-1h",
-      "schedule": "*/10 * * * *"
+      "schedule": "0 */2 * * *"
     },
     {
       "path": "/api/cron/send-review-requests",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 */4 * * *"
     },
     {
       "path": "/api/cron/calculate-trust-badges",
@@ -70,7 +70,7 @@
     },
     {
       "path": "/api/cron/send-booking-reminders",
-      "schedule": "*/30 * * * *"
+      "schedule": "0 */1 * * *"
     },
     {
       "path": "/api/cron/data-refresh",
