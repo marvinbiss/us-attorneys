@@ -372,15 +372,21 @@ export function getLegalServiceSchema(params: {
   }
 }
 
-// Schema.org Attorney (Person + LegalService for individual attorney profile pages)
+// Schema.org Attorney + Person (for individual attorney profile pages)
+// Outputs a @graph with both Attorney (LocalBusiness) and Person entities
 export function getAttorneySchema(params: {
   name: string
+  firstName?: string
+  lastName?: string
   url: string
   image?: string
   description: string
   specialty: string
+  practiceAreas?: string[]
   location: string
   state: string
+  streetAddress?: string
+  postalCode?: string
   barNumber?: string
   barState?: string
   rating?: number
@@ -389,28 +395,53 @@ export function getAttorneySchema(params: {
   email?: string
   firmName?: string
   languages?: string[]
+  priceRange?: string
+  website?: string
+  latitude?: number
+  longitude?: number
 }) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Attorney',
+  const attorneyEntity = {
+    '@type': ['Attorney', 'LegalService'],
+    '@id': `${params.url}#business`,
     name: params.name,
     url: params.url,
     description: params.description,
     ...(params.image && { image: params.image }),
-    jobTitle: `${params.specialty} Attorney`,
     address: {
       '@type': 'PostalAddress',
+      ...(params.streetAddress && { streetAddress: params.streetAddress }),
       addressLocality: params.location,
       addressRegion: params.state,
+      ...(params.postalCode && { postalCode: params.postalCode }),
       addressCountry: 'US',
     },
-    ...(params.barNumber && params.barState && {
+    ...(params.latitude && params.longitude && {
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: params.latitude,
+        longitude: params.longitude,
+      },
+    }),
+    ...(params.phone && { telephone: params.phone }),
+    ...(params.email && { email: params.email }),
+    ...(params.website && { sameAs: [params.website] }),
+    // Practice areas as knowsAbout for E-E-A-T
+    knowsAbout: [
+      params.specialty,
+      ...(params.practiceAreas || []),
+    ].filter((v, i, arr) => v && arr.indexOf(v) === i),
+    ...(params.barNumber && {
+      identifier: {
+        '@type': 'PropertyValue',
+        name: 'Bar Number',
+        value: params.barNumber,
+      },
       hasCredential: {
         '@type': 'EducationalOccupationalCredential',
         credentialCategory: 'Bar Admission',
         recognizedBy: {
           '@type': 'Organization',
-          name: `${params.barState} State Bar`,
+          name: `${params.barState || params.state} State Bar`,
         },
         identifier: params.barNumber,
       },
@@ -424,12 +455,57 @@ export function getAttorneySchema(params: {
         worstRating: 1,
       },
     }),
-    ...(params.phone && { telephone: params.phone }),
-    ...(params.email && { email: params.email }),
+    areaServed: {
+      '@type': 'AdministrativeArea',
+      name: params.state,
+    },
+    priceRange: params.priceRange || '$$',
+    employee: { '@id': `${params.url}#person` },
     ...(params.firmName && {
-      worksFor: {
+      parentOrganization: {
         '@type': 'LegalService',
         name: params.firmName,
+      },
+    }),
+    potentialAction: {
+      '@type': 'CommunicateAction',
+      target: `${params.url}#consultation`,
+      name: 'Request a free consultation',
+    },
+  }
+
+  const personEntity = {
+    '@type': 'Person',
+    '@id': `${params.url}#person`,
+    name: params.name,
+    ...(params.firstName && { givenName: params.firstName }),
+    ...(params.lastName && { familyName: params.lastName }),
+    jobTitle: `${params.specialty} Attorney`,
+    description: params.description,
+    url: params.url,
+    ...(params.image && { image: params.image }),
+    knowsAbout: [
+      params.specialty,
+      ...(params.practiceAreas || []),
+    ].filter((v, i, arr) => v && arr.indexOf(v) === i),
+    ...(params.phone && { telephone: params.phone }),
+    ...(params.email && { email: params.email }),
+    ...(params.website && { sameAs: [params.website] }),
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: params.location,
+      addressRegion: params.state,
+      addressCountry: 'US',
+    },
+    ...(params.barNumber && {
+      hasCredential: {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'Bar Admission',
+        recognizedBy: {
+          '@type': 'Organization',
+          name: `${params.barState || params.state} State Bar`,
+        },
+        identifier: params.barNumber,
       },
     }),
     ...(params.languages && params.languages.length > 0 && {
@@ -442,14 +518,21 @@ export function getAttorneySchema(params: {
       '@type': 'AdministrativeArea',
       name: params.state,
     },
-    serviceType: params.specialty,
-    makesOffer: {
-      '@type': 'Offer',
-      itemOffered: {
-        '@type': 'Service',
-        name: params.specialty,
+    worksFor: { '@id': `${params.url}#business` },
+    ...(params.rating && params.reviewCount && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: params.rating,
+        reviewCount: params.reviewCount,
+        bestRating: 5,
+        worstRating: 1,
       },
-    },
+    }),
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [attorneyEntity, personEntity],
   }
 }
 

@@ -230,7 +230,7 @@ fbq('track', 'PageView');`}
         <ThemeProvider>
         <MobileMenuProvider>
           <Header attorneyCount={attorneyCount} />
-          <main id="main-content" className="pb-16 md:pb-0">{children}</main>
+          <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">{children}</main>
           <Footer />
           <MobileBottomNav />
           <ServiceWorkerRegistration />

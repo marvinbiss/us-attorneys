@@ -315,14 +315,20 @@ describe('RATE_LIMITS constants', () => {
     expect(RATE_LIMITS.contact.maxRequests).toBeLessThanOrEqual(5)
   })
 
-  it('webhook and cron tiers have failOpen enabled', () => {
-    expect(RATE_LIMITS.webhook.failOpen).toBe(true)
-    expect(RATE_LIMITS.cron.failOpen).toBe(true)
-  })
-
-  it('auth and payment tiers have failOpen disabled', () => {
+  it('sensitive tiers have failOpen disabled (fail-close)', () => {
     expect(RATE_LIMITS.auth.failOpen).toBe(false)
     expect(RATE_LIMITS.payment.failOpen).toBe(false)
+    expect(RATE_LIMITS.contact.failOpen).toBe(false)
+    expect(RATE_LIMITS.webhook.failOpen).toBe(false)
+    expect(RATE_LIMITS.cron.failOpen).toBe(false)
+    expect(RATE_LIMITS.vapiWebhook.failOpen).toBe(false)
+  })
+
+  it('public/availability tiers have failOpen enabled (fail-open)', () => {
+    expect(RATE_LIMITS.search.failOpen).toBe(true)
+    expect(RATE_LIMITS.analytics.failOpen).toBe(true)
+    expect(RATE_LIMITS.api.failOpen).toBe(true)
+    expect(RATE_LIMITS.estimation.failOpen).toBe(true)
   })
 
   it('gdpr tier has longer window', () => {

@@ -5,7 +5,6 @@
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { createApiHandler } from '@/lib/api/handler'
 
 export const dynamic = 'force-dynamic'
@@ -18,8 +17,8 @@ export const GET = createApiHandler(async () => {
       return NextResponse.json({ user: null }, { status: 401 })
     }
 
-    const adminClient = createAdminClient()
-    const { data: profile } = await adminClient
+    // Use RLS-respecting client — user can read their own profile
+    const { data: profile } = await supabase
       .from('profiles')
       .select('full_name, email, role')
       .eq('id', user.id)

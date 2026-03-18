@@ -176,29 +176,45 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
       },
     }),
 
-    ...(attorney.intervention_radius_km && attorney.latitude && attorney.longitude && {
-      areaServed: {
-        '@type': 'GeoCircle',
-        geoMidpoint: {
-          '@type': 'GeoCoordinates',
-          latitude: attorney.latitude,
-          longitude: attorney.longitude,
+    // Area served — GeoCircle when radius is known, otherwise administrative area
+    areaServed: attorney.intervention_radius_km && attorney.latitude && attorney.longitude
+      ? {
+          '@type': 'GeoCircle',
+          geoMidpoint: {
+            '@type': 'GeoCoordinates',
+            latitude: attorney.latitude,
+            longitude: attorney.longitude,
+          },
+          geoRadius: attorney.intervention_radius_km * 1000,
+        }
+      : {
+          '@type': 'AdministrativeArea',
+          name: attorney.region || attorney.department || attorney.city,
         },
-        geoRadius: attorney.intervention_radius_km * 1000,
-      },
-    }),
 
     ...(attorney.bar_number && {
       identifier: {
         '@type': 'PropertyValue',
-        name: 'barNumber',
+        name: 'Bar Number',
         value: attorney.bar_number,
+      },
+      hasCredential: {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'Bar Admission',
+        recognizedBy: {
+          '@type': 'Organization',
+          name: `${attorney.region || attorney.department || 'State'} Bar Association`,
+        },
+        identifier: attorney.bar_number,
       },
     }),
 
     ...(attorney.website && {
       sameAs: [attorney.website],
     }),
+
+    // Link to Person entity
+    employee: { '@id': `${attorneyUrl}#person` },
 
     // Additional SEO-friendly properties
     ...(attorney.creation_date ? { foundingDate: attorney.creation_date } : {}),
@@ -289,6 +305,87 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
     } : {}),
   }
 
+  // Person Schema — the individual attorney (separate from the business entity)
+  // Google uses Person markup for knowledge panels and rich snippets on professional profiles
+  const personSchema = {
+    '@type': 'Person',
+    '@id': `${attorneyUrl}#person`,
+    name: displayName,
+    ...(attorney.first_name && { givenName: attorney.first_name }),
+    ...(attorney.last_name && { familyName: attorney.last_name }),
+    jobTitle: `${attorney.specialty} Attorney`,
+    description: attorney.description || `${displayName}, ${attorney.specialty.toLowerCase()} attorney in ${attorney.city}`,
+    url: attorneyUrl,
+    image: attorney.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
+
+    // Practice areas as knowsAbout — critical for E-E-A-T and rich snippets
+    knowsAbout: [
+      attorney.specialty,
+      ...(attorney.services || []),
+      ...attorney.service_prices.map(sp => sp.name),
+    ].filter((v, i, arr) => v && arr.indexOf(v) === i),
+
+    // Contact information
+    ...(attorney.phone && attorney.phone.replace(/\D/g, '').length >= 10 && {
+      telephone: attorney.phone,
+    }),
+    ...(attorney.email && { email: attorney.email }),
+    ...(attorney.website && { sameAs: [attorney.website] }),
+
+    // Address
+    address: {
+      '@type': 'PostalAddress',
+      ...(attorney.address ? { streetAddress: attorney.address } : {}),
+      addressLocality: attorney.city,
+      ...(attorney.region || attorney.department ? { addressRegion: attorney.region || attorney.department } : {}),
+      postalCode: attorney.postal_code,
+      addressCountry: 'US',
+    },
+
+    // Bar admission as credential
+    ...(attorney.bar_number && {
+      hasCredential: {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'Bar Admission',
+        recognizedBy: {
+          '@type': 'Organization',
+          name: `${attorney.region || attorney.department || 'State'} Bar Association`,
+        },
+        identifier: attorney.bar_number,
+      },
+    }),
+
+    // Area served
+    areaServed: attorney.intervention_radius_km && attorney.latitude && attorney.longitude
+      ? {
+          '@type': 'GeoCircle',
+          geoMidpoint: {
+            '@type': 'GeoCoordinates',
+            latitude: attorney.latitude,
+            longitude: attorney.longitude,
+          },
+          geoRadius: attorney.intervention_radius_km * 1000,
+        }
+      : {
+          '@type': 'AdministrativeArea',
+          name: attorney.region || attorney.department || attorney.city,
+        },
+
+    // Works for the attorney business entity
+    worksFor: { '@id': `${attorneyUrl}#business` },
+
+    // Aggregate rating (mirrors business for person card)
+    ...(reviews.length > 0 ? {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: Number((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)),
+        reviewCount: reviews.length,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    } : {}),
+  }
+
   // Combined schema graph for better SEO (single JSON-LD with @graph)
   const combinedSchema = {
     '@context': 'https://schema.org',
@@ -296,6 +393,7 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
       organizationSchema,
       profilePageSchema,
       localBusinessSchema,
+      personSchema,
       breadcrumbSchema,
       ...(faqSchema ? [faqSchema] : []),
       ...serviceSchemas,

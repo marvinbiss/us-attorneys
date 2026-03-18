@@ -218,7 +218,7 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   payment: { maxRequests: 10, windowMs: 60_000, failOpen: false },         // 10 requests per minute for payments — fail-close
   reviews: { maxRequests: 5, windowMs: 60_000 },                           // 5 requests per minute for reviews
   quotes: { maxRequests: 10, windowMs: 60_000 },                           // 10 requests per minute for quotes
-  contact: { maxRequests: 3, windowMs: 60_000, failOpen: true },           // 3 requests per minute for contact (sends email, unauthenticated)
+  contact: { maxRequests: 3, windowMs: 60_000, failOpen: false },           // 3 requests per minute for contact (sends email, unauthenticated) — fail-close
   upload: { maxRequests: 5, windowMs: 60_000 },                            // 5 uploads per minute (storage-intensive)
   search: { maxRequests: 100, windowMs: 60_000, failOpen: true },          // 100 searches per minute
   gdpr: { maxRequests: 5, windowMs: 300_000 },                             // 5 requests per 5 minutes for GDPR export/delete
@@ -229,9 +229,9 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   estimationLead: { maxRequests: 3, windowMs: 300_000, failOpen: true },   // 3 leads per 5 minutes for estimation lead capture — fail open
   verify: { maxRequests: 20, windowMs: 60_000 },                           // 20 requests per minute for bar number/business verification
   geocode: { maxRequests: 60, windowMs: 60_000 },                          // 60 requests per minute for geocoding
-  vapiWebhook: { maxRequests: 300, windowMs: 60_000, failOpen: true },     // 300/min for VAPI voice webhooks — fail open
-  webhook: { maxRequests: 200, windowMs: 60_000, failOpen: true },         // 200/min for external webhooks (Resend, Twilio) — fail open
-  cron: { maxRequests: 100, windowMs: 60_000, failOpen: true },            // 100/min for cron jobs — fail open
+  vapiWebhook: { maxRequests: 300, windowMs: 60_000, failOpen: false },     // 300/min for VAPI voice webhooks — fail-close (authenticated webhook)
+  webhook: { maxRequests: 200, windowMs: 60_000, failOpen: false },         // 200/min for external webhooks (Resend, Twilio) — fail-close (authenticated webhook)
+  cron: { maxRequests: 100, windowMs: 60_000, failOpen: false },            // 100/min for cron jobs — fail-close (CRON_SECRET protected)
   analytics: { maxRequests: 120, windowMs: 60_000, failOpen: true },       // 120/min for analytics beacons — fail open
   default: { maxRequests: 100, windowMs: 60_000 },                         // 100 requests per minute default
 }

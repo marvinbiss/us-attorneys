@@ -199,9 +199,17 @@ export async function middleware(request: NextRequest) {
 
       const { data: profile } = await supabase
         .from('profiles')
-        .select('role')
+        .select('role, is_admin')
         .eq('id', user.id)
         .single()
+
+      // Admin routes: verify user has admin role (authentication alone is not enough)
+      if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
+        if (!profile?.is_admin) {
+          logger.warn('Non-admin user attempted to access admin route', { userId: user.id, pathname })
+          return NextResponse.redirect(new URL('/', request.url))
+        }
+      }
 
       if (profile) {
         if (pathname.startsWith('/attorney-dashboard') && profile.role !== 'artisan') { // DB role value 'artisan' = attorney (legacy, do not change without migration)
