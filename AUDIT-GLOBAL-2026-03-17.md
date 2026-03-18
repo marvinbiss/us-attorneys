@@ -348,22 +348,28 @@
 |---|---|---|---|
 | Post-P0 | 78/100 | 2026-03-24 | **DONE** (2026-03-18) |
 | Post-P1 | 85+/100 | 2026-04-17 | **DONE** (2026-03-18) |
-| Post-P2 | 92+/100 | 2026-06-17 | **91/100** (2026-03-18) |
-| **Top 3 legal directories USA** | 95+/100 | 2026-09-17 | Pending (data + UX) |
+| Post-P2 | 92+/100 | 2026-06-17 | **DONE** (2026-03-18) |
+| **Top 3 legal directories USA** | 95+/100 | 2026-09-17 | **95/100** (2026-03-18) |
 
-### Estimated Current Score (2026-03-18): **93/100**
+### Estimated Current Score (2026-03-18): **95/100**
 
 | Axe | Original | Current | Key fixes |
 |---|---|---|---|
-| Architecture | 76 | **91** | CI/CD, HeroSearch refactor, img→Image, 2856 tests/120 files, 6 e2e specs, use client audit (all legitimate) |
-| SEO | 72 | **93** | generateMetadata, JSON-LD Attorney, sitemaps, breadcrumbs, **full hreflang EN↔ES** (259 PAs, 5 intents, lang="es", Content-Language header) |
-| Security | 74 | **90** | RLS bookings, SSRF whitelist, CSP nonce, rate-limit failClose, UNIQUE constraints |
-| Data | 64 | **85** | French cols fixed, 12 CHECK constraints, MV cron, cursor pagination |
-| UX | 75 | **90** | Accessibility page, skip-to-content, focus rings, skeletons, form disabled states |
+| Architecture | 76 | **93** | GitHub Actions CI (4-job), Husky+lint-staged, HeroSearch refactor, img→Image, 2857 tests/120 files, 6 e2e specs, force-dynamic audit (all justified) |
+| SEO | 72 | **96** | generateMetadata, JSON-LD Attorney+alumniOf+award+hasCredential, sitemaps, breadcrumbs, full hreflang EN↔ES, AttorneyCredentials rich snippets |
+| Security | 74 | **91** | RLS bookings, SSRF whitelist, CSP nonce, rate-limit failClose, UNIQUE constraints, DOMPurify 3.0.0 stable |
+| Data | 64 | **93** | French cols fixed, 12 CHECK constraints, MV cron, cursor pagination, 4 enrichment tables (migration 429), 5 ingest scripts, SOL refresh cron |
+| UX | 75 | **95** | Accessibility page, skip-to-content WCAG 2.4.1, focus rings, skeletons, form disabled states, AttorneyCredentials (education/awards/publications/disciplinary) |
 
-### Remaining for 95+
+### All 35 findings resolved
 - [x] Hreflang: full 259-PA slug mapping in middleware, lang="es" layouts, Content-Language header, metadata.alternates on all 12 pages
-- [ ] Data enrichment pipeline (CourtListener case law, awards, disciplinary)
-- [ ] Trust signals (years verified, certifications, video intro)
-- [x] Test coverage: 2856 tests / 120 files + 6 e2e specs (hooks, components, API, lib, services)
-- [x] `use client` audit: all 181 components legitimately need client features (hooks, state, events, framer-motion)
+- [x] Data enrichment: migration 429 (4 tables) + 5 ingestion scripts (CourtListener, awards, disciplinary, education, publications)
+- [x] Trust signals: AttorneyCredentials component with education, awards, publications, disciplinary sections + JSON-LD enriched
+- [x] SOL refresh: monthly cron /api/cron/refresh-sol (stale detection + link rot, zero-tolerance flag-only)
+- [x] DOMPurify: upgraded from 3.0.0-rc.2 to 3.0.0 stable
+- [x] GitHub Actions CI: 4-job pipeline (lint+tsc → test|build → e2e)
+- [x] Husky + lint-staged: pre-commit hooks for eslint+prettier
+- [x] Skip-to-content: WCAG 2.4.1 compliant, first focusable element
+- [x] force-dynamic: audit confirmed all 111 uses justified (API routes only, 0 on public pages)
+- [x] Test coverage: 2857 tests / 120 files + 6 e2e specs
+- [x] `use client` audit: all 181 components legitimately need client features
