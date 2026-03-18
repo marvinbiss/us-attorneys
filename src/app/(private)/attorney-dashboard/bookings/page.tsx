@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import {
-  Video,
   Calendar,
   Clock,
   User,
@@ -18,6 +17,8 @@ import {
 import AttorneySidebar from '@/components/attorney-dashboard/AttorneySidebar'
 import { StatCard } from '@/components/dashboard/StatCard'
 import VideoConsultationButton from '@/components/booking/VideoConsultationButton'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -191,6 +192,7 @@ export default function AttorneyBookingsPage() {
         <div className="grid lg:grid-cols-4 gap-8">
           <AttorneySidebar activePage="bookings" />
 
+          <ErrorBoundary>
           <div className="lg:col-span-3 space-y-6">
             {/* Stats Row */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -215,15 +217,12 @@ export default function AttorneyBookingsPage() {
                 <p className="text-sm text-gray-500 mt-2">Loading bookings...</p>
               </div>
             ) : bookings.length === 0 ? (
-              <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Video className="w-7 h-7 text-gray-400" />
-                </div>
-                <p className="text-gray-500 font-medium text-lg">No bookings yet</p>
-                <p className="text-gray-400 text-sm mt-2">
-                  Video consultation bookings will appear here once clients schedule with you.
-                </p>
-              </div>
+              <EmptyState
+                variant="inbox"
+                title="No bookings yet"
+                description="Video consultation bookings will appear here once clients schedule with you."
+                action={{ label: 'View Profile', href: '/attorney-dashboard/profile' }}
+              />
             ) : (
               <>
                 {/* Upcoming Bookings */}
@@ -323,6 +322,7 @@ export default function AttorneyBookingsPage() {
               </>
             )}
           </div>
+          </ErrorBoundary>
         </div>
       </div>
     </div>

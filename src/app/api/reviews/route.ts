@@ -4,15 +4,14 @@
  * World-class review system with fraud detection
  */
 
-import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@supabase/supabase-js'
 import { createHmac, timingSafeEqual } from 'crypto'
 import { apiLogger } from '@/lib/logger'
-import { createApiHandler } from '@/lib/api/handler'
+import { createApiHandler, apiSuccess, apiError } from '@/lib/api/handler'
 import { slugify } from '@/lib/utils'
-import { createReviewSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
-import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
+import { createReviewSchema, validateRequest } from '@/lib/validations/schemas'
+import { withTimeout } from '@/lib/api/timeout'
 import { z } from 'zod'
 import type { SupabaseClientType } from '@/types'
 
@@ -100,13 +99,7 @@ export const GET = createApiHandler(async ({ request }) => {
     })
 
     if (!queryValidation.success) {
-      return NextResponse.json(
-        createErrorResponse(
-          ErrorCode.VALIDATION_ERROR,
-          queryValidation.error.issues[0]?.message || 'Invalid parameters'
-        ),
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', queryValidation.error.issues[0]?.message || 'Invalid parameters', 400)
     }
 
     const { bookingId, attorneyId } = queryValidation.data
@@ -114,25 +107,24 @@ export const GET = createApiHandler(async ({ request }) => {
 
     // Get booking info for review submission - use exact match to prevent enumeration
     if (bookingId) {
-      const { data: booking, error } = await supabase
-        .from('bookings')
-        .select(`
-          id,
-          attorney_id,
-          service_name,
-          status,
-          client:profiles!client_id(full_name, email, phone_e164),
-          attorney:attorneys!bookings_attorney_id_fkey(id, name)
-        `)
-        .eq('id', bookingId)
-        .single()
+      const { data: booking, error } = await withTimeout(
+        supabase
+          .from('bookings')
+          .select(`
+            id,
+            attorney_id,
+            service_name,
+            status,
+            client:profiles!client_id(full_name, email, phone_e164),
+            attorney:attorneys!bookings_attorney_id_fkey(id, name)
+          `)
+          .eq('id', bookingId)
+          .single()
+      )
 
       if (error || !booking) {
         // Don't reveal whether the booking exists or not to prevent enumeration
-        return NextResponse.json(
-          createErrorResponse(ErrorCode.NOT_FOUND, 'Booking not found'),
-          { status: 404 }
-        )
+        return apiError('NOT_FOUND', 'Booking not found', 404)
       }
 
       const typedBooking = booking as BookingWithRelations
@@ -144,39 +136,36 @@ export const GET = createApiHandler(async ({ request }) => {
         .eq('booking_id', typedBooking.id)
         .single()
 
-      return NextResponse.json(
-        createSuccessResponse({
-          attorneyName: getAttorneyDisplayName(typedBooking.attorney),
-          specialtyName: typedBooking.service_name || 'Service',
-          alreadyReviewed: !!existingReview,
-        })
-      )
+      return apiSuccess({
+        attorneyName: getAttorneyDisplayName(typedBooking.attorney),
+        specialtyName: typedBooking.service_name || 'Service',
+        alreadyReviewed: !!existingReview,
+      })
     }
 
     // Get published reviews for an attorney (only status = 'published')
     if (attorneyId) {
-      const { data: reviews, error } = await supabase
-        .from('reviews')
-        .select(`
-          id,
-          rating,
-          comment,
-          would_recommend,
-          client_name,
-          created_at,
-          artisan_response,
-          artisan_responded_at
-        `)
-        .eq('attorney_id', attorneyId)
-        .eq('status', 'published')
-        .order('created_at', { ascending: false })
+      const { data: reviews, error } = await withTimeout(
+        supabase
+          .from('reviews')
+          .select(`
+            id,
+            rating,
+            comment,
+            would_recommend,
+            client_name,
+            created_at,
+            artisan_response,
+            artisan_responded_at
+          `)
+          .eq('attorney_id', attorneyId)
+          .eq('status', 'published')
+          .order('created_at', { ascending: false })
+      )
 
       if (error) {
         apiLogger.error('Database error:', error)
-        return NextResponse.json(
-          createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error retrieving reviews'),
-          { status: 500 }
-        )
+        return apiError('DATABASE_ERROR', 'Error retrieving reviews', 500)
       }
 
       const typedReviews = (reviews || []) as Review[]
@@ -198,23 +187,18 @@ export const GET = createApiHandler(async ({ request }) => {
         }
       })
 
-      return NextResponse.json(
-        createSuccessResponse({
-          reviews: typedReviews,
-          stats: {
-            total: totalReviews,
-            average: Math.round(avgRating * 10) / 10,
-            recommendRate: Math.round(recommendRate),
-            distribution,
-          },
-        })
-      )
+      return apiSuccess({
+        reviews: typedReviews,
+        stats: {
+          total: totalReviews,
+          average: Math.round(avgRating * 10) / 10,
+          recommendRate: Math.round(recommendRate),
+          distribution,
+        },
+      })
     }
 
-    return NextResponse.json(
-      createErrorResponse(ErrorCode.VALIDATION_ERROR, 'bookingId or attorneyId required'),
-      { status: 400 }
-    )
+    return apiError('VALIDATION_ERROR', 'bookingId or attorneyId required', 400)
 }, {})
 
 // POST /api/reviews - Submit a review
@@ -225,14 +209,7 @@ export const POST = createApiHandler(async ({ request }) => {
     const validation = validateRequest(createReviewSchema, body)
 
     if (!validation.success) {
-      return NextResponse.json(
-        createErrorResponse(
-          ErrorCode.VALIDATION_ERROR,
-          'Invalid data',
-          { fields: formatZodErrors(validation.errors) }
-        ),
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Invalid data', 400)
     }
 
     const { bookingId, rating, comment, reviewToken } = validation.data
@@ -240,17 +217,11 @@ export const POST = createApiHandler(async ({ request }) => {
 
     // Validate HMAC review token (prevents fake reviews)
     if (!reviewToken) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Review token is required'),
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Review token is required', 400)
     }
     if (!process.env.REVIEW_HMAC_SECRET) {
       apiLogger.error('REVIEW_HMAC_SECRET is not configured — rejecting review submission')
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Review submission is temporarily unavailable'),
-        { status: 503 }
-      )
+      return apiError('INTERNAL_ERROR', 'Review submission is temporarily unavailable', 503)
     }
     {
       const expected = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
@@ -260,48 +231,41 @@ export const POST = createApiHandler(async ({ request }) => {
       const provided = Buffer.from(reviewToken, 'hex')
       const expectedBuf = Buffer.from(expected, 'hex')
       if (provided.length !== expectedBuf.length || !timingSafeEqual(provided, expectedBuf)) {
-        return NextResponse.json(createErrorResponse(ErrorCode.UNAUTHORIZED, 'Invalid token'), { status: 401 })
+        return apiError('AUTHENTICATION_ERROR', 'Invalid token', 401)
       }
     }
 
     // Validate bookingId is a valid UUID to prevent enumeration
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     if (!uuidRegex.test(bookingId)) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'Invalid booking ID'),
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Invalid booking ID', 400)
     }
 
     const supabase = getSupabaseClient()
 
     // Find the booking using exact match to prevent enumeration
     // Join profiles via client_id to get client name and email
-    const { data: booking, error: bookingError } = await supabase
-      .from('bookings')
-      .select(`
-        id,
-        attorney_id,
-        status,
-        client:profiles!client_id(full_name, email, phone_e164)
-      `)
-      .eq('id', bookingId)
-      .single()
+    const { data: booking, error: bookingError } = await withTimeout(
+      supabase
+        .from('bookings')
+        .select(`
+          id,
+          attorney_id,
+          status,
+          client:profiles!client_id(full_name, email, phone_e164)
+        `)
+        .eq('id', bookingId)
+        .single()
+    )
 
     if (bookingError || !booking) {
       // Generic error to prevent enumeration
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.NOT_FOUND, 'Booking not found'),
-        { status: 404 }
-      )
+      return apiError('NOT_FOUND', 'Booking not found', 404)
     }
 
     // Check booking status
     if (!['confirmed', 'completed'].includes(booking.status)) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.VALIDATION_ERROR, 'This booking cannot be reviewed'),
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'This booking cannot be reviewed', 400)
     }
 
     // Check if already reviewed
@@ -312,10 +276,7 @@ export const POST = createApiHandler(async ({ request }) => {
       .single()
 
     if (existingReview) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.REVIEW_ALREADY_EXISTS, 'You have already left a review for this booking'),
-        { status: 409 }
-      )
+      return apiError('REVIEW_ALREADY_EXISTS', 'You have already left a review for this booking', 409)
     }
 
     // Extract client info from profiles join
@@ -345,10 +306,7 @@ export const POST = createApiHandler(async ({ request }) => {
 
     if (insertError) {
       apiLogger.error('Review insert error:', insertError)
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.DATABASE_ERROR, 'Error creating review'),
-        { status: 500 }
-      )
+      return apiError('DATABASE_ERROR', 'Error creating review', 500)
     }
 
     // Update attorney's average rating (non-blocking)
@@ -385,18 +343,15 @@ export const POST = createApiHandler(async ({ request }) => {
       apiLogger.error('Revalidation failed after review submission:', revalError)
     }
 
-    return NextResponse.json(
-      createSuccessResponse({
-        review: {
-          id: review.id,
-          status: review.status,
-        },
-        message: fraudIndicators.length > 0
-          ? 'Your review will be published after verification'
-          : 'Thank you for your review!',
-      }),
-      { status: 201 }
-    )
+    return apiSuccess({
+      review: {
+        id: review.id,
+        status: review.status,
+      },
+      message: fraudIndicators.length > 0
+        ? 'Your review will be published after verification'
+        : 'Thank you for your review!',
+    }, 201)
 }, {})
 
 // Fraud detection helper

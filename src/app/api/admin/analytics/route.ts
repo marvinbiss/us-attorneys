@@ -177,7 +177,10 @@ export const GET = createApiHandler(async ({ request }) => {
     if (!event.attorney_id) continue
 
     if (!providerMap.has(event.attorney_id)) {
-      const p = (event as Record<string, unknown>).attorneys as unknown as ProviderInfo
+      // Supabase embedded join: attorneys resolves to single object at runtime
+      const p = (Array.isArray((event as Record<string, unknown>).attorneys)
+        ? ((event as Record<string, unknown>).attorneys as ProviderInfo[])[0]
+        : (event as Record<string, unknown>).attorneys) as ProviderInfo | undefined
       providerMap.set(event.attorney_id, {
         id: event.attorney_id,
         name: p?.name || 'Unknown',
@@ -216,7 +219,10 @@ export const GET = createApiHandler(async ({ request }) => {
 
   // Recent activity feed
   const recentEvents = (recentResult.data || []).map(e => {
-    const p = (e as Record<string, unknown>).attorneys as unknown as ProviderInfo
+    // Supabase embedded join: attorneys resolves to single object at runtime
+    const p = (Array.isArray((e as Record<string, unknown>).attorneys)
+      ? ((e as Record<string, unknown>).attorneys as ProviderInfo[])[0]
+      : (e as Record<string, unknown>).attorneys) as ProviderInfo | undefined
     const meta = e.metadata as Record<string, string> | null
     return {
       id: e.id,

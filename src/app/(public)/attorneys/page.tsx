@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
-import { MapPin, Star, Phone, Search, Users, Building2 } from 'lucide-react'
+import { MapPin, Star, Phone, Users, Building2 } from 'lucide-react'
+import { EmptyState } from '@/components/ui/EmptyState'
 import Breadcrumbs from '@/components/seo/Breadcrumbs'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAttorneyUrl, getAvatarColor } from '@/lib/utils'
@@ -282,11 +283,12 @@ export default async function ArtisansPage() {
             })}
           </div>
         ) : !error ? (
-          <div className="text-center py-16 bg-gray-50 rounded-2xl">
-            <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-lg text-gray-600 font-medium">No attorneys found</p>
-            <p className="text-gray-400 mt-2">The database may be temporarily unavailable.</p>
-          </div>
+          <EmptyState
+            variant="search"
+            title="No attorneys found"
+            description="The database may be temporarily unavailable. Please try again later."
+            action={{ label: 'Browse Practice Areas', href: '/practice-areas' }}
+          />
         ) : null}
       </section>
 

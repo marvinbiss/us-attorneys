@@ -12,6 +12,7 @@ import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
 import { sendClaimApprovedEmail } from '@/lib/api/resend-client'
 import { createApiHandler } from '@/lib/api/handler'
+import { withTimeout } from '@/lib/api/timeout'
 import { z } from 'zod'
 import crypto from 'crypto'
 
@@ -81,7 +82,7 @@ export const GET = createApiHandler(async ({ request }) => {
     query = query.eq('status', status)
   }
 
-  const { data: claims, error, count } = await query
+  const { data: claims, error, count } = await withTimeout(query)
 
   if (error) {
     return NextResponse.json(
@@ -122,11 +123,13 @@ export const PATCH = createApiHandler(async ({ request }) => {
   const now = new Date().toISOString()
 
   // Fetch the claim (include contact fields for anonymous claims)
-  const { data: claim, error: claimError } = await supabase
-    .from('attorney_claims')
-    .select('id, attorney_id, user_id, status, claimant_email, claimant_name, claimant_phone, claimant_position')
-    .eq('id', claimId)
-    .single()
+  const { data: claim, error: claimError } = await withTimeout(
+    supabase
+      .from('attorney_claims')
+      .select('id, attorney_id, user_id, status, claimant_email, claimant_name, claimant_phone, claimant_position')
+      .eq('id', claimId)
+      .single()
+  )
 
   if (claimError || !claim) {
     return NextResponse.json(

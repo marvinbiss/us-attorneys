@@ -83,6 +83,8 @@ export async function resolveZipToCity(slug: string): Promise<City | null> {
 
         if (error || !data) return null
 
+        // Generic Supabase client has no schema for zip_codes; cast required.
+        // ZipRow interface above defines the exact shape returned by the select().
         const row = data as unknown as ZipRow
         const cityName = row.location?.name || 'Unknown'
         const stateCode = row.state?.abbreviation || ''
@@ -173,6 +175,8 @@ export async function getNearbyZipCodes(slug: string, limit: number = 8): Promis
           .limit(limit)
 
         if (!fallback) return []
+        // Generic Supabase client has no schema for zip_codes; cast required.
+        // NearbyZipRow interface above defines the exact shape returned by the select().
         return (fallback as unknown as NearbyZipRow[])
           .filter((z) => z.code !== zipCode)
           .slice(0, limit)

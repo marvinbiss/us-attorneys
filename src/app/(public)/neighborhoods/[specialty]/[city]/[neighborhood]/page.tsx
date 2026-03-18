@@ -238,7 +238,7 @@ export default async function NeighborhoodSpecialtyPage({ params }: PageProps) {
       <ServiceLocationPageClient
         service={service}
         location={location}
-        providers={(providers || []) as unknown as Provider[]}
+        providers={(providers || []) as Provider[]}
         h1Text={h1Text}
         totalCount={totalAttorneyCount}
         specialtySlug={specialtySlug}

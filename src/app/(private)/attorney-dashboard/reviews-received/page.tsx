@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Star, ArrowLeft, ThumbsUp, MessageCircle, Loader2, X } from 'lucide-react'
 import AttorneySidebar from '@/components/attorney-dashboard/AttorneySidebar'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 interface ReviewItem {
   id: string
@@ -158,6 +159,14 @@ export default function ReviewsReceivedPage() {
               <h2 className="text-lg font-semibold text-gray-900 mb-6">
                 Latest Reviews
               </h2>
+              {reviews.length === 0 ? (
+                <EmptyState
+                  variant="inbox"
+                  title="No reviews yet"
+                  description="Reviews from your clients will appear here. Provide excellent service to start building your reputation."
+                  action={{ label: 'View Dashboard', href: '/attorney-dashboard/dashboard' }}
+                />
+              ) : (
               <div className="space-y-6">
                 {reviews.map((item) => (
                   <div key={item.id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
@@ -243,6 +252,7 @@ export default function ReviewsReceivedPage() {
                   </div>
                 ))}
               </div>
+              )}
             </div>
 
             {/* Tips */}

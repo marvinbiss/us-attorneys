@@ -145,6 +145,9 @@ vi.mock('@/lib/api/handler', () => ({
   createApiHandler: vi.fn().mockImplementation((handler) => {
     return async (request: unknown) => handler({ request })
   }),
+  apiSuccess: vi.fn().mockImplementation((data, status = 200) => mockJsonResponse({ success: true, data }, { status })),
+  apiError: vi.fn().mockImplementation((code, message, status = 400) => mockJsonResponse({ success: false, error: { code, message } }, { status })),
+  jsonResponse: vi.fn().mockImplementation((data, status = 200) => mockJsonResponse({ success: true, data }, { status })),
 }))
 
 // Mock errors module
@@ -256,7 +259,7 @@ describe('POST /api/auth/signin', () => {
 
     expect(res.status).toBe(400)
     expect(res.body.success).toBe(false)
-    expect(res.body.error.code).toBe(2001) // VALIDATION_ERROR
+    expect(res.body.error.code).toBe('VALIDATION_ERROR')
   })
 
   it('returns 429 when rate limited', async () => {
@@ -265,7 +268,7 @@ describe('POST /api/auth/signin', () => {
     const res = await callSignin({ email: 'test@example.com', password: 'Password1' })
 
     expect(res.status).toBe(429)
-    expect(res.body.error).toContain('Too many requests')
+    expect(res.body.error.message).toContain('Too many requests')
   })
 
   it('returns 401 on "Email not confirmed" error', async () => {
@@ -399,7 +402,7 @@ describe('POST /api/auth/signup', () => {
     const res = await callSignup(validBody)
 
     expect(res.status).toBe(429)
-    expect(res.body.error).toContain('Too many requests')
+    expect(res.body.error.message).toContain('Too many requests')
   })
 
   it('returns 500 when auth creation fails', async () => {
@@ -519,7 +522,7 @@ describe('POST /api/auth/logout', () => {
 
     expect(res.status).toBe(200)
     expect(res.body.success).toBe(true)
-    expect(res.body.message).toContain('Logout successful')
+    expect(res.body.data.message).toContain('Logout successful')
   })
 
   it('returns 500 when signOut fails', async () => {
@@ -529,7 +532,7 @@ describe('POST /api/auth/logout', () => {
 
     expect(res.status).toBe(500)
     expect(res.body.success).toBe(false)
-    expect(res.body.error.code).toBe(1004)
+    expect(res.body.error.code).toBe('AUTHENTICATION_ERROR')
   })
 
   it('returns 500 on unexpected exception', async () => {
@@ -539,7 +542,7 @@ describe('POST /api/auth/logout', () => {
 
     expect(res.status).toBe(500)
     expect(res.body.success).toBe(false)
-    expect(res.body.error.code).toBe(9999)
+    expect(res.body.error.code).toBe('INTERNAL_ERROR')
   })
 })
 
@@ -571,10 +574,10 @@ describe('GET /api/auth/me', () => {
     const res = await callMe()
 
     expect(res.status).toBe(200)
-    expect(res.body.user.id).toBe('user-me')
-    expect(res.body.user.email).toBe('me@example.com')
-    expect(res.body.user.fullName).toBe('Me User')
-    expect(res.body.user.role).toBe('attorney')
+    expect(res.body.data.user.id).toBe('user-me')
+    expect(res.body.data.user.email).toBe('me@example.com')
+    expect(res.body.data.user.fullName).toBe('Me User')
+    expect(res.body.data.user.role).toBe('attorney')
   })
 
   it('returns 401 when not authenticated', async () => {
@@ -586,7 +589,8 @@ describe('GET /api/auth/me', () => {
     const res = await callMe()
 
     expect(res.status).toBe(401)
-    expect(res.body.user).toBeNull()
+    expect(res.body.success).toBe(false)
+    expect(res.body.error.code).toBe('AUTHENTICATION_ERROR')
   })
 
   it('uses fallback values when profile is missing', async () => {
@@ -605,10 +609,10 @@ describe('GET /api/auth/me', () => {
     const res = await callMe()
 
     expect(res.status).toBe(200)
-    expect(res.body.user.id).toBe('user-no-profile')
-    expect(res.body.user.email).toBe('nodata@example.com')
-    expect(res.body.user.fullName).toBe('')
-    expect(res.body.user.role).toBe('client')
+    expect(res.body.data.user.id).toBe('user-no-profile')
+    expect(res.body.data.user.email).toBe('nodata@example.com')
+    expect(res.body.data.user.fullName).toBe('')
+    expect(res.body.data.user.role).toBe('client')
   })
 })
 

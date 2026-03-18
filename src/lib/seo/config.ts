@@ -1,21 +1,21 @@
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com').trim().replace(/\/+$/, '')
-export const SITE_NAME = 'Lawtendr'
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com').trim().replace(/\/+$/, '')
+export const SITE_NAME = 'US Attorneys'
 export const PHONE_NUMBER = '(800) 555-0199'
 export const PHONE_TEL = 'tel:+18005550199'
 
 // Spanish SEO configuration
 export const SPANISH_SEO_CONFIG = {
-  siteName: 'Lawtendr — Abogados en EE.UU.',
-  titleTemplate: '%s | Lawtendr',
-  defaultTitle: 'Lawtendr — Encuentra Abogados Verificados en EE.UU.',
+  siteName: 'US Attorneys — Abogados en EE.UU.',
+  titleTemplate: '%s | US Attorneys',
+  defaultTitle: 'US Attorneys — Encuentra Abogados Verificados en EE.UU.',
   description: 'Directorio de abogados verificados en Estados Unidos. Compara perfiles, lee opiniones y solicita una consulta gratis.',
   locale: 'es_US',
 }
 
 // SEO configuration object
 export const defaultSEOConfig = {
-  titleTemplate: '%s | Lawtendr',
-  defaultTitle: 'Lawtendr — Find Top-Rated Lawyers Near You',
+  titleTemplate: '%s | US Attorneys',
+  defaultTitle: 'US Attorneys — Find Top-Rated Lawyers Near You',
   description:
     'Find experienced attorneys across all 50 states. Compare ratings, read reviews, and connect with qualified lawyers for your legal needs.',
   canonical: SITE_URL,
@@ -29,13 +29,13 @@ export const defaultSEOConfig = {
         url: `${SITE_URL}/opengraph-image`,
         width: 1200,
         height: 630,
-        alt: 'Lawtendr - Find Top-Rated Lawyers Near You',
+        alt: 'US Attorneys - Find Top-Rated Lawyers Near You',
       },
     ],
   },
   twitter: {
-    handle: '@lawtendr',
-    site: '@lawtendr',
+    handle: '@usattorneys',
+    site: '@usattorneys',
     cardType: 'summary_large_image',
   },
   additionalMetaTags: [

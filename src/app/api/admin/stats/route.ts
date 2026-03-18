@@ -8,6 +8,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { requirePermission } from '@/lib/admin-auth'
 import { createApiHandler } from '@/lib/api/handler'
+import { withTimeout } from '@/lib/api/timeout'
 
 export const dynamic = 'force-dynamic'
 
@@ -74,6 +75,7 @@ export const GET = createApiHandler(async () => {
   const sevenDaysAgo = new Date(now.getTime() - 7 * 86_400_000).toISOString()
 
   // ── Single batch: all 20 queries in parallel (no sequential batches) ─
+  // Wrapped with timeout to prevent hanging if DB is unreachable
   const [
     // Counts (0–3)
     totalUsersR, totalAttorneysR, totalBookingsR, pendingReportsR,
@@ -94,7 +96,7 @@ export const GET = createApiHandler(async () => {
     chartProfilesR, chartBookingsR, chartReviewsR,
     // Estimation leads (20–22)
     estimationTotalR, estimationTodayR, recentEstimationLeadsR,
-  ] = await Promise.allSettled([
+  ] = await withTimeout(Promise.allSettled([
     supabase.from('profiles').select('id', { count: 'exact', head: true }),
     supabase.from('attorneys').select('id', { count: 'exact', head: true }).eq('is_active', true),
     supabase.from('bookings').select('id', { count: 'exact', head: true }),
@@ -127,7 +129,7 @@ export const GET = createApiHandler(async () => {
     supabase.from('estimation_leads').select('id', { count: 'exact', head: true }),
     supabase.from('estimation_leads').select('id', { count: 'exact', head: true }).gte('created_at', todayStart),
     supabase.from('estimation_leads').select('id, nom, telephone, metier, ville, source, created_at').order('created_at', { ascending: false }).limit(5),
-  ])
+  ]))
 
   logBatchErrors('queries', [
     totalUsersR, totalAttorneysR, totalBookingsR, pendingReportsR, reviewsR,

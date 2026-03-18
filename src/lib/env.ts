@@ -117,9 +117,11 @@ const envSchema = z.object({
 export type Env = z.infer<typeof envSchema>
 
 function validateEnv(): Env {
-  // Skip validation during build and tests
+  // Skip validation during build and tests — return process.env with Env shape.
+  // This is safe: consumers only access optional keys during build/test, and
+  // Zod validation runs in production to catch missing required vars.
   if (process.env.NEXT_BUILD_SKIP_DB || process.env.NODE_ENV === 'test' || process.env.VITEST) {
-    return process.env as unknown as Env
+    return process.env as Env
   }
 
   const result = envSchema.safeParse(process.env)

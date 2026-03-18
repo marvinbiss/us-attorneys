@@ -9,6 +9,12 @@ import Image from 'next/image'
 import { chatService, Conversation } from '@/lib/realtime/chat-service'
 import { cn } from '@/lib/utils'
 
+/** Extended conversation row with joined provider/client data from getConversations query */
+interface ConversationWithJoins extends Conversation {
+  provider?: { id?: string; name?: string }
+  client?: { id?: string; full_name?: string }
+}
+
 interface ConversationListProps {
   userId: string
   userType: 'client' | 'attorney'
@@ -43,13 +49,11 @@ export function ConversationList({
 
   const filteredConversations = conversations.filter((conv) => {
     if (!searchQuery) return true
-    // The getConversations join includes provider:providers(id, name, ...) and client:profiles(id, full_name, ...)
-    const convAny = conv as unknown as Record<string, unknown>
-    const attorneyData = convAny.provider as { name?: string } | undefined
-    const clientData = convAny.client as { full_name?: string } | undefined
+    // The getConversations join includes provider:attorneys(id, name, ...) and client:profiles(id, full_name, ...)
+    const convWithJoins = conv as ConversationWithJoins
     const displayName = userType === 'client'
-      ? attorneyData?.name
-      : clientData?.full_name
+      ? convWithJoins.provider?.name
+      : convWithJoins.client?.full_name
     return displayName?.toLowerCase().includes(searchQuery.toLowerCase())
   })
 
@@ -103,12 +107,10 @@ export function ConversationList({
         ) : (
           <div className="divide-y divide-gray-100 dark:divide-gray-800">
             {filteredConversations.map((conversation) => {
-              const convAny = conversation as unknown as Record<string, unknown>
-              const attorneyData = convAny.provider as { id?: string; name?: string } | undefined
-              const clientData = convAny.client as { id?: string; full_name?: string } | undefined
+              const convWithJoins = conversation as ConversationWithJoins
               const name = userType === 'client'
-                ? attorneyData?.name
-                : clientData?.full_name
+                ? convWithJoins.provider?.name
+                : convWithJoins.client?.full_name
               // avatar_url was dropped from providers; not reliably available
               const avatar: string | undefined = undefined
 

@@ -1,5 +1,5 @@
 // ============================================================================
-// practice-areas-200.ts — 200 Practice Areas for lawtendr.com
+// practice-areas-200.ts — 200 Practice Areas for us-attorneys.com
 // Expands the original 75 from usa.ts with 125 subspecialties
 // ============================================================================
 

@@ -10,8 +10,8 @@ import { render, screen, act, fireEvent } from '@testing-library/react'
 // ── Mock dependencies ────────────────────────────────────────────────
 
 vi.mock('@/lib/seo/config', () => ({
-  SITE_NAME: 'Lawtendr',
-  SITE_URL: 'https://lawtendr.com',
+  SITE_NAME: 'US Attorneys',
+  SITE_URL: 'https://us-attorneys.com',
 }))
 
 vi.mock('@/lib/analytics/tracking', () => ({
@@ -41,7 +41,7 @@ describe('SpeakableAnswerBox', () => {
 
   it('renders default source when not provided', () => {
     render(<SpeakableAnswerBox answer="Some answer" />)
-    expect(screen.getByText(/Source: Lawtendr/)).toBeInTheDocument()
+    expect(screen.getByText(/Source: US Attorneys/)).toBeInTheDocument()
     expect(screen.getByText(/Verified bar records/)).toBeInTheDocument()
   })
 

@@ -47,8 +47,9 @@ export class CacheService {
     try {
       return JSON.parse(value) as T
     } catch (err: unknown) {
-      logger.warn('Redis cache: failed to parse JSON value, returning raw', { key, error: (err as Error).message })
-      return value as unknown as T
+      logger.warn('Redis cache: failed to parse JSON value, returning raw', { key, error: err instanceof Error ? err.message : String(err) })
+      // Raw string value — can only be returned as T if caller expects string
+      return value as T
     }
   }
 

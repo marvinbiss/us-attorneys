@@ -176,7 +176,7 @@ describe('Rate limiting', () => {
     const body = await result.json()
 
     expect(result.status).toBe(429)
-    expect(body.error).toContain('Too many requests')
+    expect(body.error.message).toContain('Too many requests')
     expect(result.headers.get('Retry-After')).toBeDefined()
   })
 })
@@ -211,7 +211,7 @@ describe('Validation', () => {
     const body = await result.json()
 
     expect(result.status).toBe(400)
-    expect(body.details).toBeDefined()
+    expect(body.error).toBeDefined()
   })
 
   it('returns 400 when client_name is too short', async () => {
@@ -277,7 +277,7 @@ describe('Attorney lookup', () => {
     const body = await result.json()
 
     expect(result.status).toBe(404)
-    expect(body.error).toBe('Attorney not found')
+    expect(body.error.message).toBe('Attorney not found')
   })
 })
 
@@ -312,7 +312,7 @@ describe('Overlap detection', () => {
     const body = await result.json()
 
     expect(result.status).toBe(409)
-    expect(body.error).toContain('conflicts')
+    expect(body.error.message).toContain('conflicts')
   })
 })
 
@@ -355,8 +355,8 @@ describe('Successful booking', () => {
 
     expect(result.status).toBe(201)
     expect(body.success).toBe(true)
-    expect(body.booking.id).toBe('new-booking-id')
-    expect(body.booking.client_name).toBe('John Smith')
+    expect(body.data.booking.id).toBe('new-booking-id')
+    expect(body.data.booking.client_name).toBe('John Smith')
   })
 
   it('sets status to confirmed when payment_intent_id is provided', async () => {
@@ -394,7 +394,7 @@ describe('Successful booking', () => {
     const body = await result.json()
 
     expect(result.status).toBe(201)
-    expect(body.booking.status).toBe('confirmed')
+    expect(body.data.booking.status).toBe('confirmed')
   })
 })
 
@@ -420,6 +420,6 @@ describe('Insert failure', () => {
     const body = await result.json()
 
     expect(result.status).toBe(500)
-    expect(body.error).toBe('Failed to create booking')
+    expect(body.error.message).toBe('Failed to create booking')
   })
 })

@@ -4,8 +4,8 @@
  * POST: Send a new message
  */
 
-import { NextResponse } from 'next/server'
 import { requireAttorney } from '@/lib/auth/attorney-guard'
+import { apiSuccess, apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -34,10 +34,7 @@ export async function GET(request: Request) {
     }
     const result = messagesQuerySchema.safeParse(queryParams)
     if (!result.success) {
-      return NextResponse.json(
-        { error: 'Invalid parameters', details: result.error.flatten() },
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Invalid parameters', 400)
     }
     const conversationId = result.data.conversation_id
 
@@ -49,10 +46,7 @@ export async function GET(request: Request) {
       .single()
 
     if (!provider) {
-      return NextResponse.json(
-        { error: 'Attorney profile not found' },
-        { status: 404 }
-      )
+      return apiError('NOT_FOUND', 'Attorney profile not found', 404)
     }
 
     if (conversationId) {
@@ -65,10 +59,7 @@ export async function GET(request: Request) {
         .single()
 
       if (!conversation) {
-        return NextResponse.json(
-          { error: 'Conversation not found' },
-          { status: 404 }
-        )
+        return apiError('NOT_FOUND', 'Conversation not found', 404)
       }
 
       // Fetch messages for this conversation (explicit columns, no select('*'))
@@ -80,10 +71,7 @@ export async function GET(request: Request) {
 
       if (messagesError) {
         logger.error('Error fetching messages:', messagesError)
-        return NextResponse.json(
-          { error: 'Error retrieving messages' },
-          { status: 500 }
-        )
+        return apiError('DATABASE_ERROR', 'Error retrieving messages', 500)
       }
 
       // Mark messages sent by client as read
@@ -94,7 +82,7 @@ export async function GET(request: Request) {
         .eq('sender_type', 'client')
         .is('read_at', null)
 
-      return NextResponse.json({ messages: messages || [] })
+      return apiSuccess({ messages: messages || [] })
     }
 
     // Bug fix: the Supabase JS client does not support .limit() on nested relation
@@ -120,10 +108,7 @@ export async function GET(request: Request) {
 
     if (convsError) {
       logger.error('Error fetching conversations:', convsError)
-      return NextResponse.json(
-        { error: 'Error retrieving conversations' },
-        { status: 500 }
-      )
+      return apiError('DATABASE_ERROR', 'Error retrieving conversations', 500)
     }
 
     const convList = conversations || []
@@ -153,10 +138,7 @@ export async function GET(request: Request) {
 
       if (msgsError) {
         logger.error('Error fetching recent messages:', msgsError)
-        return NextResponse.json(
-          { error: 'Error retrieving messages' },
-          { status: 500 }
-        )
+        return apiError('DATABASE_ERROR', 'Error retrieving messages', 500)
       }
       allMessages = (recentMsgs as MessageRow[]) || []
     }
@@ -186,13 +168,10 @@ export async function GET(request: Request) {
       }
     })
 
-    return NextResponse.json({ conversations: conversationsWithMeta })
+    return apiSuccess({ conversations: conversationsWithMeta })
   } catch (error: unknown) {
     logger.error('Messages GET error:', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
+    return apiError('INTERNAL_ERROR', 'Server error', 500)
   }
 }
 
@@ -204,10 +183,7 @@ export async function POST(request: Request) {
     const body = await request.json()
     const result = sendMessageSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Validation error', 400)
     }
     const { conversation_id, client_id, content } = result.data
 
@@ -219,10 +195,7 @@ export async function POST(request: Request) {
       .single()
 
     if (!provider) {
-      return NextResponse.json(
-        { error: 'Attorney profile not found' },
-        { status: 404 }
-      )
+      return apiError('NOT_FOUND', 'Attorney profile not found', 404)
     }
 
     let resolvedConversationId = conversation_id
@@ -230,10 +203,7 @@ export async function POST(request: Request) {
     if (!resolvedConversationId) {
       // Try to find existing conversation or create one
       if (!client_id) {
-        return NextResponse.json(
-          { error: 'conversation_id or client_id required' },
-          { status: 400 }
-        )
+        return apiError('VALIDATION_ERROR', 'conversation_id or client_id required', 400)
       }
 
       const { data: existingConv } = await supabase
@@ -254,10 +224,7 @@ export async function POST(request: Request) {
 
         if (convError || !newConv) {
           logger.error('Error creating conversation:', convError)
-          return NextResponse.json(
-            { error: 'Error creating conversation' },
-            { status: 500 }
-          )
+          return apiError('DATABASE_ERROR', 'Error creating conversation', 500)
         }
         resolvedConversationId = newConv.id
       }
@@ -271,10 +238,7 @@ export async function POST(request: Request) {
         .single()
 
       if (!conversation) {
-        return NextResponse.json(
-          { error: 'Conversation not found or unauthorized' },
-          { status: 403 }
-        )
+        return apiError('AUTHORIZATION_ERROR', 'Conversation not found or unauthorized', 403)
       }
     }
 
@@ -292,21 +256,12 @@ export async function POST(request: Request) {
 
     if (insertError) {
       logger.error('Error sending message:', insertError)
-      return NextResponse.json(
-        { error: "Error sending message" },
-        { status: 500 }
-      )
+      return apiError('DATABASE_ERROR', 'Error sending message', 500)
     }
 
-    return NextResponse.json({
-      success: true,
-      message
-    })
+    return apiSuccess({ message })
   } catch (error: unknown) {
     logger.error('Messages POST error:', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
+    return apiError('INTERNAL_ERROR', 'Server error', 500)
   }
 }

@@ -4,9 +4,10 @@
  * POST: Send a new message
  */
 
-import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { apiSuccess, apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
+import { withTimeout, isTimeoutError } from '@/lib/api/timeout'
 import { z } from 'zod'
 
 // GET query params schema
@@ -32,10 +33,7 @@ export async function GET(request: Request) {
     }
     const result = messagesQuerySchema.safeParse(queryParams)
     if (!result.success) {
-      return NextResponse.json(
-        { error: 'Invalid parameters', details: result.error.flatten() },
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Invalid parameters', 400)
     }
     const conversationId = result.data.conversation_id
 
@@ -43,41 +41,36 @@ export async function GET(request: Request) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
+      return apiError('AUTHENTICATION_ERROR', 'Not authenticated', 401)
     }
 
     if (conversationId) {
       // Verify conversation belongs to this client
-      const { data: conversation } = await supabase
-        .from('conversations')
-        .select('id, client_id, attorney_id')
-        .eq('id', conversationId)
-        .eq('client_id', user.id)
-        .single()
+      const { data: conversation } = await withTimeout(
+        supabase
+          .from('conversations')
+          .select('id, client_id, attorney_id')
+          .eq('id', conversationId)
+          .eq('client_id', user.id)
+          .single()
+      )
 
       if (!conversation) {
-        return NextResponse.json(
-          { error: 'Conversation not found' },
-          { status: 404 }
-        )
+        return apiError('NOT_FOUND', 'Conversation not found', 404)
       }
 
       // Fetch messages for this conversation
-      const { data: messages, error: messagesError } = await supabase
-        .from('messages')
-        .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
-        .eq('conversation_id', conversationId)
-        .order('created_at', { ascending: true })
+      const { data: messages, error: messagesError } = await withTimeout(
+        supabase
+          .from('messages')
+          .select('id, conversation_id, sender_id, sender_type, content, read_at, created_at')
+          .eq('conversation_id', conversationId)
+          .order('created_at', { ascending: true })
+      )
 
       if (messagesError) {
         logger.error('Error fetching messages:', messagesError)
-        return NextResponse.json(
-          { error: 'Error retrieving messages' },
-          { status: 500 }
-        )
+        return apiError('DATABASE_ERROR', 'Error retrieving messages', 500)
       }
 
       // Mark messages sent by attorney as read
@@ -88,32 +81,31 @@ export async function GET(request: Request) {
         .eq('sender_type', 'attorney')
         .is('read_at', null)
 
-      return NextResponse.json({ messages: messages || [], currentUserId: user.id })
+      return apiSuccess({ messages: messages || [], currentUserId: user.id })
     }
 
     // Fetch all conversations for this client
-    const { data: conversations, error: convsError } = await supabase
-      .from('conversations')
-      .select(`
-        id,
-        client_id,
-        attorney_id,
-        status,
-        created_at,
-        booking_id,
-        attorney:attorneys!attorney_id(id, name),
-        booking:bookings!booking_id(service_name)
-      `)
-      .eq('client_id', user.id)
-      .eq('status', 'active')
-      .order('created_at', { ascending: false })
+    const { data: conversations, error: convsError } = await withTimeout(
+      supabase
+        .from('conversations')
+        .select(`
+          id,
+          client_id,
+          attorney_id,
+          status,
+          created_at,
+          booking_id,
+          attorney:attorneys!attorney_id(id, name),
+          booking:bookings!booking_id(service_name)
+        `)
+        .eq('client_id', user.id)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+    )
 
     if (convsError) {
       logger.error('Error fetching conversations:', convsError)
-      return NextResponse.json(
-        { error: 'Error retrieving conversations' },
-        { status: 500 }
-      )
+      return apiError('DATABASE_ERROR', 'Error retrieving conversations', 500)
     }
 
     // For each conversation, get the last message and unread count
@@ -138,18 +130,20 @@ export async function GET(request: Request) {
           partner: conv.attorney,
           lastMessage: lastMessages?.[0] || null,
           unreadCount: unreadCount || 0,
-          service: (conv.booking as unknown as { service_name: string } | null)?.service_name || null,
+          // Supabase embedded join: booking resolves to single object at runtime
+          service: ((Array.isArray(conv.booking) ? conv.booking[0] : conv.booking) as { service_name: string } | null)?.service_name || null,
         }
       })
     )
 
-    return NextResponse.json({ conversations: conversationsWithMeta })
+    return apiSuccess({ conversations: conversationsWithMeta })
   } catch (error: unknown) {
+    if (isTimeoutError(error)) {
+      logger.error('Client Messages GET timeout:', error)
+      return apiError('GATEWAY_TIMEOUT', 'The request timed out. Please try again.', 504)
+    }
     logger.error('Client Messages GET error:', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
+    return apiError('INTERNAL_ERROR', 'Server error', 500)
   }
 }
 
@@ -161,19 +155,13 @@ export async function POST(request: Request) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
+      return apiError('AUTHENTICATION_ERROR', 'Not authenticated', 401)
     }
 
     const body = await request.json()
     const result = sendMessageSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Validation error', 400)
     }
     const { conversation_id, attorney_id, content } = result.data
 
@@ -182,10 +170,7 @@ export async function POST(request: Request) {
     if (!resolvedConversationId) {
       // Try to find existing conversation or create one
       if (!attorney_id) {
-        return NextResponse.json(
-          { error: 'conversation_id or attorney_id required' },
-          { status: 400 }
-        )
+        return apiError('VALIDATION_ERROR', 'conversation_id or attorney_id required', 400)
       }
 
       const { data: existingConv } = await supabase
@@ -206,10 +191,7 @@ export async function POST(request: Request) {
 
         if (convError || !newConv) {
           logger.error('Error creating conversation:', convError)
-          return NextResponse.json(
-            { error: 'Error creating conversation' },
-            { status: 500 }
-          )
+          return apiError('DATABASE_ERROR', 'Error creating conversation', 500)
         }
         resolvedConversationId = newConv.id
       }
@@ -223,10 +205,7 @@ export async function POST(request: Request) {
         .single()
 
       if (!conversation) {
-        return NextResponse.json(
-          { error: 'Conversation not found or unauthorized' },
-          { status: 403 }
-        )
+        return apiError('AUTHORIZATION_ERROR', 'Conversation not found or unauthorized', 403)
       }
     }
 
@@ -244,21 +223,16 @@ export async function POST(request: Request) {
 
     if (insertError) {
       logger.error('Error sending message:', insertError)
-      return NextResponse.json(
-        { error: 'Error sending message' },
-        { status: 500 }
-      )
+      return apiError('DATABASE_ERROR', 'Error sending message', 500)
     }
 
-    return NextResponse.json({
-      success: true,
-      message
-    })
+    return apiSuccess({ message })
   } catch (error: unknown) {
+    if (isTimeoutError(error)) {
+      logger.error('Client Messages POST timeout:', error)
+      return apiError('GATEWAY_TIMEOUT', 'The request timed out. Please try again.', 504)
+    }
     logger.error('Client Messages POST error:', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
+    return apiError('INTERNAL_ERROR', 'Server error', 500)
   }
 }

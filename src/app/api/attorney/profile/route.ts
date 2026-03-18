@@ -4,11 +4,12 @@
  * PUT: Update attorney profile
  */
 
-import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { requireAttorney } from '@/lib/auth/attorney-guard'
+import { apiSuccess, apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
+import { withTimeout, isTimeoutError } from '@/lib/api/timeout'
 import { z } from 'zod'
 
 // PUT request schema — only columns that actually exist
@@ -34,34 +35,36 @@ export async function GET() {
     if (guardError) return guardError
 
     // Fetch profile with explicit column list (profiles table)
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('id, email, full_name, role, average_rating, review_count')
-      .eq('id', user!.id)
-      .single()
+    const { data: profile, error: profileError } = await withTimeout(
+      supabase
+        .from('profiles')
+        .select('id, email, full_name, role, average_rating, review_count')
+        .eq('id', user!.id)
+        .single()
+    )
 
     if (profileError) {
       logger.error('Error fetching profile:', profileError)
-      return NextResponse.json(
-        { error: 'Error retrieving profile' },
-        { status: 500 }
-      )
+      return apiError('DATABASE_ERROR', 'Error retrieving profile', 500)
     }
 
     // Fetch associated provider data
-    const { data: provider } = await supabase
-      .from('attorneys')
-      .select('id, name, slug, bar_number, phone, address_line1, address_city, address_zip, address_state, specialty, rating_average, review_count, is_verified, is_active')
-      .eq('user_id', user!.id)
-      .single()
-
-    return NextResponse.json({ profile, provider })
-  } catch (error: unknown) {
-    logger.error('Profile GET error:', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
+    const { data: provider } = await withTimeout(
+      supabase
+        .from('attorneys')
+        .select('id, name, slug, bar_number, phone, address_line1, address_city, address_zip, address_state, specialty, rating_average, review_count, is_verified, is_active')
+        .eq('user_id', user!.id)
+        .single()
     )
+
+    return apiSuccess({ profile, provider })
+  } catch (error: unknown) {
+    if (isTimeoutError(error)) {
+      logger.error('Profile GET timeout:', error)
+      return apiError('GATEWAY_TIMEOUT', 'The request timed out. Please try again.', 504)
+    }
+    logger.error('Profile GET error:', error)
+    return apiError('INTERNAL_ERROR', 'Server error', 500)
   }
 }
 
@@ -74,10 +77,7 @@ export async function PUT(request: Request) {
     const body = await request.json()
     const result = updateProfileSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json(
-        { error: 'Validation error', details: result.error.flatten() },
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Validation error', 400)
     }
     const {
       full_name,
@@ -96,19 +96,18 @@ export async function PUT(request: Request) {
 
     let profile = null
     if (Object.keys(profileUpdate).length > 0) {
-      const { data, error: updateError } = await supabase
-        .from('profiles')
-        .update(profileUpdate)
-        .eq('id', user!.id)
-        .select('id, email, full_name, role, average_rating, review_count')
-        .single()
+      const { data, error: updateError } = await withTimeout(
+        supabase
+          .from('profiles')
+          .update(profileUpdate)
+          .eq('id', user!.id)
+          .select('id, email, full_name, role, average_rating, review_count')
+          .single()
+      )
 
       if (updateError) {
         logger.error('Error updating profile:', updateError)
-        return NextResponse.json(
-          { error: 'Error updating profile' },
-          { status: 500 }
-        )
+        return apiError('DATABASE_ERROR', 'Error updating profile', 500)
       }
       profile = data
     }
@@ -125,19 +124,18 @@ export async function PUT(request: Request) {
 
     let provider = null
     if (Object.keys(providerUpdate).length > 0) {
-      const { data, error: attorneyError } = await supabase
-        .from('attorneys')
-        .update(providerUpdate)
-        .eq('user_id', user!.id)
-        .select('id, name, slug, bar_number, phone, address_line1, address_city, address_zip, specialty, stable_id, is_verified, is_active')
-        .single()
+      const { data, error: attorneyError } = await withTimeout(
+        supabase
+          .from('attorneys')
+          .update(providerUpdate)
+          .eq('user_id', user!.id)
+          .select('id, name, slug, bar_number, phone, address_line1, address_city, address_zip, specialty, stable_id, is_verified, is_active')
+          .single()
+      )
 
       if (attorneyError) {
         logger.error('Error updating provider:', attorneyError)
-        return NextResponse.json(
-          { error: 'Error updating attorney profile' },
-          { status: 500 }
-        )
+        return apiError('DATABASE_ERROR', 'Error updating attorney profile', 500)
       }
       provider = data
     }
@@ -172,17 +170,17 @@ export async function PUT(request: Request) {
       }
     }
 
-    return NextResponse.json({
-      success: true,
+    return apiSuccess({
       profile,
       provider,
-      message: 'Profile updated successfully'
+      message: 'Profile updated successfully',
     })
   } catch (error: unknown) {
+    if (isTimeoutError(error)) {
+      logger.error('Profile PUT timeout:', error)
+      return apiError('GATEWAY_TIMEOUT', 'The request timed out. Please try again.', 504)
+    }
     logger.error('Profile PUT error:', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
+    return apiError('INTERNAL_ERROR', 'Server error', 500)
   }
 }

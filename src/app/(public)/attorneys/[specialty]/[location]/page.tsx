@@ -197,7 +197,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    robots: { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
+    // Noindex thin-content pages (0 attorneys) — fail-open: attorneyCount defaults to 1 if DB is down
+    robots: attorneyCount > 0
+      ? { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const }
+      : { index: false, follow: true },
     openGraph: {
       title,
       description,
@@ -499,7 +502,7 @@ export default async function AttorneyDirectoryPage({ params }: PageProps) {
       <ServiceLocationPageClient
         service={service}
         location={location}
-        providers={(providers || []) as unknown as Provider[]}
+        providers={(providers || []) as Provider[]}
         h1Text={h1Text}
         totalCount={totalAttorneyCount}
         specialtySlug={specialtySlug}

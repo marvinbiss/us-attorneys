@@ -146,18 +146,22 @@ export async function enqueueCampaignMessages(
   }
 
   // Filter contacts that have the required channel
-  const validContacts = ((contacts || []) as unknown as ProspectionContact[]).filter(c => {
+  // Supabase query returns rows matching ProspectionContact shape by select() columns
+  const validContacts = ((contacts || []) as ProspectionContact[]).filter(c => {
     if (campaign.channel === 'email') return !!c.email
     return !!c.phone_e164
   })
 
   // Determine A/B variant
-  const template = campaign.template as unknown as ProspectionTemplate
+  // Supabase embedded join: template resolves to single object at runtime
+  const template = (Array.isArray(campaign.template) ? campaign.template[0] : campaign.template) as ProspectionTemplate
   const messages = validContacts.map((contact: ProspectionContact, index: number) => {
     const isVariantB = campaign.ab_test_enabled && index % 100 < campaign.ab_split_percent
-    const renderedBody = renderTemplate(template.body, contact, campaign as unknown as ProspectionCampaign)
+    // DB query result includes joined template/list fields not in ProspectionCampaign; cast via unknown
+    const typedCampaign = campaign as unknown as ProspectionCampaign
+    const renderedBody = renderTemplate(template.body, contact, typedCampaign)
     const renderedSubject = template.subject
-      ? renderTemplate(template.subject, contact, campaign as unknown as ProspectionCampaign)
+      ? renderTemplate(template.subject, contact, typedCampaign)
       : null
 
     return {
@@ -255,7 +259,8 @@ export async function processBatch(
     .select('id, email, phone_e164')
     .in('id', contactIds)
 
-  const contactMap = new Map(((contacts || []) as unknown as ProspectionContact[]).map((c: ProspectionContact) => [c.id, c]))
+  // Supabase query returns rows matching ProspectionContact shape by select() columns
+  const contactMap = new Map(((contacts || []) as ProspectionContact[]).map((c: ProspectionContact) => [c.id, c]))
   const messages = claimedMessages.map((m: ProspectionMessage) => ({
     ...m,
     contact: contactMap.get(m.contact_id) || null,

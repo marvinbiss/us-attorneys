@@ -115,7 +115,10 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
 
   switch (functionCall.name) {
     case 'save_qualification': {
-      const data = functionCall.parameters as unknown as QualificationData
+      // Vapi function call parameters are Record<string, unknown>; shape matches QualificationData
+      // by contract with the Vapi function schema (VAPI_FUNCTIONS). Cast via unknown needed
+      // because Record<string, unknown> is structurally incompatible with QualificationData.
+      const data: QualificationData = functionCall.parameters as unknown as QualificationData
       const score = calculateQualificationScore(data)
 
       if (callId) {

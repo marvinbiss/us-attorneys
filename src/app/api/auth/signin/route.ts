@@ -6,8 +6,8 @@
 import { NextResponse } from 'next/server'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import { signInSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
-import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
+import { signInSchema, validateRequest } from '@/lib/validations/schemas'
+import { apiSuccess, apiError } from '@/lib/api/handler'
 import { authLogger } from '@/lib/logger'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
@@ -20,17 +20,14 @@ export async function POST(request: Request) {
     const rl = await rateLimit(request, RATE_LIMITS.auth)
     if (!rl.success) {
       return NextResponse.json(
-        { error: 'Too many requests. Please try again later.' },
+        { success: false, error: { code: 'RATE_LIMIT_ERROR', message: 'Too many requests. Please try again later.' } },
         { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.reset - Date.now()) / 1000)) } }
       )
     }
 
     // Validate environment
     if (!supabaseUrl || !supabaseAnonKey) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Missing server configuration'),
-        { status: 500 }
-      )
+      return apiError('INTERNAL_ERROR', 'Missing server configuration', 500)
     }
 
     // Parse and validate request body
@@ -38,14 +35,7 @@ export async function POST(request: Request) {
     const validation = validateRequest(signInSchema, body)
 
     if (!validation.success) {
-      return NextResponse.json(
-        createErrorResponse(
-          ErrorCode.VALIDATION_ERROR,
-          'Invalid data',
-          { fields: formatZodErrors(validation.errors) }
-        ),
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Invalid data', 400)
     }
 
     const { email, password } = validation.data
@@ -79,30 +69,18 @@ export async function POST(request: Request) {
     if (error) {
       // Handle specific error types
       if (error.message.includes('Invalid login credentials')) {
-        return NextResponse.json(
-          createErrorResponse(ErrorCode.UNAUTHORIZED, 'Incorrect email or password'),
-          { status: 401 }
-        )
+        return apiError('AUTHENTICATION_ERROR', 'Incorrect email or password', 401)
       }
       if (error.message.includes('Email not confirmed')) {
-        return NextResponse.json(
-          createErrorResponse(ErrorCode.UNAUTHORIZED, 'Please confirm your email before signing in'),
-          { status: 401 }
-        )
+        return apiError('AUTHENTICATION_ERROR', 'Please confirm your email before signing in', 401)
       }
       // Generic message — never leak internal error details to the client
       authLogger.warn('Signin error (unhandled type)', { detail: error.message })
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Invalid email or password'),
-        { status: 401 }
-      )
+      return apiError('AUTHENTICATION_ERROR', 'Invalid email or password', 401)
     }
 
     if (!data.user || !data.session) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.UNAUTHORIZED, 'Authentication failed'),
-        { status: 401 }
-      )
+      return apiError('AUTHENTICATION_ERROR', 'Authentication failed', 401)
     }
 
     // Get user profile (may not exist yet)
@@ -118,21 +96,24 @@ export async function POST(request: Request) {
     // SECURITY FIX: Do not expose the refresh token in the JSON response
     // The refresh token is managed by Supabase HTTP-only cookies
     const response = NextResponse.json(
-      createSuccessResponse({
-        user: {
-          id: data.user.id,
-          email: data.user.email,
-          fullName: profile?.full_name || data.user.user_metadata?.full_name || `${data.user.user_metadata?.first_name || ''} ${data.user.user_metadata?.last_name || ''}`.trim() || null,
-          role: profile?.role || 'user',
-          userType: profile?.role === 'attorney' ? 'attorney' : 'client',
-          isAttorney,
+      {
+        success: true,
+        data: {
+          user: {
+            id: data.user.id,
+            email: data.user.email,
+            fullName: profile?.full_name || data.user.user_metadata?.full_name || `${data.user.user_metadata?.first_name || ''} ${data.user.user_metadata?.last_name || ''}`.trim() || null,
+            role: profile?.role || 'user',
+            userType: profile?.role === 'attorney' ? 'attorney' : 'client',
+            isAttorney,
+          },
+          session: {
+            accessToken: data.session.access_token,
+            expiresAt: data.session.expires_at,
+            // refreshToken intentionally omitted for security
+          },
         },
-        session: {
-          accessToken: data.session.access_token,
-          expiresAt: data.session.expires_at,
-          // refreshToken intentionally omitted for security
-        },
-      })
+      }
     )
 
     // Set refresh token as HTTP-only cookie for security
@@ -147,9 +128,6 @@ export async function POST(request: Request) {
     return response
   } catch (error: unknown) {
     authLogger.error('Signin error:', error)
-    return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error during connection'),
-      { status: 500 }
-    )
+    return apiError('INTERNAL_ERROR', 'Error during connection', 500)
   }
 }

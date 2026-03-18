@@ -320,10 +320,10 @@ export class UnifiedNotificationService {
         recipient_email: recipient,
         error_message: error,
       }
-      // @ts-expect-error - notification_logs table is not in generated Supabase types; row shape is validated by NotificationLogInsert
+      // @ts-expect-error notification_logs table exists in DB (migration 404) but is not in generated Supabase types yet. Row shape validated by NotificationLogInsert interface above.
       await this.supabase.from('notification_logs').insert(row)
     } catch (err: unknown) {
-      logger.error('[Notification] Failed to log notification', err as Error)
+      logger.error('[Notification] Failed to log notification', err instanceof Error ? err : new Error(String(err)))
     }
   }
 

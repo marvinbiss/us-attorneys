@@ -96,7 +96,8 @@ export const GET = createApiHandler(async ({ request }) => {
 
     if (assignments) {
       for (const a of assignments) {
-        const provider = a.attorney as unknown as { id: string; name: string } | null
+        // Supabase embedded join: attorney resolves to single object at runtime
+        const provider = (Array.isArray(a.attorney) ? a.attorney[0] : a.attorney) as { id: string; name: string } | null
         const entry = {
           id: a.id,
           status: a.status,

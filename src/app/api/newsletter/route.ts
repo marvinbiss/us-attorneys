@@ -3,7 +3,7 @@
  * Handles newsletter subscriptions
  */
 
-import { NextResponse } from 'next/server'
+import { apiSuccess, apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { getResendClient } from '@/lib/api/resend-client'
 import { z } from 'zod'
@@ -21,10 +21,7 @@ export async function POST(request: Request) {
     // Validate input
     const validation = newsletterSchema.safeParse(body)
     if (!validation.success) {
-      return NextResponse.json(
-        { error: 'Invalid email address' },
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Invalid email address', 400)
     }
 
     const { email } = validation.data
@@ -57,15 +54,9 @@ export async function POST(request: Request) {
       logger.error('Newsletter welcome email failed', emailError)
     }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Subscription confirmed',
-    })
+    return apiSuccess({ message: 'Subscription confirmed' })
   } catch (error: unknown) {
     logger.error('Newsletter API error', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
+    return apiError('INTERNAL_ERROR', 'Server error', 500)
   }
 }

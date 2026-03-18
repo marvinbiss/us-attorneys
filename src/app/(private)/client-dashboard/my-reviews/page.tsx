@@ -6,6 +6,7 @@ import { FileText, MessageSquare, Star, Settings, ArrowLeft, Edit2, Trash2, Load
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
 import LogoutButton from '@/components/LogoutButton'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 interface PublishedReview {
   id: string
@@ -253,9 +254,12 @@ export default function MyReviewsPage() {
                 Published Reviews ({publishedReviews.length})
               </h2>
               {publishedReviews.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">
-                  You haven&apos;t published any reviews yet.
-                </p>
+                <EmptyState
+                  variant="inbox"
+                  title="No published reviews yet"
+                  description="After completing a consultation, you can leave a review for your attorney. Your feedback helps other clients find the right legal help."
+                  action={{ label: 'Find an Attorney', href: '/attorneys' }}
+                />
               ) : (
                 <div className="space-y-4">
                   {publishedReviews.map((item) => (

@@ -199,7 +199,8 @@ export const GET = createApiHandler(async ({ params }) => {
     }
 
     // Now get full data with relations (if tables exist)
-    let provider: ProviderRow | null = simpleProvider as unknown as ProviderRow | null
+    // Supabase select() returns row matching ProviderRow shape by column list
+    let provider: ProviderRow | null = simpleProvider as ProviderRow | null
     const attorneyError = simpleError
 
     if (simpleProvider) {
@@ -223,6 +224,8 @@ export const GET = createApiHandler(async ({ params }) => {
           .single()
 
         if (fullProvider) {
+          // Supabase TS types model nested joins (service, location) as arrays,
+          // but single FK joins resolve to objects at runtime. Cast via unknown required.
           provider = fullProvider as unknown as ProviderRow
         }
       } catch {

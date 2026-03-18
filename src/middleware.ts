@@ -93,7 +93,7 @@ const LEGACY_REDIRECTS: Record<string, string> = {
 // URL canonicalization — all fixes combined into a single 301 hop
 function getCanonicalRedirect(request: NextRequest): string | null {
   const url = request.nextUrl
-  const host = request.headers.get('host') || 'lawtendr.com'
+  const host = request.headers.get('host') || 'us-attorneys.com'
 
   let canonicalHost = host
   let pathname = url.pathname
@@ -146,7 +146,7 @@ export async function middleware(request: NextRequest) {
   // Redirect legacy pricing URLs → /pricing (301 permanent, cached at CDN edge)
   if (pathname.startsWith('/pricing-artisans') || pathname.startsWith('/pricing-attorneys')) {
     const newPath = pathname.replace('/pricing-artisans', '/pricing').replace('/pricing-attorneys', '/pricing')
-    const host = request.headers.get('host') || 'lawtendr.com'
+    const host = request.headers.get('host') || 'us-attorneys.com'
     const redirectResponse = NextResponse.redirect(`https://${host}${newPath}${request.nextUrl.search}`, 301)
     redirectResponse.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
     redirectResponse.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
@@ -155,7 +155,7 @@ export async function middleware(request: NextRequest) {
 
   // Redirect legacy/mistyped URLs → correct paths (301 permanent, cached at CDN edge)
   if (LEGACY_REDIRECTS[pathname]) {
-    const host = request.headers.get('host') || 'lawtendr.com'
+    const host = request.headers.get('host') || 'us-attorneys.com'
     const legacyRedirect = NextResponse.redirect(`https://${host}${LEGACY_REDIRECTS[pathname]}${request.nextUrl.search}`, 301)
     legacyRedirect.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
     legacyRedirect.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')

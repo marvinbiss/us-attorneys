@@ -84,7 +84,7 @@ export default async function ServiceQuartierPage({
     specialtySlug,
     locationSlug,
     { postalCode: arrondissementPostalCode },
-  ) as unknown as Provider[]
+  ) as Provider[]
 
   // 4. Generate content
   const trade = getTradeContent(specialtySlug)

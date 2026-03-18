@@ -66,6 +66,8 @@ export async function sendWhatsApp(params: WhatsAppSendParams): Promise<WhatsApp
       messageParams.statusCallback = `${siteUrl}/api/admin/prospection/webhooks/twilio`
     }
 
+    // Twilio SDK expects MessageListInstanceCreateOptions; Record<string, unknown> is structurally
+    // incompatible with the specific interface, but matches at runtime. Cast via unknown required.
     const result = await client.messages.create(messageParams as unknown as Parameters<typeof client.messages.create>[0])
 
     logger.info('WhatsApp sent', { to: params.to, sid: result.sid })

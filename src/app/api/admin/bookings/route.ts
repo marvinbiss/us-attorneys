@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { createApiHandler } from '@/lib/api/handler'
+import { withTimeout } from '@/lib/api/timeout'
 import { z } from 'zod'
 
 // GET query params schema
@@ -64,9 +65,11 @@ export const GET = createApiHandler(async ({ request }) => {
   // The search parameter is accepted for UI compatibility but ignored at DB level.
   void search
 
-  const { data: bookings, count, error } = await query
-    .order('created_at', { ascending: false })
-    .range(offset, offset + limit - 1)
+  const { data: bookings, count, error } = await withTimeout(
+    query
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1)
+  )
 
   if (error) {
     logger.warn('Bookings query failed, returning empty list', { code: error.code, message: error.message })

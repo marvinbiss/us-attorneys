@@ -5,8 +5,8 @@
 
 import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
-import { signUpSchema, validateRequest, formatZodErrors } from '@/lib/validations/schemas'
-import { createErrorResponse, createSuccessResponse, ErrorCode, getHttpStatus as _getHttpStatus } from '@/lib/errors/types'
+import { signUpSchema, validateRequest } from '@/lib/validations/schemas'
+import { apiSuccess, apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
@@ -19,17 +19,14 @@ export async function POST(request: Request) {
     const rl = await rateLimit(request, RATE_LIMITS.auth)
     if (!rl.success) {
       return NextResponse.json(
-        { error: 'Too many requests. Please try again later.' },
+        { success: false, error: { code: 'RATE_LIMIT_ERROR', message: 'Too many requests. Please try again later.' } },
         { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.reset - Date.now()) / 1000)) } }
       )
     }
 
     // Validate environment
     if (!supabaseUrl || !supabaseServiceKey) {
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Missing server configuration'),
-        { status: 500 }
-      )
+      return apiError('INTERNAL_ERROR', 'Missing server configuration', 500)
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
@@ -39,14 +36,7 @@ export async function POST(request: Request) {
     const validation = validateRequest(signUpSchema, body)
 
     if (!validation.success) {
-      return NextResponse.json(
-        createErrorResponse(
-          ErrorCode.VALIDATION_ERROR,
-          'Invalid data',
-          { fields: formatZodErrors(validation.errors) }
-        ),
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Invalid data', 400)
     }
 
     const { email, password, firstName, lastName, phone } = validation.data
@@ -63,13 +53,10 @@ export async function POST(request: Request) {
       // Return the same success response as a normal signup to prevent attackers
       // from discovering valid email addresses.
       logger.info('Signup attempted with existing email (suppressed)')
-      return NextResponse.json(
-        createSuccessResponse({
-          message: 'Account created successfully. Check your email to activate your account.',
-          requiresVerification: true,
-        }),
-        { status: 201 }
-      )
+      return apiSuccess({
+        message: 'Account created successfully. Check your email to activate your account.',
+        requiresVerification: true,
+      }, 201)
     }
 
     // Create user in Supabase Auth
@@ -86,10 +73,7 @@ export async function POST(request: Request) {
 
     if (authError || !authData.user) {
       logger.error('Auth error:', authError)
-      return NextResponse.json(
-        createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error creating account'),
-        { status: 500 }
-      )
+      return apiError('INTERNAL_ERROR', 'Error creating account', 500)
     }
 
     // Create profile record - default to client user type
@@ -110,19 +94,13 @@ export async function POST(request: Request) {
     // Note: Verification email is automatically sent by Supabase auth.admin.createUser
     // when emailConfirm is set to true
 
-    return NextResponse.json(
-      createSuccessResponse({
-        message: 'Account created successfully. Check your email to activate your account.',
-        userId: authData.user.id,
-        requiresVerification: true,
-      }),
-      { status: 201 }
-    )
+    return apiSuccess({
+      message: 'Account created successfully. Check your email to activate your account.',
+      userId: authData.user.id,
+      requiresVerification: true,
+    }, 201)
   } catch (error: unknown) {
     logger.error('Signup error:', error)
-    return NextResponse.json(
-      createErrorResponse(ErrorCode.INTERNAL_ERROR, 'Error during registration'),
-      { status: 500 }
-    )
+    return apiError('INTERNAL_ERROR', 'Error during registration', 500)
   }
 }

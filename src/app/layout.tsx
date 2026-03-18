@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
 import Script from 'next/script'
@@ -11,6 +12,7 @@ import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAttorneyCount } from '@/lib/data/stats'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
+import { PageSkeleton } from '@/components/ui/Skeleton'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -230,7 +232,11 @@ fbq('track', 'PageView');`}
         <ThemeProvider>
         <MobileMenuProvider>
           <Header attorneyCount={attorneyCount} />
-          <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">{children}</main>
+          <main id="main-content" tabIndex={-1} className="pb-16 md:pb-0 outline-none">
+            <Suspense fallback={<PageSkeleton />}>
+              {children}
+            </Suspense>
+          </main>
           <Footer />
           <MobileBottomNav />
           <ServiceWorkerRegistration />

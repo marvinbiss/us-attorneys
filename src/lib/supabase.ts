@@ -11,8 +11,10 @@ import { getCachedData, generateCacheKey, CACHE_TTL } from '@/lib/cache'
  */
 const IS_BUILD = process.env.NEXT_BUILD_SKIP_DB === '1'
 
+// During build, supabase is null. All query functions guard with IS_BUILD checks.
+// The non-null assertion (!) below is safe because every consumer checks IS_BUILD first.
 export const supabase = IS_BUILD
-  ? (null as unknown as ReturnType<typeof createClient>)
+  ? (null! as ReturnType<typeof createClient>)
   : createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
       global: {
         // Tell Next.js to cache Supabase responses so ISR pages don't
@@ -27,11 +29,20 @@ export const supabase = IS_BUILD
     })
 
 /**
+ * Cast Supabase query result rows to the expected shape.
+ * Supabase's generated types don't account for embedded joins resolving to
+ * single objects (not arrays), so we need this typed identity function.
+ */
+function asAttorneyListRows(data: unknown[]): AttorneyListRow[] {
+  return data as AttorneyListRow[]
+}
+
+/**
  * Row shape returned by provider listing queries (PROVIDER_LIST_SELECT).
  * Matches the columns selected in the lightweight listing query.
  * `specialty` comes from an embedded join on specialties via primary_specialty_id.
  */
-interface AttorneyListRow {
+export interface AttorneyListRow {
   id: string
   stable_id: string | null
   name: string
@@ -56,6 +67,23 @@ interface AttorneyListRow {
   updated_at: string | null
   is_featured: boolean | null
   boost_level: number | null
+}
+
+/** Shape returned by Supabase join on states table (state:states!state_id(...)). */
+interface StateJoinRow {
+  abbreviation: string
+  name?: string
+  region?: string
+}
+
+/**
+ * Unwrap a Supabase embedded join result to a single object.
+ * Supabase TS types model joins as arrays, but single FK joins resolve to objects at runtime.
+ */
+function unwrapJoin<T>(value: T | T[] | null): T | null {
+  if (value === null || value === undefined) return null
+  if (Array.isArray(value)) return value[0] ?? null
+  return value
 }
 
 /**
@@ -263,7 +291,7 @@ export async function getLocationBySlug(slug: string) {
               .single()
 
             if (error || !data) throw error || new Error('Location not found')
-            const state = data.state as unknown as { abbreviation: string; name: string; region: string } | null
+            const state = unwrapJoin(data.state) as StateJoinRow | null
             return {
               id: data.id,
               name: data.name,
@@ -312,6 +340,7 @@ async function queryAttorneyDetail(
     .eq('is_active', true)
     .single()
 
+  // Supabase anon client uses generated types; select() result matches AttorneyListRow by PROVIDER_LIST_SELECT
   return data ? (data as unknown as AttorneyListRow) : null
 }
 
@@ -659,7 +688,7 @@ export async function getAttorneysByServiceAndLocation(
               .order('name')
               .range(offset, offset + limit - 1)
             if (error) throw error
-            return (data || []) as unknown as AttorneyListRow[]
+            return asAttorneyListRows(data || [])
           },
           `getAttorneysByServiceAndLocation:postal(${specialtySlug}, ${postalCode})`,
         )
@@ -685,7 +714,7 @@ export async function getAttorneysByServiceAndLocation(
                 .order('name')
                 .range(offset, offset + limit - 1)
               if (error) throw error
-              return (data || []) as unknown as AttorneyListRow[]
+              return asAttorneyListRows(data || [])
             },
             `getAttorneysByServiceAndLocation:zip(${specialtySlug}, ${zipCode})`,
           )
@@ -724,7 +753,7 @@ export async function getAttorneysByServiceAndLocation(
               dbLogger.warn(`[getAttorneysByServiceAndLocation] primary query error for ${specialtySlug}/${locationSlug}:`, { error: directError.message })
             }
 
-            if (!directError && direct && direct.length > 0) return direct as unknown as AttorneyListRow[]
+            if (!directError && direct && direct.length > 0) return asAttorneyListRows(direct)
 
             return []
           },
@@ -900,7 +929,7 @@ export async function getAttorneysByLocation(locationSlug: string) {
                 .order('name')
                 .limit(500)
               if (error) throw error
-              return (data || []) as unknown as AttorneyListRow[]
+              return asAttorneyListRows(data || [])
             },
             `getAttorneysByLocation:zip(${zipCode})`,
           )
@@ -939,7 +968,7 @@ export async function getAttorneysByLocation(locationSlug: string) {
               .limit(500)
 
             if (error) throw error
-            return (data || []) as unknown as AttorneyListRow[]
+            return asAttorneyListRows(data || [])
           },
           `getAttorneysByLocation(${locationSlug})`,
         )
@@ -974,7 +1003,7 @@ export async function getAllProviders() {
             .limit(1000)
 
           if (error) throw error
-          return (data || []) as unknown as AttorneyListRow[]
+          return asAttorneyListRows(data || [])
         })(),
         QUERY_TIMEOUT_MS,
         'getAllProviders',
@@ -1014,7 +1043,7 @@ export async function getAttorneysByService(specialtySlug: string, limit?: numbe
               .limit(effectiveLimit)
 
             if (error) throw error
-            return (data || []) as unknown as AttorneyListRow[]
+            return asAttorneyListRows(data || [])
           })(),
           QUERY_TIMEOUT_MS,
           `getAttorneysByService(${specialtySlug})`,
@@ -1104,7 +1133,7 @@ export async function getLocationsByService(specialtySlug: string) {
           if (locationsError) throw locationsError
 
           return (locations || []).map(c => {
-            const state = c.state as unknown as { abbreviation: string; region: string } | null
+            const state = unwrapJoin(c.state) as StateJoinRow | null
             return {
               id: c.id,
               name: c.name,

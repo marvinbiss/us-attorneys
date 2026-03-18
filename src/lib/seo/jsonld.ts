@@ -350,7 +350,7 @@ export function getLegalServiceSchema(params: {
     serviceType: params.specialtyName,
     provider: {
       '@type': 'Organization',
-      name: 'Lawtendr',
+      name: SITE_NAME,
       url: SITE_URL,
     },
     numberOfItems: params.attorneyCount,

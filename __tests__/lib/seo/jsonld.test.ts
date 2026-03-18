@@ -64,7 +64,7 @@ describe('getOrganizationSchema', () => {
 
   it('includes name and url', () => {
     const schema = getOrganizationSchema()
-    expect(schema.name).toBe('Lawtendr')
+    expect(schema.name).toBe('US Attorneys')
     expect(schema.url).toMatch(/^https?:\/\//)
   })
 
@@ -161,7 +161,7 @@ describe('getServiceSchema', () => {
     const schema = getServiceSchema({ name: 'DUI Defense', description: 'Expert' })
     const provider = schema.provider as Record<string, unknown>
     expect(provider['@type']).toBe('Organization')
-    expect(provider.name).toBe('Lawtendr')
+    expect(provider.name).toBe('US Attorneys')
   })
 
   it('uses provided areaServed', () => {
@@ -404,7 +404,7 @@ describe('getAttorneySchema', () => {
     name: 'John Smith',
     firstName: 'John',
     lastName: 'Smith',
-    url: 'https://lawtendr.com/attorneys/john-smith',
+    url: 'https://us-attorneys.com/attorneys/john-smith',
     description: 'Experienced criminal defense attorney',
     specialty: 'Criminal Defense',
     location: 'Houston',
@@ -616,7 +616,7 @@ describe('getLegalServiceSchema', () => {
     const schema = getLegalServiceSchema(params)
     const provider = schema.provider as Record<string, unknown>
     expect(provider['@type']).toBe('Organization')
-    expect(provider.name).toBe('Lawtendr')
+    expect(provider.name).toBe('US Attorneys')
   })
 
   it('includes aggregateRating when avgRating and reviewCount provided', () => {

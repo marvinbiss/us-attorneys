@@ -62,6 +62,9 @@ export default async function FAQPage() {
       ? {
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
+          // CMS structured_data is typed as Record<string, unknown> (generic JSONB) but FAQ pages
+          // store an array of {categoryName, items[]} — the intermediate `unknown` is needed because
+          // Record<string, unknown> and Array are structurally incompatible in TS.
           mainEntity: (cmsPage.structured_data as unknown as Array<{ categoryName: string; items: Array<{ question: string; answer: string }> }>).flatMap((cat) =>
             cat.items.map((item) => ({
               '@type': 'Question',

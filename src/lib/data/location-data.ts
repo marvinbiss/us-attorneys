@@ -147,6 +147,7 @@ export async function getLocationBySlug(slug: string): Promise<LocationData | nu
           .single()
 
         if (error || !data) return null
+        // Admin client is generic (no schema); LocationData interface matches LOCATION_COLUMNS exactly
         return data as unknown as LocationData
       } catch {
         // DB unavailable or table does not exist yet -- graceful fallback

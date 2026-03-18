@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createApiHandler } from '@/lib/api/handler'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
+import { withTimeout } from '@/lib/api/timeout'
 import { z } from 'zod'
 
 const clientLeadsQuerySchema = z.object({
@@ -65,11 +66,13 @@ export const GET = createApiHandler(async ({ request, user }) => {
 
   // Fetch all consultation requests for this client
   // Table 'devis_requests' = consultation requests (legacy French name)
-  const { data: clientRequests, error: clientRequestsError } = await supabase
-    .from('devis_requests')
-    .select('id, service_name, city, postal_code, description, budget, urgency, status, client_name, created_at')
-    .eq('client_id', user!.id)
-    .order('created_at', { ascending: false })
+  const { data: clientRequests, error: clientRequestsError } = await withTimeout(
+    supabase
+      .from('devis_requests')
+      .select('id, service_name, city, postal_code, description, budget, urgency, status, client_name, created_at')
+      .eq('client_id', user!.id)
+      .order('created_at', { ascending: false })
+  )
 
   if (clientRequestsError) {
     logger.error('Client leads fetch error:', clientRequestsError)
@@ -87,11 +90,13 @@ export const GET = createApiHandler(async ({ request, user }) => {
   // Fetch lead_events for all of this client's leads (admin client — RLS is admin-only)
   const adminClient = createAdminClient()
   const leadIds = clientRequests.map(d => d.id)
-  const { data: allEvents, error: eventsError } = await adminClient
-    .from('lead_events')
-    .select('lead_id, event_type, created_at')
-    .in('lead_id', leadIds)
-    .order('created_at', { ascending: false })
+  const { data: allEvents, error: eventsError } = await withTimeout(
+    adminClient
+      .from('lead_events')
+      .select('lead_id, event_type, created_at')
+      .in('lead_id', leadIds)
+      .order('created_at', { ascending: false })
+  )
 
   if (eventsError) {
     logger.error('Client lead_events fetch error:', eventsError)

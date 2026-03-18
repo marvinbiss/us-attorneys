@@ -3,9 +3,8 @@
  * Used by ClaimButton to prefill form fields
  */
 
-import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { createApiHandler } from '@/lib/api/handler'
+import { createApiHandler, apiSuccess, apiError } from '@/lib/api/handler'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,7 +13,7 @@ export const GET = createApiHandler(async () => {
     const { data: { user }, error } = await supabase.auth.getUser()
 
     if (error || !user) {
-      return NextResponse.json({ user: null }, { status: 401 })
+      return apiError('AUTHENTICATION_ERROR', 'Not authenticated', 401)
     }
 
     // Use RLS-respecting client — user can read their own profile
@@ -24,7 +23,7 @@ export const GET = createApiHandler(async () => {
       .eq('id', user.id)
       .single()
 
-    return NextResponse.json({
+    return apiSuccess({
       user: {
         id: user.id,
         email: profile?.email || user.email || '',

@@ -9,6 +9,7 @@ import {
   formatErrorResponse,
 } from '@/lib/errors'
 import { logger } from '@/lib/logger'
+import { isTimeoutError } from '@/lib/api/timeout'
 
 interface HandlerContext {
   request: NextRequest
@@ -104,6 +105,15 @@ export function createApiHandler<T = unknown>(
 
       return await handler(context as HandlerContext & { body: T })
     } catch (error: unknown) {
+      // Return 504 Gateway Timeout for database timeout errors
+      if (isTimeoutError(error)) {
+        logger.error('API Timeout', error as Error)
+        return NextResponse.json(
+          { success: false, error: { code: 'GATEWAY_TIMEOUT', message: 'The request timed out. Please try again.' } },
+          { status: 504 }
+        )
+      }
+
       logger.error('API Error', error as Error)
 
       if (error instanceof AppError) {
@@ -119,9 +129,41 @@ export function createApiHandler<T = unknown>(
 
 /**
  * Create a JSON response
+ * @deprecated Use apiSuccess() for the standard response format
  */
 export function jsonResponse<T>(data: T, status: number = 200) {
   return NextResponse.json({ success: true, data }, { status })
+}
+
+// ============================================
+// Standard API Response Helpers
+// ============================================
+// All API routes should use these two helpers for consistency:
+//   Success: { success: true, data: T }
+//   Error:   { success: false, error: { code: string, message: string } }
+// ============================================
+
+/**
+ * Standard success response
+ *
+ * @example apiSuccess({ user: { id: '1', name: 'Jane' } })
+ * @example apiSuccess({ id: '1' }, 201)
+ */
+export function apiSuccess<T>(data: T, status: number = 200) {
+  return NextResponse.json({ success: true, data }, { status })
+}
+
+/**
+ * Standard error response
+ *
+ * @example apiError('VALIDATION_ERROR', 'Invalid email address', 400)
+ * @example apiError('NOT_FOUND', 'Attorney not found', 404)
+ */
+export function apiError(code: string, message: string, status: number = 400) {
+  return NextResponse.json(
+    { success: false, error: { code, message } },
+    { status }
+  )
 }
 
 /**

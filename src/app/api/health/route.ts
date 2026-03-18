@@ -19,7 +19,7 @@ export const GET = createApiHandler(async () => {
   // Lazy-import env to catch Zod errors instead of crashing the module
   let env: Record<string, string | undefined> | null = null
   try {
-    env = (await import('@/lib/env')).env as unknown as Record<string, string | undefined>
+    env = (await import('@/lib/env')).env as Record<string, string | undefined>
     checks.environment = { status: 'healthy' }
   } catch (err: unknown) {
     checks.environment = {

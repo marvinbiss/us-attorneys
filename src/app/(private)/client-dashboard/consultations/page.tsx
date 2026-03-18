@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import {
-  Video,
   Calendar,
   Clock,
   User,
@@ -13,6 +12,8 @@ import {
 } from 'lucide-react'
 import ClientSidebar from '@/components/client/ClientSidebar'
 import VideoConsultationButton from '@/components/booking/VideoConsultationButton'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -129,6 +130,7 @@ export default function ClientConsultationsPage() {
         <div className="grid lg:grid-cols-4 gap-8">
           <ClientSidebar activePage="consultations" />
 
+          <ErrorBoundary>
           <div className="lg:col-span-3 space-y-6">
             {/* Error */}
             {error && (
@@ -145,21 +147,12 @@ export default function ClientConsultationsPage() {
                 <p className="text-sm text-gray-500 mt-2">Loading consultations...</p>
               </div>
             ) : bookings.length === 0 ? (
-              <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Video className="w-7 h-7 text-gray-400" />
-                </div>
-                <p className="text-gray-500 font-medium text-lg">No consultations yet</p>
-                <p className="text-gray-400 text-sm mt-2">
-                  Book a video consultation with an attorney to get started.
-                </p>
-                <Link
-                  href="/search"
-                  className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Find an Attorney
-                </Link>
-              </div>
+              <EmptyState
+                variant="inbox"
+                title="No consultations yet"
+                description="Book a video consultation with an attorney to get started."
+                action={{ label: 'Find an Attorney', href: '/attorneys' }}
+              />
             ) : (
               <>
                 {/* Active Consultations */}
@@ -257,6 +250,7 @@ export default function ClientConsultationsPage() {
               </>
             )}
           </div>
+          </ErrorBoundary>
         </div>
       </div>
     </div>

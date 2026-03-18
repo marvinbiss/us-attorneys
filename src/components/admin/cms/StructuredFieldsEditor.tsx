@@ -28,6 +28,10 @@ export function StructuredFieldsEditor({ value, pageType, onChange }: Structured
     onChange({ ...value, [key]: val })
   }
 
+  // CMS structured_data is stored as generic JSON (Record<string, unknown>);
+  // cast to the specific type based on pageType. The `unknown` intermediate is
+  // required because Record<string, unknown> is structurally incompatible with
+  // the specific structured data interfaces.
   switch (pageType) {
     case 'service':
       return <ServiceFields data={value as unknown as ServiceStructuredData} update={update} />

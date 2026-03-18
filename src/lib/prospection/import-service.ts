@@ -197,8 +197,15 @@ export function validateRows(
           }
           break
         }
-        default:
-          (contact as unknown as Record<string, unknown>)[field] = value
+        default: {
+          // Dynamic field assignment for known optional string fields on ProspectionContactInsert.
+          // ProspectionContactInsert has index-incompatible types, so cast via unknown is required.
+          const stringFields = ['company_name', 'contact_name', 'address', 'postal_code', 'city', 'department', 'region', 'location_code', 'source_file'] as const
+          if (stringFields.includes(field as typeof stringFields[number])) {
+            (contact as unknown as Record<string, unknown>)[field] = value
+          }
+          break
+        }
       }
     }
 

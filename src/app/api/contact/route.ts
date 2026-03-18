@@ -4,6 +4,7 @@
  */
 
 import { NextResponse } from 'next/server'
+import { apiSuccess, apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { Resend } from 'resend'
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
     const rl = await rateLimit(request, RATE_LIMITS.contact)
     if (!rl.success) {
       return NextResponse.json(
-        { error: 'Too many requests. Please try again later.' },
+        { success: false, error: { code: 'RATE_LIMIT_ERROR', message: 'Too many requests. Please try again later.' } },
         { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.reset - Date.now()) / 1000)) } }
       )
     }
@@ -55,10 +56,7 @@ export async function POST(request: Request) {
     // Validate input
     const validation = contactSchema.safeParse(body)
     if (!validation.success) {
-      return NextResponse.json(
-        { error: 'Invalid data', details: validation.error.flatten() },
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Invalid data', 400)
     }
 
     const { name, email, subject, message } = validation.data
@@ -104,10 +102,7 @@ export async function POST(request: Request) {
 
     if (sendError) {
       logger.error('Error sending email', sendError)
-      return NextResponse.json(
-        { error: 'Error sending message' },
-        { status: 500 }
-      )
+      return apiError('EXTERNAL_SERVICE_ERROR', 'Error sending message', 500)
     }
 
     // Send confirmation email to user (non-critical — don't fail if this errors)
@@ -134,15 +129,9 @@ export async function POST(request: Request) {
       logger.error('Confirmation email failed', confirmError)
     }
 
-    return NextResponse.json({
-      success: true,
-      message: 'Message sent successfully',
-    })
+    return apiSuccess({ message: 'Message sent successfully' })
   } catch (error: unknown) {
     logger.error('Contact API error', error)
-    return NextResponse.json(
-      { error: 'Server error' },
-      { status: 500 }
-    )
+    return apiError('INTERNAL_ERROR', 'Server error', 500)
   }
 }

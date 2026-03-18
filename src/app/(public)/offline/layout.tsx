@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Offline — Lawtendr',
+  title: 'Offline — US Attorneys',
   description: 'You are currently offline.',
   robots: { index: false, follow: false },
 }

@@ -14,21 +14,25 @@ interface CookiePreferences {
 const COOKIE_CONSENT_KEY = 'cookie_consent'
 const COOKIE_PREFERENCES_KEY = 'cookie_preferences'
 
-/** Load Microsoft Clarity script — only called after analytics consent (RGPD) */
+/** Extend Window to include Clarity's global function */
+interface WindowWithClarity extends Window {
+  clarity?: ((...args: unknown[]) => void) & { q?: unknown[][] }
+}
+
+/** Load Microsoft Clarity script — only called after analytics consent */
 function enableClarity() {
-  if (typeof window !== 'undefined' && !(window as unknown as Record<string, unknown>).clarity) {
+  const win = (typeof window !== 'undefined' ? window : undefined) as WindowWithClarity | undefined
+  if (win && !win.clarity) {
     const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID
     if (clarityId) {
-      ;(function (c: Window & Record<string, unknown>, l: Document, a: string, r: string, i: string) {
-        c[a] = c[a] || function (...args: unknown[]) {
-          ;((c[a] as Record<string, unknown[]>).q = (c[a] as Record<string, unknown[]>).q || []).push(args)
-        }
-        const t = l.createElement(r) as HTMLScriptElement
-        t.async = true
-        t.src = 'https://www.clarity.ms/tag/' + i
-        const y = l.getElementsByTagName(r)[0]
-        y.parentNode?.insertBefore(t, y)
-      })(window as unknown as Window & Record<string, unknown>, document, 'clarity', 'script', clarityId)
+      win.clarity = function (...args: unknown[]) {
+        (win.clarity!.q = win.clarity!.q || []).push(args)
+      }
+      const t = document.createElement('script') as HTMLScriptElement
+      t.async = true
+      t.src = 'https://www.clarity.ms/tag/' + clarityId
+      const y = document.getElementsByTagName('script')[0]
+      y.parentNode?.insertBefore(t, y)
     }
   }
 }

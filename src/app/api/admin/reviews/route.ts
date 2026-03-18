@@ -4,6 +4,7 @@ import { requirePermission } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { createApiHandler } from '@/lib/api/handler'
+import { withTimeout } from '@/lib/api/timeout'
 
 // GET query params schema
 const reviewsQuerySchema = z.object({
@@ -58,9 +59,11 @@ export const GET = createApiHandler(async ({ request }) => {
     query = query.eq('status', 'hidden')
   }
 
-  const { data: reviews, count, error } = await query
-    .order('created_at', { ascending: false })
-    .range(offset, offset + limit - 1)
+  const { data: reviews, count, error } = await withTimeout(
+    query
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1)
+  )
 
   if (error) {
     logger.warn('Reviews query failed, returning empty list', { code: error.code, message: error.message })

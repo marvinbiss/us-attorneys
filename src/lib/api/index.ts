@@ -9,6 +9,7 @@
 export * from '../utils/errors'
 export * from '../utils/retry'
 export * from '../utils/cache'
+export { withTimeout, isTimeoutError, TIMEOUTS } from './timeout'
 export { logger, apiLogger, dbLogger, authLogger, paymentLogger } from '@/lib/logger'
 
 // ============================================

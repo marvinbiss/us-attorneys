@@ -12,6 +12,7 @@ import { createBookingSchema, validateRequest, formatZodErrors } from '@/lib/val
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
 import { apiLogger } from '@/lib/logger'
 import { getIdempotentResponse, setIdempotentResponse } from '@/lib/api/idempotency'
+import { withTimeout } from '@/lib/api/timeout'
 import { z } from 'zod'
 
 // Schema for GET request query params
@@ -53,15 +54,17 @@ export const GET = createApiHandler(async ({ request }) => {
     const startDate = new Date(month)
     const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0)
 
-    const { data: slots, error } = await supabase
-      .from('availability_slots')
-      .select('id, attorney_id, date, start_time, end_time, is_available')
-      .eq('attorney_id', attorneyId)
-      .eq('is_available', true)
-      .gte('date', startDate.toISOString().split('T')[0])
-      .lte('date', endDate.toISOString().split('T')[0])
-      .order('date')
-      .order('start_time')
+    const { data: slots, error } = await withTimeout(
+      supabase
+        .from('availability_slots')
+        .select('id, attorney_id, date, start_time, end_time, is_available')
+        .eq('attorney_id', attorneyId)
+        .eq('is_available', true)
+        .gte('date', startDate.toISOString().split('T')[0])
+        .lte('date', endDate.toISOString().split('T')[0])
+        .order('date')
+        .order('start_time')
+    )
 
     if (error) {
       apiLogger.error('Database error', error)
@@ -88,22 +91,24 @@ export const GET = createApiHandler(async ({ request }) => {
 
   // If fetching for a specific date (attorney view - all slots with bookings)
   if (date) {
-    const { data: slots, error } = await supabase
-      .from('availability_slots')
-      .select(`
-        *,
-        booking:bookings(
-          id,
-          client_name,
-          client_phone,
-          client_email,
-          service_description,
-          status
-        )
-      `)
-      .eq('attorney_id', attorneyId)
-      .eq('date', date)
-      .order('start_time')
+    const { data: slots, error } = await withTimeout(
+      supabase
+        .from('availability_slots')
+        .select(`
+          *,
+          booking:bookings(
+            id,
+            client_name,
+            client_phone,
+            client_email,
+            service_description,
+            status
+          )
+        `)
+        .eq('attorney_id', attorneyId)
+        .eq('date', date)
+        .order('start_time')
+    )
 
     if (error) {
       apiLogger.error('Database error', error)
@@ -117,16 +122,18 @@ export const GET = createApiHandler(async ({ request }) => {
   }
 
   // Default: get all bookings for the attorney
-  const { data: bookings, error } = await supabase
-    .from('bookings')
-    .select(`
-      id, client_id, attorney_id, service_name, status, scheduled_date, payment_status,
-      client_name, client_email, client_phone, service_description,
-      cancelled_at, cancelled_by, cancellation_reason,
-      rescheduled_at, deposit_amount, created_at, updated_at
-    `)
-    .eq('attorney_id', attorneyId)
-    .order('created_at', { ascending: false })
+  const { data: bookings, error } = await withTimeout(
+    supabase
+      .from('bookings')
+      .select(`
+        id, client_id, attorney_id, service_name, status, scheduled_date, payment_status,
+        client_name, client_email, client_phone, service_description,
+        cancelled_at, cancelled_by, cancellation_reason,
+        rescheduled_at, deposit_amount, created_at, updated_at
+      `)
+      .eq('attorney_id', attorneyId)
+      .order('created_at', { ascending: false })
+  )
 
   if (error) {
     apiLogger.error('Database error', error)
@@ -182,7 +189,7 @@ export const POST = createApiHandler(async ({ request }) => {
   const supabase = await createClient()
 
   // SECURITY FIX: Use atomic transaction to prevent double booking
-  const { data: result, error: rpcError } = await supabase.rpc('create_booking_atomic', {
+  const { data: result, error: rpcError } = await withTimeout(supabase.rpc('create_booking_atomic', {
     p_attorney_id: attorneyId,
     p_slot_id: slotId,
     p_client_name: clientName.trim(),
@@ -192,7 +199,7 @@ export const POST = createApiHandler(async ({ request }) => {
     p_address: address?.slice(0, 500) || null,
     p_payment_intent_id: paymentIntentId || null,
     p_deposit_amount: depositAmount || null,
-  })
+  }))
 
   if (rpcError) {
     apiLogger.error('Booking RPC error', rpcError)

@@ -136,7 +136,8 @@ export async function getAttorneys(params: {
         attorneys: (data || []).map((a) => ({
           id: a.id,
           name: a.name || 'Attorney',
-          specialty: a.specialty as unknown as { slug: string; name: string } | null,
+          // Supabase embedded join returns array type but resolves to single object at runtime
+          specialty: (Array.isArray(a.specialty) ? a.specialty[0] ?? null : a.specialty) as { slug: string; name: string } | null,
           address_city: a.address_city || '',
           address_zip: a.address_zip || '',
           rating_average: a.rating_average || 0,
@@ -174,7 +175,8 @@ export async function getAttorneyById(id: string): Promise<Attorney | null> {
       return {
         id: data.id,
         name: data.name || 'Attorney',
-        specialty: data.specialty as unknown as { slug: string; name: string } | null,
+        // Supabase embedded join returns array type but resolves to single object at runtime
+        specialty: (Array.isArray(data.specialty) ? data.specialty[0] ?? null : data.specialty) as { slug: string; name: string } | null,
         address_city: data.address_city || '',
         address_zip: data.address_zip || '',
         rating_average: data.rating_average || 0,

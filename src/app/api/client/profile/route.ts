@@ -4,10 +4,10 @@
  * PUT: Update client profile
  */
 
-import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { createApiHandler, jsonResponse } from '@/lib/api/handler'
+import { createApiHandler, apiSuccess, apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
+import { withTimeout } from '@/lib/api/timeout'
 import { z } from 'zod'
 
 // PUT request schema
@@ -23,21 +23,20 @@ export const GET = createApiHandler(
     const supabase = await createClient()
 
     // Fetch profile
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('id, email, full_name, phone_e164, average_rating, review_count, created_at, updated_at')
-      .eq('id', user!.id)
-      .single()
+    const { data: profile, error: profileError } = await withTimeout(
+      supabase
+        .from('profiles')
+        .select('id, email, full_name, phone_e164, average_rating, review_count, created_at, updated_at')
+        .eq('id', user!.id)
+        .single()
+    )
 
     if (profileError) {
       logger.error('Error fetching profile:', profileError)
-      return NextResponse.json(
-        { error: 'Error retrieving profile' },
-        { status: 500 }
-      )
+      return apiError('DATABASE_ERROR', 'Error retrieving profile', 500)
     }
 
-    return jsonResponse({ profile })
+    return apiSuccess({ profile })
   },
   { requireAuth: true }
 )
@@ -55,24 +54,23 @@ export const PUT = createApiHandler<z.infer<typeof updateClientProfileSchema>>(
     if (phone !== undefined) updateData.phone_e164 = phone
 
     // Update profile — only columns that exist on profiles table
-    const { data: profile, error: updateError } = await supabase
-      .from('profiles')
-      .update(updateData)
-      .eq('id', user!.id)
-      .select()
-      .single()
+    const { data: profile, error: updateError } = await withTimeout(
+      supabase
+        .from('profiles')
+        .update(updateData)
+        .eq('id', user!.id)
+        .select()
+        .single()
+    )
 
     if (updateError) {
       logger.error('Error updating profile:', updateError)
-      return NextResponse.json(
-        { error: 'Error updating profile' },
-        { status: 500 }
-      )
+      return apiError('DATABASE_ERROR', 'Error updating profile', 500)
     }
 
-    return jsonResponse({
+    return apiSuccess({
       profile,
-      message: 'Profile updated successfully'
+      message: 'Profile updated successfully',
     })
   },
   { requireAuth: true, bodySchema: updateClientProfileSchema }

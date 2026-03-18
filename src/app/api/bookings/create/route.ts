@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendEmail, emailTemplates } from '@/lib/services/email-service'
+import { apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { handleIdempotency, cacheIdempotencyResult } from '@/lib/idempotency'
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
     const rl = await rateLimit(request, RATE_LIMITS.booking)
     if (!rl.success) {
       return NextResponse.json(
-        { error: 'Too many requests. Please try again later.' },
+        { success: false, error: { code: 'RATE_LIMIT_ERROR', message: 'Too many requests. Please try again later.' } },
         { status: 429, headers: { 'Retry-After': String(Math.ceil((rl.reset - Date.now()) / 1000)) } }
       )
     }
@@ -49,15 +50,9 @@ export async function POST(request: NextRequest) {
     } catch (error: unknown) {
       if (error instanceof z.ZodError) {
         const messages = error.issues.map((e) => `${e.path.join('.')}: ${e.message}`)
-        return NextResponse.json(
-          { error: 'Validation error', details: messages },
-          { status: 400 }
-        )
+        return apiError('VALIDATION_ERROR', messages.join('; '), 400)
       }
-      return NextResponse.json(
-        { error: 'Invalid request body' },
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Invalid request body', 400)
     }
 
     const {
@@ -82,10 +77,7 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (attorneyError || !attorney) {
-      return NextResponse.json(
-        { error: 'Attorney not found' },
-        { status: 404 }
-      )
+      return apiError('NOT_FOUND', 'Attorney not found', 404)
     }
 
     // 3. Check for overlapping bookings (not just exact time match)
@@ -109,10 +101,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (hasConflict) {
-      return NextResponse.json(
-        { error: 'Time slot conflicts with an existing booking' },
-        { status: 409 }
-      )
+      return apiError('CONFLICT_ERROR', 'Time slot conflicts with an existing booking', 409)
     }
 
     // 4. Determine status based on payment
@@ -159,10 +148,7 @@ export async function POST(request: NextRequest) {
 
     if (insertError || !booking) {
       logger.error('Failed to insert booking', insertError)
-      return NextResponse.json(
-        { error: 'Failed to create booking' },
-        { status: 500 }
-      )
+      return apiError('DATABASE_ERROR', 'Failed to create booking', 500)
     }
 
     // 7. Send confirmation emails (non-blocking)
@@ -228,17 +214,19 @@ export async function POST(request: NextRequest) {
 
     // 8. Return created booking
     const responseBody = {
-      success: true,
-      booking: {
-        id: booking.id,
-        attorney_id: booking.attorney_id,
-        scheduled_at: booking.scheduled_at,
-        duration_minutes: booking.duration_minutes,
-        status: booking.status,
-        daily_room_url: booking.daily_room_url,
-        client_name: booking.client_name,
-        client_email: booking.client_email,
-        created_at: booking.created_at,
+      success: true as const,
+      data: {
+        booking: {
+          id: booking.id,
+          attorney_id: booking.attorney_id,
+          scheduled_at: booking.scheduled_at,
+          duration_minutes: booking.duration_minutes,
+          status: booking.status,
+          daily_room_url: booking.daily_room_url,
+          client_name: booking.client_name,
+          client_email: booking.client_email,
+          created_at: booking.created_at,
+        },
       },
     }
 
@@ -250,9 +238,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(responseBody, { status: 201 })
   } catch (error: unknown) {
     logger.error('Booking creation error', error as Error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return apiError('INTERNAL_ERROR', 'Internal server error', 500)
   }
 }

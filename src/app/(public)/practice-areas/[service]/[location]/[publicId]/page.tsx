@@ -201,13 +201,14 @@ function generateDescription(name: string, specialty: string, city: string, prov
   return parts.join(' ')
 }
 
-/** Row shape from the similar-attorneys lightweight query */
+/** Row shape from the similar-attorneys lightweight query.
+ *  `specialty` may be a single object or array depending on Supabase TS types vs runtime. */
 interface SimilarAttorneyRow {
   id: string
   stable_id: string | null
   slug: string | null
   name: string | null
-  specialty: { slug: string; name: string } | null
+  specialty: { slug: string; name: string } | { slug: string; name: string }[] | null
   primary_specialty_id: string | null
   rating_average: number | null
   review_count: number | null
@@ -264,13 +265,16 @@ async function getSimilarAttorneys(attorneyId: string, specialty: string, postal
 
     const { data } = await query
 
-    return ((data || []) as unknown as SimilarAttorneyRow[]).map((p) => {
+    // Supabase select() returns rows matching SimilarAttorneyRow shape
+    return ((data || []) as SimilarAttorneyRow[]).map((p) => {
+      // Unwrap specialty: Supabase may return array or object
+      const spec = Array.isArray(p.specialty) ? p.specialty[0] ?? null : p.specialty
       return {
         id: p.id,
         stable_id: p.stable_id || undefined,
         slug: p.slug || undefined,
         name: p.name || 'Attorney',
-        specialty: p.specialty?.name || specialty,
+        specialty: spec?.name || specialty,
         rating: p.rating_average || 0,
         reviews: p.review_count || 0,
         city: p.address_city || '',
@@ -293,11 +297,12 @@ async function getAttorneySpecialtiesList(attorneyId: string): Promise<Array<{ i
       .limit(20)
 
     if (!data || data.length === 0) return []
-    // Supabase returns joined rows; cast via unknown for safety
-    const rows = data as unknown as Array<{ specialty: { id: string; name: string; slug: string } | null }>
+    // Supabase embedded join: specialty resolves to single object at runtime
+    type SpecialtyJoinRow = { specialty: { id: string; name: string; slug: string } | { id: string; name: string; slug: string }[] | null }
+    const rows = data as SpecialtyJoinRow[]
     return rows
-      .filter((d) => d.specialty !== null)
-      .map((d) => d.specialty!)
+      .map((d) => Array.isArray(d.specialty) ? d.specialty[0] ?? null : d.specialty)
+      .filter((s): s is { id: string; name: string; slug: string } => s !== null)
   } catch {
     return []
   }
@@ -417,8 +422,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const rawProvider = stableIdResult || slugResult
     if (!rawProvider) return { title: 'Attorney Not Found', robots: { index: false, follow: false } }
 
-    // Cast to access DB columns that TS can't infer from select('*')
-    const provider = rawProvider as unknown as ProviderRecord
+    // AttorneyListRow from supabase.ts is structurally compatible with ProviderRecord
+    const provider = rawProvider as ProviderRecord
 
     const realCity = provider.address_city || ''
     const displayName = provider.name || provider.business_name || 'Attorney'

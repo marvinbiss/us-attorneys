@@ -1,6 +1,8 @@
+import { Suspense } from 'react'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AdminSidebar } from '@/components/admin/sidebar'
+import { PageSkeleton } from '@/components/ui/Skeleton'
 
 // Admin email whitelist from environment variable
 // Set ADMIN_EMAILS in .env.local as comma-separated list
@@ -52,7 +54,9 @@ export default async function AdminDashboardLayout({
       </a>
       <AdminSidebar />
       <main id="main-content" className="flex-1 bg-gray-50 min-w-0" role="main" aria-label="Admin main content">
-        {children}
+        <Suspense fallback={<PageSkeleton />}>
+          {children}
+        </Suspense>
       </main>
     </div>
   )

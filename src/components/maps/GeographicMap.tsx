@@ -194,9 +194,13 @@ export default function GeographicMap({
 
     if (validProviders.length === 0) return
 
-    // Create cluster group with clay-themed icons
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const clusterGroup = (_L as any).markerClusterGroup({
+    // Create cluster group with clay-themed icons.
+    // leaflet.markercluster plugin adds markerClusterGroup() to L at runtime;
+    // no TS types exist for this plugin method, so we extend the type inline.
+    type LeafletWithCluster = NonNullable<typeof _L> & {
+      markerClusterGroup: (opts: Record<string, unknown>) => ReturnType<typeof import('leaflet')['layerGroup']>
+    }
+    const clusterGroup = (_L as LeafletWithCluster).markerClusterGroup({
       chunkedLoading: true,
       maxClusterRadius: 50,
       spiderfyOnMaxZoom: true,

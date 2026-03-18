@@ -3,9 +3,11 @@
  * GET: Fetch leads assigned to the authenticated attorney via lead_assignments
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { requireAttorney } from '@/lib/auth/attorney-guard'
+import { apiSuccess, apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
+import { withTimeout, isTimeoutError } from '@/lib/api/timeout'
 import { z } from 'zod'
 
 const leadsQuerySchema = z.object({
@@ -22,18 +24,17 @@ export async function GET(request: NextRequest) {
     if (guardError) return guardError
 
     // Get provider linked to this user
-    const { data: provider } = await supabase
-      .from('attorneys')
-      .select('id')
-      .eq('user_id', user.id)
-      .eq('is_active', true)
-      .single()
+    const { data: provider } = await withTimeout(
+      supabase
+        .from('attorneys')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('is_active', true)
+        .single()
+    )
 
     if (!provider) {
-      return NextResponse.json(
-        { success: false, error: { message: 'No attorney profile found' } },
-        { status: 403 }
-      )
+      return apiError('AUTHORIZATION_ERROR', 'No attorney profile found', 403)
     }
 
     // Parse and validate pagination & filter params
@@ -45,7 +46,7 @@ export async function GET(request: NextRequest) {
     })
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, error: { message: 'Invalid data' } }, { status: 400 })
+      return apiError('VALIDATION_ERROR', 'Invalid data', 400)
     }
 
     const { page, pageSize, status } = parsed.data
@@ -62,14 +63,11 @@ export async function GET(request: NextRequest) {
       countQuery = countQuery.eq('status', status)
     }
 
-    const { count, error: countError } = await countQuery
+    const { count, error: countError } = await withTimeout(countQuery)
 
     if (countError) {
       logger.error('Error counting leads:', countError)
-      return NextResponse.json(
-        { success: false, error: { message: 'Error counting leads' } },
-        { status: 500 }
-      )
+      return apiError('DATABASE_ERROR', 'Error counting leads', 500)
     }
 
     const totalItems = count ?? 0
@@ -105,21 +103,24 @@ export async function GET(request: NextRequest) {
       dataQuery = dataQuery.eq('status', status)
     }
 
-    const { data: assignments, error: assignError } = await dataQuery
+    const { data: assignments, error: assignError } = await withTimeout(dataQuery)
 
     if (assignError) {
       logger.error('Error fetching assigned leads:', assignError)
-      return NextResponse.json(
-        { success: false, error: { message: 'Error retrieving leads' } },
-        { status: 500 }
-      )
+      return apiError('DATABASE_ERROR', 'Error retrieving leads', 500)
     }
 
     // Fetch quotes for these leads so attorney can see sent quote info
     const leadList = assignments || []
+
+    // Supabase embedded join: `lead` (devis_requests FK) resolves to a single object at runtime
+    type LeadJoin = { id: string }
+    const unwrapLead = (lead: unknown): LeadJoin | null =>
+      Array.isArray(lead) ? (lead[0] ?? null) : (lead as LeadJoin | null)
+
     const requestIds = leadList
       .filter((a) => a.lead && a.status === 'quoted')
-      .map((a) => (a.lead as unknown as { id: string }).id)
+      .map((a) => unwrapLead(a.lead)!.id)
 
     const quotesMap: Record<string, { id: string; amount: number; description: string; valid_until: string; status: string; created_at: string }> = {}
     if (requestIds.length > 0) {
@@ -145,12 +146,13 @@ export async function GET(request: NextRequest) {
 
     // Attach quote data to each assignment
     const enrichedLeads = leadList.map((a) => {
-      const requestId = a.lead ? (a.lead as unknown as { id: string }).id : null
+      const lead = unwrapLead(a.lead)
+      const requestId = lead ? lead.id : null
       const quote = requestId ? quotesMap[requestId] ?? null : null
       return { ...a, quote }
     })
 
-    return NextResponse.json({
+    return apiSuccess({
       leads: enrichedLeads,
       count: totalItems,
       pagination: {
@@ -161,7 +163,11 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error: unknown) {
+    if (isTimeoutError(error)) {
+      logger.error('Attorney leads GET timeout:', error)
+      return apiError('GATEWAY_TIMEOUT', 'The request timed out. Please try again.', 504)
+    }
     logger.error('Attorney leads GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+    return apiError('INTERNAL_ERROR', 'Server error', 500)
   }
 }

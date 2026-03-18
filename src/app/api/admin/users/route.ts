@@ -4,6 +4,7 @@ import { requirePermission, logAdminAction } from '@/lib/admin-auth'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { createApiHandler } from '@/lib/api/handler'
+import { withTimeout } from '@/lib/api/timeout'
 
 // GET query params schema
 const usersQuerySchema = z.object({
@@ -57,10 +58,12 @@ export const GET = createApiHandler(async ({ request }) => {
   // perPage is capped at 100 to avoid oversized responses; clients must page through results.
   const authPage = parseInt(searchParams.get('page') || '1', 10)
   const authPerPage = Math.min(parseInt(searchParams.get('perPage') || '50', 10), 100)
-  const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers({
-    page: authPage,
-    perPage: authPerPage,
-  })
+  const { data: authUsers, error: authError } = await withTimeout(
+    supabase.auth.admin.listUsers({
+      page: authPage,
+      perPage: authPerPage,
+    })
+  )
 
   if (authError) {
     logger.warn('Auth users list failed', { message: authError.message })
@@ -75,10 +78,12 @@ export const GET = createApiHandler(async ({ request }) => {
   try {
     const userIds = authUsers.users.map(u => u.id)
     if (userIds.length > 0) {
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
-        .in('id', userIds)
+      const { data: profiles } = await withTimeout(
+        supabase
+          .from('profiles')
+          .select('id, email, full_name, is_admin, role, phone_e164, average_rating, review_count')
+          .in('id', userIds)
+      )
 
       if (profiles) {
         profiles.forEach(p => profilesMap.set(p.id, p))
@@ -169,16 +174,18 @@ export const POST = createApiHandler(async ({ request }) => {
   const { email, full_name, phone, user_type, password } = result.data
 
   // Create user with Supabase Auth Admin
-  const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-    user_metadata: {
-      full_name,
-      phone,
-      is_attorney: user_type === 'attorney',
-    },
-  })
+  const { data: authData, error: authError } = await withTimeout(
+    supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: {
+        full_name,
+        phone,
+        is_attorney: user_type === 'attorney',
+      },
+    })
+  )
 
   if (authError) {
     logger.error('Auth creation error', authError)

@@ -1,6 +1,5 @@
-import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { createApiHandler } from '@/lib/api/handler'
+import { createApiHandler, apiSuccess, apiError } from '@/lib/api/handler'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendBookingConfirmation, logNotification } from '@/lib/notifications/email'
 import { logger } from '@/lib/logger'
@@ -15,7 +14,7 @@ const rescheduleBookingSchema = z.object({
 export const POST = createApiHandler(async ({ request, user, params }) => {
   const bookingId = params?.id
   if (!bookingId) {
-    return NextResponse.json({ success: false, error: { message: 'Missing booking ID' } }, { status: 400 })
+    return apiError('VALIDATION_ERROR', 'Missing booking ID', 400)
   }
 
   const supabase = await createClient()
@@ -23,10 +22,7 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
   const body = await request.json()
   const result = rescheduleBookingSchema.safeParse(body)
   if (!result.success) {
-    return NextResponse.json(
-      { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
-      { status: 400 }
-    )
+    return apiError('VALIDATION_ERROR', 'Validation error', 400)
   }
   const { newSlotId } = result.data
 
@@ -47,10 +43,7 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
     .single()
 
   if (bookingError || !booking) {
-    return NextResponse.json(
-      { success: false, error: { message: 'Booking not found' } },
-      { status: 404 }
-    )
+    return apiError('NOT_FOUND', 'Booking not found', 404)
   }
 
   // Ownership check: user must be the client or the assigned attorney
@@ -59,17 +52,11 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
   const isAttorney = bookingSlotForAuth?.attorney_id === user!.id
   const isEmailMatch = user!.email?.toLowerCase() === booking.client_email?.toLowerCase()
   if (!isClient && !isAttorney && !isEmailMatch) {
-    return NextResponse.json(
-      { success: false, error: { message: 'You are not authorized to reschedule this booking' } },
-      { status: 403 }
-    )
+    return apiError('AUTHORIZATION_ERROR', 'You are not authorized to reschedule this booking', 403)
   }
 
   if (booking.status === 'cancelled') {
-    return NextResponse.json(
-      { success: false, error: { message: 'Cannot reschedule a cancelled booking' } },
-      { status: 400 }
-    )
+    return apiError('VALIDATION_ERROR', 'Cannot reschedule a cancelled booking', 400)
   }
 
   // Verify new slot exists and is available
@@ -81,28 +68,19 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
     .single()
 
   if (slotError || !newSlot) {
-    return NextResponse.json(
-      { success: false, error: { message: 'The new slot is no longer available' } },
-      { status: 400 }
-    )
+    return apiError('SLOT_UNAVAILABLE', 'The new slot is no longer available', 400)
   }
 
   // Verify new slot belongs to the same attorney
   const bookingSlot = Array.isArray(booking.slot) ? booking.slot[0] : booking.slot
   if (newSlot.attorney_id !== bookingSlot?.attorney_id) {
-    return NextResponse.json(
-      { success: false, error: { message: 'The slot must belong to the same attorney' } },
-      { status: 400 }
-    )
+    return apiError('VALIDATION_ERROR', 'The slot must belong to the same attorney', 400)
   }
 
   // Check that new slot is in the future
   const newSlotDate = new Date(`${newSlot.date}T${newSlot.start_time}`)
   if (newSlotDate <= new Date()) {
-    return NextResponse.json(
-      { success: false, error: { message: 'The new slot must be in the future' } },
-      { status: 400 }
-    )
+    return apiError('VALIDATION_ERROR', 'The new slot must be in the future', 400)
   }
 
   // Update booking with new slot
@@ -175,8 +153,7 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
     })
   }
 
-  return NextResponse.json({
-    success: true,
+  return apiSuccess({
     message: 'Booking rescheduled successfully',
     newSlot: {
       date: newSlot.date,

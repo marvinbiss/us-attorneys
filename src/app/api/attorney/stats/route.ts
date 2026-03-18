@@ -9,6 +9,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createApiHandler } from '@/lib/api/handler'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { withTimeout } from '@/lib/api/timeout'
 import { z } from 'zod'
 
 const querySchema = z.object({
@@ -57,8 +58,8 @@ export const GET = createApiHandler(async ({ request, user }) => {
 
   const supabase = await createClient()
 
-  // Get profile + provider in parallel
-  const [{ data: profile }, { data: provider }] = await Promise.all([
+  // Get profile + provider in parallel (with timeout protection)
+  const [{ data: profile }, { data: provider }] = await withTimeout(Promise.all([
     supabase
       .from('profiles')
       .select('id, email, full_name, role')
@@ -69,7 +70,7 @@ export const GET = createApiHandler(async ({ request, user }) => {
       .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, phone, email')
       .eq('user_id', user!.id)
       .single(),
-  ])
+  ]))
 
   if (!provider) {
     return NextResponse.json(
@@ -122,7 +123,7 @@ export const GET = createApiHandler(async ({ request, user }) => {
     conversationsResult,
     // Portfolio count
     portfolioCountResult,
-  ] = await Promise.all([
+  ] = await withTimeout(Promise.all([
     // Total leads
     adminClient
       .from('lead_assignments')
@@ -259,7 +260,7 @@ export const GET = createApiHandler(async ({ request, user }) => {
       .from('portfolio_items')
       .select('id', { count: 'exact', head: true })
       .eq('attorney_id', user!.id),
-  ])
+  ]))
 
   // -----------------------------------------------------------------------
   // Compute values

@@ -1,6 +1,5 @@
-import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { createApiHandler } from '@/lib/api/handler'
+import { createApiHandler, apiSuccess, apiError } from '@/lib/api/handler'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendCancellationNotification, logNotification } from '@/lib/notifications/email'
 import { logger } from '@/lib/logger'
@@ -16,16 +15,13 @@ const cancelBookingSchema = z.object({
 export const POST = createApiHandler(async ({ request, user, params }) => {
   const id = params?.id
   if (!id) {
-    return NextResponse.json({ error: 'Missing booking ID' }, { status: 400 })
+    return apiError('VALIDATION_ERROR', 'Missing booking ID', 400)
   }
 
   const body = await request.json()
   const result = cancelBookingSchema.safeParse(body)
   if (!result.success) {
-    return NextResponse.json(
-      { error: 'Validation error', details: result.error.flatten() },
-      { status: 400 }
-    )
+    return apiError('VALIDATION_ERROR', 'Validation error', 400)
   }
   const { cancelledBy, reason } = result.data
 
@@ -39,25 +35,16 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
     .single()
 
   if (bookingError || !booking) {
-    return NextResponse.json(
-      { error: 'Booking not found' },
-      { status: 404 }
-    )
+    return apiError('NOT_FOUND', 'Booking not found', 404)
   }
 
   // Verify ownership: only the client or the provider can cancel
   if (booking.client_id !== user!.id && booking.attorney_id !== user!.id) {
-    return NextResponse.json(
-      { error: 'You are not authorized to cancel this booking' },
-      { status: 403 }
-    )
+    return apiError('AUTHORIZATION_ERROR', 'You are not authorized to cancel this booking', 403)
   }
 
   if (booking.status === 'cancelled') {
-    return NextResponse.json(
-      { error: 'This booking is already cancelled' },
-      { status: 400 }
-    )
+    return apiError('VALIDATION_ERROR', 'This booking is already cancelled', 400)
   }
 
   // Check if cancellation is allowed (at least 24h before)
@@ -66,10 +53,7 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
   const hoursUntilBooking = (bookingDate.getTime() - now.getTime()) / (1000 * 60 * 60)
 
   if (hoursUntilBooking < 24 && cancelledBy === 'client') {
-    return NextResponse.json(
-      { error: 'Cancellations must be made at least 24 hours in advance' },
-      { status: 400 }
-    )
+    return apiError('CANCELLATION_TOO_LATE', 'Cancellations must be made at least 24 hours in advance', 400)
   }
 
   // Update booking status
@@ -129,8 +113,5 @@ export const POST = createApiHandler(async ({ request, user, params }) => {
     })
   }
 
-  return NextResponse.json({
-    success: true,
-    message: 'Booking cancelled successfully',
-  })
+  return apiSuccess({ message: 'Booking cancelled successfully' })
 }, { requireAuth: true })

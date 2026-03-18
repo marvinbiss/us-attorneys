@@ -23,8 +23,8 @@ const adminFetcher = async (url: string) => {
     const res = await fetch(url, { signal: controller.signal })
     if (!res.ok) {
       const body = await res.json().catch(() => ({ error: { message: 'Network error' } }))
-      const error = new Error(body?.error?.message || `Error ${res.status}`)
-      ;(error as unknown as Record<string, unknown>).status = res.status
+      const error: Error & { status?: number } = new Error(body?.error?.message || `Error ${res.status}`)
+      error.status = res.status
       throw error
     }
     return res.json()

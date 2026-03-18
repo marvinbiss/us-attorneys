@@ -6,12 +6,12 @@
  * DELETE: Delete a review
  */
 
-import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { createApiHandler } from '@/lib/api/handler'
+import { createApiHandler, apiSuccess, apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { slugify } from '@/lib/utils'
+import { withTimeout } from '@/lib/api/timeout'
 import { z } from 'zod'
 
 // POST request schema
@@ -41,32 +41,33 @@ export const GET = createApiHandler(async ({ user }) => {
 
   // Fetch published reviews by this client via bookings (reviews has no direct client FK)
   // Step 1: get booking IDs for this client
-  const { data: clientBookings } = await supabase
-    .from('bookings')
-    .select('id')
-    .eq('client_id', user!.id)
+  const { data: clientBookings } = await withTimeout(
+    supabase
+      .from('bookings')
+      .select('id')
+      .eq('client_id', user!.id)
+  )
 
   const bookingIds = clientBookings?.map((b: { id: string }) => b.id) || []
 
   // Step 2: fetch reviews for those bookings
   // Note: 'quotes' table does not exist yet (TODO: re-enable join when quotes table is created)
   // Note: profiles does not have company_name or avatar_url
-  const { data: publishedReviews, error: reviewsError } = await supabase
-    .from('reviews')
-    .select(`
-      *,
-      attorney:profiles!attorney_id(id, full_name),
-      booking:bookings!booking_id(service_name)
-    `)
-    .in('booking_id', bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000'])
-    .order('created_at', { ascending: false })
+  const { data: publishedReviews, error: reviewsError } = await withTimeout(
+    supabase
+      .from('reviews')
+      .select(`
+        *,
+        attorney:profiles!attorney_id(id, full_name),
+        booking:bookings!booking_id(service_name)
+      `)
+      .in('booking_id', bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000'])
+      .order('created_at', { ascending: false })
+  )
 
   if (reviewsError) {
     logger.error('Error fetching reviews:', reviewsError)
-    return NextResponse.json(
-      { error: 'Error retrieving reviews' },
-      { status: 500 }
-    )
+    return apiError('DATABASE_ERROR', 'Error retrieving reviews', 500)
   }
 
   // TODO: quotes table does not exist yet -- pending reviews from completed quotes disabled
@@ -84,7 +85,7 @@ export const GET = createApiHandler(async ({ user }) => {
     response: r.attorney_response,
   })) || []
 
-  return NextResponse.json({
+  return apiSuccess({
     publishedReviews: formattedPublishedReviews,
     pendingReviews: pendingReviews,
   })
@@ -96,10 +97,7 @@ export const POST = createApiHandler(async ({ request, user }) => {
   const body = await request.json()
   const result = createReviewSchema.safeParse(body)
   if (!result.success) {
-    return NextResponse.json(
-      { error: 'Validation error', details: result.error.flatten() },
-      { status: 400 }
-    )
+    return apiError('VALIDATION_ERROR', 'Validation error', 400)
   }
   const { attorney_id, booking_id, rating, comment } = result.data
 
@@ -126,10 +124,7 @@ export const POST = createApiHandler(async ({ request, user }) => {
 
   if (insertError) {
     logger.error('Error inserting review:', insertError)
-    return NextResponse.json(
-      { error: 'Error publishing review' },
-      { status: 500 }
-    )
+    return apiError('DATABASE_ERROR', 'Error publishing review', 500)
   }
 
   // On-demand revalidation of affected pages (non-blocking)
@@ -160,8 +155,7 @@ export const POST = createApiHandler(async ({ request, user }) => {
     logger.error('Revalidation failed after client review:', revalError)
   }
 
-  return NextResponse.json({
-    success: true,
+  return apiSuccess({
     review,
     message: 'Review published successfully',
   })
@@ -173,10 +167,7 @@ export const PUT = createApiHandler(async ({ request, user }) => {
   const body = await request.json()
   const result = updateReviewSchema.safeParse(body)
   if (!result.success) {
-    return NextResponse.json(
-      { error: 'Validation error', details: result.error.flatten() },
-      { status: 400 }
-    )
+    return apiError('VALIDATION_ERROR', 'Validation error', 400)
   }
   const { review_id, rating, comment } = result.data
 
@@ -188,10 +179,7 @@ export const PUT = createApiHandler(async ({ request, user }) => {
     .single()
 
   if (!existingReview) {
-    return NextResponse.json(
-      { error: 'Review not found or unauthorized' },
-      { status: 403 }
-    )
+    return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
   }
 
   const { data: ownerBooking } = await supabase
@@ -202,10 +190,7 @@ export const PUT = createApiHandler(async ({ request, user }) => {
     .single()
 
   if (!ownerBooking) {
-    return NextResponse.json(
-      { error: 'Review not found or unauthorized' },
-      { status: 403 }
-    )
+    return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
   }
 
   // Update review
@@ -219,16 +204,10 @@ export const PUT = createApiHandler(async ({ request, user }) => {
 
   if (updateError) {
     logger.error('Error updating review:', updateError)
-    return NextResponse.json(
-      { error: 'Error updating the review' },
-      { status: 500 }
-    )
+    return apiError('DATABASE_ERROR', 'Error updating the review', 500)
   }
 
-  return NextResponse.json({
-    success: true,
-    message: 'Review updated successfully',
-  })
+  return apiSuccess({ message: 'Review updated successfully' })
 }, { requireAuth: true })
 
 export const DELETE = createApiHandler(async ({ request, user }) => {
@@ -240,10 +219,7 @@ export const DELETE = createApiHandler(async ({ request, user }) => {
   }
   const result = deleteReviewSchema.safeParse(queryParams)
   if (!result.success) {
-    return NextResponse.json(
-      { error: 'Invalid parameters', details: result.error.flatten() },
-      { status: 400 }
-    )
+    return apiError('VALIDATION_ERROR', 'Invalid parameters', 400)
   }
   const review_id = result.data.id
 
@@ -255,10 +231,7 @@ export const DELETE = createApiHandler(async ({ request, user }) => {
     .single()
 
   if (!existingReview) {
-    return NextResponse.json(
-      { error: 'Review not found or unauthorized' },
-      { status: 403 }
-    )
+    return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
   }
 
   const { data: ownerBooking } = await supabase
@@ -269,10 +242,7 @@ export const DELETE = createApiHandler(async ({ request, user }) => {
     .single()
 
   if (!ownerBooking) {
-    return NextResponse.json(
-      { error: 'Review not found or unauthorized' },
-      { status: 403 }
-    )
+    return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
   }
 
   // Delete review
@@ -283,14 +253,8 @@ export const DELETE = createApiHandler(async ({ request, user }) => {
 
   if (deleteError) {
     logger.error('Error deleting review:', deleteError)
-    return NextResponse.json(
-      { error: 'Error deleting review' },
-      { status: 500 }
-    )
+    return apiError('DATABASE_ERROR', 'Error deleting review', 500)
   }
 
-  return NextResponse.json({
-    success: true,
-    message: 'Review deleted successfully',
-  })
+  return apiSuccess({ message: 'Review deleted successfully' })
 }, { requireAuth: true })

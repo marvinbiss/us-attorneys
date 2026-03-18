@@ -1,5 +1,3 @@
-'use client'
-
 import { CreditCard, Clock } from 'lucide-react'
 
 export default function AdminPaymentsPage() {

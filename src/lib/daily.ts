@@ -24,7 +24,7 @@ interface DailyRoom {
 }
 
 export async function createDailyRoom(bookingId: string, expiresAt: Date): Promise<DailyRoom> {
-  const roomName = `lawtendr-${bookingId.slice(0, 8)}`
+  const roomName = `usattorneys-${bookingId.slice(0, 8)}`
   const exp = Math.floor(expiresAt.getTime() / 1000)
 
   const res = await fetch(`${DAILY_API_BASE}/rooms`, {

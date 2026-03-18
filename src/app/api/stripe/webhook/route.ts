@@ -4,6 +4,7 @@ import { stripe } from '@/lib/stripe/server'
 import { logger } from '@/lib/logger'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createApiHandler } from '@/lib/api/handler'
+import { withTimeout, TIMEOUTS } from '@/lib/api/timeout'
 import { env } from '@/lib/env'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import Stripe from 'stripe'
@@ -36,11 +37,14 @@ function mapStripeStatus(stripeStatus: Stripe.Subscription.Status): string {
  */
 async function findProfileByCustomerId(customerId: string) {
   const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('id, subscription_plan, subscription_status')
-    .eq('stripe_customer_id', customerId)
-    .single()
+  const { data, error } = await withTimeout(
+    supabase
+      .from('profiles')
+      .select('id, subscription_plan, subscription_status')
+      .eq('stripe_customer_id', customerId)
+      .single(),
+    TIMEOUTS.PAYMENT
+  )
 
   if (error || !data) {
     logger.error(`No profile found for stripe_customer_id=${customerId}`, error)
@@ -236,15 +240,18 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   const supabase = createAdminClient()
 
-  const { error: updateError } = await supabase
-    .from('profiles')
-    .update({
-      subscription_plan: planId,
-      subscription_status: 'active',
-      stripe_customer_id: customerId,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('id', userId)
+  const { error: updateError } = await withTimeout(
+    supabase
+      .from('profiles')
+      .update({
+        subscription_plan: planId,
+        subscription_status: 'active',
+        stripe_customer_id: customerId,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', userId),
+    TIMEOUTS.PAYMENT
+  )
 
   if (updateError) {
     logger.error(`Failed to update profile for user ${userId}`, updateError)

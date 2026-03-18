@@ -114,13 +114,10 @@ async function getCounty(slug: string): Promise<CountyInfo | null> {
           .single()
         if (error || !data) return null
 
-        const row = data as unknown as {
-          slug: string
-          name: string
-          fips_code: string | null
-          state: { name: string; abbreviation: string; slug: string } | null
-        }
-        const stateData = row.state
+        // Supabase embedded join: state resolves to single object at runtime but TS types it as array
+        const rawState = data.state
+        const stateData = (Array.isArray(rawState) ? rawState[0] ?? null : rawState) as { name: string; abbreviation: string; slug: string } | null
+        const row = { slug: data.slug, name: data.name, fips_code: data.fips_code }
 
         return {
           slug: row.slug,

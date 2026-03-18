@@ -103,6 +103,9 @@ export function toAppError(error: unknown): AppError {
 
 /**
  * Format error for API response
+ *
+ * Standard format: { success: false, error: { code: string, message: string } }
+ * The HTTP status code is conveyed via the Response status, not in the body.
  */
 export function formatErrorResponse(error: unknown) {
   const appError = toAppError(error)
@@ -112,7 +115,6 @@ export function formatErrorResponse(error: unknown) {
     error: {
       code: appError.code,
       message: appError.message,
-      statusCode: appError.statusCode,
     },
   }
 }

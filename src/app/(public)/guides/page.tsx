@@ -11,7 +11,7 @@ import { practiceAreas, states } from '@/lib/data/usa'
 export const revalidate = REVALIDATE.staticPages
 
 export const metadata: Metadata = {
-  title: "Legal Guides by Practice Area & State | Lawtendr",
+  title: "Legal Guides by Practice Area & State | US Attorneys",
   description:
     "Comprehensive legal guides covering 75 practice areas across all 50 states. Find attorneys, understand costs, know your rights, and navigate the legal process.",
   alternates: {

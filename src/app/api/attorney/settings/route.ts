@@ -1,11 +1,11 @@
 /**
  * GET/PUT /api/attorney/settings — Attorney private settings
- * No SEO, INSEE, Pappers, or Google reviews data.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import { requireAttorney } from '@/lib/auth/attorney-guard'
+import { apiSuccess, apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
@@ -32,13 +32,13 @@ export async function GET() {
       .eq('id', user.id)
       .single()
 
-    return NextResponse.json({
+    return apiSuccess({
       profile: profile || null,
       provider: provider || null,
     })
   } catch (error: unknown) {
     logger.error('Settings GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+    return apiError('INTERNAL_ERROR', 'Server error', 500)
   }
 }
 
@@ -50,10 +50,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json()
     const result = settingsUpdateSchema.safeParse(body)
     if (!result.success) {
-      return NextResponse.json(
-        { success: false, error: { message: 'Validation error', details: result.error.flatten() } },
-        { status: 400 }
-      )
+      return apiError('VALIDATION_ERROR', 'Validation error', 400)
     }
     const { phone, name } = result.data
 
@@ -77,7 +74,7 @@ export async function PUT(request: NextRequest) {
 
         if (updateError) {
           logger.error('Settings PUT provider update error:', updateError)
-          return NextResponse.json({ success: false, error: { message: 'Update error' } }, { status: 500 })
+          return apiError('DATABASE_ERROR', 'Update error', 500)
         }
       }
     }
@@ -91,13 +88,13 @@ export async function PUT(request: NextRequest) {
 
       if (profileError) {
         logger.error('Settings PUT profile update error:', profileError)
-        return NextResponse.json({ success: false, error: { message: 'Profile update error' } }, { status: 500 })
+        return apiError('DATABASE_ERROR', 'Profile update error', 500)
       }
     }
 
-    return NextResponse.json({ success: true })
+    return apiSuccess({ message: 'Settings updated successfully' })
   } catch (error: unknown) {
     logger.error('Settings PUT error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+    return apiError('INTERNAL_ERROR', 'Server error', 500)
   }
 }
