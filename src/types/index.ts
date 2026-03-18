@@ -50,7 +50,7 @@ export interface Provider {
   noindex: boolean
   meta_description?: string
   description?: string
-  specialty?: string
+  specialty?: { slug: string; name: string } | null
   created_at: string
   updated_at: string
   source?: string

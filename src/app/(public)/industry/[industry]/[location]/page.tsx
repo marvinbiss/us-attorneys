@@ -176,7 +176,7 @@ export default async function IndustryPage({ params }: PageProps) {
     { name: location.name, url: `/industry/${indSlug}/${locSlug}` },
   ])
   const itemListSchema = providers.length > 0
-    ? getItemListSchema({ name: `${ind.name} Attorneys in ${location.name}`, description: `Attorneys for ${ind.name.toLowerCase()} in ${location.name}`, url: `/industry/${indSlug}/${locSlug}`, items: providers.slice(0, 20).map((p, i) => ({ name: p.name, url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city }), position: i + 1, image: getServiceImage(ind.paSlug).src, rating: p.rating_average ?? undefined, reviewCount: p.review_count ?? undefined })) })
+    ? getItemListSchema({ name: `${ind.name} Attorneys in ${location.name}`, description: `Attorneys for ${ind.name.toLowerCase()} in ${location.name}`, url: `/industry/${indSlug}/${locSlug}`, items: providers.slice(0, 20).map((p, i) => ({ name: p.name, url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city }), position: i + 1, image: getServiceImage(ind.paSlug).src, rating: p.rating_average ?? undefined, reviewCount: p.review_count ?? undefined })) })
     : null
   const speakableSchema = getSpeakableSchema({ url: `${SITE_URL}/industry/${indSlug}/${locSlug}`, title: h1 })
   const collectionPageSchema = {
@@ -254,7 +254,7 @@ export default async function IndustryPage({ params }: PageProps) {
           {providers.length > 0 ? (
             <div className="grid gap-4">
               {(providers as Provider[]).slice(0, 20).map((p, idx) => (
-                <Link key={p.stable_id || idx} href={getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city })} className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 hover:border-orange-300 hover:shadow-sm transition-all bg-white">
+                <Link key={p.stable_id || idx} href={getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city })} className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 hover:border-orange-300 hover:shadow-sm transition-all bg-white">
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-900 truncate">{p.name}</p>
                     <p className="text-sm text-gray-500">{p.address_city}{p.address_county ? `, ${p.address_county}` : ''}</p>

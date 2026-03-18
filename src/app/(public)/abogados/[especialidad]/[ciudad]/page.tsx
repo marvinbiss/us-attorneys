@@ -394,7 +394,7 @@ export default async function AbogadosPage({ params }: PageProps) {
                     </div>
                     <div className="flex flex-col sm:items-end gap-2">
                       <Link
-                        href={getAttorneyUrl({ stable_id: attorney.stable_id, slug: attorney.slug, specialty: attorney.specialty, city: attorney.address_city })}
+                        href={getAttorneyUrl({ stable_id: attorney.stable_id, slug: attorney.slug, specialty: attorney.specialty?.name, city: attorney.address_city })}
                         className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-lg text-sm transition-colors"
                       >
                         Comparar perfiles

@@ -215,7 +215,7 @@ export default async function SituationPage({ params }: PageProps) {
   ])
 
   const itemListSchema = providers.length > 0
-    ? getItemListSchema({ name: `${sit.name} Attorneys in ${location.name}`, description: `Attorneys for ${sit.name.toLowerCase()} cases in ${location.name}`, url: `/situations/${sitSlug}/${locSlug}`, items: providers.slice(0, 20).map((p, i) => ({ name: p.name, url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city }), position: i + 1, image: getServiceImage(sit.paSlug).src, rating: p.rating_average ?? undefined, reviewCount: p.review_count ?? undefined })) })
+    ? getItemListSchema({ name: `${sit.name} Attorneys in ${location.name}`, description: `Attorneys for ${sit.name.toLowerCase()} cases in ${location.name}`, url: `/situations/${sitSlug}/${locSlug}`, items: providers.slice(0, 20).map((p, i) => ({ name: p.name, url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city }), position: i + 1, image: getServiceImage(sit.paSlug).src, rating: p.rating_average ?? undefined, reviewCount: p.review_count ?? undefined })) })
     : null
 
   const speakableSchema = getSpeakableSchema({ url: `${SITE_URL}/situations/${sitSlug}/${locSlug}`, title: h1 })
@@ -291,7 +291,7 @@ export default async function SituationPage({ params }: PageProps) {
           {providers.length > 0 ? (
             <div className="grid gap-4">
               {(providers as Provider[]).slice(0, 20).map((p, idx) => (
-                <Link key={p.stable_id || idx} href={getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city })} className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 hover:border-red-300 hover:shadow-sm transition-all bg-white">
+                <Link key={p.stable_id || idx} href={getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city })} className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 hover:border-red-300 hover:shadow-sm transition-all bg-white">
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-900 truncate">{p.name}</p>
                     <p className="text-sm text-gray-500">{p.address_city}{p.address_county ? `, ${p.address_county}` : ''}</p>

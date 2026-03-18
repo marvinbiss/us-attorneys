@@ -77,7 +77,7 @@ export default function AttorneyProfilePage() {
   const publicUrl = provider ? getAttorneyUrl({
     stable_id: provider.stable_id as string | null,
     slug: provider.slug as string | null,
-    specialty: provider.specialty as string | null,
+    specialty: (provider.specialty as { name?: string } | null)?.name ?? null,
     city: provider.address_city as string | null,
   }) : null
 

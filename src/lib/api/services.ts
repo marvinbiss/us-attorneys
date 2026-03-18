@@ -15,9 +15,9 @@ export interface Service {
 export interface Attorney {
   id: string
   name: string
-  specialty: string | null
+  specialty: { slug: string; name: string } | null
   address_city: string
-  address_postal_code: string
+  address_zip: string
   rating_average: number
   review_count: number
   is_verified: boolean
@@ -93,12 +93,16 @@ export async function getAttorneys(params: {
       const supabase = await createClient()
       let query = supabase
         .from('attorneys')
-        .select('id, name, slug, specialty, address_city, address_postal_code, rating_average, review_count, is_verified, is_active', { count: 'exact' })
+        .select('id, name, slug, primary_specialty_id, address_city, address_zip, rating_average, review_count, is_verified, is_active, specialty:specialties!primary_specialty_id(slug,name)', { count: 'exact' })
         .eq('is_active', true)
         .eq('is_verified', true)
 
       if (params.service) {
-        query = query.eq('specialty', params.service)
+        // Resolve specialty slug to ID for filtering
+        const { data: specData } = await supabase.from('specialties').select('id').eq('slug', params.service).single()
+        if (specData) {
+          query = query.eq('primary_specialty_id', specData.id)
+        }
       }
 
       if (params.city) {
@@ -106,7 +110,7 @@ export async function getAttorneys(params: {
       }
 
       if (params.postalCode) {
-        query = query.like('address_postal_code', `${params.postalCode.substring(0, 2)}%`)
+        query = query.like('address_zip', `${params.postalCode.substring(0, 2)}%`)
       }
 
       // Order by rating
@@ -132,9 +136,9 @@ export async function getAttorneys(params: {
         attorneys: (data || []).map((a) => ({
           id: a.id,
           name: a.name || 'Attorney',
-          specialty: a.specialty,
+          specialty: a.specialty as unknown as { slug: string; name: string } | null,
           address_city: a.address_city || '',
-          address_postal_code: a.address_postal_code || '',
+          address_zip: a.address_zip || '',
           rating_average: a.rating_average || 0,
           review_count: a.review_count || 0,
           is_verified: a.is_verified || false,
@@ -157,7 +161,7 @@ export async function getAttorneyById(id: string): Promise<Attorney | null> {
       const supabase = await createClient()
       const { data, error } = await supabase
         .from('attorneys')
-        .select('id, name, slug, specialty, address_city, address_postal_code, rating_average, review_count, is_verified, is_active')
+        .select('id, name, slug, primary_specialty_id, address_city, address_zip, rating_average, review_count, is_verified, is_active, specialty:specialties!primary_specialty_id(slug,name)')
         .eq('id', id)
         .eq('is_active', true)
         .single()
@@ -170,9 +174,9 @@ export async function getAttorneyById(id: string): Promise<Attorney | null> {
       return {
         id: data.id,
         name: data.name || 'Attorney',
-        specialty: data.specialty,
+        specialty: data.specialty as unknown as { slug: string; name: string } | null,
         address_city: data.address_city || '',
-        address_postal_code: data.address_postal_code || '',
+        address_zip: data.address_zip || '',
         rating_average: data.rating_average || 0,
         review_count: data.review_count || 0,
         is_verified: data.is_verified || false,

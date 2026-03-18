@@ -50,7 +50,24 @@ function createChainProxy(terminal: () => unknown = () => ({ range: mockRange })
 }
 
 const mockSelect = vi.fn(() => createChainProxy())
-const mockFrom = vi.fn(() => ({ select: mockSelect }))
+
+// Mock for resolveSpecialtyIds: from('specialties').select('id').in('slug', slugs)
+// Returns fake UUIDs so the downstream .in('primary_specialty_id', ids) works
+function createSpecialtiesChain(): unknown {
+  return {
+    select: vi.fn(() => ({
+      in: vi.fn(() => Promise.resolve({
+        data: [{ id: 'fake-specialty-id-1' }, { id: 'fake-specialty-id-2' }],
+        error: null,
+      })),
+    })),
+  }
+}
+
+const mockFrom = vi.fn((table: string) => {
+  if (table === 'specialties') return createSpecialtiesChain()
+  return { select: mockSelect }
+})
 
 // For count queries (handled by flexible proxy above)
 
@@ -160,9 +177,12 @@ describe('getAttorneyCountByServiceAndLocation — ZIP slug', () => {
         },
       })
     }
-    ;(mockFrom as any).mockImplementationOnce(() => ({
-      select: () => countProxy(),
-    }))
+    // Override mockFrom: first call resolves specialties, second call returns count proxy
+    ;(mockFrom as any)
+      .mockImplementationOnce(() => createSpecialtiesChain())
+      .mockImplementationOnce(() => ({
+        select: () => countProxy(),
+      }))
 
     const count = await getAttorneyCountByServiceAndLocation(
       'personal-injury',

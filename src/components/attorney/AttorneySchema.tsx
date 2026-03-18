@@ -268,7 +268,7 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
   const breadcrumbItems = [
     { name: 'Home', item: baseUrl },
     { name: 'Practice Areas', item: `${baseUrl}/services` },
-    { name: attorney.specialty, item: `${baseUrl}/practice-areas/${specialtySlug}` },
+    { name: attorney.specialty || '', item: `${baseUrl}/practice-areas/${specialtySlug}` },
     { name: attorney.city, item: `${baseUrl}/practice-areas/${specialtySlug}/${citySlug}` },
     { name: displayName, item: '' },
   ]
@@ -314,7 +314,7 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
     ...(attorney.first_name && { givenName: attorney.first_name }),
     ...(attorney.last_name && { familyName: attorney.last_name }),
     jobTitle: `${attorney.specialty} Attorney`,
-    description: attorney.description || `${displayName}, ${attorney.specialty.toLowerCase()} attorney in ${attorney.city}`,
+    description: attorney.description || `${displayName}, ${attorney.specialty?.toLowerCase()} attorney in ${attorney.city}`,
     url: attorneyUrl,
     image: attorney.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
 

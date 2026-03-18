@@ -19,7 +19,7 @@ interface ProviderRecord {
   business_name?: string | null
   first_name?: string | null
   last_name?: string | null
-  specialty?: string | null
+  specialty?: { slug: string; name: string } | null
   description?: string | null
   bio?: string | null
   address_line1?: string | null
@@ -88,7 +88,7 @@ interface PageProps {
 
 // Convert provider data to LegacyAttorney format (sub-components still read legacy fields)
 function convertToAttorney(provider: ProviderRecord, service: Service | null, location: Location | null, specialtySlug: string): LegacyAttorney {
-  const specialty = service?.name || provider.specialty || 'Attorney'
+  const specialty = service?.name || provider.specialty?.name || 'Attorney'
   const city = location?.name || provider.address_city || ''
   const name = provider.name || provider.business_name || 'Attorney'
 
@@ -207,7 +207,8 @@ interface SimilarAttorneyRow {
   stable_id: string | null
   slug: string | null
   name: string | null
-  specialty: string | null
+  specialty: { slug: string; name: string } | null
+  primary_specialty_id: string | null
   rating_average: number | null
   review_count: number | null
   address_city: string | null
@@ -230,18 +231,30 @@ async function getSimilarAttorneys(attorneyId: string, specialty: string, postal
     const { supabase } = await import('@/lib/supabase')
     const deptCode = postalCode && postalCode.length >= 2 ? postalCode.substring(0, 2) : null
 
+    // Resolve specialty name to ID for filtering
+    let specialtyId: string | null = null
+    if (specialty) {
+      const { data: specData } = await supabase
+        .from('specialties')
+        .select('id')
+        .eq('name', specialty)
+        .limit(1)
+        .single()
+      specialtyId = specData?.id ?? null
+    }
+
     let query = supabase
       .from('attorneys')
-      .select('id, stable_id, slug, name, specialty, rating_average, review_count, address_city, is_verified, phone')
+      .select('id, stable_id, slug, name, primary_specialty_id, rating_average, review_count, address_city, is_verified, phone, specialty:specialties!primary_specialty_id(slug,name)')
       .eq('is_active', true)
       .neq('id', attorneyId)
       .order('phone', { ascending: false, nullsFirst: false })
       .order('rating_average', { ascending: false, nullsFirst: false })
       .limit(8)
 
-    // Match exact specialty (fast — uses index)
-    if (specialty) {
-      query = query.eq('specialty', specialty.toLowerCase())
+    // Match exact specialty by primary_specialty_id
+    if (specialtyId) {
+      query = query.eq('primary_specialty_id', specialtyId)
     }
 
     // Prefer same department
@@ -251,13 +264,13 @@ async function getSimilarAttorneys(attorneyId: string, specialty: string, postal
 
     const { data } = await query
 
-    return ((data || []) as SimilarAttorneyRow[]).map((p) => {
+    return ((data || []) as unknown as SimilarAttorneyRow[]).map((p) => {
       return {
         id: p.id,
         stable_id: p.stable_id || undefined,
         slug: p.slug || undefined,
         name: p.name || 'Attorney',
-        specialty: p.specialty || specialty,
+        specialty: p.specialty?.name || specialty,
         rating: p.rating_average || 0,
         reviews: p.review_count || 0,
         city: p.address_city || '',
@@ -415,7 +428,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const canonicalPath = getAttorneyUrl({
       stable_id: provider.stable_id,
       slug: provider.slug,
-      specialty: provider.specialty,
+      specialty: provider.specialty?.name,
       city: realCity,
     })
     const ratingStr = provider.rating_average && Number(provider.rating_average) >= 1
@@ -512,7 +525,7 @@ export default async function AttorneyPage({ params }: PageProps) {
   const canonicalUrl = getAttorneyUrl({
     stable_id: provider.stable_id,
     slug: provider.slug,
-    specialty: provider.specialty,
+    specialty: provider.specialty?.name,
     city: provider.address_city,
   })
   const currentPath = `/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`

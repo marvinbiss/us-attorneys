@@ -683,7 +683,7 @@ export default async function CostGuidePage({ params }: PageProps) {
         url: `/cost/${specialtySlug}/${locationSlug}`,
         items: providers.slice(0, 20).map((p, i) => ({
           name: p.name,
-          url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city }),
+          url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city }),
           position: i + 1,
           image: getServiceImage(specialtySlug).src,
           rating: p.rating_average ?? undefined,

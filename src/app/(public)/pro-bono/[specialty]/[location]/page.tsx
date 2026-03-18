@@ -138,7 +138,7 @@ export default async function ProBonoPage({ params }: PageProps) {
     { name: location.name, url: `/pro-bono/${slug}/${locSlug}` },
   ])
   const itemListSchema = providers.length > 0
-    ? getItemListSchema({ name: `Pro Bono ${service.name} in ${location.name}`, description: `Free ${svcLower} attorneys in ${location.name}`, url: `/pro-bono/${slug}/${locSlug}`, items: providers.slice(0, 20).map((p, i) => ({ name: p.name, url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city }), position: i + 1, image: getServiceImage(slug).src, rating: p.rating_average ?? undefined, reviewCount: p.review_count ?? undefined })) })
+    ? getItemListSchema({ name: `Pro Bono ${service.name} in ${location.name}`, description: `Free ${svcLower} attorneys in ${location.name}`, url: `/pro-bono/${slug}/${locSlug}`, items: providers.slice(0, 20).map((p, i) => ({ name: p.name, url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city }), position: i + 1, image: getServiceImage(slug).src, rating: p.rating_average ?? undefined, reviewCount: p.review_count ?? undefined })) })
     : null
   const speakableSchema = getSpeakableSchema({ url: `${SITE_URL}/pro-bono/${slug}/${locSlug}`, title: h1 })
   const schemas: Record<string, unknown>[] = [breadcrumbSchema, speakableSchema, ...(itemListSchema ? [itemListSchema] : [])]
@@ -199,7 +199,7 @@ export default async function ProBonoPage({ params }: PageProps) {
           {providers.length > 0 ? (
             <div className="grid gap-4">
               {(providers as Provider[]).slice(0, 20).map((p, idx) => (
-                <Link key={p.stable_id || idx} href={getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city })} className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 hover:border-purple-300 hover:shadow-sm transition-all bg-white">
+                <Link key={p.stable_id || idx} href={getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city })} className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 hover:border-purple-300 hover:shadow-sm transition-all bg-white">
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-900 truncate">{p.name}</p>
                     <p className="text-sm text-gray-500">{p.address_city}{p.address_county ? `, ${p.address_county}` : ''}</p>
@@ -251,7 +251,7 @@ export default async function ProBonoPage({ params }: PageProps) {
                   '@type': 'ListItem',
                   position: i + 1,
                   name: p.name,
-                  url: `${SITE_URL}${getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city })}`,
+                  url: `${SITE_URL}${getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city })}`,
                 })),
               },
             } : {}),

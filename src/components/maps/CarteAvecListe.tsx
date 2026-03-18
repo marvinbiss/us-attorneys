@@ -188,7 +188,7 @@ export default function CarteAvecListe({
                     <p className="text-sm text-gray-600 mb-3">{provider.address_city}</p>
                   )}
                   <Link
-                    href={getAttorneyUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })}
+                    href={getAttorneyUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty?.name, city: provider.address_city })}
                     className="block w-full py-2 bg-blue-600 text-white text-center rounded-lg text-sm font-semibold hover:bg-blue-700"
                   >
                     View profile

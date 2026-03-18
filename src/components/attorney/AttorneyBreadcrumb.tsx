@@ -18,7 +18,7 @@ export function AttorneyBreadcrumb({ attorney }: AttorneyBreadcrumbProps) {
   const items: Array<{ label: string; href?: string; icon?: typeof Home }> = [
     { label: 'Home', href: '/', icon: Home },
     { label: 'Practice Areas', href: '/services' },
-    { label: attorney.specialty, href: `/practice-areas/${specialtySlug}` },
+    { label: attorney.specialty || '', href: `/practice-areas/${specialtySlug}` },
   ]
 
   // Add city with service+city URL structure

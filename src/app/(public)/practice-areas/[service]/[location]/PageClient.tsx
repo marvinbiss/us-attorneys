@@ -127,7 +127,7 @@ export default function ServiceLocationPageClient({
     longitude: p.longitude || 0,
     rating_average: p.rating_average,
     review_count: p.review_count,
-    specialty: p.specialty,
+    specialty: p.specialty?.name,
     address_city: p.address_city,
     is_verified: p.is_verified || false,
     phone: p.phone,

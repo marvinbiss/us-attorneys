@@ -218,7 +218,7 @@ export default async function BestAttorneysPage({ params }: PageProps) {
         url: `/best/${slug}/${locSlug}`,
         items: providers.slice(0, 20).map((p, i) => ({
           name: p.name,
-          url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city }),
+          url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city }),
           position: i + 1,
           image: getServiceImage(slug).src,
           rating: p.rating_average ?? undefined,
@@ -295,7 +295,7 @@ export default async function BestAttorneysPage({ params }: PageProps) {
               {(providers as Provider[]).slice(0, 20).map((p, idx) => (
                 <Link
                   key={p.stable_id || idx}
-                  href={getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty, city: p.address_city })}
+                  href={getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city })}
                   className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition-all bg-white"
                 >
                   <span className="flex-shrink-0 w-8 h-8 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center font-bold text-sm">

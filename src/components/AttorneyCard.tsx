@@ -24,7 +24,7 @@ export default function AttorneyCard({
   provider,
   isHovered = false,
 }: AttorneyCardProps) {
-  const providerUrl = getAttorneyUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty, city: provider.address_city })
+  const providerUrl = getAttorneyUrl({ stable_id: provider.stable_id, slug: provider.slug, specialty: provider.specialty?.name, city: provider.address_city })
   const ratingValue = provider.rating_average?.toFixed(1)
   const reviewCount = provider.review_count
 
@@ -95,8 +95,8 @@ export default function AttorneyCard({
               </span>
             )}
           </div>
-          {provider.specialty && (
-            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">{provider.specialty}</p>
+          {provider.specialty?.name && (
+            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium mt-0.5">{provider.specialty.name}</p>
           )}
         </div>
         {ratingValue && typeof reviewCount === 'number' && reviewCount > 0 ? (

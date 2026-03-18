@@ -284,7 +284,7 @@ export default async function ContratarPage({ params }: PageProps) {
                       )}
                     </div>
                     <Link
-                      href={getAttorneyUrl({ stable_id: attorney.stable_id, slug: attorney.slug, specialty: attorney.specialty, city: attorney.address_city })}
+                      href={getAttorneyUrl({ stable_id: attorney.stable_id, slug: attorney.slug, specialty: attorney.specialty?.name, city: attorney.address_city })}
                       className="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2.5 rounded-lg text-sm transition-colors"
                     >
                       Solicitar consulta

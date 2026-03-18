@@ -63,7 +63,7 @@ export default function AttorneyList({
       if (searchQuery) {
         const q = searchQuery.toLowerCase()
         const nameMatch = p.name.toLowerCase().includes(q)
-        const specialtyMatch = p.specialty?.toLowerCase().includes(q) ?? false
+        const specialtyMatch = p.specialty?.name?.toLowerCase().includes(q) ?? false
         const cityMatch = p.address_city?.toLowerCase().includes(q) ?? false
         if (!nameMatch && !specialtyMatch && !cityMatch) return false
       }

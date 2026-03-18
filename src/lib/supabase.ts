@@ -29,13 +29,15 @@ export const supabase = IS_BUILD
 /**
  * Row shape returned by provider listing queries (PROVIDER_LIST_SELECT).
  * Matches the columns selected in the lightweight listing query.
+ * `specialty` comes from an embedded join on specialties via primary_specialty_id.
  */
 interface AttorneyListRow {
   id: string
   stable_id: string | null
   name: string
   slug: string
-  specialty: string | null
+  primary_specialty_id: string | null
+  specialty: { slug: string; name: string } | null
   address_line1: string | null
   address_zip: string | null
   address_city: string | null
@@ -119,10 +121,34 @@ async function retryWithBackoff<T>(
 }
 
 
+/**
+ * Resolve specialty slugs to their UUID primary keys.
+ * Cached for 24h since specialties rarely change.
+ * Used to filter attorneys by primary_specialty_id instead of the non-existent 'specialty' text column.
+ */
+async function resolveSpecialtyIds(slugs: string[]): Promise<string[]> {
+  if (slugs.length === 0) return []
+  const cacheKey = `specialty-ids:${slugs.sort().join(',')}`
+  return getCachedData(
+    cacheKey,
+    async () => {
+      const { data, error } = await supabase
+        .from('specialties')
+        .select('id')
+        .in('slug', slugs)
+      if (error) throw error
+      return (data || []).map(s => s.id)
+    },
+    CACHE_TTL.services, // 86400s — specialties rarely change
+  )
+}
+
 // Lightweight select for listing pages — all required Provider fields + display fields
 // Covers: AttorneyCard, AttorneyList, GeographicMap, ServiceNeighborhoodPage
+// `specialty` is an embedded join on specialties via primary_specialty_id FK (not a column on attorneys).
 const PROVIDER_LIST_SELECT = [
-  'id', 'stable_id', 'name', 'slug', 'specialty',
+  'id', 'stable_id', 'name', 'slug',
+  'primary_specialty_id',
   'address_line1', 'address_zip', 'address_city', 'address_state', 'address_county',
   'is_verified', 'is_active', 'noindex',
   'rating_average', 'review_count',
@@ -130,7 +156,7 @@ const PROVIDER_LIST_SELECT = [
   'latitude', 'longitude',
   'created_at', 'updated_at',
   'is_featured', 'boost_level',
-].join(',')
+].join(',') + ',specialty:specialties!primary_specialty_id(slug,name)'
 
 
 export async function getSpecialties() {
@@ -231,21 +257,22 @@ export async function getLocationBySlug(slug: string) {
           async () => {
             const { data, error } = await supabase
               .from('locations_us')
-              .select('code_insee, name, slug, code_postal, population, departement_code, departement_name, region_name, latitude, longitude')
+              .select('id, name, slug, population, latitude, longitude, state:states!state_id(abbreviation, name, region)')
               .eq('slug', slug)
               .limit(1)
               .single()
 
             if (error || !data) throw error || new Error('Location not found')
+            const state = data.state as unknown as { abbreviation: string; name: string; region: string } | null
             return {
-              id: data.code_insee,
+              id: data.id,
               name: data.name,
               slug: data.slug,
-              postal_code: data.code_postal,
+              postal_code: undefined as string | undefined,
               population: data.population,
-              department_code: data.departement_code,
-              department_name: data.departement_name,
-              region_name: data.region_name,
+              department_code: state?.abbreviation ?? undefined,
+              department_name: state?.name ?? undefined,
+              region_name: state?.region ?? undefined,
               latitude: data.latitude,
               longitude: data.longitude,
             }
@@ -610,6 +637,9 @@ export async function getAttorneysByServiceAndLocation(
       const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
       if (!specialties || specialties.length === 0) return []
 
+      const specialtyIds = await resolveSpecialtyIds(specialties)
+      if (specialtyIds.length === 0) return []
+
       // STRICT RULE: ZIP-specific pages show ONLY providers
       // whose address_zip matches the exact ZIP code.
       if (postalCode) {
@@ -618,7 +648,7 @@ export async function getAttorneysByServiceAndLocation(
             const { data, error } = await supabase
               .from('attorneys')
               .select(PROVIDER_LIST_SELECT)
-              .in('specialty', specialties)
+              .in('primary_specialty_id', specialtyIds)
               .eq('address_zip', postalCode)
               .eq('is_active', true)
               .is('canonical_attorney_id', null)
@@ -644,7 +674,7 @@ export async function getAttorneysByServiceAndLocation(
               const { data, error } = await supabase
                 .from('attorneys')
                 .select(PROVIDER_LIST_SELECT)
-                .in('specialty', specialties)
+                .in('primary_specialty_id', specialtyIds)
                 .eq('address_zip', zipCode)
                 .eq('is_active', true)
                 .is('canonical_attorney_id', null)
@@ -678,7 +708,7 @@ export async function getAttorneysByServiceAndLocation(
             const { data: direct, error: directError } = await supabase
               .from('attorneys')
               .select(PROVIDER_LIST_SELECT)
-              .in('specialty', specialties)
+              .in('primary_specialty_id', specialtyIds)
               .in('address_city', cityValues)
               .eq('is_active', true)
               .is('canonical_attorney_id', null)
@@ -733,13 +763,16 @@ export async function hasProvidersByServiceAndLocation(
             const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
             if (!specialties || specialties.length === 0) return false
 
+            const specialtyIds = await resolveSpecialtyIds(specialties)
+            if (specialtyIds.length === 0) return false
+
             // ZIP slug — filter by address_zip
             if (isZipSlug(locationSlug)) {
               const zipCode = extractZipCode(locationSlug)
               const { count, error } = await supabase
                 .from('attorneys')
                 .select('id', { count: 'exact', head: true })
-                .in('specialty', specialties)
+                .in('primary_specialty_id', specialtyIds)
                 .eq('address_zip', zipCode)
                 .eq('is_active', true)
                 .is('canonical_attorney_id', null)
@@ -755,7 +788,7 @@ export async function hasProvidersByServiceAndLocation(
             const { count, error } = await supabase
               .from('attorneys')
               .select('id', { count: 'exact', head: true })
-              .in('specialty', specialties)
+              .in('primary_specialty_id', specialtyIds)
               .in('address_city', cityValues)
               .eq('is_active', true)
               .is('canonical_attorney_id', null)
@@ -798,13 +831,16 @@ export async function getAttorneyCountByServiceAndLocation(
             const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
             if (!specialties || specialties.length === 0) return 0
 
+            const specialtyIds = await resolveSpecialtyIds(specialties)
+            if (specialtyIds.length === 0) return 0
+
             // ZIP slug — filter by address_zip
             if (isZipSlug(locationSlug)) {
               const zipCode = extractZipCode(locationSlug)
               const { count, error } = await supabase
                 .from('attorneys')
                 .select('id', { count: 'exact', head: true })
-                .in('specialty', specialties)
+                .in('primary_specialty_id', specialtyIds)
                 .eq('address_zip', zipCode)
                 .eq('is_active', true)
                 .is('canonical_attorney_id', null)
@@ -820,7 +856,7 @@ export async function getAttorneyCountByServiceAndLocation(
             const { count, error } = await supabase
               .from('attorneys')
               .select('id', { count: 'exact', head: true })
-              .in('specialty', specialties)
+              .in('primary_specialty_id', specialtyIds)
               .in('address_city', cityValues)
               .eq('is_active', true)
               .is('canonical_attorney_id', null)
@@ -955,6 +991,9 @@ export async function getAttorneysByService(specialtySlug: string, limit?: numbe
   const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
   if (!specialties || specialties.length === 0) return []
 
+  const specialtyIds = await resolveSpecialtyIds(specialties)
+  if (specialtyIds.length === 0) return []
+
   const effectiveLimit = limit || 50
   return getCachedData(
     generateCacheKey('attorneys:service', { slug: specialtySlug, limit: effectiveLimit }),
@@ -965,7 +1004,7 @@ export async function getAttorneysByService(specialtySlug: string, limit?: numbe
             const { data, error } = await supabase
               .from('attorneys')
               .select(PROVIDER_LIST_SELECT)
-              .in('specialty', specialties)
+              .in('primary_specialty_id', specialtyIds)
               .eq('is_active', true)
               .is('canonical_attorney_id', null)
               .order('is_featured', { ascending: false, nullsFirst: true })
@@ -994,6 +1033,8 @@ export async function getAttorneyCountByService(specialtySlug: string): Promise<
   if (IS_BUILD) return 0
   const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
   if (!specialties || specialties.length === 0) return 0
+  const specialtyIds = await resolveSpecialtyIds(specialties)
+  if (specialtyIds.length === 0) return 0
   return getCachedData(
     `attorney-count:service:${specialtySlug}`,
     async () => {
@@ -1003,7 +1044,7 @@ export async function getAttorneyCountByService(specialtySlug: string): Promise<
             const { count, error } = await supabase
               .from('attorneys')
               .select('id', { count: 'exact', head: true })
-              .in('specialty', specialties)
+              .in('primary_specialty_id', specialtyIds)
               .eq('is_active', true)
               .is('canonical_attorney_id', null)
             if (error) throw error
@@ -1027,6 +1068,9 @@ export async function getLocationsByService(specialtySlug: string) {
   const specialties = SPECIALTY_TO_BAR_CATEGORIES[specialtySlug]
   if (!specialties || specialties.length === 0) return []
 
+  const specialtyIds = await resolveSpecialtyIds(specialties)
+  if (specialtyIds.length === 0) return []
+
   return getCachedData(
     `locations:service:${specialtySlug}`,
     async () => {
@@ -1036,7 +1080,7 @@ export async function getLocationsByService(specialtySlug: string) {
           const { data: providerCities, error: citiesError } = await supabase
             .from('attorneys')
             .select('address_city')
-            .in('specialty', specialties)
+            .in('primary_specialty_id', specialtyIds)
             .eq('is_active', true)
             .is('canonical_attorney_id', null)
             .not('address_city', 'is', null)
@@ -1052,20 +1096,23 @@ export async function getLocationsByService(specialtySlug: string) {
           // Step 2: look up location data (slug, state, region) for those cities
           const { data: locations, error: locationsError } = await supabase
             .from('locations_us')
-            .select('code_insee, name, slug, departement_code, region_name')
+            .select('id, name, slug, state:states!state_id(abbreviation, region)')
             .in('name', uniqueCityNames.slice(0, 200))
             .order('population', { ascending: false })
             .limit(100)
 
           if (locationsError) throw locationsError
 
-          return (locations || []).map(c => ({
-            id: c.code_insee,
-            name: c.name,
-            slug: c.slug,
-            department_code: c.departement_code,
-            region_name: c.region_name,
-          }))
+          return (locations || []).map(c => {
+            const state = c.state as unknown as { abbreviation: string; region: string } | null
+            return {
+              id: c.id,
+              name: c.name,
+              slug: c.slug,
+              department_code: state?.abbreviation ?? undefined,
+              region_name: state?.region ?? undefined,
+            }
+          })
         },
         `getLocationsByService(${specialtySlug})`,
       )
