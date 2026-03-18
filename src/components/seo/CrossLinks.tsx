@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import { Search, ArrowRight } from 'lucide-react'
+import { Search, ArrowRight, MapPin } from 'lucide-react'
 import { getNearbyCities, getCityBySlug } from '@/lib/data/usa'
 import { PRACTICE_AREAS_200 } from '@/lib/data/practice-areas-200'
+import { isZipPageSlug, parseZipPageSlug } from '@/lib/zip-pages'
 
 // ============================================================================
 // CrossLinks — "People also search for" section
@@ -157,6 +158,45 @@ export default function CrossLinks({
               </div>
             </div>
           )}
+
+          {/* ZIP code level links (Doctolib pattern) */}
+          {city.zipCode && !isZipPageSlug(citySlug) && (
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-1.5">
+                <MapPin className="w-4 h-4" aria-hidden="true" />
+                {currentPA.name} by ZIP code
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href={`/practice-areas/${practiceAreaSlug}/${citySlug}-${city.zipCode}`}
+                  className="inline-flex items-center px-3 py-1.5 bg-sand-100 hover:bg-clay-50 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] text-stone-700 hover:text-clay-600 dark:text-gray-400 dark:hover:text-white border border-stone-200/40 hover:border-clay-200 dark:border-white/[0.06] dark:hover:border-white/[0.12] rounded-full text-sm transition-all duration-200"
+                >
+                  {currentPA.name} near {city.zipCode}
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* If we're on a ZIP page, link to the parent city page */}
+          {isZipPageSlug(citySlug) && (() => {
+            const parsed = parseZipPageSlug(citySlug)
+            if (!parsed) return null
+            return (
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+                  See more in this area
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  <Link
+                    href={`/practice-areas/${practiceAreaSlug}/${parsed.citySlug}`}
+                    className="inline-flex items-center px-3 py-1.5 bg-sand-100 hover:bg-clay-50 dark:bg-white/[0.04] dark:hover:bg-white/[0.08] text-stone-700 hover:text-clay-600 dark:text-gray-400 dark:hover:text-white border border-stone-200/40 hover:border-clay-200 dark:border-white/[0.06] dark:hover:border-white/[0.12] rounded-full text-sm transition-all duration-200"
+                  >
+                    All {currentPA.name.toLowerCase()} in {city.name}
+                  </Link>
+                </div>
+              </div>
+            )
+          })()}
         </div>
 
         {/* Broader exploration links */}

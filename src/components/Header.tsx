@@ -7,6 +7,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useMobileMenu } from '@/contexts/MobileMenuContext'
 import { useFavorites } from '@/hooks/useFavorites'
 import QuickSearch from '@/components/search/QuickSearch'
+import NotificationCenter from '@/components/notifications/NotificationCenter'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { trackEvent } from '@/lib/analytics/tracking'
 import { cn } from '@/lib/utils'
@@ -331,6 +332,9 @@ export default function Header({ attorneyCount = 0 }: { attorneyCount?: number }
                 </span>
               )}
             </Link>
+
+            {/* Notification Center */}
+            {mounted && <NotificationCenter />}
 
             <Link
               href="/login"

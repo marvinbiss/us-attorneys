@@ -2,6 +2,11 @@
  * Attorney Claim API
  * POST: Submit a claim request for a provider page (bar number verification + admin review)
  * Auth is OPTIONAL — anonymous claims are supported (account created on admin approval)
+ *
+ * After submission, auto-triggers bar license verification via state bar APIs:
+ *   - If auto-verified -> auto-approve claim (no admin needed)
+ *   - If not_found or suspended/disbarred -> reject with reason
+ *   - If manual_review (unsupported state or API error) -> queue for admin
  */
 
 import { NextResponse } from 'next/server'
@@ -10,6 +15,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { createApiHandler } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { checkRateLimit } from '@/lib/rate-limiter'
+import { verifyBarLicense } from '@/lib/verification/bar-verification'
 import { z } from 'zod'
 
 const claimSchema = z.object({
@@ -216,8 +222,166 @@ export const POST = createApiHandler(async ({ request }) => {
     attorneyName: provider.name,
   })
 
+  // ─── Auto-verify bar license against state bar records ────────────
+  // This runs after claim creation so the claim exists even if verification fails.
+  let verificationMessage = 'Your claim request has been submitted. An administrator will review it within 24 to 48 hours.'
+  let verificationStatus: string = 'pending'
+
+  if (provider.bar_state) {
+    try {
+      const verificationResult = await verifyBarLicense(normalizedInput, provider.bar_state)
+
+      // Log verification to verification_logs
+      const { data: verificationLog } = await adminClient
+        .from('verification_logs')
+        .insert({
+          attorney_id: attorneyId,
+          bar_number: normalizedInput,
+          state_code: provider.bar_state,
+          status: verificationResult.status,
+          response_data: {
+            attorney_name: verificationResult.attorney_name,
+            admission_date: verificationResult.admission_date,
+            practice_status: verificationResult.practice_status,
+            source: verificationResult.source,
+          },
+          verified_at: verificationResult.verified ? new Date().toISOString() : null,
+          source: verificationResult.source || 'api_lookup',
+          error_message: verificationResult.error_message || null,
+        })
+        .select('id')
+        .single()
+
+      // Fetch the claim we just inserted to update it
+      const { data: claim } = await adminClient
+        .from('attorney_claims')
+        .select('id')
+        .eq('attorney_id', attorneyId)
+        .eq('bar_number_provided', normalizedInput)
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (claim) {
+        if (verificationResult.status === 'verified' && user) {
+          // AUTO-APPROVE: Bar number verified against state bar
+          await adminClient
+            .from('attorney_claims')
+            .update({
+              status: 'approved',
+              verification_status: 'verified',
+              verification_log_id: verificationLog?.id || null,
+              auto_verified_at: new Date().toISOString(),
+              reviewed_at: new Date().toISOString(),
+            })
+            .eq('id', claim.id)
+
+          // Assign attorney to user
+          await adminClient
+            .from('attorneys')
+            .update({
+              user_id: user.id,
+              is_verified: true,
+              verified_at: new Date().toISOString(),
+              claimed_at: new Date().toISOString(),
+              claimed_by: user.id,
+            })
+            .eq('id', attorneyId)
+
+          // Update profile to attorney type
+          await adminClient
+            .from('profiles')
+            .update({
+              user_type: 'attorney',
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', user.id)
+
+          verificationMessage = 'Your bar license has been automatically verified against state bar records. Your profile is now active!'
+          verificationStatus = 'verified'
+
+          logger.info('Claim auto-approved via bar verification', {
+            userId: user.id,
+            attorneyId,
+            source: verificationResult.source,
+          })
+        } else if (verificationResult.status === 'not_found') {
+          // REJECT: Bar number not found in state bar records
+          await adminClient
+            .from('attorney_claims')
+            .update({
+              status: 'rejected',
+              rejection_reason: 'Bar number not found in state bar records. Please verify your bar number and try again.',
+              verification_status: 'not_found',
+              verification_log_id: verificationLog?.id || null,
+              reviewed_at: new Date().toISOString(),
+            })
+            .eq('id', claim.id)
+
+          verificationMessage = 'Your bar number was not found in state bar records. Please verify your bar number and try again.'
+          verificationStatus = 'not_found'
+
+          logger.warn('Claim rejected: bar number not found', {
+            userId: user?.id || 'anonymous',
+            attorneyId,
+            barNumber: normalizedInput,
+            stateCode: provider.bar_state,
+          })
+        } else if (verificationResult.status === 'suspended' || verificationResult.status === 'disbarred') {
+          // REJECT: Suspended or disbarred
+          const statusLabel = verificationResult.status === 'suspended' ? 'suspended' : 'disbarred'
+          await adminClient
+            .from('attorney_claims')
+            .update({
+              status: 'rejected',
+              rejection_reason: `Bar license status: ${statusLabel}. Attorneys with ${statusLabel} licenses cannot claim profiles.`,
+              verification_status: verificationResult.status,
+              verification_log_id: verificationLog?.id || null,
+              reviewed_at: new Date().toISOString(),
+            })
+            .eq('id', claim.id)
+
+          verificationMessage = `Your bar license is currently ${statusLabel}. Only attorneys with active bar licenses can claim profiles.`
+          verificationStatus = verificationResult.status
+
+          logger.warn(`Claim rejected: bar license ${statusLabel}`, {
+            userId: user?.id || 'anonymous',
+            attorneyId,
+            barNumber: normalizedInput,
+          })
+        } else {
+          // MANUAL REVIEW: Unsupported state, API error, or ambiguous status
+          await adminClient
+            .from('attorney_claims')
+            .update({
+              verification_status: 'manual_review',
+              verification_log_id: verificationLog?.id || null,
+            })
+            .eq('id', claim.id)
+
+          verificationStatus = 'manual_review'
+
+          logger.info('Claim queued for manual review', {
+            userId: user?.id || 'anonymous',
+            attorneyId,
+            reason: verificationResult.error_message || 'No automated adapter',
+          })
+        }
+      }
+    } catch (verifyError) {
+      // Verification failure should NOT block the claim submission
+      logger.error('Bar verification failed (non-blocking)', {
+        error: verifyError instanceof Error ? verifyError.message : 'Unknown',
+        attorneyId,
+        barNumber: normalizedInput,
+      })
+    }
+  }
+
   return NextResponse.json({
     success: true,
-    message: 'Your claim request has been submitted. An administrator will review it within 24 to 48 hours.',
+    message: verificationMessage,
+    verification_status: verificationStatus,
   })
 }, {})

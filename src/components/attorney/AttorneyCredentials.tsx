@@ -25,6 +25,9 @@ import type {
 } from '@/lib/attorney-enrichment'
 import { ACTION_TYPE_LABELS, PUBLICATION_TYPE_LABELS } from '@/lib/attorney-enrichment'
 import type { LegacyAttorney } from '@/types/legacy'
+import BarVerificationLink from './BarVerificationLink'
+import { VerificationBadgeDetailed } from '@/components/verification/VerificationBadgeDetailed'
+import type { BarAdmissionRecord } from '@/lib/verification/bar-verify'
 
 // ============================================================================
 // AttorneyCredentials — Unified credentials & trust signals component
@@ -38,9 +41,17 @@ interface AttorneyCredentialsProps {
   attorney?: LegacyAttorney
   trustScore?: number
   trustScoreBreakdown?: Record<string, number>
+  /** Verification timestamp (ISO string) — when bar license was last verified */
+  verifiedAt?: string | null
+  /** State bar association URL for external verification link */
+  barAssociationUrl?: string | null
+  /** Bar state abbreviation (2 letters) */
+  barState?: string | null
+  /** All bar admissions from bar_admissions table */
+  barAdmissions?: BarAdmissionRecord[]
 }
 
-export function AttorneyCredentials({ enrichment, attorney, trustScore, trustScoreBreakdown }: AttorneyCredentialsProps) {
+export function AttorneyCredentials({ enrichment, attorney, trustScore, trustScoreBreakdown, verifiedAt, barAssociationUrl, barState, barAdmissions }: AttorneyCredentialsProps) {
   const { education, awards, publications, disciplinary } = enrichment
 
   const hasBarNumber = !!attorney?.bar_number
@@ -50,11 +61,36 @@ export function AttorneyCredentials({ enrichment, attorney, trustScore, trustSco
   const hasBusinessData = hasBarNumber || hasCreationDate || hasLegalForm || hasTeamSize
   const hasEnrichment = education.length > 0 || awards.length > 0 || publications.length > 0 || disciplinary.length > 0
   const hasTrustScore = (trustScore ?? 0) > 0
+  const hasBarAdmissions = barAdmissions && barAdmissions.length > 0
+
+  // Determine overall verification status for the badge
+  const verificationStatus = hasBarNumber && (verifiedAt || attorney?.is_verified)
+    ? 'verified' as const
+    : hasBarNumber
+      ? 'pending' as const
+      : 'unverified' as const
+
+  // Extract admission year from creation_date or first admission
+  const admissionYear = barAdmissions?.[0]?.admissionDate
+    ? new Date(barAdmissions[0].admissionDate).getFullYear()
+    : attorney?.creation_date
+      ? new Date(attorney.creation_date).getFullYear()
+      : undefined
 
   if (!hasBusinessData && !hasEnrichment && !hasTrustScore) return null
 
   return (
     <div className="space-y-6">
+      {/* Detailed Verification Badge — multi-state display */}
+      {(hasBarNumber || hasBarAdmissions) && (
+        <VerificationBadgeDetailed
+          status={verificationStatus}
+          primaryState={barState || barAdmissions?.[0]?.state || undefined}
+          admissionYear={admissionYear}
+          barAdmissions={barAdmissions}
+        />
+      )}
+
       {/* Bar Admissions & Business Profile */}
       {hasBusinessData && (
         <BarAdmissionsSection
@@ -63,6 +99,9 @@ export function AttorneyCredentials({ enrichment, attorney, trustScore, trustSco
           hasCreationDate={hasCreationDate}
           hasLegalForm={hasLegalForm}
           hasTeamSize={hasTeamSize}
+          verifiedAt={verifiedAt}
+          barAssociationUrl={barAssociationUrl}
+          barState={barState}
         />
       )}
 
@@ -89,14 +128,21 @@ function BarAdmissionsSection({
   hasCreationDate,
   hasLegalForm,
   hasTeamSize,
+  verifiedAt,
+  barAssociationUrl,
+  barState,
 }: {
   attorney: LegacyAttorney
   hasBarNumber: boolean
   hasCreationDate: boolean
   hasLegalForm: boolean
   hasTeamSize: boolean
+  verifiedAt?: string | null
+  barAssociationUrl?: string | null
+  barState?: string | null
 }) {
   const yearsSinceCreation = attorney.creation_date ? getYearsSinceCreation(attorney.creation_date) : null
+  const formattedVerifiedAt = verifiedAt ? formatVerifiedDate(verifiedAt) : null
 
   return (
     <div className="bg-[#FFFCF8] dark:bg-gray-900 rounded-2xl shadow-soft border border-stone-200/60 dark:border-gray-700 overflow-hidden">
@@ -112,7 +158,9 @@ function BarAdmissionsSection({
                 Credentials &amp; Bar Admissions
               </h3>
               <p className="text-sm text-slate-500 dark:text-gray-400">
-                Verified through state bar records
+                {formattedVerifiedAt
+                  ? `Last verified: ${formattedVerifiedAt}`
+                  : 'Verified through state bar records'}
               </p>
             </div>
           </div>
@@ -207,6 +255,17 @@ function BarAdmissionsSection({
             </div>
           )}
         </dl>
+
+        {/* External verification link */}
+        {barState && barAssociationUrl && (
+          <div className="mt-4 pt-4 border-t border-stone-200/40 dark:border-gray-700">
+            <BarVerificationLink
+              barState={barState}
+              barNumber={attorney.bar_number}
+              barAssociationUrl={barAssociationUrl}
+            />
+          </div>
+        )}
       </div>
     </div>
   )
@@ -635,6 +694,24 @@ function getYearsSinceCreation(dateStr: string): number | null {
     return Math.floor((new Date().getTime() - date.getTime()) / (365.25 * 24 * 60 * 60 * 1000))
   } catch {
     return null
+  }
+}
+
+function formatVerifiedDate(dateStr: string): string {
+  try {
+    const date = new Date(dateStr)
+    if (isNaN(date.getTime())) return dateStr
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+    if (diffHours < 1) return 'Just now'
+    if (diffHours < 24) return `${diffHours}h ago`
+    if (diffDays < 7) return `${diffDays}d ago`
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  } catch {
+    return dateStr
   }
 }
 

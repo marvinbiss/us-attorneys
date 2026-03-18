@@ -8,6 +8,7 @@ import {
   ChevronLeft, ChevronRight
 } from 'lucide-react'
 import { getAttorneyUrl } from '@/lib/utils'
+import { CompareButton } from '@/components/ui/CompareButton'
 
 interface TimeSlot {
   time: string
@@ -195,6 +196,19 @@ export default function AttorneyResultCard({
                       Firm
                     </span>
                   )}
+                  <CompareButton
+                    provider={{
+                      id: attorney.id,
+                      name: displayName || attorney.id,
+                      slug: attorney.slug || attorney.stable_id || attorney.id,
+                      stable_id: attorney.stable_id,
+                      address_city: attorney.city || undefined,
+                      is_verified: attorney.is_verified,
+                      rating_average: attorney.average_rating || undefined,
+                      review_count: attorney.review_count || undefined,
+                    }}
+                    size="sm"
+                  />
                 </div>
               </div>
 

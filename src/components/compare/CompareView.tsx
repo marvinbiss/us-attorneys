@@ -216,7 +216,7 @@ export function CompareView({ onClose }: CompareViewProps) {
               providers={compareList}
             >
               <AttorneyGrid providers={compareList}>
-                {(provider) => <BooleanCell value={provider.is_verified} />}
+                {(provider) => <BooleanCell value={provider.is_verified ?? undefined} />}
               </AttorneyGrid>
             </CompareRow>
 

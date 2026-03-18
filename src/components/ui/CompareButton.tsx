@@ -35,8 +35,8 @@ export function CompareButton({ provider, size = 'sm', className }: CompareButto
         size === 'sm' && 'px-2.5 py-1.5 text-xs',
         size === 'md' && 'px-3 py-2 text-sm',
         active
-          ? 'bg-blue-50 text-blue-700 border-blue-300 hover:bg-blue-100'
-          : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300',
+          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-300 dark:border-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/40'
+          : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300 dark:hover:border-gray-600',
         className,
       )}
       aria-label={active ? `Remove ${provider.name} from comparison` : `Add ${provider.name} to comparison`}

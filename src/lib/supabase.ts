@@ -730,6 +730,37 @@ export async function getAttorneysByServiceAndLocation(
         }
       }
 
+      // New ZIP page slug (e.g., "new-york-10001") — filter by address_zip
+      const zipPageMatch = locationSlug.match(/^(.+)-(\d{5})$/)
+      if (zipPageMatch) {
+        const zipCode = zipPageMatch[2]
+        try {
+          return await retryWithBackoff(
+            async () => {
+              const { data, error } = await supabase
+                .from('attorneys')
+                .select(PROVIDER_LIST_SELECT)
+                .in('primary_specialty_id', specialtyIds)
+                .eq('address_zip', zipCode)
+                .eq('is_active', true)
+                .is('canonical_attorney_id', null)
+                .order('is_featured', { ascending: false, nullsFirst: true })
+                .order('boost_level', { ascending: false, nullsFirst: true })
+                .order('phone', { ascending: false, nullsFirst: false })
+                .order('is_verified', { ascending: false })
+                .order('name')
+                .range(offset, offset + limit - 1)
+              if (error) throw error
+              return asAttorneyListRows(data || [])
+            },
+            `getAttorneysByServiceAndLocation:zipPage(${specialtySlug}, ${zipCode})`,
+          )
+        } catch (err: unknown) {
+          dbLogger.error(`[getAttorneysByServiceAndLocation] ZIP page query FAILED for ${specialtySlug}/${locationSlug}:`, { error: err instanceof Error ? err.message : err })
+          throw err
+        }
+      }
+
       // City slug — use static data for city name resolution
       const cityData = getCityBySlugImport(locationSlug)
       if (!cityData) return []
@@ -869,9 +900,24 @@ export async function getAttorneyCountByServiceAndLocation(
             const specialtyIds = await resolveSpecialtyIds(specialties)
             if (specialtyIds.length === 0) return 0
 
-            // ZIP slug — filter by address_zip
+            // ZIP slug (old format: "10001-new-york-ny") — filter by address_zip
             if (isZipSlug(locationSlug)) {
               const zipCode = extractZipCode(locationSlug)
+              const { count, error } = await supabase
+                .from('attorneys')
+                .select('id', { count: 'exact', head: true })
+                .in('primary_specialty_id', specialtyIds)
+                .eq('address_zip', zipCode)
+                .eq('is_active', true)
+                .is('canonical_attorney_id', null)
+              if (error) throw error
+              return count ?? 0
+            }
+
+            // ZIP page slug (new format: "new-york-10001") — filter by address_zip
+            const zipPageCountMatch = locationSlug.match(/^.+-(\d{5})$/)
+            if (zipPageCountMatch) {
+              const zipCode = zipPageCountMatch[1]
               const { count, error } = await supabase
                 .from('attorneys')
                 .select('id', { count: 'exact', head: true })

@@ -3,6 +3,7 @@ import { MapPin, Phone, Star, ChevronRight, ShieldCheck, Award } from 'lucide-re
 import { Provider } from '@/types'
 import { getAttorneyUrl, getAvatarColor } from '@/lib/utils'
 import { FavoriteButton } from '@/components/ui/FavoriteButton'
+import { CompareButton } from '@/components/ui/CompareButton'
 import { TrustScore } from '@/components/attorney/TrustScore'
 import { AvailabilityBadge } from '@/components/ui/AvailabilityBadge'
 import type { AvailabilitySlot } from '@/lib/availability'
@@ -39,13 +40,30 @@ export default function AttorneyCard({
           : 'border-gray-100 dark:border-gray-700 shadow-sm hover:-translate-y-1 hover:scale-[1.02] hover:border-amber-200 dark:hover:border-amber-700 hover:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.12),0_4px_6px_-2px_rgba(0,0,0,0.05)] hover:before:opacity-100'
       }`}
     >
-      {/* Favorite button — top-right */}
-      <FavoriteButton
-        attorneyId={provider.stable_id || provider.id}
-        attorneyName={provider.name}
-        size="sm"
-        className="absolute top-3 right-3 z-30"
-      />
+      {/* Action buttons — top-right */}
+      <div className="absolute top-3 right-3 z-30 flex items-center gap-1.5">
+        <CompareButton
+          provider={{
+            id: provider.id,
+            name: provider.name,
+            slug: provider.slug || '',
+            stable_id: provider.stable_id || undefined,
+            specialty: provider.specialty?.name || undefined,
+            address_city: provider.address_city || undefined,
+            address_state: provider.address_state || undefined,
+            is_verified: provider.is_verified,
+            rating_average: provider.rating_average,
+            review_count: provider.review_count,
+            bar_number: provider.bar_number || undefined,
+          }}
+          size="sm"
+        />
+        <FavoriteButton
+          attorneyId={provider.stable_id || provider.id}
+          attorneyName={provider.name}
+          size="sm"
+        />
+      </div>
       {/* Featured badge */}
       {provider.is_featured && (
         <div className="absolute top-3 left-3 z-20 inline-flex items-center gap-1 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">

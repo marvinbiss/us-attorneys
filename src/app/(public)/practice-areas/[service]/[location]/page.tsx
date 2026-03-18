@@ -21,6 +21,8 @@ import { getAttorneyUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
 import { practiceAreas as staticPracticeAreas, cities, getCityBySlug, getNearbyCities, getCitiesByState, getStateByCode } from '@/lib/data/usa'
 import { resolveZipToCity, getNearbyZipCodes, isZipSlug } from '@/lib/location-resolver'
+import { parseZipPageSlug, getZipMetadata, getNearbyZips, zipMetadataToCity, TOP_ZIP_CODES } from '@/lib/zip-pages'
+import NearbyZipCodes from '@/components/seo/NearbyZipCodes'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
@@ -76,14 +78,22 @@ export const revalidate = REVALIDATE.serviceLocation
 // Allow on-demand ISR for cities not pre-rendered at build time
 export const dynamicParams = true
 
-// Pre-render top 15 cities (46 x 15 = 690 pages)
-// Remaining cities are generated on-demand via ISR
+// Pre-render top 15 cities + top ZIP codes
+// Remaining cities/ZIPs are generated on-demand via ISR
 const TOP_CITIES_COUNT = 15
 export function generateStaticParams() {
   const topCities = cities.slice(0, TOP_CITIES_COUNT)
-  return staticPracticeAreas.flatMap(s =>
+  // City pages: 46 PAs x 15 cities = 690 pages
+  const cityParams = staticPracticeAreas.flatMap(s =>
     topCities.map(v => ({ service: s.slug, location: v.slug }))
   )
+  // ZIP pages: top 5 PAs x first 20 ZIPs = 100 seed pages (rest via ISR)
+  const topPAs = staticPracticeAreas.slice(0, 5)
+  const topZips = TOP_ZIP_CODES.slice(0, 20)
+  const zipParams = topPAs.flatMap(s =>
+    topZips.map(z => ({ service: s.slug, location: `${z.citySlug}-${z.zip}` }))
+  )
+  return [...cityParams, ...zipParams]
 }
 
 /** Resolve a city from static data to Location shape (fallback when DB is down) */
@@ -103,12 +113,21 @@ function cityToLocation(slug: string): LocationType | null {
   }
 }
 
-/** Resolve city data for content generation — supports both city slugs and ZIP slugs */
+/** Resolve city data for content generation — supports city slugs, old ZIP slugs, and new ZIP page slugs */
 async function resolveCityData(slug: string) {
   // Try static city first (fast, no DB)
   const staticCity = getCityBySlug(slug)
   if (staticCity) return staticCity
-  // ZIP slug — resolve from DB
+  // New ZIP page slug (e.g., "new-york-10001")
+  const zipParsed = parseZipPageSlug(slug)
+  if (zipParsed) {
+    const zipMeta = await getZipMetadata(zipParsed.zipCode)
+    if (zipMeta) return zipMetadataToCity(zipMeta)
+    // Try resolving via the city slug part
+    const fallbackCity = getCityBySlug(zipParsed.citySlug)
+    if (fallbackCity) return fallbackCity
+  }
+  // Old ZIP slug — resolve from DB
   return resolveZipToCity(slug)
 }
 
@@ -150,17 +169,21 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   // Fail open: default to indexed. ISR will correct if truly 0 providers.
   let attorneyCount = 1
 
+  // Check if this is a new-format ZIP page slug (e.g., "new-york-10001")
+  const zipPageInfo = parseZipPageSlug(locationSlug)
+
   try {
     const [service, location, count] = await Promise.all([
       getSpecialtyBySlug(specialtySlug),
-      getLocationBySlug(locationSlug) as Promise<import('@/types').Location | null>,
+      getLocationBySlug(zipPageInfo ? zipPageInfo.citySlug : locationSlug) as Promise<import('@/types').Location | null>,
       // Lightweight count-only check — avoids fetching all provider rows
       getAttorneyCountByServiceAndLocation(specialtySlug, locationSlug),
     ])
 
     if (service) specialtyName = service.name
     if (location) {
-      locationName = location.name
+      // For ZIP pages, display "City ZIP" format
+      locationName = zipPageInfo ? `${location.name} ${zipPageInfo.zipCode}` : location.name
       departmentCode = location.department_code || ''
       departmentName = location.department_name || ''
     }
@@ -169,10 +192,11 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   } catch {
     // DB down — fallback to static data
     const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
-    const fallbackCity = getCityBySlug(locationSlug)
+    const citySlug = zipPageInfo ? zipPageInfo.citySlug : locationSlug
+    const fallbackCity = getCityBySlug(citySlug)
     if (staticSvc) specialtyName = staticSvc.name
     if (fallbackCity) {
-      locationName = fallbackCity.name
+      locationName = zipPageInfo ? `${fallbackCity.name} ${zipPageInfo.zipCode}` : fallbackCity.name
       departmentCode = fallbackCity.stateCode
       departmentName = fallbackCity.stateName
     }
@@ -372,20 +396,29 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   }
 
   // 2. Resolve location (DB → static data fallback)
+  // For ZIP page slugs (e.g., "new-york-10001"), resolve the city part
+  const zipParsedBody = parseZipPageSlug(locationSlug)
+  const locationLookupSlug = zipParsedBody ? zipParsedBody.citySlug : locationSlug
+
   let location: LocationType
   try {
-    const dbLocation = await getLocationBySlug(locationSlug)
+    const dbLocation = await getLocationBySlug(locationLookupSlug)
     if (!dbLocation) {
-      const fallback = cityToLocation(locationSlug)
+      const fallback = cityToLocation(locationLookupSlug)
       if (!fallback) notFound()
       location = fallback
     } else {
       location = { ...dbLocation, id: (dbLocation as Record<string, unknown>).code_insee as string || '' }
     }
   } catch {
-    const fallback = cityToLocation(locationSlug)
+    const fallback = cityToLocation(locationLookupSlug)
     if (!fallback) notFound()
     location = fallback
+  }
+
+  // For ZIP pages, update location name to include ZIP code
+  if (zipParsedBody) {
+    location = { ...location, name: `${location.name} ${zipParsedBody.zipCode}`, postal_code: zipParsedBody.zipCode }
   }
 
   // 3. Fetch providers (paginated) + total count in parallel
@@ -473,6 +506,37 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
     ...(itemListSchema ? [itemListSchema] : []),
   ]
 
+  // Detect if this is a ZIP page (new format: "new-york-10001")
+  const zipPageParsed = parseZipPageSlug(locationSlug)
+  const isZipPage = !!zipPageParsed
+
+  // ZIP-specific JSON-LD: LegalService schema with geo coordinates
+  if (zipPageParsed && cityData) {
+    const zipGeoSchema: Record<string, unknown> = {
+      '@context': 'https://schema.org',
+      '@type': 'LegalService',
+      name: `${service.name} Attorneys near ${zipPageParsed.zipCode}`,
+      description: `Find verified ${service.name.toLowerCase()} attorneys near ZIP code ${zipPageParsed.zipCode} in ${location.name}`,
+      url: `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}`,
+      areaServed: {
+        '@type': 'PostalAddress',
+        postalCode: zipPageParsed.zipCode,
+        addressLocality: location.name.replace(` ${zipPageParsed.zipCode}`, ''),
+        addressRegion: location.department_code || '',
+        addressCountry: 'US',
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: cityData.latitude || 0,
+        longitude: cityData.longitude || 0,
+      },
+      provider: {
+        '@id': `${SITE_URL}#organization`,
+      },
+    }
+    jsonLdSchemas.push(zipGeoSchema)
+  }
+
   // Cross-link to semantically related services (with fallback to popular)
   const relatedSlugs = relatedServices[specialtySlug] || []
   const otherServices = relatedSlugs.length > 0
@@ -481,9 +545,16 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
         return svc ? { slug: svc.slug, name: svc.name, icon: svc.icon } : null
       }).filter(Boolean) as { slug: string; name: string; icon: string }[]
     : popularServices.filter(s => s.slug !== specialtySlug).slice(0, 6)
+
+  // Fetch nearby ZIPs for ZIP pages, nearby cities for city pages
+  const nearbyZipsData = isZipPage
+    ? await getNearbyZips(zipPageParsed!.zipCode, 10, 12)
+    : []
   const nearbyCities = isZipSlug(locationSlug)
     ? await getNearbyZipCodes(locationSlug, 12)
-    : getNearbyCities(locationSlug, 12)
+    : isZipPage
+      ? getNearbyCities(zipPageParsed!.citySlug, 6) // For ZIP pages, also show nearby cities
+      : getNearbyCities(locationSlug, 12)
   const deptCities = location.department_code
     ? getCitiesByState(location.department_code).filter(v => v.slug !== locationSlug).slice(0, 10)
     : []
@@ -532,11 +603,20 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       {/* Visual breadcrumb for navigation and SEO */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 py-3">
-          <Breadcrumb items={[
-            { label: 'Services', href: '/services' },
-            { label: service.name, href: `/practice-areas/${specialtySlug}` },
-            { label: location.name },
-          ]} />
+          <Breadcrumb items={
+            isZipPage && zipPageParsed
+              ? [
+                  { label: 'Services', href: '/services' },
+                  { label: service.name, href: `/practice-areas/${specialtySlug}` },
+                  { label: location.name.replace(` ${zipPageParsed.zipCode}`, ''), href: `/practice-areas/${specialtySlug}/${zipPageParsed.citySlug}` },
+                  { label: zipPageParsed.zipCode },
+                ]
+              : [
+                  { label: 'Services', href: '/services' },
+                  { label: service.name, href: `/practice-areas/${specialtySlug}` },
+                  { label: location.name },
+                ]
+          } />
         </div>
       </div>
 
@@ -659,14 +739,47 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
         currentIntent="services"
       />
 
+      {/* Nearby ZIP codes for ZIP-level pages */}
+      {isZipPage && zipPageParsed && nearbyZipsData.length > 0 && (
+        <NearbyZipCodes
+          nearbyZips={nearbyZipsData}
+          specialtySlug={specialtySlug}
+          specialtyName={service.name}
+          cityName={location.name.replace(` ${zipPageParsed.zipCode}`, '')}
+          citySlug={zipPageParsed.citySlug}
+          stateCode={location.department_code || ''}
+          currentZipCode={zipPageParsed.zipCode}
+          className="bg-white"
+        />
+      )}
+
       {/* Nearby cities for internal linking mesh */}
       <NearbyCities
-        citySlug={locationSlug}
+        citySlug={isZipPage ? zipPageParsed!.citySlug : locationSlug}
         specialtySlug={specialtySlug}
         specialtyName={service.name}
         limit={8}
         className="bg-sand-50 border-t border-stone-200/40"
       />
+
+      {/* ZIP code pages — internal links from city to ZIP-level pages */}
+      {cityData?.zipCode && (
+        <section className="py-6 bg-white border-t border-stone-200/40" aria-label={`Browse ${service.name} by ZIP code in ${location.name}`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 className="text-sm font-semibold text-gray-700 mb-3">
+              Browse {service.name} by ZIP Code in {location.name}
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              <a
+                href={`/practice-areas/${specialtySlug}/zip/${cityData.zipCode}`}
+                className="inline-flex items-center gap-1 px-3 py-1.5 bg-sand-50 hover:bg-clay-50 text-stone-600 hover:text-clay-600 rounded text-sm border border-stone-200/40 hover:border-clay-200 transition-colors"
+              >
+                {cityData.zipCode}
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
 
       <StickyMobileCTA specialtySlug={specialtySlug} citySlug={locationSlug} attorneyCount={totalAttorneyCount} />
 

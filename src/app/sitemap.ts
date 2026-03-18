@@ -32,6 +32,13 @@ const TOP_HISPANIC_CITIES = 200
 // Total US counties
 const TOTAL_COUNTIES = 3_144
 
+// Phase 1 ZIP codes: top 500 per state batch (PA × ZIP batched by state)
+// We emit ZIPs grouped by state to keep sitemap files manageable.
+// 57 states × 10 top PAs × ~800 avg ZIPs/state ≈ batched at 5K per file.
+const TOP_PA_FOR_ZIPS = 10
+// Approximate total ZIP codes for sitemap sizing (Phase 1: top 500 ZIPs by population)
+const ZIP_PHASE1_COUNT = 500
+
 // ─── English intent prefixes ────────────────────────────────────────────────
 // URL prefix for each English intent
 const EN_INTENTS = ['attorneys', 'hire', 'cost', 'reviews', 'emergency'] as const
@@ -201,6 +208,10 @@ export async function generateSitemaps() {
 
     // ── Geographic hub sitemaps ─────────────────────────────────────────
     { id: 'counties-hub' },
+
+    // ── Type Z: ZIP code pages (PA × top ZIPs by population) ─────────
+    // Phase 1: top 10 PAs × top 500 ZIPs = 5,000 URLs per batch
+    ...batchIds('zip-pages', TOP_PA_FOR_ZIPS * ZIP_PHASE1_COUNT, BATCH_SIZE),
   ]
 
   // Provider/attorney sitemaps are served dynamically via /api/sitemap-attorneys
@@ -251,10 +262,19 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/situations`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/counties`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/industries`, lastModified: BUILD_DATE },
-      // Spanish index pages (routes live at /{intent-es}/ — no /es/ prefix)
-      // Note: these hub pages may not exist yet as actual routes;
-      // included for forward-compatibility when they are created.
+      // Spanish hub pages (routes live at /{intent-es}/ — no /es/ prefix)
+      { url: `${SITE_URL}/abogados`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/contratar`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/costo`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/opiniones`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/emergencia`, lastModified: BUILD_DATE },
     ]
+
+    // Spanish state hub pages (/abogados/{state})
+    const spanishStatePages: MetadataRoute.Sitemap = states.map((state) => ({
+      url: `${SITE_URL}/abogados/${state.slug}`,
+      lastModified: BUILD_DATE,
+    }))
 
     // Guide pages (editorial)
     const guideSlugs = [
@@ -301,7 +321,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
 
     return [
-      ...homepage, ...staticPages, ...guidePages, ...guideHubPages, ...questionPages,
+      ...homepage, ...staticPages, ...spanishStatePages,
+      ...guidePages, ...guideHubPages, ...questionPages,
       ...servicesIndex, ...servicePages,
       ...emergencyPages, ...pricingPages,
     ]
@@ -826,6 +847,31 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       })
     }
     return allUrls
+  }
+
+  // ── Type Z: ZIP code pages (PA × top ZIPs, Doctolib pattern) ─────
+  if (id.startsWith('zip-pages-')) {
+    const batchIndex = parseInt(id.slice('zip-pages-'.length), 10)
+    const offset = batchIndex * BATCH_SIZE
+    const topPAs = practiceAreas.slice(0, TOP_PA_FOR_ZIPS)
+
+    // Use TOP_ZIP_CODES from zip-pages module (curated major metro ZIPs)
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { TOP_ZIP_CODES } = require('@/lib/zip-pages')
+    const zipCodes = (TOP_ZIP_CODES as { zip: string; citySlug: string }[])
+      .slice(0, ZIP_PHASE1_COUNT)
+
+    const allUrls: MetadataRoute.Sitemap = []
+    for (const pa of topPAs) {
+      for (const { zip, citySlug } of zipCodes) {
+        // Doctolib pattern: /practice-areas/personal-injury/new-york-10001
+        allUrls.push({
+          url: `${SITE_URL}/practice-areas/${pa.slug}/${citySlug}-${zip}`,
+          priority: 0.5,
+        })
+      }
+    }
+    return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
   // ─── Fallback ─────────────────────────────────────────────────────────

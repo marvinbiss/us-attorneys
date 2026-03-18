@@ -112,6 +112,20 @@ const TOP_PA_SLUGS = new Set([
   'bancarrota', 'custodia-de-menores', 'derecho-laboral',
 ])
 
+// Hispanic-heavy metro areas — always linked from state pages
+const HISPANIC_METRO_CITIES = [
+  { name: 'Miami', slug: 'miami', stateCode: 'FL' },
+  { name: 'Los Angeles', slug: 'los-angeles', stateCode: 'CA' },
+  { name: 'Houston', slug: 'houston', stateCode: 'TX' },
+  { name: 'San Antonio', slug: 'san-antonio', stateCode: 'TX' },
+  { name: 'New York', slug: 'new-york', stateCode: 'NY' },
+  { name: 'Chicago', slug: 'chicago', stateCode: 'IL' },
+  { name: 'Phoenix', slug: 'phoenix', stateCode: 'AZ' },
+  { name: 'Dallas', slug: 'dallas', stateCode: 'TX' },
+  { name: 'El Paso', slug: 'el-paso', stateCode: 'TX' },
+  { name: 'San Diego', slug: 'san-diego', stateCode: 'CA' },
+]
+
 interface PageProps {
   params: Promise<{ especialidad: string }>
 }
@@ -217,17 +231,17 @@ export default async function AbogadosStatePage({ params }: PageProps) {
       <JsonLd data={[breadcrumbSchema, collectionSchema]} />
 
       {/* Breadcrumbs */}
-      <div className="bg-white border-b" lang="es">
-        <div className="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-500">
-          <Link href="/" className="hover:text-blue-600">Inicio</Link>
+      <div className="bg-white dark:bg-gray-900 border-b dark:border-gray-800" lang="es">
+        <div className="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+          <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400">Inicio</Link>
           <span className="mx-2">/</span>
-          <Link href="/abogados" className="hover:text-blue-600">Abogados</Link>
+          <Link href="/abogados" className="hover:text-blue-600 dark:hover:text-blue-400">Abogados</Link>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">{state.name}</span>
+          <span className="text-gray-900 dark:text-white">{state.name}</span>
         </div>
       </div>
 
-      <div className="min-h-screen bg-gray-50" lang="es">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950" lang="es">
         {/* Hero */}
         <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white overflow-hidden">
           <div className="absolute inset-0 opacity-[0.04]" style={{
@@ -298,7 +312,7 @@ export default async function AbogadosStatePage({ params }: PageProps) {
         {/* Top practice areas */}
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
               Especialidades mas buscadas en {state.name}
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
@@ -308,9 +322,9 @@ export default async function AbogadosStatePage({ params }: PageProps) {
                   <Link
                     key={pa.esSlug}
                     href={`/abogados/${pa.esSlug}/${firstCity}`}
-                    className="bg-white rounded-xl border-2 border-blue-100 p-4 text-center hover:border-blue-400 hover:shadow-md transition-all group"
+                    className="bg-white dark:bg-gray-900 rounded-xl border-2 border-blue-100 dark:border-blue-900 p-4 text-center hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-md transition-all group"
                   >
-                    <span className="font-semibold text-gray-800 group-hover:text-blue-600 text-sm block">
+                    <span className="font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 text-sm block">
                       {pa.esName}
                     </span>
                     <span className="text-xs text-gray-400 mt-1 block">en {state.code}</span>
@@ -321,26 +335,52 @@ export default async function AbogadosStatePage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* Hispanic metro city links */}
+        <section className="py-10 bg-white dark:bg-gray-900 border-t dark:border-gray-800">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="font-heading text-xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
+              Principales ciudades hispanas en EE.UU.
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+              Encuentre abogados que hablan espanol en las areas metropolitanas con mayor poblacion hispana.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+              {HISPANIC_METRO_CITIES.map((city) => (
+                <Link
+                  key={city.slug}
+                  href={`/abogados/${topPAs[0]?.esSlug || 'lesiones-personales'}/${city.slug}`}
+                  className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-md transition-all group text-center"
+                >
+                  <span className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 text-sm block">
+                    {city.name}
+                  </span>
+                  <span className="text-xs text-gray-400 mt-0.5 block">({city.stateCode})</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Cities in this state */}
         {stateCities.length > 0 && (
-          <section className="py-12 bg-white border-t">
+          <section className="py-12 bg-white dark:bg-gray-900 border-t dark:border-gray-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-emerald-600" />
+                <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/50 rounded-xl flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                 </div>
                 <div>
-                  <h2 className="font-heading text-2xl font-bold text-gray-900 tracking-tight">
+                  <h2 className="font-heading text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
                     Ciudades principales en {state.name}
                   </h2>
-                  <p className="text-sm text-gray-500">{stateCities.length} ciudades con abogados</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{stateCities.length} ciudades con abogados</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {stateCities.map((city: City) => (
-                  <div key={city.slug} className="bg-gray-50 rounded-xl border border-gray-200 p-4 hover:shadow-md hover:border-blue-300 transition-all">
-                    <h3 className="font-semibold text-gray-900 text-sm mb-2 flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-blue-500" />
+                  <div key={city.slug} className="bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition-all">
+                    <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-2 flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-blue-500 dark:text-blue-400" />
                       {city.name}
                     </h3>
                     <div className="flex flex-wrap gap-1.5">
@@ -368,18 +408,18 @@ export default async function AbogadosStatePage({ params }: PageProps) {
         )}
 
         {/* All practice areas by category */}
-        <section className="py-12 border-t">
+        <section className="py-12 border-t dark:border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 tracking-tight">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 dark:text-white mb-8 tracking-tight">
               Todas las especialidades legales en {state.name}
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Object.entries(paByCategory).map(([category, pas]) => {
                 const firstCity = stateCities[0]?.slug || 'houston'
                 return (
-                  <div key={category} className="bg-white rounded-2xl border border-gray-200 p-6">
-                    <h3 className="font-heading text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <Scale className="w-4 h-4 text-blue-600" />
+                  <div key={category} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6">
+                    <h3 className="font-heading text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                      <Scale className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                       {category}
                     </h3>
                     <div className="space-y-1.5">
@@ -387,9 +427,9 @@ export default async function AbogadosStatePage({ params }: PageProps) {
                         <Link
                           key={pa.esSlug}
                           href={`/abogados/${pa.esSlug}/${firstCity}`}
-                          className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors group"
+                          className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 py-1 transition-colors group"
                         >
-                          <ChevronRight className="w-3 h-3 text-gray-300 group-hover:text-blue-400" />
+                          <ChevronRight className="w-3 h-3 text-gray-300 dark:text-gray-600 group-hover:text-blue-400" />
                           {pa.esName}
                         </Link>
                       ))}
@@ -403,15 +443,15 @@ export default async function AbogadosStatePage({ params }: PageProps) {
 
         {/* Specialty x City cross-links for top combos */}
         {stateCities.length > 0 && (
-          <section className="py-12 bg-white border-t">
+          <section className="py-12 bg-white dark:bg-gray-900 border-t dark:border-gray-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="font-heading text-xl font-bold text-gray-900 mb-6 tracking-tight">
+              <h2 className="font-heading text-xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
                 Especialidades por ciudad en {state.name}
               </h2>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {stateCities.slice(0, 9).map((city: City) => (
-                  <div key={city.slug} className="bg-gray-50 rounded-2xl border border-gray-200 p-6">
-                    <h3 className="font-heading font-semibold text-gray-900 mb-3">Abogados en {city.name}</h3>
+                  <div key={city.slug} className="bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+                    <h3 className="font-heading font-semibold text-gray-900 dark:text-white mb-3">Abogados en {city.name}</h3>
                     <div className="flex flex-wrap gap-1.5">
                       {topPAs.map((pa) => (
                         <Link
@@ -434,9 +474,9 @@ export default async function AbogadosStatePage({ params }: PageProps) {
         )}
 
         {/* Other Spanish intent cross-links */}
-        <section className="py-12 border-t">
+        <section className="py-12 border-t dark:border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="font-heading text-xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
               Mas recursos en espanol para {state.name}
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
@@ -479,13 +519,13 @@ export default async function AbogadosStatePage({ params }: PageProps) {
 
         {/* Sibling states */}
         {siblingStates.length > 0 && (
-          <section className="py-12 bg-white border-t">
+          <section className="py-12 bg-white dark:bg-gray-900 border-t dark:border-gray-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                  <Building2 className="w-5 h-5 text-amber-600" />
+                <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/50 rounded-xl flex items-center justify-center">
+                  <Building2 className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                 </div>
-                <h2 className="font-heading text-xl font-bold text-gray-900 tracking-tight">
+                <h2 className="font-heading text-xl font-bold text-gray-900 dark:text-white tracking-tight">
                   Otros estados en {state.region}
                 </h2>
               </div>
@@ -494,7 +534,7 @@ export default async function AbogadosStatePage({ params }: PageProps) {
                   <Link
                     key={s.slug}
                     href={`/abogados/${s.slug}`}
-                    className="bg-gray-50 border border-gray-200 hover:bg-blue-50 hover:border-blue-200 text-gray-700 hover:text-blue-700 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                    className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:border-blue-200 dark:hover:border-blue-600 text-gray-700 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-400 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
                   >
                     {s.name} ({s.code})
                   </Link>
@@ -532,15 +572,15 @@ export default async function AbogadosStatePage({ params }: PageProps) {
         </section>
 
         {/* Navigation */}
-        <section className="py-10 bg-white border-t">
+        <section className="py-10 bg-white dark:bg-gray-900 border-t dark:border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Navegacion</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Navegacion</h2>
             <div className="flex flex-wrap gap-4 text-sm">
-              <Link href="/abogados" className="text-blue-600 hover:text-blue-800">Todos los abogados</Link>
-              <Link href={`/states/${stateSlug}`} className="text-blue-600 hover:text-blue-800">{state.name} (English)</Link>
-              <Link href="/states" className="text-blue-600 hover:text-blue-800">All States</Link>
-              <Link href="/quotes" className="text-blue-600 hover:text-blue-800">Consulta gratis</Link>
-              <Link href="/contact" className="text-blue-600 hover:text-blue-800">Contacto</Link>
+              <Link href="/abogados" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">Todos los abogados</Link>
+              <Link href={`/states/${stateSlug}`} className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">{state.name} (English)</Link>
+              <Link href="/states" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">All States</Link>
+              <Link href="/quotes" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">Consulta gratis</Link>
+              <Link href="/contact" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">Contacto</Link>
             </div>
           </div>
         </section>
@@ -548,9 +588,9 @@ export default async function AbogadosStatePage({ params }: PageProps) {
         {/* Editorial methodology */}
         <section className="pb-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6">
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">Metodologia editorial</h3>
-              <p className="text-xs text-gray-500 leading-relaxed">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Metodologia editorial</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
                 Los datos de abogados en {state.name} provienen de fuentes oficiales incluyendo el colegio de abogados de {state.name}, registros publicos y fuentes gubernamentales. US Attorneys es un directorio independiente — no proporcionamos servicios legales directamente.
               </p>
             </div>

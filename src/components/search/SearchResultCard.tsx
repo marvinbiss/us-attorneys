@@ -14,6 +14,7 @@ import {
   ChevronDown,
   Globe,
   MessageCircle,
+  Scale,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { AvailabilityBadge } from '@/components/ui/AvailabilityBadge'
@@ -21,6 +22,7 @@ import { VerifiedAttorneyBadge } from '@/components/ui/VerifiedBadge'
 import { ResponseTimeBadge } from '@/components/ui/ResponseTimeBadge'
 import { SubscriptionBadge } from '@/components/ui/SubscriptionBadge'
 import { ConsultationModal } from '@/components/booking/ConsultationModal'
+import { useCompare } from '@/components/compare/CompareProvider'
 import { getSubscriptionTier } from '@/lib/search/ranking'
 import type { AvailabilitySlot } from '@/lib/availability'
 import type { SubscriptionTier } from '@/lib/billing/cpa-model'
@@ -94,6 +96,34 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
 export function SearchResultCard({ attorney }: SearchResultCardProps) {
   const [showAllPAs, setShowAllPAs] = useState(false)
   const [showConsultation, setShowConsultation] = useState(false)
+  const { addToCompare, removeFromCompare, isInCompare, isFull } = useCompare()
+  const inCompare = isInCompare(attorney.id)
+
+  const handleCompareToggle = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (inCompare) {
+      removeFromCompare(attorney.id)
+    } else {
+      addToCompare({
+        id: attorney.id,
+        name: attorney.name,
+        slug: attorney.slug,
+        address_city: attorney.address_city,
+        address_state: attorney.address_state,
+        is_verified: attorney.is_verified,
+        rating_average: attorney.rating_average,
+        review_count: attorney.review_count,
+        specialty_name: attorney.specialty_name || attorney.specialty?.name,
+        years_experience: attorney.years_experience,
+        consultation_fee: attorney.consultation_fee,
+        languages: attorney.languages,
+        response_time_hours: attorney.response_time_hours,
+        practice_areas: attorney.practice_areas,
+        distance_miles: attorney.distance_miles,
+      })
+    }
+  }
 
   const tier = attorney.subscription_tier || getSubscriptionTier(attorney.boost_level)
   const isPro = tier === 'pro'
@@ -248,7 +278,28 @@ export function SearchResultCard({ attorney }: SearchResultCardProps) {
                   )}
                 </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-blue-500 dark:group-hover:text-blue-400 flex-shrink-0 mt-1 transition-colors" />
+              <div className="flex items-center gap-1.5 flex-shrink-0 mt-1">
+                <button
+                  type="button"
+                  onClick={handleCompareToggle}
+                  disabled={!inCompare && isFull}
+                  className={cn(
+                    'p-1.5 rounded-lg border transition-all duration-200',
+                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1',
+                    inCompare
+                      ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-700'
+                      : isFull
+                        ? 'bg-gray-50 dark:bg-gray-800 text-gray-300 dark:text-gray-600 border-gray-200 dark:border-gray-700 cursor-not-allowed'
+                        : 'bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-500 border-gray-200 dark:border-gray-700 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                  )}
+                  aria-label={inCompare ? `Remove ${attorney.name} from comparison` : `Add ${attorney.name} to comparison`}
+                  aria-pressed={inCompare}
+                  title={inCompare ? 'Remove from compare' : isFull ? 'Compare list full (max 4)' : 'Add to compare'}
+                >
+                  <Scale className="w-4 h-4" />
+                </button>
+                <ChevronRight className="w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors" />
+              </div>
             </div>
 
             {/* Rating */}

@@ -251,15 +251,15 @@ export default function AbogadosHubPage() {
       <JsonLd data={[breadcrumbSchema, collectionSchema]} />
 
       {/* Breadcrumbs */}
-      <div className="bg-white border-b" lang="es">
-        <div className="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-500">
-          <Link href="/" className="hover:text-blue-600">Inicio</Link>
+      <div className="bg-white dark:bg-gray-900 border-b dark:border-gray-800" lang="es">
+        <div className="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+          <Link href="/" className="hover:text-blue-600 dark:hover:text-blue-400">Inicio</Link>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">Abogados</span>
+          <span className="text-gray-900 dark:text-white">Abogados</span>
         </div>
       </div>
 
-      <div className="min-h-screen bg-gray-50" lang="es">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950" lang="es">
         {/* Hero */}
         <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 text-white overflow-hidden">
           <div className="absolute inset-0 opacity-[0.04]" style={{
@@ -272,7 +272,7 @@ export default function AbogadosHubPage() {
               <span className="text-blue-200 text-sm">Servicio completo en espanol</span>
             </div>
             <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight">
-              Abogados en Estados Unidos
+              Encuentre Abogados que Hablan Espanol
             </h1>
             <p className="text-lg md:text-xl text-blue-100 max-w-3xl leading-relaxed">
               Directorio completo de abogados verificados por el colegio de abogados. {ALL_PRACTICE_AREAS.length} especialidades legales en los 50 estados. Compare perfiles, lea opiniones y solicite una consulta gratis.
@@ -329,9 +329,9 @@ export default function AbogadosHubPage() {
         </section>
 
         {/* Quick city links */}
-        <section className="py-10 border-b">
+        <section className="py-10 border-b dark:border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
               Buscar abogados por ciudad
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
@@ -339,15 +339,15 @@ export default function AbogadosHubPage() {
                 <Link
                   key={city.slug}
                   href={`/abogados/${city.slug}`}
-                  className="bg-white rounded-lg border border-gray-200 p-4 hover:border-blue-300 hover:shadow-md transition-all group"
+                  className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-4 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-md transition-all group"
                 >
                   <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-gray-400 group-hover:text-blue-600" />
-                    <span className="font-medium text-gray-900 group-hover:text-blue-600 truncate text-sm">
+                    <MapPin className="w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400" />
+                    <span className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate text-sm">
                       {city.name}
                     </span>
                   </div>
-                  <span className="text-xs text-gray-500 mt-1 block">({city.stateCode})</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 mt-1 block">({city.stateCode})</span>
                 </Link>
               ))}
             </div>
@@ -357,15 +357,15 @@ export default function AbogadosHubPage() {
         {/* Practice areas by category */}
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 tracking-tight">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 dark:text-white mb-8 tracking-tight">
               Especialidades legales en espanol
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {PA_CATEGORIES.map((cat) => (
-                <div key={cat.category} className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-sm transition-shadow">
-                  <h3 className="font-heading text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <span className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Scale className="w-4 h-4 text-blue-600" />
+                <div key={cat.category} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 hover:shadow-sm transition-shadow">
+                  <h3 className="font-heading text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                    <span className="w-8 h-8 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center">
+                      <Scale className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     </span>
                     {cat.category}
                   </h3>
@@ -374,9 +374,9 @@ export default function AbogadosHubPage() {
                       <Link
                         key={pa.esSlug}
                         href={`/abogados/${pa.esSlug}/houston`}
-                        className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1.5 transition-colors group"
+                        className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 py-1.5 transition-colors group"
                       >
-                        <ChevronRight className="w-3 h-3 text-gray-300 group-hover:text-blue-400" />
+                        <ChevronRight className="w-3 h-3 text-gray-300 dark:text-gray-600 group-hover:text-blue-400" />
                         {pa.esName}
                       </Link>
                     ))}
@@ -388,12 +388,12 @@ export default function AbogadosHubPage() {
         </section>
 
         {/* States listing */}
-        <section className="py-12 bg-white border-t">
+        <section className="py-12 bg-white dark:bg-gray-900 border-t dark:border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-4 tracking-tight">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
               Abogados por estado
             </h2>
-            <p className="text-gray-600 mb-8 max-w-2xl">
+            <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl">
               Encuentre abogados que hablan espanol en cada estado. Los estados con mayor poblacion hispana aparecen primero.
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -405,17 +405,17 @@ export default function AbogadosHubPage() {
                     href={`/abogados/${state.slug}`}
                     className={`rounded-xl p-4 transition-all group ${
                       isHighHispanic
-                        ? 'bg-blue-50 border-2 border-blue-200 hover:border-blue-400 hover:shadow-md'
-                        : 'bg-gray-50 border border-gray-200 hover:border-blue-300 hover:shadow-md'
+                        ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-md'
+                        : 'bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-md'
                     }`}
                   >
                     <div className="flex items-center gap-2">
                       <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${
-                        isHighHispanic ? 'bg-blue-200 text-blue-800' : 'bg-gray-200 text-gray-700'
+                        isHighHispanic ? 'bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-200' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                       }`}>
                         {state.code}
                       </span>
-                      <span className="font-medium text-gray-900 group-hover:text-blue-600 text-sm truncate">
+                      <span className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 text-sm truncate">
                         {state.name}
                       </span>
                     </div>
@@ -427,17 +427,17 @@ export default function AbogadosHubPage() {
         </section>
 
         {/* Popular specialty + city combinations */}
-        <section className="py-12 border-t">
+        <section className="py-12 border-t dark:border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="font-heading text-2xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
               Busquedas populares
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Lesiones Personales</h3>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4">Lesiones Personales</h3>
                 <div className="space-y-1.5">
                   {TOP_HISPANIC_CITIES.slice(0, 8).map((city) => (
-                    <Link key={`pi-${city.slug}`} href={`/abogados/lesiones-personales/${city.slug}`} className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                    <Link key={`pi-${city.slug}`} href={`/abogados/lesiones-personales/${city.slug}`} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
                       Lesiones personales en {city.name}
                     </Link>
@@ -445,10 +445,10 @@ export default function AbogadosHubPage() {
                 </div>
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Inmigracion</h3>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4">Inmigracion</h3>
                 <div className="space-y-1.5">
                   {TOP_HISPANIC_CITIES.slice(0, 8).map((city) => (
-                    <Link key={`imm-${city.slug}`} href={`/abogados/inmigracion/${city.slug}`} className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                    <Link key={`imm-${city.slug}`} href={`/abogados/inmigracion/${city.slug}`} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
                       Inmigracion en {city.name}
                     </Link>
@@ -456,10 +456,10 @@ export default function AbogadosHubPage() {
                 </div>
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">Defensa Criminal</h3>
+                <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 uppercase tracking-wider mb-4">Defensa Criminal</h3>
                 <div className="space-y-1.5">
                   {TOP_HISPANIC_CITIES.slice(0, 8).map((city) => (
-                    <Link key={`cd-${city.slug}`} href={`/abogados/defensa-criminal/${city.slug}`} className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 py-1 transition-colors">
+                    <Link key={`cd-${city.slug}`} href={`/abogados/defensa-criminal/${city.slug}`} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 py-1 transition-colors">
                       <ChevronRight className="w-3 h-3" />
                       Defensa criminal en {city.name}
                     </Link>
@@ -471,20 +471,20 @@ export default function AbogadosHubPage() {
         </section>
 
         {/* Other Spanish intents cross-links */}
-        <section className="py-12 bg-white border-t">
+        <section className="py-12 bg-white dark:bg-gray-900 border-t dark:border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-xl font-bold text-gray-900 mb-6 tracking-tight">
+            <h2 className="font-heading text-xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight">
               Mas recursos en espanol
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-gray-50 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 mb-3 text-sm">Costo de abogados</h3>
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-5">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3 text-sm">Costo de abogados</h3>
                 <div className="space-y-1.5">
                   {['lesiones-personales', 'inmigracion', 'divorcio', 'defensa-criminal', 'bancarrota'].map((slug) => {
                     const pa = ALL_PRACTICE_AREAS.find(p => p.esSlug === slug)
                     if (!pa) return null
                     return (
-                      <Link key={`cost-${slug}`} href={`/costo/${slug}/houston`} className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 transition-colors">
+                      <Link key={`cost-${slug}`} href={`/costo/${slug}/houston`} className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                         <ChevronRight className="w-3 h-3" />
                         Costo de {pa.esName.toLowerCase()}
                       </Link>
@@ -492,14 +492,14 @@ export default function AbogadosHubPage() {
                   })}
                 </div>
               </div>
-              <div className="bg-gray-50 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 mb-3 text-sm">Opiniones de abogados</h3>
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-5">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3 text-sm">Opiniones de abogados</h3>
                 <div className="space-y-1.5">
                   {['lesiones-personales', 'inmigracion', 'divorcio', 'defensa-criminal', 'bancarrota'].map((slug) => {
                     const pa = ALL_PRACTICE_AREAS.find(p => p.esSlug === slug)
                     if (!pa) return null
                     return (
-                      <Link key={`rev-${slug}`} href={`/opiniones/${slug}/houston`} className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 transition-colors">
+                      <Link key={`rev-${slug}`} href={`/opiniones/${slug}/houston`} className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                         <ChevronRight className="w-3 h-3" />
                         Opiniones de {pa.esName.toLowerCase()}
                       </Link>
@@ -507,14 +507,14 @@ export default function AbogadosHubPage() {
                   })}
                 </div>
               </div>
-              <div className="bg-gray-50 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 mb-3 text-sm">Contratar abogados</h3>
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-5">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3 text-sm">Contratar abogados</h3>
                 <div className="space-y-1.5">
                   {['lesiones-personales', 'inmigracion', 'divorcio', 'defensa-criminal', 'bancarrota'].map((slug) => {
                     const pa = ALL_PRACTICE_AREAS.find(p => p.esSlug === slug)
                     if (!pa) return null
                     return (
-                      <Link key={`hire-${slug}`} href={`/contratar/${slug}/houston`} className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 transition-colors">
+                      <Link key={`hire-${slug}`} href={`/contratar/${slug}/houston`} className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                         <ChevronRight className="w-3 h-3" />
                         Contratar {pa.esName.toLowerCase()}
                       </Link>
@@ -522,14 +522,14 @@ export default function AbogadosHubPage() {
                   })}
                 </div>
               </div>
-              <div className="bg-gray-50 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 mb-3 text-sm">Emergencia legal</h3>
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-5">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-3 text-sm">Emergencia legal</h3>
                 <div className="space-y-1.5">
                   {['lesiones-personales', 'defensa-criminal', 'violencia-domestica', 'dui-dwi', 'inmigracion'].map((slug) => {
                     const pa = ALL_PRACTICE_AREAS.find(p => p.esSlug === slug)
                     if (!pa) return null
                     return (
-                      <Link key={`emer-${slug}`} href={`/emergencia/${slug}/houston`} className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 transition-colors">
+                      <Link key={`emer-${slug}`} href={`/emergencia/${slug}/houston`} className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                         <ChevronRight className="w-3 h-3" />
                         Emergencia: {pa.esName.toLowerCase()}
                       </Link>
@@ -542,34 +542,34 @@ export default function AbogadosHubPage() {
         </section>
 
         {/* Informational / why us section */}
-        <section className="py-12 border-t">
+        <section className="py-12 border-t dark:border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">Como funciona nuestro directorio</h2>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Como funciona nuestro directorio</h2>
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-7 h-7 text-blue-600" />
+                <div className="w-14 h-14 bg-blue-100 dark:bg-blue-900/50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-7 h-7 text-blue-600 dark:text-blue-400" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Abogados verificados</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Abogados verificados</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                   Todos los abogados en nuestro directorio estan verificados por el colegio de abogados de su estado. Puede confiar en sus credenciales y licencias.
                 </p>
               </div>
               <div className="text-center">
-                <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-7 h-7 text-emerald-600" />
+                <div className="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Users className="w-7 h-7 text-emerald-600 dark:text-emerald-400" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Servicio en espanol</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Servicio en espanol</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                   Encuentre abogados que hablan espanol y entienden las necesidades de la comunidad hispana. Servicio bilingue disponible.
                 </p>
               </div>
               <div className="text-center">
-                <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Scale className="w-7 h-7 text-amber-600" />
+                <div className="w-14 h-14 bg-amber-100 dark:bg-amber-900/50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Scale className="w-7 h-7 text-amber-600 dark:text-amber-400" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">Consulta gratuita</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Consulta gratuita</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
                   Solicite una consulta gratuita sin compromiso. Compare perfiles, lea opiniones de otros clientes y tome una decision informada.
                 </p>
               </div>
@@ -605,17 +605,17 @@ export default function AbogadosHubPage() {
         </section>
 
         {/* SEO footer links */}
-        <section className="py-10 bg-white border-t">
+        <section className="py-10 bg-white dark:bg-gray-900 border-t dark:border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Navegacion</h2>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Navegacion</h2>
             <div className="flex flex-wrap gap-4 text-sm">
-              <Link href="/" className="text-blue-600 hover:text-blue-800">Inicio</Link>
-              <Link href="/practice-areas" className="text-blue-600 hover:text-blue-800">Practice Areas (English)</Link>
-              <Link href="/states" className="text-blue-600 hover:text-blue-800">States</Link>
-              <Link href="/cities" className="text-blue-600 hover:text-blue-800">Cities</Link>
-              <Link href="/quotes" className="text-blue-600 hover:text-blue-800">Consulta gratis</Link>
-              <Link href="/faq" className="text-blue-600 hover:text-blue-800">FAQ</Link>
-              <Link href="/contact" className="text-blue-600 hover:text-blue-800">Contacto</Link>
+              <Link href="/" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">Inicio</Link>
+              <Link href="/practice-areas" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">Practice Areas (English)</Link>
+              <Link href="/states" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">States</Link>
+              <Link href="/cities" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">Cities</Link>
+              <Link href="/quotes" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">Consulta gratis</Link>
+              <Link href="/faq" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">FAQ</Link>
+              <Link href="/contact" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">Contacto</Link>
             </div>
           </div>
         </section>
@@ -623,9 +623,9 @@ export default function AbogadosHubPage() {
         {/* Editorial methodology */}
         <section className="pb-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6">
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">Metodologia editorial</h3>
-              <p className="text-xs text-gray-500 leading-relaxed">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6">
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Metodologia editorial</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
                 Los datos de abogados provienen de fuentes oficiales incluyendo colegios de abogados estatales, registros publicos y fuentes de datos gubernamentales. US Attorneys es un directorio independiente — no proporcionamos servicios legales directamente. Toda la informacion es verificada y actualizada regularmente.
               </p>
             </div>

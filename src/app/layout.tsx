@@ -7,6 +7,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { MobileMenuProvider } from '@/contexts/MobileMenuContext'
+import { CompareProviderWrapper } from '@/components/compare/CompareProvider'
 import { ThemeProvider } from '@/lib/theme/theme-provider'
 import { getOrganizationSchema, getWebsiteSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
@@ -47,6 +48,10 @@ const WebVitals = dynamic(
 const PageViewTracker = dynamic(() => import('@/components/PageViewTracker'), {
   ssr: false,
 })
+const CompareFloatingButton = dynamic(
+  () => import('@/components/compare/CompareFloatingButton'),
+  { ssr: false }
+)
 
 // Viewport configuration - Primary brand color
 export const viewport: Viewport = {
@@ -264,6 +269,7 @@ fbq('track', 'PageView');`}
         <PageViewTracker />
         <ThemeProvider>
         <MobileMenuProvider>
+        <CompareProviderWrapper>
           <Header attorneyCount={attorneyCount} />
           <main id="main-content" tabIndex={-1} className="pb-16 pb-[calc(4rem+env(safe-area-inset-bottom,0px))] md:pb-0 outline-none">
             <Suspense fallback={<PageSkeleton />}>
@@ -274,6 +280,8 @@ fbq('track', 'PageView');`}
           <MobileBottomNav />
           <ServiceWorkerRegistration />
           <CookieConsent />
+          <CompareFloatingButton />
+        </CompareProviderWrapper>
         </MobileMenuProvider>
         </ThemeProvider>
       </body>
