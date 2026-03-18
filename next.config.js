@@ -53,10 +53,13 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              // unsafe-eval only in development (Next.js HMR/Fast Refresh); stripped in production
+              // Static fallback CSP for assets not processed by middleware.
+              // Middleware provides per-request nonce + strict-dynamic; this fallback
+              // must NOT include 'unsafe-inline' for script-src in production.
+              // Development needs 'unsafe-eval' for Next.js HMR/Fast Refresh.
               process.env.NODE_ENV === 'development'
                 ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://connect.facebook.net https://t.contentsquare.net"
-                : "script-src 'self' 'unsafe-inline' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://connect.facebook.net https://t.contentsquare.net",
+                : "script-src 'self' https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com https://googleads.g.doubleclick.net https://www.googleadservices.com https://connect.facebook.net https://t.contentsquare.net",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: blob: https: http:",
               "font-src 'self' https://fonts.gstatic.com data:",
