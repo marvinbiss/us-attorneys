@@ -26,6 +26,7 @@ import { ShareButton } from '@/components/ui/ShareButton'
 import { useFavorites } from '@/hooks/useFavorites'
 import { ClaimButton } from '@/components/attorney/ClaimButton'
 import type { LegacyAttorney } from '@/types/legacy'
+import type { AttorneyEnrichmentData } from '@/lib/attorney-enrichment'
 import { BookingFunnel } from '@/lib/analytics/tracking'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 
@@ -106,6 +107,12 @@ const EndorseButton = dynamic(
   { ssr: false }
 )
 
+// Attorney credentials (education, awards, publications, disciplinary)
+const AttorneyCredentials = dynamic(
+  () => import('@/components/attorney/AttorneyCredentials').then(mod => ({ default: mod.AttorneyCredentials })),
+  { loading: () => <SectionSkeleton height="h-64" /> }
+)
+
 // Business verification card
 const AttorneyBusinessCard = dynamic(
   () => import('@/components/attorney/AttorneyBusinessCard').then(mod => ({ default: mod.AttorneyBusinessCard })),
@@ -153,6 +160,7 @@ interface AttorneyPageClientProps {
   trustScoreBreakdown?: Record<string, number>
   endorsementCount?: number
   attorneySpecialties?: AttorneySpecialty[]
+  enrichment?: AttorneyEnrichmentData
 }
 
 export default function AttorneyPageClient({
@@ -166,6 +174,7 @@ export default function AttorneyPageClient({
   trustScoreBreakdown,
   endorsementCount = 0,
   attorneySpecialties = [],
+  enrichment,
 }: AttorneyPageClientProps) {
   const reducedMotion = useReducedMotion()
   const attorney = initialAttorney
@@ -322,6 +331,11 @@ export default function AttorneyPageClient({
               <section aria-label="About">
                 <AttorneyAbout attorney={attorney} />
               </section>
+              {enrichment && (
+                <section aria-label="Credentials and trust signals">
+                  <AttorneyCredentials enrichment={enrichment} />
+                </section>
+              )}
               <section aria-label="Why choose this attorney">
                 <AttorneyWhyChoose attorney={attorney} />
               </section>

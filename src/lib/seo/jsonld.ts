@@ -399,6 +399,10 @@ export function getAttorneySchema(params: {
   website?: string
   latitude?: number
   longitude?: number
+  // Enrichment fields (migration 429)
+  education?: { institution: string; degree: string; graduationYear?: number | null }[]
+  awards?: string[]
+  barAdmissions?: { state: string; barNumber: string }[]
 }) {
   const attorneyEntity = {
     '@type': ['Attorney', 'LegalService'],
@@ -497,16 +501,58 @@ export function getAttorneySchema(params: {
       addressRegion: params.state,
       addressCountry: 'US',
     },
-    ...(params.barNumber && {
-      hasCredential: {
-        '@type': 'EducationalOccupationalCredential',
-        credentialCategory: 'Bar Admission',
-        recognizedBy: {
-          '@type': 'Organization',
-          name: `${params.barState || params.state} State Bar`,
-        },
-        identifier: params.barNumber,
-      },
+    // hasCredential: bar admissions (primary + additional)
+    ...(() => {
+      const credentials: Record<string, unknown>[] = []
+      // Primary bar admission
+      if (params.barNumber) {
+        credentials.push({
+          '@type': 'EducationalOccupationalCredential',
+          credentialCategory: 'Bar Admission',
+          recognizedBy: {
+            '@type': 'Organization',
+            name: `${params.barState || params.state} State Bar`,
+          },
+          identifier: params.barNumber,
+        })
+      }
+      // Additional bar admissions from enrichment
+      if (params.barAdmissions && params.barAdmissions.length > 0) {
+        for (const ba of params.barAdmissions) {
+          // Skip if same as primary
+          if (ba.barNumber === params.barNumber && ba.state === (params.barState || params.state)) continue
+          credentials.push({
+            '@type': 'EducationalOccupationalCredential',
+            credentialCategory: 'Bar Admission',
+            recognizedBy: {
+              '@type': 'Organization',
+              name: `${ba.state} State Bar`,
+            },
+            identifier: ba.barNumber,
+          })
+        }
+      }
+      return credentials.length > 0
+        ? { hasCredential: credentials.length === 1 ? credentials[0] : credentials }
+        : {}
+    })(),
+    // alumniOf: education records from enrichment (migration 429)
+    ...(params.education && params.education.length > 0 && {
+      alumniOf: params.education.map(edu => ({
+        '@type': 'EducationalOrganization',
+        name: edu.institution,
+        ...(edu.degree && {
+          hasCredential: {
+            '@type': 'EducationalOccupationalCredential',
+            credentialCategory: edu.degree,
+            ...(edu.graduationYear && { dateCreated: `${edu.graduationYear}` }),
+          },
+        }),
+      })),
+    }),
+    // award: professional recognitions from enrichment (migration 429)
+    ...(params.awards && params.awards.length > 0 && {
+      award: params.awards,
     }),
     ...(params.languages && params.languages.length > 0 && {
       knowsLanguage: params.languages.map(lang => ({

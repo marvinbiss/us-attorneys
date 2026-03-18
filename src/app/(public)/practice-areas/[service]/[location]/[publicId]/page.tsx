@@ -8,6 +8,8 @@ import AttorneyInternalLinks from '@/components/attorney/AttorneyInternalLinks'
 import { Review } from '@/components/attorney'
 import type { LegacyAttorney } from '@/types/legacy'
 import type { Service, Location } from '@/types'
+import { getAttorneyEnrichment } from '@/lib/attorney-enrichment'
+import type { AttorneyEnrichmentData } from '@/lib/attorney-enrichment'
 import { getServiceImage } from '@/lib/data/images'
 
 /** Raw provider row from select('*') — includes all DB columns the mapper reads */
@@ -543,21 +545,24 @@ export default async function AttorneyPage({ params }: PageProps) {
   // Convert to Attorney format
   const attorney = convertToAttorney(provider, service, location, specialtySlug)
 
-  // Fetch reviews, similar attorneys, and specialties in parallel (graceful degradation)
+  // Fetch reviews, similar attorneys, specialties, and enrichment in parallel (graceful degradation)
   let reviews: Review[] = []
   let similarAttorneys: Awaited<ReturnType<typeof getSimilarAttorneys>> = []
   let attorneySpecialties: Array<{ id: string; name: string; slug: string }> = []
+  let enrichment: AttorneyEnrichmentData = { education: [], awards: [], publications: [], disciplinary: [] }
   try {
-    const [revs, similar, specs] = await Promise.all([
+    const [revs, similar, specs, enrich] = await Promise.all([
       getAttorneyReviews(provider.id, service?.name || attorney.specialty),
       getSimilarAttorneys(provider.id, attorney.specialty, attorney.postal_code),
       getAttorneySpecialtiesList(provider.id),
+      getAttorneyEnrichment(provider.id),
     ])
     reviews = revs
     similarAttorneys = similar
     attorneySpecialties = specs
+    enrichment = enrich
   } catch {
-    // Graceful degradation — page renders without reviews/similar attorneys
+    // Graceful degradation — page renders without reviews/similar attorneys/enrichment
   }
 
   const specialtyName = service?.name || attorney.specialty
@@ -593,6 +598,7 @@ export default async function AttorneyPage({ params }: PageProps) {
         trustScoreBreakdown={provider.trust_score_breakdown ?? undefined}
         endorsementCount={provider.endorsement_count ?? 0}
         attorneySpecialties={attorneySpecialties}
+        enrichment={enrichment}
       />
 
       {/* Back link to service+location listing */}
