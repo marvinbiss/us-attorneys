@@ -96,7 +96,7 @@ export default function CallbackRequest({ specialtySlug, cityName }: CallbackReq
         <Phone className="w-4 h-4 text-amber-600" />
         <span className="text-sm font-semibold text-amber-900">Get a free callback</span>
       </div>
-      <form onSubmit={handleSubmit} className="flex gap-2">
+      <form onSubmit={handleSubmit} className="flex gap-2" aria-busy={loading}>
         <input
           type="tel"
           inputMode="tel"

@@ -50,7 +50,7 @@ export function ReviewResponseForm({ reviewId }: ReviewResponseFormProps) {
   }
 
   return (
-    <div className="mt-4 space-y-3">
+    <div className="mt-4 space-y-3" aria-busy={isLoading}>
       {error && (
         <div className="p-2 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
           {error}
@@ -62,6 +62,7 @@ export function ReviewResponseForm({ reviewId }: ReviewResponseFormProps) {
         onChange={(e) => setResponse(e.target.value)}
         placeholder="Your response..."
         rows={3}
+        disabled={isLoading}
       />
 
       <div className="flex gap-2">
@@ -71,7 +72,7 @@ export function ReviewResponseForm({ reviewId }: ReviewResponseFormProps) {
         >
           {isLoading ? 'Publishing...' : 'Publish'}
         </Button>
-        <Button variant="ghost" onClick={() => setIsOpen(false)}>
+        <Button variant="ghost" onClick={() => setIsOpen(false)} disabled={isLoading}>
           Cancel
         </Button>
       </div>

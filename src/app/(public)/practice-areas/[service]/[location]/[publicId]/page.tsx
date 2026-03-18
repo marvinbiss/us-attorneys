@@ -57,6 +57,7 @@ interface ProviderRecord {
   trust_score_breakdown?: Record<string, number> | null
   endorsement_count?: number | null
 }
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
 import { SITE_URL } from '@/lib/seo/config'
 import { hashCode } from '@/lib/seo/location-content'
 import { getNeighborhoodBySlug, practiceAreas as staticPracticeAreas, getStateByCode } from '@/lib/data/usa'
@@ -541,13 +542,27 @@ export default async function AttorneyPage({ params }: PageProps) {
     // Graceful degradation — page renders without reviews/similar attorneys
   }
 
+  const specialtyName = service?.name || attorney.specialty
+  const cityName = attorney.city
+
   return (
     <>
       {/* Preload hints */}
       <link rel="dns-prefetch" href="//umjmbdbwcsxrvfqktiui.supabase.co" />
 
-      {/* JSON-LD structured data (BreadcrumbList, LocalBusiness, ProfilePage, etc.)
-           is rendered by AttorneySchema inside AttorneyPageClient — no duplicates here */}
+      {/* Breadcrumbs (visual + JSON-LD) */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Breadcrumbs
+            items={[
+              { label: 'Practice Areas', href: '/practice-areas' },
+              { label: specialtyName, href: `/practice-areas/${specialtySlug}` },
+              ...(cityName ? [{ label: cityName, href: `/practice-areas/${specialtySlug}/${locationSlug}` }] : []),
+              { label: attorney.business_name || 'Attorney' },
+            ]}
+          />
+        </div>
+      </div>
 
       <AttorneyPageClient
         initialAttorney={attorney}

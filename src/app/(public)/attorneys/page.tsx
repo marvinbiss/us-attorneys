@@ -2,9 +2,7 @@ import { Metadata } from 'next'
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 import { MapPin, Star, Phone, Search, Users, Building2 } from 'lucide-react'
-import Breadcrumb from '@/components/Breadcrumb'
-import JsonLd from '@/components/JsonLd'
-import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAttorneyUrl, getAvatarColor } from '@/lib/utils'
 
@@ -84,20 +82,18 @@ export default async function ArtisansPage() {
   const { providers, count, error } = await getRecentProviders(60)
   const topServices = practiceAreas.slice(0, 15)
 
-  const breadcrumbItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Attorneys' },
-  ]
-
-  const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'Attorneys', url: '/attorneys' },
-  ])
-
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
-      <Breadcrumb items={breadcrumbItems} />
+      {/* Breadcrumbs (visual + JSON-LD) */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <Breadcrumbs
+            items={[
+              { label: 'Attorneys' },
+            ]}
+          />
+        </div>
+      </div>
 
       {/* Hero */}
       <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white py-16 md:py-24 overflow-hidden">

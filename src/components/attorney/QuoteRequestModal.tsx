@@ -250,7 +250,7 @@ export function QuoteRequestModal({ attorney, isOpen, onClose }: QuoteRequestMod
                   </button>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+                <form onSubmit={handleSubmit} className="space-y-4" noValidate aria-busy={isSubmitting}>
                   {serverError && (
                     <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700" role="alert">
                       {serverError}

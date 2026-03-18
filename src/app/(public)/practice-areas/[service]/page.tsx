@@ -5,12 +5,12 @@ import { notFound } from 'next/navigation'
 import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench, FileText } from 'lucide-react'
 import { getSpecialtyBySlug, getLocationsByService, getAttorneysByService, getAttorneyCountByService } from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
-import { getServiceSchema, getBreadcrumbSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
+import { getServiceSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema } from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL } from '@/lib/seo/config'
 import { logger } from '@/lib/logger'
 import PriceTable from '@/components/seo/PriceTable'
-import Breadcrumb from '@/components/Breadcrumb'
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
 import { PopularCitiesLinks } from '@/components/InternalLinks'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import { practiceAreas as staticPracticeAreas, states, getCitiesByState } from '@/lib/data/usa'
@@ -290,12 +290,6 @@ export default async function ServicePage({ params }: PageProps) {
     image: getServiceImage(specialtySlug).src,
   })
 
-  const breadcrumbSchema = getBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'Services', url: '/services' },
-    { name: service.name, url: `/practice-areas/${specialtySlug}` },
-  ])
-
   const faqSchema = trade
     ? getFAQSchema(trade.faq.map(f => ({ question: f.q, answer: f.a })))
     : null
@@ -320,14 +314,14 @@ export default async function ServicePage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* JSON-LD */}
-      <JsonLd data={[serviceSchema, breadcrumbSchema, speakableSchema, ...(faqSchema ? [faqSchema] : []), ...(pricingSchema ? [pricingSchema] : [])]} />
+      <JsonLd data={[serviceSchema, speakableSchema, ...(faqSchema ? [faqSchema] : []), ...(pricingSchema ? [pricingSchema] : [])]} />
 
-      {/* Breadcrumb */}
+      {/* Breadcrumbs (visual + JSON-LD) */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb
+          <Breadcrumbs
             items={[
-              { label: 'Services', href: '/services' },
+              { label: 'Practice Areas', href: '/practice-areas' },
               { label: service.name },
             ]}
           />
@@ -741,8 +735,14 @@ export default async function ServicePage({ params }: PageProps) {
                     )
                   })}
               </div>
-              <h3 className="font-semibold text-gray-900 mb-4 mt-6">Practical Tools</h3>
+              <h3 className="font-semibold text-gray-900 mb-4 mt-6">Practical Tools & Guides</h3>
               <div className="flex flex-wrap gap-2">
+                <Link
+                  href={`/guides/${specialtySlug}`}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 hover:text-blue-800 rounded-full text-sm transition-colors font-medium"
+                >
+                  {service.name} Legal Guide
+                </Link>
                 <Link
                   href="/tools/calculator"
                   className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"

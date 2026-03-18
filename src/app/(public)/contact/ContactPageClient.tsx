@@ -224,7 +224,7 @@ export default function ContactPageClient() {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6" aria-busy={isLoading}>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="contact-name" className="block text-sm font-medium text-gray-700 mb-2">

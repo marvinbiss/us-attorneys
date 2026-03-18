@@ -87,6 +87,7 @@ export const CallbackPanel = memo(function CallbackPanel({
           <form
             onSubmit={lead.handleCallbackSubmit}
             className="space-y-3"
+            aria-busy={lead.callbackLoading}
           >
             <div>
               <input

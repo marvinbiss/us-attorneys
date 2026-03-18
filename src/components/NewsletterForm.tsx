@@ -58,7 +58,7 @@ export default function NewsletterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row w-full max-w-md gap-3">
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row w-full max-w-md gap-3" aria-busy={isLoading}>
       <div className="flex-1">
         <input
           type="email"

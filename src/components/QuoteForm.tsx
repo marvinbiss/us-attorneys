@@ -426,6 +426,7 @@ export default function ConsultationRequestForm({
     <form
       onSubmit={handleSubmit}
       noValidate
+      aria-busy={submitting}
       className="bg-white rounded-2xl shadow-xl p-6 md:p-10 max-w-2xl mx-auto"
     >
       <p className="text-center text-sm text-gray-500 mb-4">
@@ -793,6 +794,7 @@ export default function ConsultationRequestForm({
                   value={formData.name}
                   onChange={(e) => updateField('name', e.target.value)}
                   onBlur={() => validateField('name')}
+                  disabled={submitting}
                   aria-describedby={errors.name ? 'name-error' : undefined}
                   aria-invalid={!!errors.name}
                   style={{ fontSize: '16px' }}
@@ -825,6 +827,7 @@ export default function ConsultationRequestForm({
                   value={formData.phone}
                   onChange={(e) => updateField('phone', e.target.value)}
                   onBlur={() => validateField('phone')}
+                  disabled={submitting}
                   aria-describedby={errors.phone ? 'phone-error' : undefined}
                   aria-invalid={!!errors.phone}
                   style={{ fontSize: '16px' }}
@@ -857,6 +860,7 @@ export default function ConsultationRequestForm({
                   value={formData.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   onBlur={() => validateField('email')}
+                  disabled={submitting}
                   aria-describedby={errors.email ? 'email-error' : undefined}
                   aria-invalid={!!errors.email}
                   style={{ fontSize: '16px' }}
@@ -882,6 +886,7 @@ export default function ConsultationRequestForm({
                   type="checkbox"
                   checked={formData.consent}
                   onChange={(e) => updateField('consent', e.target.checked)}
+                  disabled={submitting}
                   className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm text-slate-600 leading-relaxed">

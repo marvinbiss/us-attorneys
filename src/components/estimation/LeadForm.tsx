@@ -15,6 +15,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
     <form
       onSubmit={lead.handleLeadSubmit}
       className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3"
+      aria-busy={lead.leadLoading}
     >
       <p className="text-sm font-semibold text-gray-900">
         {context.artisan
