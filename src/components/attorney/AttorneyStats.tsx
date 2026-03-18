@@ -1,7 +1,3 @@
-'use client'
-
-import { motion } from 'framer-motion'
-import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   Calendar,
   MessageCircle,
@@ -29,7 +25,6 @@ interface StatConfig {
 }
 
 export function AttorneyStats({ attorney }: AttorneyStatsProps) {
-  const reducedMotion = useReducedMotion()
   const stats: StatConfig[] = []
   const currentYear = new Date().getFullYear()
 
@@ -145,10 +140,7 @@ export function AttorneyStats({ attorney }: AttorneyStatsProps) {
       : 'md:grid-cols-2'
 
   return (
-    <motion.div
-      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.1 }}
+    <div
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
     >
       {/* Section header */}
@@ -168,14 +160,10 @@ export function AttorneyStats({ attorney }: AttorneyStatsProps) {
           role="list"
           aria-label="Key information about this attorney"
         >
-          {stats.map((stat, index) => (
-            <motion.div
+          {stats.map((stat) => (
+            <div
               key={stat.label}
               role="listitem"
-              initial={reducedMotion ? false : { opacity: 0, scale: 0.85 }}
-              whileInView={reducedMotion ? undefined : { opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={reducedMotion ? { duration: 0 } : { duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: index * 0.08 }}
               className={`text-center p-4 rounded-xl border ${stat.bgColor}`}
             >
               <div
@@ -196,10 +184,10 @@ export function AttorneyStats({ attorney }: AttorneyStatsProps) {
               <div className="text-xs text-slate-500 mt-1.5 font-medium leading-tight" aria-hidden="true">
                 {stat.label}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }

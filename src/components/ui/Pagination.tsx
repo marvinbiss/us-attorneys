@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { clsx } from 'clsx'
@@ -20,10 +18,9 @@ export function Pagination({
   if (totalPages <= 1) return null
 
   const getPageUrl = (page: number) => {
-    const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost'
-    const url = new URL(baseUrl, origin)
-    url.searchParams.set('page', String(page))
-    return `${url.pathname}${url.search}`
+    // Build URL without window reference for server component compatibility
+    const separator = baseUrl.includes('?') ? '&' : '?'
+    return `${baseUrl}${separator}page=${page}`
   }
 
   const pages: (number | 'ellipsis')[] = []

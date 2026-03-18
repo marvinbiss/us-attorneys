@@ -239,7 +239,9 @@ export function ReviewMediaUpload({
                   alt={file.fileName}
                   width={200}
                   height={128}
+                  sizes="200px"
                   className="w-full h-32 object-cover"
+                  loading="lazy"
                   unoptimized
                 />
               ) : (

@@ -108,6 +108,7 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
               fill
               className="object-cover"
               sizes="(max-width: 768px) 50vw, 40vw"
+              loading="lazy"
               unoptimized
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
@@ -140,6 +141,7 @@ export function AttorneyGallery({ attorney }: AttorneyGalleryProps) {
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 25vw, 20vw"
+                loading="lazy"
                 unoptimized
               />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">

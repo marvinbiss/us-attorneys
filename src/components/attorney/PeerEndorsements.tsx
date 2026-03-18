@@ -204,6 +204,7 @@ export default function PeerEndorsements({
                         alt={endorser.name || 'Attorney'}
                         width={44}
                         height={44}
+                        sizes="44px"
                         className="w-11 h-11 rounded-full object-cover border-2 border-blue-100"
                       />
                     ) : (

@@ -105,6 +105,7 @@ export function AttorneyDetail({ provider, showQuoteForm = true }: AttorneyDetai
                   fill
                   sizes="128px"
                   className="object-cover"
+                  priority
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-400 text-4xl font-bold">

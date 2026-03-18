@@ -1,7 +1,3 @@
-'use client'
-
-import { motion } from 'framer-motion'
-import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   Shield,
   CheckCircle,
@@ -59,7 +55,6 @@ function formatTeamSize(size: number): string {
 }
 
 export function AttorneyBusinessCard({ attorney }: AttorneyBusinessCardProps) {
-  const reducedMotion = useReducedMotion()
   const hasBarNumber = !!attorney.bar_number
   const hasEmployees = attorney.team_size != null && attorney.team_size >= 0
   const hasAnyData =
@@ -77,10 +72,7 @@ export function AttorneyBusinessCard({ attorney }: AttorneyBusinessCardProps) {
     : null
 
   return (
-    <motion.div
-      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.2 }}
+    <div
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
     >
       {/* ── Header ─────────────────────────────────────────────────── */}
@@ -234,6 +226,6 @@ export function AttorneyBusinessCard({ attorney }: AttorneyBusinessCardProps) {
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }

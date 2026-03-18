@@ -226,3 +226,118 @@ describe('generateCacheKey', () => {
     expect(generateCacheKey('single', { slug: 'foo' })).toBe('single:slug=foo')
   })
 })
+
+// ---------------------------------------------------------------------------
+// getCachedData — TTL expiry
+// ---------------------------------------------------------------------------
+describe('getCachedData — TTL expiry', () => {
+  it('re-fetches data after L1 TTL expires', async () => {
+    mockRedisGet.mockResolvedValue(null)
+    const fetcher = vi.fn()
+      .mockResolvedValueOnce('first')
+      .mockResolvedValueOnce('second')
+
+    // First call: populates L1 + L2
+    const first = await getCachedData('ttl-key', fetcher, 1) // 1 second TTL
+    expect(first).toBe('first')
+
+    // Manually expire the L1 entry by manipulating time
+    // The L1 expiry is Date.now() + Math.min(ttl, 3600) * 1000
+    // We need to advance time past this point
+    const originalDateNow = Date.now
+    const futureTime = Date.now() + 2000 // 2 seconds in the future
+    Date.now = vi.fn(() => futureTime)
+
+    // Also make Redis return null (simulating expired Redis TTL too)
+    mockRedisGet.mockResolvedValue(null)
+
+    const second = await getCachedData('ttl-key', fetcher, 1)
+    expect(second).toBe('second')
+    expect(fetcher).toHaveBeenCalledTimes(2)
+
+    // Restore Date.now
+    Date.now = originalDateNow
+  })
+})
+
+// ---------------------------------------------------------------------------
+// getCachedData — error handling
+// ---------------------------------------------------------------------------
+describe('getCachedData — error handling', () => {
+  it('propagates error when fetcher throws', async () => {
+    mockRedisGet.mockResolvedValue(null)
+    const fetcher = vi.fn().mockRejectedValue(new Error('DB connection failed'))
+
+    await expect(getCachedData('error-key', fetcher, 300)).rejects.toThrow('DB connection failed')
+  })
+
+  it('still works when Redis SET fails (fire-and-forget)', async () => {
+    mockRedisGet.mockResolvedValue(null)
+    mockRedisSet.mockRejectedValue(new Error('Redis timeout'))
+    const fetcher = vi.fn().mockResolvedValue('fallback-data')
+
+    const result = await getCachedData('redis-fail-key', fetcher, 300)
+    expect(result).toBe('fallback-data')
+    // L1 cache should still be populated
+    const stats = getCacheStats()
+    expect(stats.keys).toContain('redis-fail-key')
+  })
+})
+
+// ---------------------------------------------------------------------------
+// getCachedData — skipNull with undefined
+// ---------------------------------------------------------------------------
+describe('getCachedData — skipNull with undefined', () => {
+  it('does NOT cache undefined results when skipNull is true', async () => {
+    mockRedisGet.mockResolvedValue(null)
+    const fetcher = vi.fn().mockResolvedValue(undefined)
+
+    const result = await getCachedData('undef-key', fetcher, 300, { skipNull: true })
+    expect(result).toBeUndefined()
+    expect(mockRedisSet).not.toHaveBeenCalled()
+  })
+
+  it('DOES cache non-null results when skipNull is true', async () => {
+    mockRedisGet.mockResolvedValue(null)
+    const fetcher = vi.fn().mockResolvedValue({ valid: true })
+
+    await getCachedData('valid-key', fetcher, 300, { skipNull: true })
+    expect(mockRedisSet).toHaveBeenCalledWith('valid-key', { valid: true }, 300)
+  })
+
+  it('DOES cache non-empty arrays when skipNull is true', async () => {
+    mockRedisGet.mockResolvedValue(null)
+    const fetcher = vi.fn().mockResolvedValue([1, 2, 3])
+
+    await getCachedData('arr-key', fetcher, 300, { skipNull: true })
+    expect(mockRedisSet).toHaveBeenCalledWith('arr-key', [1, 2, 3], 300)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// getCachedData — L1 TTL capped at 1 hour
+// ---------------------------------------------------------------------------
+describe('getCachedData — L1 TTL cap', () => {
+  it('caps L1 memory TTL at 1 hour even when requested TTL is larger', async () => {
+    mockRedisGet.mockResolvedValue(null)
+    const fetcher = vi.fn().mockResolvedValue('long-ttl')
+
+    await getCachedData('long-ttl-key', fetcher, 86400) // 24h requested
+
+    // L1 TTL should be capped at 3600s (1h)
+    // Verify by checking that at 3601 seconds, the L1 entry is expired
+    const originalDateNow = Date.now
+    const justAfterOneHour = Date.now() + 3601 * 1000
+    Date.now = vi.fn(() => justAfterOneHour)
+
+    mockRedisGet.mockResolvedValue(null)
+    const fetcherSecond = vi.fn().mockResolvedValue('refreshed')
+    const result = await getCachedData('long-ttl-key', fetcherSecond, 86400)
+
+    // Should have called fetcher again because L1 expired at 1h
+    expect(fetcherSecond).toHaveBeenCalledTimes(1)
+    expect(result).toBe('refreshed')
+
+    Date.now = originalDateNow
+  })
+})

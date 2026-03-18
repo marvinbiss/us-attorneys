@@ -258,6 +258,7 @@ export default async function HowItWorksPage() {
                             fill
                             className="object-cover opacity-30"
                             sizes="(max-width: 1024px) 100vw, 50vw"
+                            loading={index === 0 ? 'eager' : 'lazy'}
                             placeholder="blur"
                             blurDataURL={BLUR_PLACEHOLDER}
                           />

@@ -1,9 +1,5 @@
-'use client'
-
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
-import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
   Users,
   Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, Home, TreeDeciduous, Sparkles,
@@ -14,25 +10,6 @@ import {
 import { getServiceImage, testimonialImages, beforeAfterPairs, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { getAvatarColor, getInitials } from '@/lib/utils'
 import { practiceAreas as allServices } from '@/lib/data/usa'
-
-// ─── ANIMATION VARIANTS ────────────────────────────────────────
-
-const premiumEase: [number, number, number, number] = [0.16, 1, 0.3, 1]
-
-const sectionReveal = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: premiumEase } },
-}
-
-const staggerContainer = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
-}
-
-const staggerItem = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: premiumEase } },
-}
 
 // ─── SERVICES SHOWCASE → BENTO GRID ─────────────────────────────
 
@@ -52,7 +29,6 @@ const services = [
 ]
 
 export function ServicesShowcase() {
-  const reducedMotion = useReducedMotion()
   // Bento layout: first 2 large, next 4 medium, remaining 4 in 3-col grid (last row)
   const featured = services.slice(0, 2)
   const medium = services.slice(2, 6)
@@ -61,11 +37,7 @@ export function ServicesShowcase() {
   return (
     <section className="py-20 md:py-28 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true, margin: '-100px' }}
-          variants={reducedMotion ? undefined : sectionReveal}
+        <div
           className="text-center mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
@@ -79,14 +51,10 @@ export function ServicesShowcase() {
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Find the right attorney for every legal need, from urgent matters to complex litigation.
           </p>
-        </motion.div>
+        </div>
 
         {/* Bento grid */}
-        <motion.div
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true }}
-          variants={reducedMotion ? undefined : staggerContainer}
+        <div
           className="space-y-4"
         >
           {/* Row 1: 2 featured large cards */}
@@ -94,7 +62,7 @@ export function ServicesShowcase() {
             {featured.map((service) => {
               const Icon = service.icon
               return (
-                <motion.div key={service.slug} variants={reducedMotion ? undefined : staggerItem}>
+                <div key={service.slug}>
                   <Link
                     href={`/practice-areas/${service.slug}`}
                     className="group relative flex items-center gap-6 p-8 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -123,7 +91,7 @@ export function ServicesShowcase() {
                       />
                     </div>
                   </Link>
-                </motion.div>
+                </div>
               )
             })}
           </div>
@@ -133,7 +101,7 @@ export function ServicesShowcase() {
             {medium.map((service) => {
               const Icon = service.icon
               return (
-                <motion.div key={service.slug} variants={reducedMotion ? undefined : staggerItem} className="snap-start flex-shrink-0 w-[75vw] sm:w-[45vw] md:w-auto">
+                <div key={service.slug} className="snap-start flex-shrink-0 w-[75vw] sm:w-[45vw] md:w-auto">
                   <Link
                     href={`/practice-areas/${service.slug}`}
                     className="group relative flex flex-col items-center p-6 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -147,7 +115,7 @@ export function ServicesShowcase() {
                     <span className="text-xs text-slate-400 mb-3">{service.desc}</span>
                     <ArrowRight className="w-4 h-4 text-slate-200 group-hover:text-blue-400 group-hover:translate-x-1 transition-all duration-300" />
                   </Link>
-                </motion.div>
+                </div>
               )
             })}
           </div>
@@ -157,7 +125,7 @@ export function ServicesShowcase() {
             {compact.map((service) => {
               const Icon = service.icon
               return (
-                <motion.div key={service.slug} variants={reducedMotion ? undefined : staggerItem}>
+                <div key={service.slug}>
                   <Link
                     href={`/practice-areas/${service.slug}`}
                     className="group flex items-center gap-4 p-4 bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
@@ -173,17 +141,13 @@ export function ServicesShowcase() {
                     </div>
                     <ArrowRight className="w-4 h-4 text-slate-200 opacity-40 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-blue-400 transition-all duration-300 shrink-0" />
                   </Link>
-                </motion.div>
+                </div>
               )
             })}
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true }}
-          variants={reducedMotion ? undefined : sectionReveal}
+        <div
           className="text-center mt-12"
         >
           <Link
@@ -193,7 +157,7 @@ export function ServicesShowcase() {
             View all practice areas
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   )
@@ -232,15 +196,10 @@ const steps = [
 ]
 
 export function HowItWorksSection() {
-  const reducedMotion = useReducedMotion()
   return (
     <section className="py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true, margin: '-100px' }}
-          variants={reducedMotion ? undefined : sectionReveal}
+        <div
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-sm font-medium mb-5">
@@ -254,14 +213,10 @@ export function HowItWorksSection() {
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
             In 3 simple steps, find the ideal attorney for your case.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
+        <div
           className="grid md:grid-cols-3 gap-8 relative"
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true }}
-          variants={reducedMotion ? undefined : staggerContainer}
         >
           {/* Connector line (desktop only) */}
           <div className="hidden md:block absolute top-[5.5rem] left-[20%] right-[20%] z-0">
@@ -271,9 +226,8 @@ export function HowItWorksSection() {
           {steps.map((item) => {
             const Icon = item.icon
             return (
-              <motion.div
+              <div
                 key={item.step}
-                variants={reducedMotion ? undefined : staggerItem}
                 className="relative text-center"
               >
                 {/* Large step number background */}
@@ -296,16 +250,12 @@ export function HowItWorksSection() {
 
                 <h3 className="font-heading text-xl font-bold text-slate-900 mb-3">{item.title}</h3>
                 <p className="text-slate-600 leading-relaxed max-w-xs mx-auto">{item.description}</p>
-              </motion.div>
+              </div>
             )
           })}
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true }}
-          variants={reducedMotion ? undefined : sectionReveal}
+        <div
           className="text-center mt-14"
         >
           <Link
@@ -314,7 +264,7 @@ export function HowItWorksSection() {
           >
             Request a Free Consultation <ArrowRight className="w-5 h-5" />
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   )
@@ -329,7 +279,6 @@ const attorneyBenefits = [
 ]
 
 export function ArtisanCTASection() {
-  const reducedMotion = useReducedMotion()
   return (
     <section className="relative py-20 md:py-28 overflow-hidden">
       {/* Premium dark background with radial accents */}
@@ -349,11 +298,7 @@ export function ArtisanCTASection() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-        <motion.div
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true, margin: '-100px' }}
-          variants={reducedMotion ? undefined : sectionReveal}
+        <div
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-sm text-amber-300 rounded-full text-sm font-medium mb-6 border border-white/10">
             <Users className="w-3.5 h-3.5" />
@@ -371,26 +316,21 @@ export function ArtisanCTASection() {
             Claim your profile and receive qualified consultation requests.
           </p>
 
-          <motion.div
+          <div
             className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-12"
-            initial={reducedMotion ? false : "hidden"}
-            whileInView={reducedMotion ? undefined : "visible"}
-            viewport={{ once: true }}
-            variants={reducedMotion ? undefined : staggerContainer}
           >
             {attorneyBenefits.map((b, i) => (
-              <motion.div
+              <div
                 key={i}
-                variants={reducedMotion ? undefined : staggerItem}
                 className="flex items-center gap-3"
               >
                 <div className="w-10 h-10 bg-white/[0.08] backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/10">
                   <b.icon className="w-5 h-5 text-amber-300" />
                 </div>
                 <span className="text-sm text-slate-300 text-left">{b.text}</span>
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
@@ -406,7 +346,7 @@ export function ArtisanCTASection() {
               Learn more
             </Link>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )
@@ -446,15 +386,10 @@ const trustPoints = [
 ]
 
 export function TrustSection() {
-  const reducedMotion = useReducedMotion()
   return (
     <section className="py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true, margin: '-100px' }}
-          variants={reducedMotion ? undefined : sectionReveal}
+        <div
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
@@ -472,21 +407,16 @@ export function TrustSection() {
             Unlike traditional directories, our data comes directly
             from official state bar records. Transparency and reliability guaranteed.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
+        <div
           className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true }}
-          variants={reducedMotion ? undefined : staggerContainer}
         >
           {trustPoints.map((item) => {
             const Icon = item.icon
             return (
-              <motion.div
+              <div
                 key={item.title}
-                variants={reducedMotion ? undefined : staggerItem}
                 className="group relative bg-gradient-to-b from-slate-50/90 to-white/90 backdrop-blur-sm rounded-2xl p-6 border border-gray-100/80 hover:border-amber-200/50 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-300 ease-out"
               >
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
@@ -498,17 +428,13 @@ export function TrustSection() {
                 <div className="text-xs text-blue-600 font-medium mb-3">{item.statLabel}</div>
                 <h3 className="font-heading text-lg font-bold text-slate-900 mb-2">{item.title}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">{item.description}</p>
-              </motion.div>
+              </div>
             )
           })}
-        </motion.div>
+        </div>
 
         {/* Source attribution */}
-        <motion.div
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true }}
-          variants={reducedMotion ? undefined : sectionReveal}
+        <div
           className="mt-10 text-center"
         >
           <div className="inline-flex items-center gap-3 px-5 py-3 bg-slate-50 rounded-full border border-slate-100">
@@ -517,7 +443,7 @@ export function TrustSection() {
               Source: <strong className="text-slate-900">State Bar Associations</strong> — verified official records
             </span>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   )
@@ -526,15 +452,10 @@ export function TrustSection() {
 // ─── TESTIMONIALS SECTION ────────────────────────────────────────
 
 export function TestimonialsSection() {
-  const reducedMotion = useReducedMotion()
   return (
     <section className="py-20 md:py-28 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true, margin: '-100px' }}
-          variants={reducedMotion ? undefined : sectionReveal}
+        <div
           className="text-center mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-50 text-amber-600 rounded-full text-sm font-medium mb-5">
@@ -548,19 +469,14 @@ export function TestimonialsSection() {
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Thousands of clients find the right attorney every day on US Attorneys.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
+        <div
           className="grid md:grid-cols-3 gap-8"
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true }}
-          variants={reducedMotion ? undefined : staggerContainer}
         >
           {testimonialImages.map((t, i) => (
-            <motion.div
+            <div
               key={i}
-              variants={reducedMotion ? undefined : staggerItem}
               className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
             >
               <div className="flex items-center gap-4 mb-4">
@@ -578,9 +494,9 @@ export function TestimonialsSection() {
                 ))}
               </div>
               <p className="text-slate-600 leading-relaxed">{t.text}</p>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )
@@ -589,15 +505,10 @@ export function TestimonialsSection() {
 // ─── BEFORE/AFTER SHOWCASE ───────────────────────────────────────
 
 export function BeforeAfterShowcase() {
-  const reducedMotion = useReducedMotion()
   return (
     <section className="py-20 md:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true, margin: '-100px' }}
-          variants={reducedMotion ? undefined : sectionReveal}
+        <div
           className="text-center mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-sm font-medium mb-5">
@@ -611,19 +522,14 @@ export function BeforeAfterShowcase() {
           <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
             Discover the outcomes achieved by our verified attorneys.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
+        <div
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-          initial={reducedMotion ? false : "hidden"}
-          whileInView={reducedMotion ? undefined : "visible"}
-          viewport={{ once: true }}
-          variants={reducedMotion ? undefined : staggerContainer}
         >
           {beforeAfterPairs.slice(0, 6).map((pair, i) => (
-            <motion.div
+            <div
               key={i}
-              variants={reducedMotion ? undefined : staggerItem}
               className="group relative bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
             >
               <div className="grid grid-cols-2 h-48">
@@ -644,9 +550,9 @@ export function BeforeAfterShowcase() {
                 <span className="text-sm font-semibold text-slate-900">{pair.category}</span>
                 <span className="text-xs text-slate-500 ml-2">{pair.alt}</span>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

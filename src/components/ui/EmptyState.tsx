@@ -1,5 +1,3 @@
-'use client'
-
 import { ReactNode } from 'react'
 import { clsx } from 'clsx'
 import { Search, Inbox, FileQuestion, AlertCircle } from 'lucide-react'
@@ -12,13 +10,11 @@ export interface EmptyStateProps {
   icon?: ReactNode
   action?: {
     label: string
-    href?: string
-    onClick?: () => void
+    href: string
   }
   secondaryAction?: {
     label: string
-    href?: string
-    onClick?: () => void
+    href: string
   }
   className?: string
 }
@@ -71,38 +67,20 @@ export function EmptyState({
       {(action || secondaryAction) && (
         <div className="flex flex-col sm:flex-row gap-3">
           {action && (
-            action.href ? (
-              <Link
-                href={action.href}
-                className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
-              >
-                {action.label}
-              </Link>
-            ) : (
-              <button
-                onClick={action.onClick}
-                className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
-              >
-                {action.label}
-              </button>
-            )
+            <Link
+              href={action.href}
+              className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/25"
+            >
+              {action.label}
+            </Link>
           )}
           {secondaryAction && (
-            secondaryAction.href ? (
-              <Link
-                href={secondaryAction.href}
-                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
-              >
-                {secondaryAction.label}
-              </Link>
-            ) : (
-              <button
-                onClick={secondaryAction.onClick}
-                className="inline-flex items-center justify-center gap-2 bg-white border-2 border-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
-              >
-                {secondaryAction.label}
-              </button>
-            )
+            <Link
+              href={secondaryAction.href}
+              className="inline-flex items-center justify-center gap-2 bg-white border-2 border-gray-200 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
+            >
+              {secondaryAction.label}
+            </Link>
           )}
         </div>
       )}

@@ -1,22 +1,14 @@
-'use client'
-
-import { motion } from 'framer-motion'
-import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Wrench, Clock, DollarSign, CheckCircle } from 'lucide-react'
 import type { LegacyAttorney } from '@/types/legacy'
+import { RequestConsultationButton } from './RequestConsultationButton'
 
 interface AttorneyServicesProps {
   attorney: LegacyAttorney
 }
 
 export function AttorneyServices({ attorney }: AttorneyServicesProps) {
-  const reducedMotion = useReducedMotion()
-
   return (
-    <motion.div
-      initial={reducedMotion ? false : { opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={reducedMotion ? { duration: 0 } : { duration: 0.4, delay: 0.2 }}
+    <div
       className="bg-[#FFFCF8] rounded-2xl shadow-soft border border-stone-200/60 overflow-hidden"
     >
       {/* Section header */}
@@ -53,12 +45,9 @@ export function AttorneyServices({ attorney }: AttorneyServicesProps) {
               <p className="text-xs text-slate-400 italic mb-3">* Indicative fees, the final price depends on the exact nature of the consultation. Request a consultation for a precise quote.</p>
             )}
             {attorney.service_prices.map((service, index) => (
-              <motion.div
+              <div
                 key={index}
                 role="listitem"
-                initial={reducedMotion ? false : { opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={reducedMotion ? { duration: 0 } : { duration: 0.3, delay: 0.1 + index * 0.05 }}
                 className="flex items-center justify-between p-4 rounded-xl bg-sand-50 border border-sand-200 group"
               >
                 <div className="flex-1 min-w-0">
@@ -82,24 +71,18 @@ export function AttorneyServices({ attorney }: AttorneyServicesProps) {
                     <span>{service.price}</span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         ) : (
           <div className="bg-clay-50 rounded-xl border border-clay-200 p-6 text-center mt-4">
             <p className="text-slate-700 font-medium mb-2">Fees upon consultation</p>
             <p className="text-sm text-slate-500 mb-4">This attorney offers fees tailored to each case. Request a free consultation to learn their rates.</p>
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new Event('sa:open-estimation'))}
-              className="inline-flex items-center gap-2 bg-clay-400 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-clay-600 transition-colors"
-            >
-              Request a Free Consultation
-            </button>
+            <RequestConsultationButton />
           </div>
         )}
 
       </div>
-    </motion.div>
+    </div>
   )
 }

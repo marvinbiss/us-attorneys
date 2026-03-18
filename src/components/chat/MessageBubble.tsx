@@ -209,8 +209,10 @@ export function MessageBubble({
               alt="Shared image"
               width={400}
               height={300}
+              sizes="(max-width: 768px) 100vw, 400px"
               className="max-w-full rounded-lg mb-2 cursor-pointer hover:opacity-90 object-contain"
               onClick={() => window.open(message.file_url, '_blank')}
+              loading="lazy"
               unoptimized
             />
           )}

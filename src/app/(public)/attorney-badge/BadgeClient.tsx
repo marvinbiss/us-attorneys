@@ -312,6 +312,7 @@ export default function BadgeClient({ faqItems }: BadgeClientProps) {
                   alt={`Badge ${displayName}`}
                   width={parseInt(badgeW)}
                   height={parseInt(badgeH)}
+                  sizes="(max-width: 768px) 100vw, 300px"
                   className="max-w-full h-auto"
                   unoptimized
                 />

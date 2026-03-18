@@ -80,6 +80,7 @@ export function PagePreview({ isOpen, onClose, title, contentHtml, structuredDat
                   alt={title}
                   width={800}
                   height={300}
+                  sizes="(max-width: 768px) 100vw, 800px"
                   className="w-full max-h-[300px] object-cover rounded-lg"
                 />
               </div>

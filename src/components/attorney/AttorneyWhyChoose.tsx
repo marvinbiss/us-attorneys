@@ -1,7 +1,3 @@
-'use client'
-
-import { motion } from 'framer-motion'
-import { useReducedMotion } from '@/hooks/useReducedMotion'
 import { Trophy, Calendar, Shield, Star, Users, MapPin, CheckCircle } from 'lucide-react'
 import type { LegacyAttorney } from '@/types/legacy'
 
@@ -70,26 +66,7 @@ function getWhyCards(attorney: LegacyAttorney): WhyCard[] {
   return cards.slice(0, 3)
 }
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: 'easeOut' as const },
-  },
-}
-
 export function AttorneyWhyChoose({ attorney }: { attorney: LegacyAttorney }) {
-  const reducedMotion = useReducedMotion()
   const cards = getWhyCards(attorney)
 
   if (cards.length === 0) return null
@@ -105,17 +82,10 @@ export function AttorneyWhyChoose({ attorney }: { attorney: LegacyAttorney }) {
         </h2>
       </div>
 
-      <motion.div
-        variants={reducedMotion ? undefined : containerVariants}
-        initial={reducedMotion ? false : "hidden"}
-        whileInView={reducedMotion ? undefined : "visible"}
-        viewport={{ once: true, margin: '-40px' }}
-        className="grid grid-cols-1 sm:grid-cols-3 gap-4"
-      >
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {cards.map((card) => (
-          <motion.div
+          <div
             key={card.title}
-            variants={reducedMotion ? undefined : cardVariants}
             className="rounded-xl bg-white border border-stone-200/60 p-5"
           >
             <div className="flex items-center justify-center w-10 h-10 rounded-full bg-clay-50 mb-3">
@@ -123,9 +93,9 @@ export function AttorneyWhyChoose({ attorney }: { attorney: LegacyAttorney }) {
             </div>
             <p className="font-semibold text-gray-900 mb-1">{card.title}</p>
             <p className="text-sm text-slate-600">{card.description}</p>
-          </motion.div>
+          </div>
         ))}
-      </motion.div>
+      </div>
     </div>
   )
 }

@@ -73,8 +73,10 @@ export function FilePreview({ attachment, onClose, isModal = false }: FilePrevie
             alt={attachment.file_name}
             width={320}
             height={192}
+            sizes="(max-width: 768px) 100vw, 320px"
             className="max-w-full max-h-48 rounded-lg cursor-pointer hover:opacity-90 transition-opacity object-contain"
             onClick={() => window.open(attachment.file_url, '_blank')}
+            loading="lazy"
             unoptimized
           />
           <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -201,6 +203,7 @@ export function FilePreview({ attachment, onClose, isModal = false }: FilePrevie
             alt={attachment.file_name}
             width={1200}
             height={900}
+            sizes="100vw"
             style={{
               transform: `scale(${zoom}) rotate(${rotation}deg)`,
               transition: 'transform 0.2s ease-out',
