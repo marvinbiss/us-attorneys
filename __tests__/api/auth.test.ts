@@ -558,7 +558,7 @@ describe('GET /api/auth/me', () => {
       data: { user: { id: 'user-me', email: 'me@example.com' } },
       error: null,
     })
-    mockAdminFrom.mockReturnValue({
+    mockServerFrom.mockReturnValue({
       select: vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
           single: vi.fn().mockResolvedValue({
@@ -594,7 +594,7 @@ describe('GET /api/auth/me', () => {
       data: { user: { id: 'user-no-profile', email: 'nodata@example.com' } },
       error: null,
     })
-    mockAdminFrom.mockReturnValue({
+    mockServerFrom.mockReturnValue({
       select: vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
           single: vi.fn().mockResolvedValue({ data: null }),

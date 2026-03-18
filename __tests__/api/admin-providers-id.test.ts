@@ -110,12 +110,12 @@ function sampleProviderRow(overrides: Record<string, unknown> = {}) {
     slug: 'smith-associates',
     email: 'smith@example.com',
     phone: '+12125551234',
-    siret: '12345678901234',
+    bar_number: '12345678901234',
     description: 'Expert trial attorney',
-    address_street: '123 Broadway',
+    address_line1: '123 Broadway',
     address_city: 'New York',
-    address_postal_code: '10001',
-    address_region: 'New York',
+    address_zip: '10001',
+    address_state: 'New York',
     latitude: 40.7128,
     longitude: -74.006,
     is_verified: true,
@@ -220,10 +220,10 @@ describe('GET /api/admin/providers/[id]', () => {
   it('maps provider fields correctly for response', async () => {
     mockSelectResult = {
       data: sampleProviderRow({
-        address_street: '456 Wilshire Blvd',
+        address_line1: '456 Wilshire Blvd',
         address_city: 'Los Angeles',
-        address_postal_code: '90017',
-        address_region: 'California',
+        address_zip: '90017',
+        address_state: 'California',
         is_verified: false,
         is_active: true,
         rating_average: 3.2,
@@ -239,10 +239,10 @@ describe('GET /api/admin/providers/[id]', () => {
     ) as unknown as { body: { provider: Record<string, unknown> } }
 
     const p = result.body.provider
-    expect(p.address_street).toBe('456 Wilshire Blvd')
+    expect(p.address_line1).toBe('456 Wilshire Blvd')
     expect(p.address_city).toBe('Los Angeles')
-    expect(p.address_postal_code).toBe('90017')
-    expect(p.address_region).toBe('California')
+    expect(p.address_zip).toBe('90017')
+    expect(p.address_state).toBe('California')
     expect(p.is_verified).toBe(false)
     expect(p.is_active).toBe(true)
     expect(p.rating_average).toBe(3.2)
@@ -255,12 +255,12 @@ describe('GET /api/admin/providers/[id]', () => {
         user_id: null,
         email: null,
         phone: null,
-        siret: null,
+        bar_number: null,
         description: null,
-        address_street: null,
+        address_line1: null,
         address_city: null,
-        address_postal_code: null,
-        address_region: null,
+        address_zip: null,
+        address_state: null,
         rating_average: null,
         review_count: null,
       }),
@@ -277,11 +277,11 @@ describe('GET /api/admin/providers/[id]', () => {
     expect(p.user_id).toBeNull()
     expect(p.email).toBe('')
     expect(p.phone).toBe('')
-    expect(p.siret).toBe('')
+    expect(p.bar_number).toBe('')
     expect(p.description).toBe('')
-    expect(p.address_street).toBe('')
+    expect(p.address_line1).toBe('')
     expect(p.address_city).toBe('')
-    expect(p.address_postal_code).toBe('')
+    expect(p.address_zip).toBe('')
     expect(p.rating_average).toBeNull()
     expect(p.review_count).toBe(0)
   })

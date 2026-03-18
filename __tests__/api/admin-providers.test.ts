@@ -184,9 +184,9 @@ function sampleProvider(overrides: Record<string, unknown> = {}) {
     email: 'smith@example.com',
     phone: '+12125551234',
     address_city: 'New York',
-    address_region: 'New York',
+    address_state: 'New York',
     address_department: 'NY',
-    siret: '12345678901234',
+    bar_number: '12345678901234',
     is_verified: true,
     is_active: true,
     source_api: 'manual',
@@ -352,7 +352,7 @@ describe('GET /api/admin/providers', () => {
     expect(mockOrCalls[0]).toContain('name.ilike.%attorney%')
     expect(mockOrCalls[0]).toContain('email.ilike.%attorney%')
     expect(mockOrCalls[0]).toContain('address_city.ilike.%attorney%')
-    expect(mockOrCalls[0]).toContain('siret.ilike.%attorney%')
+    expect(mockOrCalls[0]).toContain('bar_number.ilike.%attorney%')
   })
 
   // ------------------------------------------
@@ -437,13 +437,13 @@ describe('GET /api/admin/providers', () => {
         email: 'johnson@example.com',
         phone: '+13105559876',
         address_city: 'Los Angeles',
-        address_region: 'California',
+        address_state: 'California',
         is_verified: false,
         is_active: true,
         rating_average: 3.8,
         review_count: 7,
         source: 'scraping',
-        siret: '98765432109876',
+        bar_number: '98765432109876',
         specialty: 'Criminal Defense',
       })],
       error: null,
@@ -462,13 +462,13 @@ describe('GET /api/admin/providers', () => {
     expect(provider.email).toBe('johnson@example.com')
     expect(provider.phone).toBe('+13105559876')
     expect(provider.address_city).toBe('Los Angeles')
-    expect(provider.address_region).toBe('California')
+    expect(provider.address_state).toBe('California')
     expect(provider.is_verified).toBe(false)
     expect(provider.is_active).toBe(true)
     expect(provider.rating_average).toBe(3.8)
     expect(provider.review_count).toBe(7)
     expect(provider.source).toBe('scraping')
-    expect(provider.siret).toBe('98765432109876')
+    expect(provider.bar_number).toBe('98765432109876')
     // Specialty column (no remapping to service_type)
     expect(provider.specialty).toBe('Criminal Defense')
   })
@@ -607,7 +607,7 @@ describe('GET /api/admin/providers', () => {
 
   it('defaults email and phone to empty string when null', async () => {
     mockQueryResult = {
-      data: [sampleProvider({ email: null, phone: null, address_city: null, address_region: null })],
+      data: [sampleProvider({ email: null, phone: null, address_city: null, address_state: null })],
       error: null,
       count: 1,
     }
@@ -621,7 +621,7 @@ describe('GET /api/admin/providers', () => {
     expect(provider.email).toBe('')
     expect(provider.phone).toBe('')
     expect(provider.address_city).toBe('')
-    expect(provider.address_region).toBe('')
+    expect(provider.address_state).toBe('')
   })
 
   it('does not apply or() when search is empty string', async () => {
