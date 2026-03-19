@@ -40,50 +40,50 @@ export default function StickyMobileCTA({
 
   if (!visible || dismissed) return null
 
-  const devisHref = href || (
-    specialtySlug && citySlug
+  const quoteHref =
+    href ||
+    (specialtySlug && citySlug
       ? `/quotes/${specialtySlug}/${citySlug}`
       : specialtySlug
-      ? `/quotes/${specialtySlug}`
-      : '/quotes'
-  )
+        ? `/quotes/${specialtySlug}`
+        : '/quotes')
 
   return (
-    <div className="fixed bottom-16 left-0 right-0 z-40 md:hidden animate-in slide-in-from-bottom-4 duration-300">
-      <div className="mx-2 bg-white/95 backdrop-blur-lg rounded-2xl shadow-[0_-2px_20px_rgba(0,0,0,0.12)] border border-gray-200/60 p-3">
+    <div className="animate-in slide-in-from-bottom-4 fixed bottom-16 left-0 right-0 z-40 duration-300 md:hidden">
+      <div className="mx-2 rounded-2xl border border-gray-200/60 bg-white/95 p-3 shadow-[0_-2px_20px_rgba(0,0,0,0.12)] backdrop-blur-lg">
         <button
           onClick={() => {
             setDismissed(true)
             sessionStorage.setItem('stickyMobileCTA_dismissed', '1')
           }}
-          className="absolute -top-3 -right-2 w-11 h-11 bg-white rounded-full shadow-md flex items-center justify-center text-gray-400 hover:text-gray-600"
+          className="absolute -right-2 -top-3 flex h-11 w-11 items-center justify-center rounded-full bg-white text-gray-400 shadow-md hover:text-gray-600"
           aria-label="Close"
         >
-          <X className="w-3.5 h-3.5" />
+          <X className="h-3.5 w-3.5" />
         </button>
 
         {attorneyCount && attorneyCount > 0 && (
-          <p className="text-xs text-gray-500 text-center mb-1.5">
+          <p className="mb-1.5 text-center text-xs text-gray-500">
             {attorneyCount} attorney{attorneyCount > 1 ? 's' : ''} available in your area
           </p>
         )}
 
         <Link
-          href={devisHref}
+          href={quoteHref}
           onClick={() => {
             trackEvent('sticky_cta_click', {
               service: specialtySlug,
               city: citySlug,
-              href: devisHref,
+              href: quoteHref,
             })
           }}
-          className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold text-sm rounded-xl shadow-lg shadow-blue-500/25 transition-all active:scale-[0.98]"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all hover:from-blue-700 hover:to-blue-800 active:scale-[0.98]"
         >
-          <FileText className="w-4 h-4" />
+          <FileText className="h-4 w-4" />
           {ctaText}
         </Link>
 
-        <p className="text-[10px] text-gray-400 text-center mt-1.5">
+        <p className="mt-1.5 text-center text-[10px] text-gray-400">
           Free · No obligation · Response within 24h
         </p>
       </div>

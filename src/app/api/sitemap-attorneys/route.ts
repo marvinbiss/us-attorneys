@@ -15,6 +15,17 @@ function escapeXml(s: string): string {
     .replace(/'/g, '&apos;')
 }
 
+/** Minimal slugify — mirrors src/lib/utils.ts without importing heavy data files */
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+}
+
 /**
  * Dynamic API route for attorney sitemaps.
  * Serves /sitemap/attorneys-{id}.xml via next.config.js rewrite.
@@ -66,16 +77,24 @@ export async function GET(request: NextRequest) {
         // Batch index out of range — return empty sitemap
         return new NextResponse(
           '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>',
-          { headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, s-maxage=3600' } }
+          {
+            headers: {
+              'Content-Type': 'application/xml; charset=utf-8',
+              'Cache-Control': 'public, s-maxage=3600',
+            },
+          }
         )
       }
     }
 
     // Main data fetch: keyset pagination (WHERE id > cursor ORDER BY id ASC LIMIT N)
     // This is O(log n) via B-tree index seek — no sequential scan.
+    // Join specialties via primary_specialty_id FK to get the specialty slug for URL generation.
     let query = supabase
       .from('attorneys')
-      .select('id, slug, stable_id, updated_at')
+      .select(
+        'id, slug, stable_id, address_city, updated_at, specialty:specialties!primary_specialty_id(slug)'
+      )
       .eq('is_active', true)
       .eq('noindex', false)
       .order('id', { ascending: true })
@@ -93,9 +112,18 @@ export async function GET(request: NextRequest) {
       .filter((a) => a.slug || a.stable_id)
       .map((a) => {
         const publicId = a.slug || a.stable_id || a.id
-        const lastmod = a.updated_at ? new Date(a.updated_at).toISOString().split('T')[0] : undefined
-        // TODO: Build full practice-areas/specialty/location/publicId URL when specialty+location data is connected
-        const loc = escapeXml(`${SITE_URL}/attorneys/${publicId}`)
+        const lastmod = a.updated_at
+          ? new Date(a.updated_at).toISOString().split('T')[0]
+          : undefined
+        // Build full /practice-areas/{specialty}/{location}/{publicId} URL
+        const specialtyObj = (Array.isArray(a.specialty) ? a.specialty[0] : a.specialty) as {
+          slug: string
+        } | null
+        const specialtySlug = specialtyObj?.slug || 'attorney'
+        const locationSlug = a.address_city ? slugify(a.address_city) : 'nationwide'
+        const loc = escapeXml(
+          `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`
+        )
         return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ''}</url>`
       })
 
@@ -113,7 +141,8 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch {
-    const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>'
+    const xml =
+      '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n</urlset>'
     return new NextResponse(xml, {
       headers: {
         'Content-Type': 'application/xml; charset=utf-8',

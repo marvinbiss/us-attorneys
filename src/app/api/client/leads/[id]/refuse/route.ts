@@ -3,7 +3,7 @@
  * POST /api/client/leads/[id]/refuse
  * Body: { quote_id: string }
  *
- * - Verifies the quote belongs to this devis_request
+ * - Verifies the quote belongs to this quote_request
  * - Marks quote.status = 'refused'
  * - Logs a 'refused' lead_event
  */

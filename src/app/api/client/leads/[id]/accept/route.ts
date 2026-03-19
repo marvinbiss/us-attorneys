@@ -3,9 +3,9 @@
  * POST /api/client/leads/[id]/accept
  * Body: { quote_id: string }
  *
- * - Verifies the quote belongs to this devis_request
+ * - Verifies the quote belongs to this quote_request
  * - Marks quote as 'accepted', all others as 'refused'
- * - Marks the devis_request as 'accepted'
+ * - Marks the quote_request as 'accepted'
  * - Logs an 'accepted' lead_event
  */
 

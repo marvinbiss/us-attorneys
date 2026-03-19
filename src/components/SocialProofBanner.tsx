@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Users, Clock, TrendingUp, FileText } from 'lucide-react'
 
 interface SocialProofData {
-  devisThisMonth: number
+  requestsThisMonth: number
   activeProviders: number
 }
 
@@ -27,12 +27,18 @@ interface SocialProofBannerProps {
 function getDailyCount(): number {
   const now = new Date()
   const dayOfYear = Math.floor(
-    (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000,
+    (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000
   )
   return 47 + ((dayOfYear * 7 + 13) % 137) // 47-183, deterministic per day
 }
 
-export function SocialProofBanner({ specialty, metier, cityName, ville, variant = 'inline' }: SocialProofBannerProps) {
+export function SocialProofBanner({
+  specialty,
+  metier,
+  cityName,
+  ville,
+  variant = 'inline',
+}: SocialProofBannerProps) {
   const displaySpecialty = specialty || metier
   const displayCity = cityName || ville
   const fallbackCount = getDailyCount()
@@ -48,23 +54,28 @@ export function SocialProofBanner({ specialty, metier, cityName, ville, variant 
           setData(parsed.data)
           return
         }
-      } catch { /* ignore corrupt cache */ }
+      } catch {
+        /* ignore corrupt cache */
+      }
     }
 
     fetch('/api/social-proof')
-      .then(r => r.json())
+      .then((r) => r.json())
       .then((d: SocialProofData) => {
         setData(d)
-        sessionStorage.setItem('sa:social-proof', JSON.stringify({ data: d, fetchedAt: Date.now() }))
+        sessionStorage.setItem(
+          'sa:social-proof',
+          JSON.stringify({ data: d, fetchedAt: Date.now() })
+        )
       })
       .catch(() => {
         // Fallback — use deterministic values
-        setData({ devisThisMonth: fallbackCount, activeProviders: 500 })
+        setData({ requestsThisMonth: fallbackCount, activeProviders: 500 })
       })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const devisCount = data?.devisThisMonth ?? fallbackCount
+  const requestCount = data?.requestsThisMonth ?? fallbackCount
   const attorneyCount = data?.activeProviders ?? 500
 
   // ── Compact variant: minimal inline stats ──
@@ -72,11 +83,11 @@ export function SocialProofBanner({ specialty, metier, cityName, ville, variant 
     return (
       <div className="flex items-center gap-4 text-xs text-gray-500">
         <span className="flex items-center gap-1">
-          <FileText className="w-3.5 h-3.5" />
-          {devisCount.toLocaleString('en-US')} consultations this month
+          <FileText className="h-3.5 w-3.5" />
+          {requestCount.toLocaleString('en-US')} consultations this month
         </span>
         <span className="flex items-center gap-1">
-          <Users className="w-3.5 h-3.5" />
+          <Users className="h-3.5 w-3.5" />
           {attorneyCount.toLocaleString('en-US')} active attorneys
         </span>
       </div>
@@ -86,35 +97,41 @@ export function SocialProofBanner({ specialty, metier, cityName, ville, variant 
   // ── Card variant: full card with stats grid ──
   if (variant === 'card') {
     return (
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <TrendingUp className="w-4 h-4 text-blue-600" />
+      <div className="rounded-xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-4">
+        <div className="mb-3 flex items-center gap-2">
+          <TrendingUp className="h-4 w-4 text-blue-600" />
           <span className="text-sm font-semibold text-blue-900">
-            {displaySpecialty ? `High demand for ${displaySpecialty.toLowerCase()}` : 'High demand this month'}
+            {displaySpecialty
+              ? `High demand for ${displaySpecialty.toLowerCase()}`
+              : 'High demand this month'}
           </span>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-              <FileText className="w-4 h-4 text-blue-600" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100">
+              <FileText className="h-4 w-4 text-blue-600" />
             </div>
             <div>
-              <p className="text-lg font-bold text-slate-900">{devisCount.toLocaleString('en-US')}</p>
+              <p className="text-lg font-bold text-slate-900">
+                {requestCount.toLocaleString('en-US')}
+              </p>
               <p className="text-xs text-slate-500">consultations this month</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
-              <Users className="w-4 h-4 text-green-600" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100">
+              <Users className="h-4 w-4 text-green-600" />
             </div>
             <div>
-              <p className="text-lg font-bold text-slate-900">{attorneyCount.toLocaleString('en-US')}</p>
+              <p className="text-lg font-bold text-slate-900">
+                {attorneyCount.toLocaleString('en-US')}
+              </p>
               <p className="text-xs text-slate-500">attorneys available</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
-              <Clock className="w-4 h-4 text-amber-600" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100">
+              <Clock className="h-4 w-4 text-amber-600" />
             </div>
             <div>
               <p className="text-lg font-bold text-slate-900">~2h</p>
@@ -123,7 +140,7 @@ export function SocialProofBanner({ specialty, metier, cityName, ville, variant 
           </div>
         </div>
         {displayCity && (
-          <p className="text-xs text-blue-600 mt-2">
+          <p className="mt-2 text-xs text-blue-600">
             Attorneys available in {displayCity} and surrounding areas
           </p>
         )}
@@ -134,16 +151,17 @@ export function SocialProofBanner({ specialty, metier, cityName, ville, variant 
   // ── Inline variant (default): pill badges ──
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-      <span className="flex items-center gap-1.5 text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full">
-        <TrendingUp className="w-3.5 h-3.5" />
-        {devisCount.toLocaleString('en-US')} requests this month{displayCity ? ` in ${displayCity}` : ''}
+      <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-emerald-700">
+        <TrendingUp className="h-3.5 w-3.5" />
+        {requestCount.toLocaleString('en-US')} requests this month
+        {displayCity ? ` in ${displayCity}` : ''}
       </span>
-      <span className="flex items-center gap-1.5 text-blue-700 bg-blue-50 px-3 py-1.5 rounded-full">
-        <Clock className="w-3.5 h-3.5" />
+      <span className="flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-blue-700">
+        <Clock className="h-3.5 w-3.5" />
         Response in ~2h
       </span>
-      <span className="flex items-center gap-1.5 text-violet-700 bg-violet-50 px-3 py-1.5 rounded-full">
-        <Users className="w-3.5 h-3.5" />
+      <span className="flex items-center gap-1.5 rounded-full bg-violet-50 px-3 py-1.5 text-violet-700">
+        <Users className="h-3.5 w-3.5" />
         {attorneyCount.toLocaleString('en-US')} attorneys
       </span>
     </div>

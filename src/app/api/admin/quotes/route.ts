@@ -174,7 +174,7 @@ export const DELETE = createApiHandler(async ({ request }) => {
     )
   }
 
-  await logAdminAction(authResult.admin.id, 'devis_request_deleted', 'devis_request', id)
+  await logAdminAction(authResult.admin.id, 'quote_request_deleted', 'quote_request', id)
 
   return NextResponse.json({ success: true })
 })

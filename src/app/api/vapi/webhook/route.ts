@@ -14,7 +14,7 @@ import type {
   QualificationData,
   VapiAssistantResponse,
 } from '@/types/voice-qualification'
-import { trackVoiceLeadForBilling } from '@/lib/billing/voice-usage'
+import { createVoiceLead } from '@/lib/voice/lead-routing'
 
 export const maxDuration = 30
 
@@ -329,18 +329,18 @@ async function handleEndOfCallReport(event: VapiWebhookEvent): Promise<NextRespo
       .eq('id', voiceCall.conversation_id)
   }
 
-  // TODO P2.19: Track qualified voice leads for attorney billing.
-  // Currently voice_calls doesn't have a direct attorney_id FK.
-  // Once lead dispatch assigns the call to an attorney, pass that ID here.
-  // Fire-and-forget billing — never block the webhook response
+  // Dispatch qualified voice leads to attorneys (creates lead, assigns attorney, tracks billing, sends SMS).
+  // Fire-and-forget — never block the webhook response.
   if (voiceCall.qualification_score && voiceCall.qualification_score !== 'disqualified') {
-    trackVoiceLeadForBilling({
-      voiceCallId: voiceCall.id,
-      attorneyId: null, // TODO: resolve from lead dispatch once voice→attorney assignment exists
-      qualificationScore: voiceCall.qualification_score,
-      vapiCost: cost || 0,
+    createVoiceLead(supabase, {
+      id: voiceCall.id,
+      contact_id: voiceCall.contact_id,
+      conversation_id: voiceCall.conversation_id,
+      qualification_score: voiceCall.qualification_score,
+      qualification_data: voiceCall.qualification_data as Record<string, unknown> | null,
+      caller_phone: call.customer?.number || 'unknown',
     }).catch((err) =>
-      logger.error('Voice billing tracking failed', { error: String(err), callId: call.id })
+      logger.error('Voice lead dispatch failed', { error: String(err), callId: call.id })
     )
   }
 

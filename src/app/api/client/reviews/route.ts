@@ -40,20 +40,9 @@ export const GET = createApiHandler(
   async ({ user }) => {
     const supabase = await createClient()
 
-    // Fetch published reviews by this client via bookings (reviews has no direct client FK)
-    // Step 1: get booking IDs for this client
-    const { data: clientBookings } = await withTimeout(
-      supabase
-        .from('bookings')
-        .select('id')
-        .eq('client_id', user?.id ?? '')
-    )
+    const userId = user?.id ?? ''
 
-    const bookingIds = clientBookings?.map((b: { id: string }) => b.id) || []
-
-    // Step 2: fetch reviews for those bookings
-    // Note: 'quotes' table does not exist yet (TODO: re-enable join when quotes table is created)
-    // Note: profiles does not have company_name or avatar_url
+    // Fetch published reviews by this client (reviews has client_id FK to profiles)
     const { data: publishedReviews, error: reviewsError } = await withTimeout(
       supabase
         .from('reviews')
@@ -61,13 +50,10 @@ export const GET = createApiHandler(
           `
         *,
         attorney:attorneys!attorney_id(id, name),
-        booking:bookings!booking_id(id)
+        booking:bookings!booking_id(id, scheduled_at, status)
       `
         )
-        .in(
-          'booking_id',
-          bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000']
-        )
+        .eq('client_id', userId)
         .order('created_at', { ascending: false })
     )
 
@@ -76,25 +62,62 @@ export const GET = createApiHandler(
       return apiError('DATABASE_ERROR', 'Error retrieving reviews', 500)
     }
 
-    // TODO: quotes table does not exist yet -- pending reviews from completed quotes disabled
-    const pendingReviews: unknown[] = []
+    // Pending reviews: completed bookings that don't have a review yet
+    const reviewedBookingIds = new Set(
+      publishedReviews?.filter((r) => r.booking_id).map((r) => r.booking_id as string) || []
+    )
+
+    const { data: completedBookings, error: bookingsError } = await withTimeout(
+      supabase
+        .from('bookings')
+        .select(
+          `
+        id,
+        scheduled_at,
+        attorney:attorneys!attorney_id(id, name)
+      `
+        )
+        .eq('client_id', userId)
+        .eq('status', 'completed')
+        .order('scheduled_at', { ascending: false })
+    )
+
+    if (bookingsError) {
+      logger.error('Error fetching completed bookings:', bookingsError)
+    }
+
+    const pendingReviews =
+      completedBookings
+        ?.filter((b) => !reviewedBookingIds.has(b.id))
+        .map((b) => {
+          const att = b.attorney as unknown as { id: string; name: string } | null
+          return {
+            booking_id: b.id,
+            attorney: att?.name || 'Attorney',
+            attorney_id: att?.id || null,
+            date: b.scheduled_at,
+          }
+        }) || []
 
     // Format published reviews
     const formattedPublishedReviews =
-      publishedReviews?.map((r) => ({
-        id: r.id,
-        attorney: r.attorney?.name || 'Attorney',
-        attorney_id: r.attorney_id,
-        service: null, // bookings table service_name may not exist in all environments
-        date: r.created_at,
-        rating: r.rating,
-        comment: r.comment,
-        response: r.attorney_response,
-      })) || []
+      publishedReviews?.map((r) => {
+        const att = r.attorney as unknown as { id: string; name: string } | null
+        return {
+          id: r.id,
+          attorney: att?.name || 'Attorney',
+          attorney_id: r.attorney_id,
+          service: null,
+          date: r.created_at,
+          rating: r.rating,
+          comment: r.comment,
+          response: r.attorney_response,
+        }
+      }) || []
 
     return apiSuccess({
       publishedReviews: formattedPublishedReviews,
-      pendingReviews: pendingReviews,
+      pendingReviews,
     })
   },
   { requireAuth: true }

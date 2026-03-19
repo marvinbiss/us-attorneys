@@ -55,40 +55,41 @@ export default function ProactiveChatPrompt({
 
   if (!visible) return null
 
-  const devisHref = specialtySlug && citySlug
-    ? `/quotes/${specialtySlug}/${citySlug}`
-    : specialtySlug
-    ? `/quotes/${specialtySlug}`
-    : '/quotes'
+  const quoteHref =
+    specialtySlug && citySlug
+      ? `/quotes/${specialtySlug}/${citySlug}`
+      : specialtySlug
+        ? `/quotes/${specialtySlug}`
+        : '/quotes'
 
   return (
-    <div className="fixed bottom-20 md:bottom-6 left-4 z-40 max-w-xs animate-in slide-in-from-bottom-4 duration-300">
-      <div className="bg-white rounded-2xl shadow-2xl border border-gray-200/60 p-4 relative">
+    <div className="animate-in slide-in-from-bottom-4 fixed bottom-20 left-4 z-40 max-w-xs duration-300 md:bottom-6">
+      <div className="relative rounded-2xl border border-gray-200/60 bg-white p-4 shadow-2xl">
         <button
           onClick={() => setVisible(false)}
-          className="absolute top-2 right-2 p-1 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+          className="absolute right-2 top-2 rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
           aria-label="Close"
         >
-          <X className="w-3.5 h-3.5" />
+          <X className="h-3.5 w-3.5" />
         </button>
 
         <div className="flex items-start gap-3 pr-6">
-          <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-            <MessageCircle className="w-4 h-4 text-blue-600" />
+          <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-blue-100">
+            <MessageCircle className="h-4 w-4 text-blue-600" />
           </div>
           <div>
-            <p className="text-sm text-gray-700 leading-relaxed">{message}</p>
-            <div className="flex gap-2 mt-3">
+            <p className="text-sm leading-relaxed text-gray-700">{message}</p>
+            <div className="mt-3 flex gap-2">
               <Link
-                href={devisHref}
+                href={quoteHref}
                 onClick={() => setVisible(false)}
-                className="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 px-3 py-1.5 rounded-lg transition-colors"
+                className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-700"
               >
                 Free consultation
               </Link>
               <button
                 onClick={() => setVisible(false)}
-                className="text-xs font-medium text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+                className="rounded-lg px-3 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
               >
                 No thanks
               </button>

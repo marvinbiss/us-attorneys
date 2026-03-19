@@ -21,7 +21,7 @@ export const GET = createApiHandler(async ({ request }) => {
   const thirtyDaysAgo = new Date()
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
 
-  const { count: monthlyDevis } = await supabase
+  const { count: monthlyRequests } = await supabase
     .from('quote_requests')
     .select('*', { count: 'exact', head: true })
     .gte('created_at', thirtyDaysAgo.toISOString())
@@ -33,12 +33,12 @@ export const GET = createApiHandler(async ({ request }) => {
     .eq('is_active', true)
 
   // Minimum display values for credibility
-  const devisCount = Math.max(monthlyDevis || 0, 50)
+  const requestCount = Math.max(monthlyRequests || 0, 50)
   const attorneyCount = activeProviders || 0
 
   return NextResponse.json(
     {
-      requestsThisMonth: devisCount,
+      requestsThisMonth: requestCount,
       activeProviders: attorneyCount,
       updatedAt: new Date().toISOString(),
     },

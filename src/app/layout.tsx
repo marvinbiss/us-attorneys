@@ -258,20 +258,23 @@ fbq('track', 'PageView');`}
           </Script>
         )}
         {/*
-          Contentsquare UX Analytics — SRI applicable.
-          Unlike GTM/fbevents, the Contentsquare tag JS is version-pinned per account.
-          TODO: Generate the SRI hash by running:
-            curl -s https://t.contentsquare.net/uxa/8da7eeef2dab8.js | openssl dgst -sha384 -binary | openssl base64 -A
-          Then set integrity="sha384-<hash>" below.
-          IMPORTANT: Re-generate the hash after every Contentsquare SDK version bump.
-          If the hash becomes stale, the script will be blocked by the browser —
-          monitor for CSP/SRI errors in /api/csp-report.
+          Contentsquare UX Analytics — SRI NOT applicable.
+          next/script with strategy="lazyOnload" injects the <script> element dynamically
+          via JavaScript at runtime (document.createElement('script')). Browsers only
+          enforce the `integrity` attribute on static <script> tags present in the
+          original HTML markup — dynamically injected scripts silently ignore it.
+          Therefore, adding an integrity attribute here would have no security benefit.
+
+          Additionally, Contentsquare may update the SDK payload between version bumps,
+          which would cause hash mismatches if SRI were enforced.
+
+          Mitigation: rely on CSP script-src directives (allow-listed origin
+          https://t.contentsquare.net) to restrict which external scripts can execute.
         */}
         <Script
           src="https://t.contentsquare.net/uxa/8da7eeef2dab8.js"
           strategy="lazyOnload"
           crossOrigin="anonymous"
-          // TODO: Add integrity="sha384-<hash>" once hash is generated (see comment above)
         />
         {/* Microsoft Clarity — loaded only after analytics consent via CookieConsent */}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />

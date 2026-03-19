@@ -53,7 +53,7 @@ export async function generateMetadata({
 
   const tradeLower = trade.name.toLowerCase()
 
-  const titleHash = Math.abs(hashCode(`devis-title-${service}`))
+  const titleHash = Math.abs(hashCode(`quote-title-${service}`))
   const titleTemplates = [
     `Free ${tradeLower} consultation 2026 — Compare`,
     `${tradeLower} consultation online — Free 2026`,
@@ -63,7 +63,7 @@ export async function generateMetadata({
   ]
   const title = truncateTitle(titleTemplates[titleHash % titleTemplates.length])
 
-  const descHash = Math.abs(hashCode(`devis-desc-${service}`))
+  const descHash = Math.abs(hashCode(`quote-desc-${service}`))
   const descTemplates = [
     `Request a free ${tradeLower} consultation. Compare up to 3 verified attorneys. Rates: ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. 100% free.`,
     `${tradeLower} consultation online: ${trade.priceRange.min} to ${trade.priceRange.max} ${trade.priceRange.unit}. Compare offers from qualified professionals. 100% free.`,
@@ -230,7 +230,7 @@ export default async function DevisServicePage({
           <div className="text-center">
             <h1 className="mb-6 font-heading text-4xl font-extrabold tracking-[-0.025em] md:text-5xl">
               {(() => {
-                const h1Hash = Math.abs(hashCode(`devis-h1-${service}`))
+                const h1Hash = Math.abs(hashCode(`quote-h1-${service}`))
                 const h1Templates = [
                   `Free ${tradeLower} consultation — Compare attorneys`,
                   `Request a ${tradeLower} consultation online`,

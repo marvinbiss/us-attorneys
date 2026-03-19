@@ -116,13 +116,13 @@ export const POST = createApiHandler(
     const { request_id, amount, description, valid_until } = parsed.data
 
     // Verify the request exists
-    const { data: devisRequest } = await supabase
+    const { data: quoteRequest } = await supabase
       .from('quote_requests')
       .select('id, status')
       .eq('id', request_id)
       .single()
 
-    if (!devisRequest) {
+    if (!quoteRequest) {
       return apiError('NOT_FOUND', 'Request not found', 404)
     }
 

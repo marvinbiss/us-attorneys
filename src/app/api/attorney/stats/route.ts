@@ -324,13 +324,13 @@ export const GET = createApiHandler(
 
       for (let i = 0; i < uniqueLeadIds.length; i += batchSize) {
         const batch = uniqueLeadIds.slice(i, i + batchSize)
-        const { data: devisData } = await adminClient
+        const { data: requestData } = await adminClient
           .from('quote_requests')
           .select('service_name')
           .in('id', batch)
 
-        if (devisData) {
-          for (const d of devisData) {
+        if (requestData) {
+          for (const d of requestData) {
             const name = d.service_name || 'Not specified'
             serviceMap.set(name, (serviceMap.get(name) || 0) + 1)
           }

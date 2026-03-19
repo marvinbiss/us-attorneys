@@ -59,13 +59,13 @@ export async function GET(_request: NextRequest, { params }: { params: { id: str
 
     // Check if user is the client via the consultation request
 
-    const { data: devisRequest } = await supabase
+    const { data: quoteRequest } = await supabase
       .from('quote_requests')
       .select('client_id')
       .eq('id', quote.request_id)
       .single()
 
-    const isClient = devisRequest?.client_id === user.id
+    const isClient = quoteRequest?.client_id === user.id
 
     if (!isProvider && !isClient) {
       return NextResponse.json(
@@ -151,13 +151,13 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 
     const isProvider = provider?.id === quote.attorney_id
 
-    const { data: devisRequest } = await supabase
+    const { data: quoteRequest } = await supabase
       .from('quote_requests')
       .select('client_id')
       .eq('id', quote.request_id)
       .single()
 
-    const isClient = devisRequest?.client_id === user.id
+    const isClient = quoteRequest?.client_id === user.id
 
     let newStatus: string
 

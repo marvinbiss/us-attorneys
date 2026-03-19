@@ -1,7 +1,7 @@
 /**
  * Attorney Quotes API
  * GET: Get quotes sent by the attorney (from `quotes` table)
- * POST: Send a quote to a client for a given devis_request
+ * POST: Send a quote to a client for a given quote_request
  */
 
 import { NextResponse } from 'next/server'
@@ -125,13 +125,13 @@ export async function POST(request: Request) {
 
     // Verify the consultation request exists
 
-    const { data: devisRequest } = await supabase
+    const { data: quoteRequest } = await supabase
       .from('quote_requests')
       .select('id, status')
       .eq('id', request_id)
       .single()
 
-    if (!devisRequest) {
+    if (!quoteRequest) {
       return NextResponse.json(
         { success: false, error: { message: 'Request not found' } },
         { status: 404 }
@@ -139,7 +139,7 @@ export async function POST(request: Request) {
     }
 
     // Reject quotes on closed/completed requests
-    if (!['pending', 'sent'].includes(devisRequest.status)) {
+    if (!['pending', 'sent'].includes(quoteRequest.status)) {
       return NextResponse.json(
         { success: false, error: { message: 'This request no longer accepts quotes' } },
         { status: 409 }
