@@ -23,6 +23,10 @@
     {
       "path": "/api/cron/daily-tasks",
       "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/refresh-mv",
+      "schedule": "30 3 * * *"
     }
   ]
 }
