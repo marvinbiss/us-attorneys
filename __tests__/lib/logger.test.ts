@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
+// Unmock logger so we test the real implementation (global mock is in setup.ts)
+vi.unmock('@/lib/logger')
+
 // We need to test the logger module, but it reads process.env.NODE_ENV at module load time.
 // We'll import it dynamically in some tests.
 
