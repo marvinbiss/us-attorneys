@@ -17,84 +17,8 @@
   },
   "crons": [
     {
-      "path": "/api/cron/send-reminders",
-      "schedule": "0 8 * * *"
-    },
-    {
-      "path": "/api/cron/send-reminders-1h",
-      "schedule": "0 */2 * * *"
-    },
-    {
-      "path": "/api/cron/send-review-requests",
-      "schedule": "0 */4 * * *"
-    },
-    {
-      "path": "/api/cron/calculate-trust-badges",
-      "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/generate-insights",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/cron/send-search-alerts",
-      "schedule": "0 9 * * *"
-    },
-    {
-      "path": "/api/cron/send-reports",
-      "schedule": "0 8 * * 1"
-    },
-    {
-      "path": "/api/cron/prospection-process",
-      "schedule": "0 0 31 2 *"
-    },
-    {
-      "path": "/api/cron/recalculate-quality",
-      "schedule": "0 4 * * *"
-    },
-    {
-      "path": "/api/cron/sitemap-health",
-      "schedule": "0 6 * * *"
-    },
-    {
-      "path": "/api/cron/indexnow-submit",
-      "schedule": "15 6 * * *"
-    },
-    {
-      "path": "/api/cron/voice-lead-expiry",
-      "schedule": "0 */4 * * *"
-    },
-    {
-      "path": "/api/cron/voice-stats",
-      "schedule": "0 1 * * *"
-    },
-    {
-      "path": "/api/cron/send-booking-reminders",
-      "schedule": "0 */1 * * *"
-    },
-    {
-      "path": "/api/cron/data-refresh",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/cron/data-quality",
-      "schedule": "0 6 * * 1"
-    },
-    {
-      "path": "/api/cron/refresh-mv",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/cron/refresh-sol",
-      "schedule": "0 4 1 * *"
-    },
-    {
-      "path": "/api/cron/data-retention",
-      "schedule": "0 2 1 * *"
-    },
-    {
       "path": "/api/cron/health-check",
-      "schedule": "*/5 * * * *"
+      "schedule": "0 */6 * * *"
     }
   ]
 }
