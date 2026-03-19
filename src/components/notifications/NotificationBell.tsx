@@ -6,8 +6,6 @@
  * wrapper for backward compatibility with dashboards that pass a userId prop.
  */
 
-'use client'
-
 import NotificationCenter from './NotificationCenter'
 
 interface NotificationBellProps {
