@@ -10,22 +10,16 @@ test.setTimeout(60_000)
 async function preAcceptCookies(page: Page) {
   await page.addInitScript(() => {
     localStorage.setItem('cookie_consent', 'accepted')
-    localStorage.setItem('cookie_preferences', JSON.stringify({
-      necessary: true, analytics: true, marketing: false, personalization: false,
-    }))
+    localStorage.setItem(
+      'cookie_preferences',
+      JSON.stringify({
+        necessary: true,
+        analytics: true,
+        marketing: false,
+        personalization: false,
+      })
+    )
   })
-}
-
-/**
- * Dismiss the cookie consent banner if it is visible (fallback).
- */
-async function dismissCookieBanner(page: Page) {
-  const acceptBtn = page.getByRole('button', { name: /accept all/i })
-  const isVisible = await acceptBtn.isVisible({ timeout: 2_000 }).catch(() => false)
-  if (isVisible) {
-    await acceptBtn.click()
-    await acceptBtn.waitFor({ state: 'hidden', timeout: 3_000 }).catch(() => {})
-  }
 }
 
 // ---------------------------------------------------------------------------
@@ -42,7 +36,7 @@ async function mockContactApi(page: Page) {
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({ success: true, data: { message: 'Message sent successfully' } }),
-    }),
+    })
   )
 }
 
@@ -51,10 +45,8 @@ async function mockNewsletterApi(page: Page, status = 200, body?: Record<string,
     route.fulfill({
       status,
       contentType: 'application/json',
-      body: JSON.stringify(
-        body ?? { success: true, data: { message: 'Subscription confirmed' } },
-      ),
-    }),
+      body: JSON.stringify(body ?? { success: true, data: { message: 'Subscription confirmed' } }),
+    })
   )
 }
 
@@ -64,7 +56,7 @@ async function mockQuotesApi(page: Page) {
       status: 200,
       contentType: 'application/json',
       body: JSON.stringify({ success: true }),
-    }),
+    })
   )
 }
 
@@ -74,7 +66,7 @@ async function mockClaimApi(page: Page, status = 200, body?: Record<string, unkn
       status,
       contentType: 'application/json',
       body: JSON.stringify(body ?? { success: true, message: 'Claim submitted' }),
-    }),
+    })
   )
 }
 
@@ -130,9 +122,7 @@ test.describe('Contact page', () => {
   })
 
   test('page loads with h1 heading "Contact Us"', async ({ page }) => {
-    await expect(
-      page.getByRole('heading', { level: 1, name: /contact us/i }),
-    ).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: /contact us/i })).toBeVisible()
   })
 
   test('contact form is visible with all required fields', async ({ page }) => {
@@ -140,17 +130,13 @@ test.describe('Contact page', () => {
     await expect(page.locator('#contact-email')).toBeVisible()
     await expect(page.locator('#contact-subject')).toBeVisible()
     await expect(page.locator('#contact-message')).toBeVisible()
-    await expect(
-      page.getByRole('button', { name: /send message/i }),
-    ).toBeVisible()
+    await expect(page.getByRole('button', { name: /send message/i })).toBeVisible()
   })
 
   test('empty submission is blocked by native validation', async ({ page }) => {
     await page.getByRole('button', { name: /send message/i }).click()
     // The form uses "required" attributes — browser blocks submission.
-    await expect(
-      page.getByRole('heading', { name: /message sent/i }),
-    ).not.toBeVisible()
+    await expect(page.getByRole('heading', { name: /message sent/i })).not.toBeVisible()
   })
 
   test('invalid email is rejected by native validation', async ({ page }) => {
@@ -159,9 +145,7 @@ test.describe('Contact page', () => {
     await page.locator('#contact-subject').selectOption('other')
     await page.locator('#contact-message').fill('This is a test message for E2E')
     await page.getByRole('button', { name: /send message/i }).click()
-    await expect(
-      page.getByRole('heading', { name: /message sent/i }),
-    ).not.toBeVisible()
+    await expect(page.getByRole('heading', { name: /message sent/i })).not.toBeVisible()
   })
 
   test('successful submission shows confirmation', async ({ page }) => {
@@ -171,9 +155,7 @@ test.describe('Contact page', () => {
     await page.locator('#contact-message').fill('I need help with a personal injury case')
     await page.getByRole('button', { name: /send message/i }).click()
     // After successful API response, the component renders a success view
-    await expect(
-      page.getByText(/message sent/i).first(),
-    ).toBeVisible({ timeout: 15_000 })
+    await expect(page.getByText(/message sent/i).first()).toBeVisible({ timeout: 15_000 })
   })
 
   test('contact info (email, phone) is displayed', async ({ page }) => {
@@ -210,9 +192,7 @@ test.describe('Newsletter signup', () => {
   test('empty email shows validation error', async ({ page }) => {
     await page.getByRole('button', { name: /subscribe/i }).click()
     // Native required validation prevents submission — form stays, no success text
-    await expect(
-      page.getByText(/thank you for subscribing/i),
-    ).not.toBeVisible()
+    await expect(page.getByText(/thank you for subscribing/i)).not.toBeVisible()
   })
 
   test('invalid email format shows error', async ({ page }) => {
@@ -228,9 +208,7 @@ test.describe('Newsletter signup', () => {
     const emailInput = page.getByPlaceholder(/your email/i)
     await emailInput.fill('test@example.com')
     await page.getByRole('button', { name: /subscribe/i }).click()
-    await expect(
-      page.getByText(/thank you for subscribing/i),
-    ).toBeVisible({ timeout: 10_000 })
+    await expect(page.getByText(/thank you for subscribing/i)).toBeVisible({ timeout: 10_000 })
   })
 
   test('duplicate email handled gracefully', async ({ page }) => {
@@ -243,9 +221,7 @@ test.describe('Newsletter signup', () => {
     await emailInput.fill('existing@example.com')
     await page.getByRole('button', { name: /subscribe/i }).click()
     // Should display an error text — not crash
-    await expect(
-      page.getByText(/error|already/i).first(),
-    ).toBeVisible({ timeout: 10_000 })
+    await expect(page.getByText(/error|already/i).first()).toBeVisible({ timeout: 10_000 })
   })
 })
 
@@ -267,9 +243,7 @@ test.describe('Quote request flow', () => {
   })
 
   test('quote page loads with form and step indicator', async ({ page }) => {
-    await expect(
-      page.getByRole('heading', { level: 1 }),
-    ).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
     await expect(page.getByText(/step 1 of 4/i)).toBeVisible()
   })
 
@@ -320,9 +294,9 @@ test.describe('Quote request flow', () => {
     await page.getByText(/i agree to be contacted/i).click()
     await page.getByRole('button', { name: /get my free consultations/i }).click()
 
-    await expect(
-      page.getByText(/your request has been submitted/i),
-    ).toBeVisible({ timeout: 10_000 })
+    await expect(page.getByText(/your request has been submitted/i)).toBeVisible({
+      timeout: 10_000,
+    })
   })
 
   test('step 4: validation blocks submission on incomplete fields', async ({ page }) => {
@@ -354,7 +328,7 @@ test.describe('Attorney claim flow', () => {
     await preAcceptCookies(page)
     await mockClaimApi(page)
     await page.route('**/api/auth/me', (route) =>
-      route.fulfill({ status: 401, contentType: 'application/json', body: '{}' }),
+      route.fulfill({ status: 401, contentType: 'application/json', body: '{}' })
     )
     await page.goto('/practice-areas', { waitUntil: 'domcontentloaded' })
     const firstAttorneyLink = page.getByRole('link', { name: /view profile|attorney/i }).first()
@@ -386,17 +360,23 @@ test.describe('Attorney claim flow', () => {
     await preAcceptCookies(page)
     await mockClaimApi(page, 400, { error: 'Bar number is required' })
     await page.route('**/api/auth/me', (route) =>
-      route.fulfill({ status: 401, contentType: 'application/json', body: '{}' }),
+      route.fulfill({ status: 401, contentType: 'application/json', body: '{}' })
     )
     await page.goto('/practice-areas', { waitUntil: 'domcontentloaded' })
     const firstAttorneyLink = page.getByRole('link', { name: /view profile|attorney/i }).first()
     const hasAttorney = await firstAttorneyLink.isVisible({ timeout: 10_000 }).catch(() => false)
-    if (!hasAttorney) { test.skip(); return }
+    if (!hasAttorney) {
+      test.skip()
+      return
+    }
     await firstAttorneyLink.click()
     await page.waitForLoadState('domcontentloaded')
     const claimBtn = page.getByRole('button', { name: /claim this profile/i })
     const hasClaim = await claimBtn.isVisible({ timeout: 10_000 }).catch(() => false)
-    if (!hasClaim) { test.skip(); return }
+    if (!hasClaim) {
+      test.skip()
+      return
+    }
     await claimBtn.click()
 
     const submitBtn = page.getByRole('button', { name: /send my request/i })
@@ -410,17 +390,23 @@ test.describe('Attorney claim flow', () => {
       message: 'Your claim request has been submitted.',
     })
     await page.route('**/api/auth/me', (route) =>
-      route.fulfill({ status: 401, contentType: 'application/json', body: '{}' }),
+      route.fulfill({ status: 401, contentType: 'application/json', body: '{}' })
     )
     await page.goto('/practice-areas', { waitUntil: 'domcontentloaded' })
     const firstAttorneyLink = page.getByRole('link', { name: /view profile|attorney/i }).first()
     const hasAttorney = await firstAttorneyLink.isVisible({ timeout: 10_000 }).catch(() => false)
-    if (!hasAttorney) { test.skip(); return }
+    if (!hasAttorney) {
+      test.skip()
+      return
+    }
     await firstAttorneyLink.click()
     await page.waitForLoadState('domcontentloaded')
     const claimBtn = page.getByRole('button', { name: /claim this profile/i })
     const hasClaim = await claimBtn.isVisible({ timeout: 10_000 }).catch(() => false)
-    if (!hasClaim) { test.skip(); return }
+    if (!hasClaim) {
+      test.skip()
+      return
+    }
     await claimBtn.click()
 
     await page.getByPlaceholder('John Smith').fill('Jane Attorney')
@@ -447,13 +433,16 @@ test.describe('FAQ page', () => {
 
   test('page loads with h1 heading', async ({ page }) => {
     await expect(
-      page.getByRole('heading', { level: 1, name: /frequently asked questions/i }),
+      page.getByRole('heading', { level: 1, name: /frequently asked questions/i })
     ).toBeVisible()
   })
 
   test('FAQ accordions expand and collapse on click', async ({ page }) => {
     // faqCategories may be empty in dev — skip gracefully
-    const firstQuestion = page.locator('button').filter({ hasText: /.{15,}/ }).first()
+    const firstQuestion = page
+      .locator('button')
+      .filter({ hasText: /.{15,}/ })
+      .first()
     const isVisible = await firstQuestion.isVisible({ timeout: 5_000 }).catch(() => false)
     if (!isVisible) {
       test.skip()
@@ -499,9 +488,7 @@ test.describe('FAQ page', () => {
   })
 
   test('"Contact us" CTA link is present', async ({ page }) => {
-    await expect(
-      page.getByRole('link', { name: /contact us/i }),
-    ).toBeVisible()
+    await expect(page.getByRole('link', { name: /contact us/i })).toBeVisible()
   })
 })
 

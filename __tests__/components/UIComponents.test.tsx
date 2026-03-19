@@ -87,7 +87,7 @@ import StickyMobileCTA from '@/components/StickyMobileCTA'
 describe('StickyMobileCTA', () => {
   beforeEach(() => {
     sessionStorageMock.clear()
-    sessionStorageMock.getItem.mockReturnValue(null)
+    sessionStorageMock.getItem.mockReturnValue(null as unknown as string)
   })
 
   it('renders CTA button with default text', () => {

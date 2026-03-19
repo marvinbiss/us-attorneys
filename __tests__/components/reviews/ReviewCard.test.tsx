@@ -307,7 +307,7 @@ describe('AttorneyVerificationSummary', () => {
   })
 
   it('hides trust score in compact mode when < 60', () => {
-    const { container } = render(
+    render(
       <AttorneyVerificationSummary
         identity={true}
         insurance={false}

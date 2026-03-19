@@ -5,7 +5,7 @@
  * Total: ~70 tests covering every function + edge cases
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 
 // Mock company-identity before importing jsonld
 vi.mock('@/lib/config/company-identity', () => ({
@@ -282,7 +282,6 @@ describe('getFAQSchema', () => {
   })
 
   it('returns null for undefined-like input', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(getFAQSchema(null as any)).toBeNull()
   })
 
@@ -540,7 +539,7 @@ describe('getAttorneySchema', () => {
     const graph = schema['@graph'] as Array<Record<string, unknown>>
     const knows = graph[0].knowsAbout as string[]
     // 'Criminal Defense' appears once (deduplicated)
-    expect(knows.filter(k => k === 'Criminal Defense')).toHaveLength(1)
+    expect(knows.filter((k) => k === 'Criminal Defense')).toHaveLength(1)
     expect(knows).toContain('DUI Defense')
   })
 

@@ -13,7 +13,9 @@ import { SearchResultCard, type SearchAttorney } from '@/components/search/Searc
 // Mock next/link
 vi.mock('next/link', () => ({
   default: ({ children, href, ...props }: React.PropsWithChildren<{ href: string }>) => (
-    <a href={href} {...props}>{children}</a>
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }))
 
@@ -105,6 +107,7 @@ const baseAttorney: SearchAttorney = {
   specialty_name: 'Personal Injury',
   address_city: 'New York',
   address_state: 'NY',
+  address_county: 'Test County',
   is_verified: true,
   rating_average: 4.8,
   review_count: 25,
@@ -258,6 +261,7 @@ describe('SearchResultCard', () => {
       slug: 'bob-johnson',
       address_city: null,
       address_state: null,
+      address_county: null,
       is_verified: null,
       rating_average: null,
       review_count: null,

@@ -69,17 +69,13 @@ function setupAuthSuccess(fromImpl: (table: string) => unknown) {
   return supabase
 }
 
-function setupAuthFailure(status: number, message: string) {
-  const { NextResponse } = require('next/server')
+async function setupAuthFailure(status: number, message: string) {
+  const { NextResponse } = await import('next/server')
   mockRequireAttorney.mockResolvedValue({
     error: NextResponse.json({ error: message }, { status }),
     user: null,
     supabase: {},
   })
-}
-
-function makeGetRequest(): Request {
-  return new Request('http://localhost/api/attorney/profile', { method: 'GET' })
 }
 
 function makePutRequest(body: Record<string, unknown>): Request {
@@ -99,7 +95,7 @@ beforeEach(() => {
 // ---------------------------------------------------------------------------
 describe('GET /api/attorney/profile — Auth', () => {
   it('returns 401 when user is not authenticated', async () => {
-    setupAuthFailure(401, 'Not authenticated')
+    await setupAuthFailure(401, 'Not authenticated')
 
     const { GET } = await import('@/app/api/attorney/profile/route')
     const res = await GET()
@@ -110,7 +106,7 @@ describe('GET /api/attorney/profile — Auth', () => {
   })
 
   it('returns 403 when user is not an attorney', async () => {
-    setupAuthFailure(403, 'Access reserved for attorneys')
+    await setupAuthFailure(403, 'Access reserved for attorneys')
 
     const { GET } = await import('@/app/api/attorney/profile/route')
     const res = await GET()
@@ -250,7 +246,7 @@ describe('GET /api/attorney/profile — Timeout', () => {
 // ---------------------------------------------------------------------------
 describe('PUT /api/attorney/profile — Auth', () => {
   it('returns 401 when user is not authenticated', async () => {
-    setupAuthFailure(401, 'Not authenticated')
+    await setupAuthFailure(401, 'Not authenticated')
 
     const { PUT } = await import('@/app/api/attorney/profile/route')
     const res = await PUT(makePutRequest({ full_name: 'New Name' }))
@@ -349,15 +345,17 @@ describe('PUT /api/attorney/profile — Provider update', () => {
     })
 
     const { PUT } = await import('@/app/api/attorney/profile/route')
-    const res = await PUT(makePutRequest({
-      name: 'Updated Law Firm',
-      bar_number: '99999',
-      phone: '2125559999',
-      address_line1: '456 Oak Ave',
-      address_city: 'Dallas',
-      address_zip: '75001',
-      specialty: 'Family Law',
-    }))
+    const res = await PUT(
+      makePutRequest({
+        name: 'Updated Law Firm',
+        bar_number: '99999',
+        phone: '2125559999',
+        address_line1: '456 Oak Ave',
+        address_city: 'Dallas',
+        address_zip: '75001',
+        specialty: 'Family Law',
+      })
+    )
     const body = await res.json()
 
     expect(res.status).toBe(200)
@@ -389,7 +387,9 @@ describe('PUT /api/attorney/profile — Provider update', () => {
     })
 
     const { PUT } = await import('@/app/api/attorney/profile/route')
-    await PUT(makePutRequest({ name: 'Test Firm', specialty: 'Criminal Defense', address_city: 'Austin' }))
+    await PUT(
+      makePutRequest({ name: 'Test Firm', specialty: 'Criminal Defense', address_city: 'Austin' })
+    )
 
     expect(mockRevalidatePath).toHaveBeenCalled()
   })
@@ -400,9 +400,7 @@ describe('PUT /api/attorney/profile — Provider update', () => {
 // ---------------------------------------------------------------------------
 describe('PUT /api/attorney/profile — DB error', () => {
   it('returns 500 when profile update fails', async () => {
-    setupAuthSuccess(() =>
-      makeChainBuilder({ data: null, error: { message: 'Update failed' } })
-    )
+    setupAuthSuccess(() => makeChainBuilder({ data: null, error: { message: 'Update failed' } }))
 
     const { PUT } = await import('@/app/api/attorney/profile/route')
     const res = await PUT(makePutRequest({ full_name: 'Test' }))
@@ -459,7 +457,9 @@ describe('PUT — Revalidation failure', () => {
       return makeChainBuilder({ data: null, error: null })
     })
 
-    mockRevalidatePath.mockImplementation(() => { throw new Error('Revalidation error') })
+    mockRevalidatePath.mockImplementation(() => {
+      throw new Error('Revalidation error')
+    })
 
     const { PUT } = await import('@/app/api/attorney/profile/route')
     const res = await PUT(makePutRequest({ name: 'Test', specialty: 'Tax Law' }))

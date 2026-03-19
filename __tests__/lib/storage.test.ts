@@ -171,8 +171,6 @@ describe('generateFilePath', () => {
 
   it('includes a timestamp and random string for uniqueness', () => {
     const path1 = generateFilePath('att-123', 'photo.jpg')
-    const path2 = generateFilePath('att-123', 'photo.jpg')
-    // Very unlikely to be identical due to random component
     // Just verify the format includes timestamp-random pattern
     const fileName = path1.split('/')[1]
     const parts = fileName.split('-')
@@ -270,9 +268,9 @@ describe('deleteFile', () => {
   })
 
   it('throws on invalid file URL (no matching path)', async () => {
-    await expect(
-      deleteFile('https://example.com/some/random/path')
-    ).rejects.toThrow('Invalid file URL')
+    await expect(deleteFile('https://example.com/some/random/path')).rejects.toThrow(
+      'Invalid file URL'
+    )
   })
 
   it('extracts path from valid storage URL and calls remove', async () => {
@@ -280,9 +278,7 @@ describe('deleteFile', () => {
     // Second call for thumbnail deletion
     mockRemove.mockResolvedValueOnce({ error: null })
 
-    await deleteFile(
-      'https://xyz.supabase.co/storage/v1/object/public/portfolio/att-123/photo.jpg'
-    )
+    await deleteFile('https://xyz.supabase.co/storage/v1/object/public/portfolio/att-123/photo.jpg')
 
     expect(mockFrom).toHaveBeenCalledWith('portfolio')
     expect(mockRemove).toHaveBeenCalledWith(['att-123/photo.jpg'])
@@ -300,9 +296,7 @@ describe('deleteFile', () => {
     mockRemove.mockResolvedValueOnce({ error: null })
     mockRemove.mockResolvedValueOnce({ error: null })
 
-    await deleteFile(
-      'https://xyz.supabase.co/storage/v1/object/public/portfolio/att-123/photo.jpg'
-    )
+    await deleteFile('https://xyz.supabase.co/storage/v1/object/public/portfolio/att-123/photo.jpg')
 
     // Second call should be for thumbnail
     expect(mockRemove).toHaveBeenCalledTimes(2)

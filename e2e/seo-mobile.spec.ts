@@ -14,9 +14,8 @@ async function goto(page: Page, path: string) {
 
 /** Extract all JSON-LD scripts from the page and return parsed objects */
 async function getAllJsonLd(page: Page): Promise<Record<string, unknown>[]> {
-  const scripts = await page.$$eval(
-    'script[type="application/ld+json"]',
-    (els) => els.map((el) => el.textContent ?? '')
+  const scripts = await page.$$eval('script[type="application/ld+json"]', (els) =>
+    els.map((el) => el.textContent ?? '')
   )
   const results: Record<string, unknown>[] = []
   for (const raw of scripts) {
@@ -166,9 +165,8 @@ test.describe('2. JSON-LD Structured Data', () => {
 
   test('all JSON-LD on homepage is valid parseable JSON', async ({ page }) => {
     await goto(page, '/')
-    const rawTexts = await page.$$eval(
-      'script[type="application/ld+json"]',
-      (els) => els.map((el) => el.textContent ?? '')
+    const rawTexts = await page.$$eval('script[type="application/ld+json"]', (els) =>
+      els.map((el) => el.textContent ?? '')
     )
     expect(rawTexts.length).toBeGreaterThan(0)
 
@@ -330,7 +328,6 @@ test.describe('5. Breadcrumbs', () => {
       // If the last item has a link, it should NOT be the text label itself (it could be the chevron icon wrapper)
       if (linkCount > 0) {
         // The link should not contain the label text directly — that would make the current page clickable
-        const linkText = await lastLink.first().textContent()
         const spanText = await lastSpan.first().textContent()
         // Both can have text, but the span (plain text) should be the primary label
         expect(spanText!.length).toBeGreaterThan(0)
@@ -381,7 +378,10 @@ test.describe('6. Noindex Verification', () => {
     const robotsMeta = await page.getAttribute('meta[name="robots"]', 'content')
     if (robotsMeta) {
       // Split by comma and check individual directives (avoid false positive from "max-image-preview")
-      const directives = robotsMeta.toLowerCase().split(',').map((d) => d.trim())
+      const directives = robotsMeta
+        .toLowerCase()
+        .split(',')
+        .map((d) => d.trim())
       expect(directives).not.toContain('noindex')
     }
   })
@@ -390,7 +390,10 @@ test.describe('6. Noindex Verification', () => {
     await goto(page, '/about')
     const robotsMeta = await page.getAttribute('meta[name="robots"]', 'content')
     if (robotsMeta) {
-      const directives = robotsMeta.toLowerCase().split(',').map((d) => d.trim())
+      const directives = robotsMeta
+        .toLowerCase()
+        .split(',')
+        .map((d) => d.trim())
       expect(directives).not.toContain('noindex')
     }
   })
@@ -399,7 +402,10 @@ test.describe('6. Noindex Verification', () => {
     await goto(page, '/faq')
     const robotsMeta = await page.getAttribute('meta[name="robots"]', 'content')
     if (robotsMeta) {
-      const directives = robotsMeta.toLowerCase().split(',').map((d) => d.trim())
+      const directives = robotsMeta
+        .toLowerCase()
+        .split(',')
+        .map((d) => d.trim())
       expect(directives).not.toContain('noindex')
     }
   })
@@ -427,7 +433,9 @@ test.describe('7. Mobile Responsive (375px)', () => {
   test('header: hamburger menu button visible', async ({ page }) => {
     await goto(page, '/')
     // The mobile menu button has aria-label "Open menu" — visible only below lg breakpoint
-    const menuButton = page.locator('button[aria-label="Open menu"], button[aria-label="Close menu"]')
+    const menuButton = page.locator(
+      'button[aria-label="Open menu"], button[aria-label="Close menu"]'
+    )
     await expect(menuButton.first()).toBeVisible({ timeout: 10_000 })
   })
 
@@ -436,7 +444,9 @@ test.describe('7. Mobile Responsive (375px)', () => {
     // On mobile (375px), the lg:hidden class hides the hamburger and lg:flex shows desktop nav.
     // At 375px, the hamburger should be visible and desktop nav hidden.
     // We verify by checking the menu button IS visible (proving mobile layout)
-    const menuButton = page.locator('button[aria-label="Open menu"], button[aria-label="Close menu"]')
+    const menuButton = page.locator(
+      'button[aria-label="Open menu"], button[aria-label="Close menu"]'
+    )
     await expect(menuButton.first()).toBeVisible({ timeout: 10_000 })
   })
 
@@ -485,7 +495,7 @@ test.describe('7. Mobile Responsive (375px)', () => {
     await goto(page, '/')
     await page.waitForTimeout(500)
     const overflowingImages = await page.evaluate(() => {
-      const images = document.querySelectorAll('img')
+      const images = Array.from(document.querySelectorAll('img'))
       let overflowCount = 0
       for (const img of images) {
         const rect = img.getBoundingClientRect()
@@ -572,7 +582,7 @@ test.describe('9. Performance Basics', () => {
   test('third-party scripts use async or defer', async ({ page }) => {
     await goto(page, '/')
     const externalScripts = await page.evaluate(() => {
-      const scripts = document.querySelectorAll('script[src]')
+      const scripts = Array.from(document.querySelectorAll('script[src]'))
       const results: { src: string; async: boolean; defer: boolean }[] = []
       for (const script of scripts) {
         const src = script.getAttribute('src') || ''
@@ -590,10 +600,7 @@ test.describe('9. Performance Basics', () => {
 
     for (const script of externalScripts) {
       const hasAsyncOrDefer = script.async || script.defer
-      expect(
-        hasAsyncOrDefer,
-        `External script ${script.src} should have async or defer`
-      ).toBe(true)
+      expect(hasAsyncOrDefer, `External script ${script.src} should have async or defer`).toBe(true)
     }
   })
 
@@ -607,7 +614,7 @@ test.describe('9. Performance Basics', () => {
   test('no render-blocking external scripts in <head>', async ({ page }) => {
     await goto(page, '/')
     const blockingScripts = await page.evaluate(() => {
-      const headScripts = document.head.querySelectorAll('script[src]')
+      const headScripts = Array.from(document.head.querySelectorAll('script[src]'))
       const blocking: string[] = []
       for (const script of headScripts) {
         const src = script.getAttribute('src') || ''
@@ -625,7 +632,7 @@ test.describe('9. Performance Basics', () => {
   test('images have dimensions to prevent CLS', async ({ page }) => {
     await goto(page, '/')
     const imagesWithoutDimensions = await page.evaluate(() => {
-      const images = document.querySelectorAll('img')
+      const images = Array.from(document.querySelectorAll('img'))
       let count = 0
       for (const img of images) {
         const hasWidth = img.hasAttribute('width') || img.style.width
@@ -650,7 +657,7 @@ test.describe('10. Accessibility Basics', () => {
   test('all images have alt attributes on homepage', async ({ page }) => {
     await goto(page, '/')
     const imagesWithoutAlt = await page.evaluate(() => {
-      const images = document.querySelectorAll('img')
+      const images = Array.from(document.querySelectorAll('img'))
       let count = 0
       for (const img of images) {
         // alt="" is valid for decorative images; only fail if attribute is missing entirely
@@ -684,8 +691,10 @@ test.describe('10. Accessibility Basics', () => {
   test('form inputs have associated labels or aria attributes', async ({ page }) => {
     await goto(page, '/')
     const unlabeledInputs = await page.evaluate(() => {
-      const inputs = document.querySelectorAll(
-        'input:not([type="hidden"]):not([type="submit"]):not([type="button"])'
+      const inputs = Array.from(
+        document.querySelectorAll(
+          'input:not([type="hidden"]):not([type="submit"]):not([type="button"])'
+        )
       )
       let count = 0
       for (const input of inputs) {
@@ -742,9 +751,7 @@ test.describe('10. Accessibility Basics', () => {
   test('interactive elements are keyboard focusable', async ({ page }) => {
     await goto(page, '/')
     await page.keyboard.press('Tab')
-    const focusedTag = await page.evaluate(() =>
-      document.activeElement?.tagName?.toLowerCase()
-    )
+    const focusedTag = await page.evaluate(() => document.activeElement?.tagName?.toLowerCase())
     expect(['a', 'button', 'input', 'select', 'textarea']).toContain(focusedTag)
   })
 })
@@ -765,9 +772,8 @@ test.describe('Cross-cutting: SEO on multiple pages', () => {
   for (const { path, name } of publicPages) {
     test(`${name} — all JSON-LD is valid parseable JSON`, async ({ page }) => {
       await goto(page, path)
-      const rawTexts = await page.$$eval(
-        'script[type="application/ld+json"]',
-        (els) => els.map((el) => el.textContent ?? '')
+      const rawTexts = await page.$$eval('script[type="application/ld+json"]', (els) =>
+        els.map((el) => el.textContent ?? '')
       )
       for (const raw of rawTexts) {
         expect(() => JSON.parse(raw), `Invalid JSON-LD on ${path}`).not.toThrow()

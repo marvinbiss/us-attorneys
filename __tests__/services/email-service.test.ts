@@ -30,17 +30,17 @@ describe('sendEmail', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
     // Reset env vars to a known state
-    delete process.env.RESEND_API_KEY
-    delete process.env.NODE_ENV
+    delete (process.env as Record<string, string | undefined>).RESEND_API_KEY
+    ;(process.env as Record<string, string | undefined>).NODE_ENV = undefined
   })
 
   afterEach(() => {
     process.env.RESEND_API_KEY = originalEnv.RESEND_API_KEY
-    process.env.NODE_ENV = originalEnv.NODE_ENV
+    ;(process.env as Record<string, string | undefined>).NODE_ENV = originalEnv.NODE_ENV
   })
 
   it('returns success with dev-mode id when RESEND_API_KEY is not set', async () => {
-    delete process.env.RESEND_API_KEY
+    delete (process.env as Record<string, string | undefined>).RESEND_API_KEY
     const result = await sendEmail({
       to: 'test@example.com',
       template: { subject: 'Test', html: '<p>Hello</p>' },
@@ -50,8 +50,8 @@ describe('sendEmail', () => {
 
   it('logs email details in development mode when API key is missing', async () => {
     const { logger } = await import('@/lib/logger')
-    delete process.env.RESEND_API_KEY
-    process.env.NODE_ENV = 'development'
+    delete (process.env as Record<string, string | undefined>).RESEND_API_KEY
+    ;(process.env as Record<string, string | undefined>).NODE_ENV = 'development'
 
     await sendEmail({
       to: 'dev@example.com',

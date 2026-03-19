@@ -50,6 +50,14 @@ export default tseslint.config(
     },
   },
   {
+    files: ['__tests__/**/*.{ts,tsx}', 'e2e/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@next/next/no-img-element': 'off',
+    },
+  },
+  {
     ignores: [
       'node_modules/**',
       '.next/**',

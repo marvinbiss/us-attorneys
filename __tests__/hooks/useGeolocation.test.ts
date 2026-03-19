@@ -40,8 +40,20 @@ function makePosition(lat: number, lng: number, accuracy: number = 10): Geolocat
       altitudeAccuracy: null,
       heading: null,
       speed: null,
+      toJSON: () => ({
+        latitude: lat,
+        longitude: lng,
+        accuracy,
+        altitude: null,
+        altitudeAccuracy: null,
+        heading: null,
+        speed: null,
+      }),
     },
     timestamp: Date.now(),
+    toJSON() {
+      return { coords: this.coords, timestamp: this.timestamp }
+    },
   }
 }
 
@@ -89,7 +101,9 @@ describe('useGeolocation', () => {
 
     const { result } = renderHook(() => useGeolocation())
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
 
     expect(result.current.loading).toBe(true)
     expect(result.current.error).toBeNull()
@@ -102,7 +116,9 @@ describe('useGeolocation', () => {
 
     const { result } = renderHook(() => useGeolocation())
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
 
     expect(result.current.latitude).toBe(40.7128)
     expect(result.current.longitude).toBe(-74.006)
@@ -120,7 +136,9 @@ describe('useGeolocation', () => {
 
     const { result } = renderHook(() => useGeolocation())
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
 
     expect(result.current.error).toContain('denied access')
     expect(result.current.loading).toBe(false)
@@ -135,7 +153,9 @@ describe('useGeolocation', () => {
 
     const { result } = renderHook(() => useGeolocation())
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
 
     expect(result.current.error).toContain('unavailable')
     expect(result.current.loading).toBe(false)
@@ -150,7 +170,9 @@ describe('useGeolocation', () => {
 
     const { result } = renderHook(() => useGeolocation())
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
 
     expect(result.current.error).toContain('timed out')
     expect(result.current.loading).toBe(false)
@@ -161,7 +183,9 @@ describe('useGeolocation', () => {
 
     const { result } = renderHook(() => useGeolocation())
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
 
     expect(result.current.error).toContain('not supported')
     expect(result.current.loading).toBe(false)
@@ -177,7 +201,9 @@ describe('useGeolocation', () => {
       useGeolocation({ enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 })
     )
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
 
     expect(mockGetCurrentPosition).toHaveBeenCalledWith(
       expect.any(Function),
@@ -191,7 +217,9 @@ describe('useGeolocation', () => {
 
     const { result } = renderHook(() => useGeolocation({ watch: true }))
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
 
     expect(mockWatchPosition).toHaveBeenCalled()
     expect(mockGetCurrentPosition).not.toHaveBeenCalled()
@@ -202,11 +230,15 @@ describe('useGeolocation', () => {
 
     const { result } = renderHook(() => useGeolocation({ watch: true }))
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
 
     // After getLocation, isWatching should become true on next render
     // clearWatch should call navigator.geolocation.clearWatch
-    act(() => { result.current.clearWatch() })
+    act(() => {
+      result.current.clearWatch()
+    })
 
     expect(mockClearWatch).toHaveBeenCalledWith(42)
   })
@@ -216,7 +248,9 @@ describe('useGeolocation', () => {
 
     const { result, unmount } = renderHook(() => useGeolocation({ watch: true }))
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
     unmount()
 
     expect(mockClearWatch).toHaveBeenCalledWith(99)
@@ -230,7 +264,9 @@ describe('useGeolocation', () => {
 
     const { result } = renderHook(() => useGeolocation())
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
     expect(result.current.latitude).toBe(34.0522)
 
     // Second: error — lat/lng are reset because handleError spreads prev
@@ -240,7 +276,9 @@ describe('useGeolocation', () => {
       }
     )
 
-    act(() => { result.current.getLocation() })
+    act(() => {
+      result.current.getLocation()
+    })
 
     // The error handler uses ...prev, so coords remain
     expect(result.current.latitude).toBe(34.0522)

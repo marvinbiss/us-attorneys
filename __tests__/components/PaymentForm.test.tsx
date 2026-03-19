@@ -12,7 +12,13 @@ import PaymentForm from '@/components/PaymentForm'
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => {
-      const { initial, animate, exit, transition, ...domProps } = props
+      const {
+        initial: _initial,
+        animate: _animate,
+        exit: _exit,
+        transition: _transition,
+        ...domProps
+      } = props
       return <div {...domProps}>{children}</div>
     },
   },
@@ -32,8 +38,10 @@ const mockStripe = {
 const mockElements = {}
 
 vi.mock('@stripe/react-stripe-js', () => ({
-  Elements: ({ children }: React.PropsWithChildren) => <div data-testid="stripe-elements">{children}</div>,
-  PaymentElement: (props: Record<string, unknown>) => <div data-testid="payment-element" />,
+  Elements: ({ children }: React.PropsWithChildren) => (
+    <div data-testid="stripe-elements">{children}</div>
+  ),
+  PaymentElement: (_props: Record<string, unknown>) => <div data-testid="payment-element" />,
   useStripe: () => mockStripe,
   useElements: () => mockElements,
 }))
@@ -54,15 +62,18 @@ const defaultProps = {
 // ── Setup ────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
-  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-    ok: true,
-    json: () =>
-      Promise.resolve({
-        clientSecret: 'pi_secret_test',
-        amount: 25000,
-        totalAmount: 25000,
-      }),
-  }))
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          clientSecret: 'pi_secret_test',
+          amount: 25000,
+          totalAmount: 25000,
+        }),
+    })
+  )
 })
 
 afterEach(() => {
@@ -124,13 +135,7 @@ describe('PaymentForm', () => {
   // ── Payment type selection ───────────────────────────────────────────
 
   it('renders payment type options when showDeposit and showSplitPayment are true', async () => {
-    render(
-      <PaymentForm
-        {...defaultProps}
-        showDeposit
-        showSplitPayment
-      />
-    )
+    render(<PaymentForm {...defaultProps} showDeposit showSplitPayment />)
 
     await waitFor(() => {
       expect(screen.getByText('Payment method')).toBeInTheDocument()
@@ -141,13 +146,7 @@ describe('PaymentForm', () => {
   })
 
   it('shows full payment amount', async () => {
-    render(
-      <PaymentForm
-        {...defaultProps}
-        showDeposit
-        showSplitPayment
-      />
-    )
+    render(<PaymentForm {...defaultProps} showDeposit showSplitPayment />)
 
     await waitFor(() => {
       // The full payment option shows $250.00
@@ -158,12 +157,7 @@ describe('PaymentForm', () => {
   // ── Deposit option ───────────────────────────────────────────────────
 
   it('shows deposit amount when deposit is selected', async () => {
-    render(
-      <PaymentForm
-        {...defaultProps}
-        showDeposit
-      />
-    )
+    render(<PaymentForm {...defaultProps} showDeposit />)
 
     await waitFor(() => {
       expect(screen.getByText('Deposit')).toBeInTheDocument()
@@ -180,12 +174,7 @@ describe('PaymentForm', () => {
   })
 
   it('shows deposit percentage options (20%, 30%, 50%)', async () => {
-    render(
-      <PaymentForm
-        {...defaultProps}
-        showDeposit
-      />
-    )
+    render(<PaymentForm {...defaultProps} showDeposit />)
 
     await waitFor(() => {
       expect(screen.getByText('Deposit')).toBeInTheDocument()
@@ -202,12 +191,7 @@ describe('PaymentForm', () => {
   })
 
   it('updates deposit amount when percentage changes', async () => {
-    render(
-      <PaymentForm
-        {...defaultProps}
-        showDeposit
-      />
-    )
+    render(<PaymentForm {...defaultProps} showDeposit />)
 
     await waitFor(() => {
       expect(screen.getByText('Deposit')).toBeInTheDocument()
@@ -229,12 +213,7 @@ describe('PaymentForm', () => {
   })
 
   it('shows remaining balance for deposit', async () => {
-    render(
-      <PaymentForm
-        {...defaultProps}
-        showDeposit
-      />
-    )
+    render(<PaymentForm {...defaultProps} showDeposit />)
 
     await waitFor(() => {
       expect(screen.getByText('Deposit')).toBeInTheDocument()
@@ -252,12 +231,7 @@ describe('PaymentForm', () => {
   // ── Split payment option ─────────────────────────────────────────────
 
   it('shows split payment installment amount when split is selected', async () => {
-    render(
-      <PaymentForm
-        {...defaultProps}
-        showSplitPayment
-      />
-    )
+    render(<PaymentForm {...defaultProps} showSplitPayment />)
 
     await waitFor(() => {
       expect(screen.getByText('Split payment')).toBeInTheDocument()
@@ -273,12 +247,7 @@ describe('PaymentForm', () => {
   })
 
   it('shows installment options (2x, 3x, 4x)', async () => {
-    render(
-      <PaymentForm
-        {...defaultProps}
-        showSplitPayment
-      />
-    )
+    render(<PaymentForm {...defaultProps} showSplitPayment />)
 
     await waitFor(() => {
       expect(screen.getByText('Split payment')).toBeInTheDocument()
@@ -294,12 +263,7 @@ describe('PaymentForm', () => {
   })
 
   it('updates installment amount when installment count changes', async () => {
-    render(
-      <PaymentForm
-        {...defaultProps}
-        showSplitPayment
-      />
-    )
+    render(<PaymentForm {...defaultProps} showSplitPayment />)
 
     await waitFor(() => {
       expect(screen.getByText('Split payment')).toBeInTheDocument()
@@ -396,7 +360,11 @@ describe('PaymentForm', () => {
 
   it('shows Processing... and disables button during payment', async () => {
     let resolvePayment!: (v: unknown) => void
-    mockConfirmPayment.mockReturnValue(new Promise((r) => { resolvePayment = r }))
+    mockConfirmPayment.mockReturnValue(
+      new Promise((r) => {
+        resolvePayment = r
+      })
+    )
 
     render(<PaymentForm {...defaultProps} />)
 
@@ -427,10 +395,13 @@ describe('PaymentForm', () => {
   // ── Payment intent API error ─────────────────────────────────────────
 
   it('calls onError when payment intent creation fails', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
-      ok: false,
-      json: () => Promise.resolve({}),
-    }))
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: false,
+        json: () => Promise.resolve({}),
+      })
+    )
 
     const onError = vi.fn()
     render(<PaymentForm {...defaultProps} onError={onError} />)

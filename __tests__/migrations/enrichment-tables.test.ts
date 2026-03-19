@@ -56,24 +56,16 @@ describe('CREATE TABLE idempotency', () => {
     expect(createTableMatches!.length).toBe(4)
   })
 
-  it.each(expectedTables)(
-    'CREATE TABLE %s should use IF NOT EXISTS',
-    (table) => {
-      // Match CREATE TABLE IF NOT EXISTS <table_name> with flexible whitespace
-      const pattern = new RegExp(
-        `CREATE\\s+TABLE\\s+IF\\s+NOT\\s+EXISTS\\s+${table}\\b`,
-        'i'
-      )
-      expect(sql).toMatch(pattern)
-    }
-  )
+  it.each(expectedTables)('CREATE TABLE %s should use IF NOT EXISTS', (table) => {
+    // Match CREATE TABLE IF NOT EXISTS <table_name> with flexible whitespace
+    const pattern = new RegExp(`CREATE\\s+TABLE\\s+IF\\s+NOT\\s+EXISTS\\s+${table}\\b`, 'i')
+    expect(sql).toMatch(pattern)
+  })
 
   it('should have no CREATE TABLE without IF NOT EXISTS', () => {
     // Find all CREATE TABLE statements, then verify each has IF NOT EXISTS
     const allCreateTable = sql.match(/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?(\w+)/gi) || []
-    const withoutIfNotExists = allCreateTable.filter(
-      (stmt) => !/IF\s+NOT\s+EXISTS/i.test(stmt)
-    )
+    const withoutIfNotExists = allCreateTable.filter((stmt) => !/IF\s+NOT\s+EXISTS/i.test(stmt))
     expect(withoutIfNotExists).toEqual([])
   })
 })
@@ -132,19 +124,54 @@ describe('Expected table definitions', () => {
   const tables = [
     {
       name: 'attorney_education',
-      requiredColumns: ['id', 'attorney_id', 'institution', 'degree', 'graduation_year', 'is_verified', 'created_at', 'updated_at'],
+      requiredColumns: [
+        'id',
+        'attorney_id',
+        'institution',
+        'degree',
+        'graduation_year',
+        'is_verified',
+        'created_at',
+        'updated_at',
+      ],
     },
     {
       name: 'attorney_awards',
-      requiredColumns: ['id', 'attorney_id', 'title', 'issuer', 'year', 'is_verified', 'created_at'],
+      requiredColumns: [
+        'id',
+        'attorney_id',
+        'title',
+        'issuer',
+        'year',
+        'is_verified',
+        'created_at',
+      ],
     },
     {
       name: 'disciplinary_actions',
-      requiredColumns: ['id', 'attorney_id', 'state', 'action_type', 'effective_date', 'source_url', 'is_public', 'created_at', 'updated_at'],
+      requiredColumns: [
+        'id',
+        'attorney_id',
+        'state',
+        'action_type',
+        'effective_date',
+        'source_url',
+        'is_public',
+        'created_at',
+        'updated_at',
+      ],
     },
     {
       name: 'attorney_publications',
-      requiredColumns: ['id', 'attorney_id', 'title', 'publication_type', 'publisher', 'is_verified', 'created_at'],
+      requiredColumns: [
+        'id',
+        'attorney_id',
+        'title',
+        'publication_type',
+        'publisher',
+        'is_verified',
+        'created_at',
+      ],
     },
   ]
 
@@ -216,10 +243,7 @@ describe('Row Level Security', () => {
   it('should have public read policies for all 4 tables', () => {
     // Each table should have a SELECT policy
     for (const table of tables) {
-      const pattern = new RegExp(
-        `CREATE\\s+POLICY\\s+[^;]*?ON\\s+${table}\\s+FOR\\s+SELECT`,
-        'is'
-      )
+      const pattern = new RegExp(`CREATE\\s+POLICY\\s+[^;]*?ON\\s+${table}\\s+FOR\\s+SELECT`, 'is')
       expect(sql).toMatch(pattern)
     }
   })
@@ -253,9 +277,7 @@ describe('Indexes', () => {
 
   it('all CREATE INDEX statements should use IF NOT EXISTS', () => {
     const allCreateIndex = sql.match(/CREATE\s+INDEX\s+(?:IF\s+NOT\s+EXISTS\s+)?(\w+)/gi) || []
-    const withoutIfNotExists = allCreateIndex.filter(
-      (stmt) => !/IF\s+NOT\s+EXISTS/i.test(stmt)
-    )
+    const withoutIfNotExists = allCreateIndex.filter((stmt) => !/IF\s+NOT\s+EXISTS/i.test(stmt))
     expect(withoutIfNotExists).toEqual([])
   })
 
@@ -322,7 +344,8 @@ describe('CHECK constraints', () => {
 
   it('disciplinary_actions.source_url should be NOT NULL', () => {
     // Extract the disciplinary_actions CREATE TABLE block
-    const tablePattern = /CREATE\s+TABLE\s+IF\s+NOT\s+EXISTS\s+disciplinary_actions\s*\(([^;]+?)\);/is
+    const tablePattern =
+      /CREATE\s+TABLE\s+IF\s+NOT\s+EXISTS\s+disciplinary_actions\s*\(([^;]+?)\);/i
     const match = sql.match(tablePattern)
     expect(match).not.toBeNull()
     // source_url should be TEXT NOT NULL (mandatory for legal data integrity)

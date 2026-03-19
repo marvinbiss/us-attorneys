@@ -53,7 +53,7 @@ function makeRequest(
   body?: unknown,
   headers?: Record<string, string>
 ): NextRequest {
-  const init: RequestInit = { method, headers }
+  const init: any = { method, headers }
   if (body) {
     init.body = JSON.stringify(body)
     init.headers = { ...init.headers, 'Content-Type': 'application/json' }

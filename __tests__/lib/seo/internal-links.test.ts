@@ -71,11 +71,11 @@ describe('getRelatedServiceLinks', () => {
 
   it('limits output to 5 links max', () => {
     // Use a slug that matches many keywords + pricing category + emergency tag
-    const links = getRelatedServiceLinks(
-      'personal-injury-car-accident-dui',
-      'Pricing',
-      ['immigration', 'estate-planning', 'emergency']
-    )
+    const links = getRelatedServiceLinks('personal-injury-car-accident-dui', 'Pricing', [
+      'immigration',
+      'estate-planning',
+      'emergency',
+    ])
     expect(links.length).toBeLessThanOrEqual(5)
   })
 
@@ -92,10 +92,7 @@ describe('getRelatedServiceLinks', () => {
   })
 
   it('handles multiple distinct service matches from tags (limited to 5)', () => {
-    const links = getRelatedServiceLinks('general-article', 'General', [
-      'patent',
-      'bankruptcy',
-    ])
+    const links = getRelatedServiceLinks('general-article', 'General', ['patent', 'bankruptcy'])
     // First match (patent -> intellectual-property) generates 1 service link + 5 city links = 6
     // But output is capped at 5, so only the first service and its city variants appear
     const ipLink = links.find((l) => l.href === '/practice-areas/intellectual-property')
@@ -107,13 +104,45 @@ describe('getRelatedServiceLinks', () => {
 // ─── getRelatedArticleSlugs ──────────────────────────────────────────
 
 describe('getRelatedArticleSlugs', () => {
-  const articlesMap: Record<string, { category: string; tags: string[]; title: string; readTime?: string }> = {
-    'dui-defense': { category: 'Criminal', tags: ['DUI', 'Defense'], title: 'DUI Defense Guide', readTime: '5 min' },
-    'drug-charges': { category: 'Criminal', tags: ['Drug', 'Defense'], title: 'Drug Charges FAQ', readTime: '4 min' },
-    'divorce-guide': { category: 'Family', tags: ['Divorce', 'Custody'], title: 'Divorce Guide', readTime: '7 min' },
-    'child-custody': { category: 'Family', tags: ['Custody'], title: 'Child Custody Tips', readTime: '6 min' },
-    'estate-planning': { category: 'Estate', tags: ['Wills', 'Trusts'], title: 'Estate Planning 101' },
-    'immigration-faq': { category: 'Immigration', tags: ['Visa', 'DUI'], title: 'Immigration FAQ', readTime: '8 min' },
+  const articlesMap: Record<
+    string,
+    { category: string; tags: string[]; title: string; readTime?: string }
+  > = {
+    'dui-defense': {
+      category: 'Criminal',
+      tags: ['DUI', 'Defense'],
+      title: 'DUI Defense Guide',
+      readTime: '5 min',
+    },
+    'drug-charges': {
+      category: 'Criminal',
+      tags: ['Drug', 'Defense'],
+      title: 'Drug Charges FAQ',
+      readTime: '4 min',
+    },
+    'divorce-guide': {
+      category: 'Family',
+      tags: ['Divorce', 'Custody'],
+      title: 'Divorce Guide',
+      readTime: '7 min',
+    },
+    'child-custody': {
+      category: 'Family',
+      tags: ['Custody'],
+      title: 'Child Custody Tips',
+      readTime: '6 min',
+    },
+    'estate-planning': {
+      category: 'Estate',
+      tags: ['Wills', 'Trusts'],
+      title: 'Estate Planning 101',
+    },
+    'immigration-faq': {
+      category: 'Immigration',
+      tags: ['Visa', 'DUI'],
+      title: 'Immigration FAQ',
+      readTime: '8 min',
+    },
     'empty-article': { category: 'General', tags: [], title: '', readTime: '' },
   }
   const allSlugs = Object.keys(articlesMap)
@@ -125,7 +154,13 @@ describe('getRelatedArticleSlugs', () => {
   })
 
   it('returns articles with overlapping tags scored higher', () => {
-    const result = getRelatedArticleSlugs('dui-defense', 'Criminal', ['DUI', 'Defense'], allSlugs, articlesMap)
+    const result = getRelatedArticleSlugs(
+      'dui-defense',
+      'Criminal',
+      ['DUI', 'Defense'],
+      allSlugs,
+      articlesMap
+    )
     // immigration-faq shares tag 'DUI'
     expect(result.some((r) => r.slug === 'immigration-faq')).toBe(true)
   })
@@ -136,12 +171,24 @@ describe('getRelatedArticleSlugs', () => {
   })
 
   it('limits results to 4 max', () => {
-    const result = getRelatedArticleSlugs('dui-defense', 'Criminal', ['DUI', 'Defense'], allSlugs, articlesMap)
+    const result = getRelatedArticleSlugs(
+      'dui-defense',
+      'Criminal',
+      ['DUI', 'Defense'],
+      allSlugs,
+      articlesMap
+    )
     expect(result.length).toBeLessThanOrEqual(4)
   })
 
   it('excludes articles with score 0 (no shared tags or category)', () => {
-    const result = getRelatedArticleSlugs('estate-planning', 'Estate', ['Wills', 'Trusts'], allSlugs, articlesMap)
+    const result = getRelatedArticleSlugs(
+      'estate-planning',
+      'Estate',
+      ['Wills', 'Trusts'],
+      allSlugs,
+      articlesMap
+    )
     // No other articles share Estate category or Wills/Trusts tags
     expect(result.every((r) => r.slug !== 'dui-defense' || r.category === 'Estate')).toBe(true)
   })
@@ -152,7 +199,13 @@ describe('getRelatedArticleSlugs', () => {
   })
 
   it('returns empty array when no articles match', () => {
-    const result = getRelatedArticleSlugs('estate-planning', 'Estate', ['Wills', 'Trusts'], allSlugs, articlesMap)
+    const result = getRelatedArticleSlugs(
+      'estate-planning',
+      'Estate',
+      ['Wills', 'Trusts'],
+      allSlugs,
+      articlesMap
+    )
     // Only estate-planning has Estate category and Wills/Trusts tags, and it's excluded as current
     expect(Array.isArray(result)).toBe(true)
   })
@@ -173,8 +226,6 @@ describe('getRelatedArticleSlugs', () => {
       allSlugs,
       articlesMap
     )
-    // estate-planning has no readTime
-    const ep = result.find((r) => r.slug === 'estate-planning')
     // estate-planning has no shared tags or category with Family/Custody, so it won't appear
     // child-custody shares both category and tag
     const cc = result.find((r) => r.slug === 'child-custody')
@@ -184,7 +235,13 @@ describe('getRelatedArticleSlugs', () => {
   })
 
   it('sorts results by score descending (category + tag overlap)', () => {
-    const result = getRelatedArticleSlugs('dui-defense', 'Criminal', ['DUI', 'Defense'], allSlugs, articlesMap)
+    const result = getRelatedArticleSlugs(
+      'dui-defense',
+      'Criminal',
+      ['DUI', 'Defense'],
+      allSlugs,
+      articlesMap
+    )
     // drug-charges: +2 (category) + 3 (Defense) = 5
     // immigration-faq: +3 (DUI) = 3
     if (result.length >= 2) {

@@ -29,7 +29,7 @@ async function mockAdminLogin(page: Page) {
           },
         },
       }),
-    }),
+    })
   )
 }
 
@@ -43,7 +43,7 @@ async function mockFailedLogin(page: Page) {
         success: false,
         error: { code: 'AUTHENTICATION_ERROR', message: 'Incorrect email or password' },
       }),
-    }),
+    })
   )
 }
 
@@ -62,11 +62,32 @@ const MOCK_STATS = {
     trends: { users: 8, bookings: -3, revenue: 15 },
   },
   recentActivity: [
-    { id: '1', type: 'booking' as const, action: 'created', details: 'New booking by John Doe', timestamp: new Date().toISOString(), status: 'pending' },
-    { id: '2', type: 'review' as const, action: 'submitted', details: '5-star review for Attorney Smith', timestamp: new Date().toISOString() },
+    {
+      id: '1',
+      type: 'booking' as const,
+      action: 'created',
+      details: 'New booking by John Doe',
+      timestamp: new Date().toISOString(),
+      status: 'pending',
+    },
+    {
+      id: '2',
+      type: 'review' as const,
+      action: 'submitted',
+      details: '5-star review for Attorney Smith',
+      timestamp: new Date().toISOString(),
+    },
   ],
   pendingReports: [
-    { id: 'r1', target_type: 'review', reason: 'spam', description: 'Fake review', status: 'pending', created_at: new Date().toISOString(), reporter_id: 'u1' },
+    {
+      id: 'r1',
+      target_type: 'review',
+      reason: 'spam',
+      description: 'Fake review',
+      status: 'pending',
+      created_at: new Date().toISOString(),
+      reporter_id: 'u1',
+    },
   ],
   chartData: [
     { date: '2026-03-11', bookings: 5, users: 10, reviews: 3 },
@@ -76,7 +97,15 @@ const MOCK_STATS = {
     total: 42,
     today: 3,
     recent: [
-      { id: 'l1', lastName: 'Johnson', telephone: '+1-555-0101', practice_area: 'Personal Injury', city: 'Houston', source: 'chat', created_at: new Date().toISOString() },
+      {
+        id: 'l1',
+        lastName: 'Johnson',
+        telephone: '+1-555-0101',
+        practice_area: 'Personal Injury',
+        city: 'Houston',
+        source: 'chat',
+        created_at: new Date().toISOString(),
+      },
     ],
   },
 }
@@ -85,9 +114,54 @@ const MOCK_STATS = {
 const MOCK_ATTORNEYS = {
   success: true,
   providers: [
-    { id: 'att-1', name: 'John Smith', slug: 'john-smith', email: 'john@example.com', phone: '555-0001', address_city: 'Houston', address_state: 'TX', specialty: 'Personal Injury', is_verified: true, is_active: true, rating_average: 4.5, review_count: 12, created_at: '2026-01-01T00:00:00Z', bar_number: 'TX123456' },
-    { id: 'att-2', name: 'Jane Doe', slug: 'jane-doe', email: 'jane@example.com', phone: '555-0002', address_city: 'Dallas', address_state: 'TX', specialty: 'Family Law', is_verified: false, is_active: true, rating_average: 0, review_count: 0, created_at: '2026-02-15T00:00:00Z', bar_number: 'TX654321' },
-    { id: 'att-3', name: 'Bob Wilson', slug: 'bob-wilson', email: 'bob@example.com', phone: '555-0003', address_city: 'Austin', address_state: 'TX', specialty: 'Criminal Defense', is_verified: true, is_active: false, rating_average: 3.8, review_count: 5, created_at: '2026-01-20T00:00:00Z', bar_number: 'TX789012' },
+    {
+      id: 'att-1',
+      name: 'John Smith',
+      slug: 'john-smith',
+      email: 'john@example.com',
+      phone: '555-0001',
+      address_city: 'Houston',
+      address_state: 'TX',
+      specialty: 'Personal Injury',
+      is_verified: true,
+      is_active: true,
+      rating_average: 4.5,
+      review_count: 12,
+      created_at: '2026-01-01T00:00:00Z',
+      bar_number: 'TX123456',
+    },
+    {
+      id: 'att-2',
+      name: 'Jane Doe',
+      slug: 'jane-doe',
+      email: 'jane@example.com',
+      phone: '555-0002',
+      address_city: 'Dallas',
+      address_state: 'TX',
+      specialty: 'Family Law',
+      is_verified: false,
+      is_active: true,
+      rating_average: 0,
+      review_count: 0,
+      created_at: '2026-02-15T00:00:00Z',
+      bar_number: 'TX654321',
+    },
+    {
+      id: 'att-3',
+      name: 'Bob Wilson',
+      slug: 'bob-wilson',
+      email: 'bob@example.com',
+      phone: '555-0003',
+      address_city: 'Austin',
+      address_state: 'TX',
+      specialty: 'Criminal Defense',
+      is_verified: true,
+      is_active: false,
+      rating_average: 3.8,
+      review_count: 5,
+      created_at: '2026-01-20T00:00:00Z',
+      bar_number: 'TX789012',
+    },
   ],
   totalPages: 2,
   total: 25,
@@ -96,9 +170,40 @@ const MOCK_ATTORNEYS = {
 // Mock reviews list
 const MOCK_REVIEWS = {
   reviews: [
-    { id: 'rev-1', client_name: 'Alice Brown', client_email: 'alice@example.com', provider_name: 'John Smith', attorney_id: 'att-1', rating: 5, comment: 'Excellent attorney, very professional.', status: 'pending_review' as const, created_at: '2026-03-15T00:00:00Z' },
-    { id: 'rev-2', client_name: 'Bob Green', client_email: 'bob@example.com', provider_name: 'Jane Doe', attorney_id: 'att-2', rating: 3, comment: 'Average experience.', response: 'Thank you for your feedback.', status: 'published' as const, created_at: '2026-03-14T00:00:00Z' },
-    { id: 'rev-3', client_name: 'Carol White', client_email: 'carol@example.com', provider_name: 'Bob Wilson', attorney_id: 'att-3', rating: 1, comment: 'Terrible service.', status: 'flagged' as const, created_at: '2026-03-13T00:00:00Z' },
+    {
+      id: 'rev-1',
+      client_name: 'Alice Brown',
+      client_email: 'alice@example.com',
+      provider_name: 'John Smith',
+      attorney_id: 'att-1',
+      rating: 5,
+      comment: 'Excellent attorney, very professional.',
+      status: 'pending_review' as const,
+      created_at: '2026-03-15T00:00:00Z',
+    },
+    {
+      id: 'rev-2',
+      client_name: 'Bob Green',
+      client_email: 'bob@example.com',
+      provider_name: 'Jane Doe',
+      attorney_id: 'att-2',
+      rating: 3,
+      comment: 'Average experience.',
+      response: 'Thank you for your feedback.',
+      status: 'published' as const,
+      created_at: '2026-03-14T00:00:00Z',
+    },
+    {
+      id: 'rev-3',
+      client_name: 'Carol White',
+      client_email: 'carol@example.com',
+      provider_name: 'Bob Wilson',
+      attorney_id: 'att-3',
+      rating: 1,
+      comment: 'Terrible service.',
+      status: 'flagged' as const,
+      created_at: '2026-03-13T00:00:00Z',
+    },
   ],
   totalPages: 1,
 }
@@ -107,17 +212,43 @@ const MOCK_REVIEWS = {
 const MOCK_CLAIMS = {
   data: [
     {
-      id: 'claim-1', status: 'pending' as const, siret_provided: 'TX123456',
-      claimant_name: 'John Smith', claimant_email: 'john@example.com', claimant_phone: '555-0001', claimant_position: 'Attorney',
-      rejection_reason: null, reviewed_at: null, created_at: '2026-03-10T00:00:00Z',
-      provider: { id: 'att-1', name: 'John Smith Esq.', bar_number: 'TX123456', address_city: 'Houston', stable_id: 'sid-1' },
+      id: 'claim-1',
+      status: 'pending' as const,
+      siret_provided: 'TX123456',
+      claimant_name: 'John Smith',
+      claimant_email: 'john@example.com',
+      claimant_phone: '555-0001',
+      claimant_position: 'Attorney',
+      rejection_reason: null,
+      reviewed_at: null,
+      created_at: '2026-03-10T00:00:00Z',
+      provider: {
+        id: 'att-1',
+        name: 'John Smith Esq.',
+        bar_number: 'TX123456',
+        address_city: 'Houston',
+        stable_id: 'sid-1',
+      },
       user: { id: 'u1', email: 'john@example.com', full_name: 'John Smith' },
     },
     {
-      id: 'claim-2', status: 'approved' as const, siret_provided: 'TX654321',
-      claimant_name: 'Jane Doe', claimant_email: 'jane@example.com', claimant_phone: null, claimant_position: null,
-      rejection_reason: null, reviewed_at: '2026-03-12T00:00:00Z', created_at: '2026-03-08T00:00:00Z',
-      provider: { id: 'att-2', name: 'Jane Doe Esq.', bar_number: 'TX654321', address_city: 'Dallas', stable_id: 'sid-2' },
+      id: 'claim-2',
+      status: 'approved' as const,
+      siret_provided: 'TX654321',
+      claimant_name: 'Jane Doe',
+      claimant_email: 'jane@example.com',
+      claimant_phone: null,
+      claimant_position: null,
+      rejection_reason: null,
+      reviewed_at: '2026-03-12T00:00:00Z',
+      created_at: '2026-03-08T00:00:00Z',
+      provider: {
+        id: 'att-2',
+        name: 'Jane Doe Esq.',
+        bar_number: 'TX654321',
+        address_city: 'Dallas',
+        stable_id: 'sid-2',
+      },
       user: { id: 'u2', email: 'jane@example.com', full_name: 'Jane Doe' },
     },
   ],
@@ -127,9 +258,42 @@ const MOCK_CLAIMS = {
 // Mock bookings list
 const MOCK_BOOKINGS = {
   bookings: [
-    { id: 'bk-1', attorney_id: 'att-1', client_id: 'cl-1', service_name: 'Consultation', scheduled_at: '2026-03-20T10:00:00Z', status: 'pending', payment_status: 'paid', deposit_amount: 15000, created_at: '2026-03-15T00:00:00Z', provider: { id: 'att-1', name: 'John Smith', email: 'john@example.com' } },
-    { id: 'bk-2', attorney_id: 'att-2', client_id: 'cl-2', service_name: 'Video Consultation', scheduled_at: '2026-03-22T14:00:00Z', status: 'confirmed', payment_status: 'paid', deposit_amount: 20000, created_at: '2026-03-16T00:00:00Z', provider: { id: 'att-2', name: 'Jane Doe', email: 'jane@example.com' } },
-    { id: 'bk-3', attorney_id: 'att-3', client_id: 'cl-3', service_name: 'Case Review', scheduled_at: '2026-03-18T09:00:00Z', status: 'completed', payment_status: 'paid', deposit_amount: 10000, created_at: '2026-03-10T00:00:00Z', provider: { id: 'att-3', name: 'Bob Wilson', email: 'bob@example.com' } },
+    {
+      id: 'bk-1',
+      attorney_id: 'att-1',
+      client_id: 'cl-1',
+      service_name: 'Consultation',
+      scheduled_at: '2026-03-20T10:00:00Z',
+      status: 'pending',
+      payment_status: 'paid',
+      deposit_amount: 15000,
+      created_at: '2026-03-15T00:00:00Z',
+      provider: { id: 'att-1', name: 'John Smith', email: 'john@example.com' },
+    },
+    {
+      id: 'bk-2',
+      attorney_id: 'att-2',
+      client_id: 'cl-2',
+      service_name: 'Video Consultation',
+      scheduled_at: '2026-03-22T14:00:00Z',
+      status: 'confirmed',
+      payment_status: 'paid',
+      deposit_amount: 20000,
+      created_at: '2026-03-16T00:00:00Z',
+      provider: { id: 'att-2', name: 'Jane Doe', email: 'jane@example.com' },
+    },
+    {
+      id: 'bk-3',
+      attorney_id: 'att-3',
+      client_id: 'cl-3',
+      service_name: 'Case Review',
+      scheduled_at: '2026-03-18T09:00:00Z',
+      status: 'completed',
+      payment_status: 'paid',
+      deposit_amount: 10000,
+      created_at: '2026-03-10T00:00:00Z',
+      provider: { id: 'att-3', name: 'Bob Wilson', email: 'bob@example.com' },
+    },
   ],
   totalPages: 1,
   total: 3,
@@ -138,37 +302,81 @@ const MOCK_BOOKINGS = {
 /** Sets up all admin API mocks so dashboard pages render with data. */
 async function setupAdminAPIMocks(page: Page) {
   await page.route('**/api/admin/stats', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_STATS) }),
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(MOCK_STATS),
+    })
   )
   await page.route('**/api/admin/providers?**', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_ATTORNEYS) }),
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(MOCK_ATTORNEYS),
+    })
   )
   await page.route('**/api/admin/providers/**', (route) => {
     if (route.request().method() === 'PATCH') {
-      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true }) })
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true }),
+      })
     }
-    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_ATTORNEYS.providers[0]) })
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(MOCK_ATTORNEYS.providers[0]),
+    })
   })
   await page.route('**/api/admin/reviews?**', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_REVIEWS) }),
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(MOCK_REVIEWS),
+    })
   )
   await page.route('**/api/admin/reviews/**', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true }) }),
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ success: true }),
+    })
   )
   await page.route('**/api/admin/claims?**', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_CLAIMS) }),
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(MOCK_CLAIMS),
+    })
   )
   await page.route('**/api/admin/claims', (route) => {
     if (route.request().method() === 'PATCH') {
-      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true, message: 'Claim processed successfully' }) })
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true, message: 'Claim processed successfully' }),
+      })
     }
-    return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_CLAIMS) })
+    return route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(MOCK_CLAIMS),
+    })
   })
   await page.route('**/api/admin/bookings?**', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_BOOKINGS) }),
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(MOCK_BOOKINGS),
+    })
   )
   await page.route('**/api/admin/bookings/**', (route) =>
-    route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ success: true }) }),
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ success: true }),
+    })
   )
 }
 
@@ -198,15 +406,6 @@ async function requireAdminDashboard(page: Page): Promise<boolean> {
   }
 }
 
-/**
- * Locator for the admin login form. Scoped to the card container
- * that holds the login form, to avoid matching newsletter inputs in the footer.
- */
-function loginCard(page: Page) {
-  // The login form is inside a div with class "bg-slate-800/50" which contains the form
-  return page.locator('form[class]').first()
-}
-
 // ==========================================================================
 // 1. ADMIN LOGIN
 // ==========================================================================
@@ -215,7 +414,9 @@ test.describe('Admin Login', () => {
   test('login page loads with correct heading', async ({ page }) => {
     await page.goto('/admin/login')
     await page.waitForLoadState('domcontentloaded')
-    await expect(page.locator('h1').filter({ hasText: 'Administration' })).toBeVisible({ timeout: 15000 })
+    await expect(page.locator('h1').filter({ hasText: 'Administration' })).toBeVisible({
+      timeout: 15000,
+    })
     await expect(page.getByText('Sign in to access the admin panel')).toBeVisible()
   })
 
@@ -231,7 +432,9 @@ test.describe('Admin Login', () => {
 
   test('login page has submit button', async ({ page }) => {
     await page.goto('/admin/login')
-    await expect(page.getByRole('button', { name: /Admin Sign In/i })).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('button', { name: /Admin Sign In/i })).toBeVisible({
+      timeout: 15000,
+    })
   })
 
   test('login page has "Back to Site" link', async ({ page }) => {
@@ -273,7 +476,9 @@ test.describe('Admin Login', () => {
     let resolveRoute: (() => void) | null = null
     await page.route('**/api/auth/signin', async (route) => {
       // Wait indefinitely until we resolve
-      await new Promise<void>((resolve) => { resolveRoute = resolve })
+      await new Promise<void>((resolve) => {
+        resolveRoute = resolve
+      })
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -301,7 +506,7 @@ test.describe('Admin Login', () => {
     await expect(submitBtn).toBeDisabled({ timeout: 3000 })
 
     // Clean up: resolve the pending route
-    resolveRoute?.()
+    if (resolveRoute) (resolveRoute as () => void)()
   })
 
   test('successful admin login redirects to /admin', async ({ page }) => {
@@ -340,7 +545,9 @@ test.describe('Admin Dashboard', () => {
 
     const isAdmin = await requireAdminDashboard(page)
     if (isAdmin) {
-      await expect(page.getByRole('heading', { name: /Dashboard/i })).toBeVisible({ timeout: 10000 })
+      await expect(page.getByRole('heading', { name: /Dashboard/i })).toBeVisible({
+        timeout: 10000,
+      })
     } else {
       // Expected: redirected to login
       await expect(page).toHaveURL(/\/login|error=unauthorized/)
@@ -422,10 +629,30 @@ test.describe('Admin Sidebar Navigation', () => {
 
     const sidebar = page.locator('aside[aria-label="Admin navigation"]')
     const expectedItems = [
-      'Dashboard', 'Analytics', 'System', 'Requests', 'Leads Estimation',
-      'Dispatch', 'Algorithm', 'Tools', 'Log', 'Users', 'Attorneys',
-      'Claims', 'Bookings', 'Quotes', 'Reviews', 'Payments', 'Services',
-      'Content', 'Messages', 'Reports', 'Audit', 'GDPR', 'Prospection', 'Settings',
+      'Dashboard',
+      'Analytics',
+      'System',
+      'Requests',
+      'Leads Estimation',
+      'Dispatch',
+      'Algorithm',
+      'Tools',
+      'Log',
+      'Users',
+      'Attorneys',
+      'Claims',
+      'Bookings',
+      'Quotes',
+      'Reviews',
+      'Payments',
+      'Services',
+      'Content',
+      'Messages',
+      'Reports',
+      'Audit',
+      'GDPR',
+      'Prospection',
+      'Settings',
     ]
 
     for (const item of expectedItems) {
@@ -448,7 +675,9 @@ test.describe('Admin Sidebar Navigation', () => {
       test.skip(true, 'Redirected to login')
       return
     }
-    const dashboardLink = page.locator('aside').getByRole('link', { name: 'Dashboard', exact: true })
+    const dashboardLink = page
+      .locator('aside')
+      .getByRole('link', { name: 'Dashboard', exact: true })
     await expect(dashboardLink).toHaveAttribute('aria-current', 'page')
   })
 
@@ -478,7 +707,9 @@ test.describe('Attorney Management', () => {
       test.skip(true, 'Redirected to login')
       return
     }
-    await expect(page.getByRole('heading', { name: /Attorney Management/i })).toBeVisible({ timeout: 10000 })
+    await expect(page.getByRole('heading', { name: /Attorney Management/i })).toBeVisible({
+      timeout: 10000,
+    })
   })
 
   test('attorney list shows total count', async ({ page }) => {
@@ -498,7 +729,10 @@ test.describe('Attorney Management', () => {
     }
     const searchInput = page.getByLabel('Search for an attorney')
     await expect(searchInput).toBeVisible({ timeout: 10000 })
-    await expect(searchInput).toHaveAttribute('placeholder', /Search by name, email, city, bar number/i)
+    await expect(searchInput).toHaveAttribute(
+      'placeholder',
+      /Search by name, email, city, bar number/i
+    )
   })
 
   test('attorney list has filter buttons', async ({ page }) => {
@@ -646,7 +880,9 @@ test.describe('Review Management', () => {
       test.skip(true, 'Redirected to login')
       return
     }
-    await expect(page.getByRole('heading', { name: /Review Moderation/i })).toBeVisible({ timeout: 10000 })
+    await expect(page.getByRole('heading', { name: /Review Moderation/i })).toBeVisible({
+      timeout: 10000,
+    })
     await expect(page.getByText('Review and moderate client reviews')).toBeVisible()
   })
 
@@ -704,13 +940,19 @@ test.describe('Review Management', () => {
       return
     }
 
-    await expect(page.getByRole('button', { name: /Publish/i }).first()).toBeVisible({ timeout: 10000 })
+    await expect(page.getByRole('button', { name: /Publish/i }).first()).toBeVisible({
+      timeout: 10000,
+    })
     await expect(page.getByRole('button', { name: /Hide/i }).first()).toBeVisible()
   })
 
   test('reviews show status badges', async ({ page }) => {
     await page.route('**/api/admin/reviews?**', (route) =>
-      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_REVIEWS) }),
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(MOCK_REVIEWS),
+      })
     )
     await page.goto('/admin/reviews')
     if (!(await requireAdminDashboard(page))) {
@@ -724,7 +966,11 @@ test.describe('Review Management', () => {
 
   test('published reviews show attorney response', async ({ page }) => {
     await page.route('**/api/admin/reviews?**', (route) =>
-      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_REVIEWS) }),
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(MOCK_REVIEWS),
+      })
     )
     await page.goto('/admin/reviews')
     if (!(await requireAdminDashboard(page))) {
@@ -765,7 +1011,9 @@ test.describe('Claims Management', () => {
       test.skip(true, 'Redirected to login')
       return
     }
-    await expect(page.getByRole('heading', { name: /Profile claims/i })).toBeVisible({ timeout: 10000 })
+    await expect(page.getByRole('heading', { name: /Profile claims/i })).toBeVisible({
+      timeout: 10000,
+    })
     await expect(page.getByText('Manage attorney profile claim requests')).toBeVisible()
   })
 
@@ -822,7 +1070,9 @@ test.describe('Claims Management', () => {
       return
     }
 
-    await expect(page.getByRole('button', { name: /Approve/i }).first()).toBeVisible({ timeout: 10000 })
+    await expect(page.getByRole('button', { name: /Approve/i }).first()).toBeVisible({
+      timeout: 10000,
+    })
     await expect(page.getByRole('button', { name: /Reject/i }).first()).toBeVisible()
   })
 
@@ -843,7 +1093,10 @@ test.describe('Claims Management', () => {
       return
     }
 
-    await page.getByRole('button', { name: /Approve/i }).first().click({ timeout: 10000 })
+    await page
+      .getByRole('button', { name: /Approve/i })
+      .first()
+      .click({ timeout: 10000 })
     await expect(page.getByText('Approve claim')).toBeVisible({ timeout: 3000 })
   })
 
@@ -854,7 +1107,10 @@ test.describe('Claims Management', () => {
       return
     }
 
-    await page.getByRole('button', { name: /Reject/i }).first().click({ timeout: 10000 })
+    await page
+      .getByRole('button', { name: /Reject/i })
+      .first()
+      .click({ timeout: 10000 })
     await expect(page.getByText('Reject claim')).toBeVisible({ timeout: 3000 })
     await expect(page.getByText('Rejection reason (optional)')).toBeVisible()
     await expect(page.getByPlaceholder(/Explain why the request is rejected/i)).toBeVisible()
@@ -876,7 +1132,9 @@ test.describe('Bookings Management', () => {
       test.skip(true, 'Redirected to login')
       return
     }
-    await expect(page.getByRole('heading', { name: /Bookings Management/i })).toBeVisible({ timeout: 10000 })
+    await expect(page.getByRole('heading', { name: /Bookings Management/i })).toBeVisible({
+      timeout: 10000,
+    })
     await expect(page.getByText('3 total bookings')).toBeVisible()
   })
 
@@ -1007,7 +1265,9 @@ test.describe('Admin Protected Routes', () => {
   test('/admin/login page itself is accessible without auth', async ({ page }) => {
     await page.goto('/admin/login')
     await expect(page).toHaveURL(/\/admin\/login/)
-    await expect(page.locator('h1').filter({ hasText: 'Administration' })).toBeVisible({ timeout: 15000 })
+    await expect(page.locator('h1').filter({ hasText: 'Administration' })).toBeVisible({
+      timeout: 15000,
+    })
   })
 })
 
@@ -1095,7 +1355,9 @@ test.describe('Mobile Admin Layout', () => {
   test('admin login page is responsive at 768px', async ({ page }) => {
     await page.goto('/admin/login')
     await page.waitForLoadState('domcontentloaded')
-    await expect(page.locator('h1').filter({ hasText: 'Administration' })).toBeVisible({ timeout: 15000 })
+    await expect(page.locator('h1').filter({ hasText: 'Administration' })).toBeVisible({
+      timeout: 15000,
+    })
     await expect(page.getByPlaceholder('admin@example.com')).toBeVisible()
     await expect(page.getByPlaceholder('••••••••')).toBeVisible()
     await expect(page.getByRole('button', { name: /Admin Sign In/i })).toBeVisible()
@@ -1112,7 +1374,9 @@ test.describe('Small Mobile Admin', () => {
   test('admin login renders correctly on small mobile', async ({ page }) => {
     await page.goto('/admin/login')
     await page.waitForLoadState('domcontentloaded')
-    await expect(page.locator('h1').filter({ hasText: 'Administration' })).toBeVisible({ timeout: 15000 })
+    await expect(page.locator('h1').filter({ hasText: 'Administration' })).toBeVisible({
+      timeout: 15000,
+    })
     await expect(page.getByRole('button', { name: /Admin Sign In/i })).toBeVisible()
   })
 })

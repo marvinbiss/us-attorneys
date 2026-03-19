@@ -20,8 +20,6 @@ import {
   getRegionSlugByName,
   getNeighborhoodsByCity,
   getNeighborhoodBySlug,
-  type City,
-  type State,
 } from '@/lib/data/usa'
 
 // ============================================================================
@@ -35,13 +33,58 @@ describe('states', () => {
   })
 
   it('contains all 50 US states by code', () => {
-    const stateCodes = states.map(s => s.code)
+    const stateCodes = states.map((s) => s.code)
     const expected50 = [
-      'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
-      'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
-      'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
-      'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
-      'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
+      'AL',
+      'AK',
+      'AZ',
+      'AR',
+      'CA',
+      'CO',
+      'CT',
+      'DE',
+      'FL',
+      'GA',
+      'HI',
+      'ID',
+      'IL',
+      'IN',
+      'IA',
+      'KS',
+      'KY',
+      'LA',
+      'ME',
+      'MD',
+      'MA',
+      'MI',
+      'MN',
+      'MS',
+      'MO',
+      'MT',
+      'NE',
+      'NV',
+      'NH',
+      'NJ',
+      'NM',
+      'NY',
+      'NC',
+      'ND',
+      'OH',
+      'OK',
+      'OR',
+      'PA',
+      'RI',
+      'SC',
+      'SD',
+      'TN',
+      'TX',
+      'UT',
+      'VT',
+      'VA',
+      'WA',
+      'WV',
+      'WI',
+      'WY',
     ]
     for (const code of expected50) {
       expect(stateCodes).toContain(code)
@@ -49,18 +92,18 @@ describe('states', () => {
   })
 
   it('includes DC', () => {
-    const dc = states.find(s => s.code === 'DC')
+    const dc = states.find((s) => s.code === 'DC')
     expect(dc).toBeDefined()
     expect(dc!.name).toBe('District of Columbia')
   })
 
   it('has unique state codes', () => {
-    const codes = states.map(s => s.code)
+    const codes = states.map((s) => s.code)
     expect(new Set(codes).size).toBe(codes.length)
   })
 
   it('has unique slugs', () => {
-    const slugs = states.map(s => s.slug)
+    const slugs = states.map((s) => s.slug)
     expect(new Set(slugs).size).toBe(slugs.length)
   })
 
@@ -87,17 +130,17 @@ describe('states', () => {
   })
 
   it('California has the expected attorney estimate', () => {
-    const ca = states.find(s => s.code === 'CA')
+    const ca = states.find((s) => s.code === 'CA')
     expect(ca).toBeDefined()
     expect(ca!.attorneysEstimate).toBe(170000)
   })
 
   it('New York has the largest bar', () => {
-    const ny = states.find(s => s.code === 'NY')
+    const ny = states.find((s) => s.code === 'NY')
     expect(ny).toBeDefined()
     expect(ny!.attorneysEstimate).toBe(188000)
     // NY should have the max estimate
-    const maxEstimate = Math.max(...states.map(s => s.attorneysEstimate))
+    const maxEstimate = Math.max(...states.map((s) => s.attorneysEstimate))
     expect(ny!.attorneysEstimate).toBe(maxEstimate)
   })
 })
@@ -112,7 +155,7 @@ describe('cities', () => {
   })
 
   it('has unique slugs', () => {
-    const slugs = cities.map(c => c.slug)
+    const slugs = cities.map((c) => c.slug)
     expect(new Set(slugs).size).toBe(slugs.length)
   })
 
@@ -135,7 +178,7 @@ describe('cities', () => {
   })
 
   it('every city stateCode references a valid state', () => {
-    const stateCodes = new Set(states.map(s => s.code))
+    const stateCodes = new Set(states.map((s) => s.code))
     for (const city of cities) {
       expect(stateCodes.has(city.stateCode)).toBe(true)
     }
@@ -159,15 +202,25 @@ describe('cities', () => {
   })
 
   it('contains major US cities', () => {
-    const slugs = new Set(cities.map(c => c.slug))
-    const majorCities = ['new-york', 'los-angeles', 'chicago', 'houston', 'phoenix', 'philadelphia', 'san-antonio', 'san-diego', 'dallas']
+    const slugs = new Set(cities.map((c) => c.slug))
+    const majorCities = [
+      'new-york',
+      'los-angeles',
+      'chicago',
+      'houston',
+      'phoenix',
+      'philadelphia',
+      'san-antonio',
+      'san-diego',
+      'dallas',
+    ]
     for (const slug of majorCities) {
       expect(slugs.has(slug)).toBe(true)
     }
   })
 
   it('New York is in the correct state', () => {
-    const ny = cities.find(c => c.slug === 'new-york')
+    const ny = cities.find((c) => c.slug === 'new-york')
     expect(ny).toBeDefined()
     expect(ny!.stateCode).toBe('NY')
     expect(ny!.stateName).toBe('New York')
@@ -184,7 +237,7 @@ describe('usRegions', () => {
   })
 
   it('has the expected region slugs', () => {
-    const slugs = usRegions.map(r => r.slug)
+    const slugs = usRegions.map((r) => r.slug)
     expect(slugs).toContain('northeast')
     expect(slugs).toContain('midwest')
     expect(slugs).toContain('south')
@@ -222,12 +275,12 @@ describe('usRegions', () => {
 // ============================================================================
 
 describe('practiceAreas', () => {
-  it('contains 76 practice areas', () => {
-    expect(practiceAreas.length).toBe(76)
+  it('contains 78 practice areas', () => {
+    expect(practiceAreas.length).toBe(78)
   })
 
   it('has unique slugs', () => {
-    const slugs = practiceAreas.map(p => p.slug)
+    const slugs = practiceAreas.map((p) => p.slug)
     expect(new Set(slugs).size).toBe(slugs.length)
   })
 
@@ -241,8 +294,14 @@ describe('practiceAreas', () => {
   })
 
   it('contains key practice areas', () => {
-    const slugs = new Set(practiceAreas.map(p => p.slug))
-    const expected = ['personal-injury', 'criminal-defense', 'immigration-law', 'bankruptcy', 'real-estate-law']
+    const slugs = new Set(practiceAreas.map((p) => p.slug))
+    const expected = [
+      'personal-injury',
+      'criminal-defense',
+      'immigration-law',
+      'bankruptcy',
+      'real-estate-law',
+    ]
     for (const slug of expected) {
       expect(slugs.has(slug)).toBe(true)
     }
@@ -345,7 +404,7 @@ describe('getNearbyCities', () => {
     expect(nearby.length).toBeGreaterThan(0)
     expect(nearby.length).toBeLessThanOrEqual(5)
     // Should not include the city itself
-    expect(nearby.find(c => c.slug === 'houston')).toBeUndefined()
+    expect(nearby.find((c) => c.slug === 'houston')).toBeUndefined()
   })
 
   it('respects the limit parameter', () => {
@@ -360,7 +419,7 @@ describe('getNearbyCities', () => {
   it('prioritizes cities in the same state', () => {
     const nearby = getNearbyCities('houston')
     // Houston is in TX; there are many TX cities in the dataset
-    const txCities = nearby.filter(c => c.stateCode === 'TX')
+    const txCities = nearby.filter((c) => c.stateCode === 'TX')
     expect(txCities.length).toBeGreaterThan(0)
   })
 
@@ -427,7 +486,7 @@ describe('getNeighborhoodsByCity', () => {
 
   it('generates correct slugs for neighborhoods', () => {
     const neighborhoods = getNeighborhoodsByCity('new-york')
-    const manhattan = neighborhoods.find(n => n.name === 'Manhattan')
+    const manhattan = neighborhoods.find((n) => n.name === 'Manhattan')
     expect(manhattan).toBeDefined()
     expect(manhattan!.slug).toBe('manhattan')
   })

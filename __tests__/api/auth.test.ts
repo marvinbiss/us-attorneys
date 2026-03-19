@@ -208,7 +208,7 @@ vi.mock('@/lib/errors', () => ({
 // ── Helpers ─────────────────────────────────────────────────────────
 
 type MockResponse = {
-  body: unknown
+  body: any
   status: number
   headers?: Record<string, string>
   cookies?: { set: ReturnType<typeof vi.fn> }
@@ -247,7 +247,7 @@ beforeEach(() => {
 describe('POST /api/auth/signin', () => {
   async function callSignin(body: unknown): Promise<MockResponse> {
     const { POST } = await import('@/app/api/auth/signin/route')
-    return POST(makeRequest(body)) as unknown as MockResponse
+    return POST(makeRequest(body) as never) as unknown as MockResponse
   }
 
   it('returns 200 with user data on valid credentials', async () => {
@@ -388,7 +388,7 @@ describe('POST /api/auth/signin', () => {
 describe('POST /api/auth/signup', () => {
   async function callSignup(body: unknown): Promise<MockResponse> {
     const { POST } = await import('@/app/api/auth/signup/route')
-    return POST(makeRequest(body)) as unknown as MockResponse
+    return POST(makeRequest(body) as never) as unknown as MockResponse
   }
 
   const validBody = {

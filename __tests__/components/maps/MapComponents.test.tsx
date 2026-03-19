@@ -7,8 +7,8 @@
  * Leaflet and react-leaflet are fully mocked since jsdom lacks Canvas/WebGL.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, act, waitFor } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 // ── Mock leaflet ─────────────────────────────────────────────────────
 vi.mock('leaflet', () => {
@@ -26,10 +26,16 @@ vi.mock('leaflet/dist/leaflet.css', () => ({}))
 // ── Mock react-leaflet ───────────────────────────────────────────────
 vi.mock('react-leaflet', () => ({
   MapContainer: ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <div data-testid="map-container" className={className}>{children}</div>
+    <div data-testid="map-container" className={className}>
+      {children}
+    </div>
   ),
   TileLayer: ({ url }: { url: string }) => <div data-testid="tile-layer" data-url={url} />,
-  Marker: ({ children, position, eventHandlers }: {
+  Marker: ({
+    children,
+    position,
+    eventHandlers,
+  }: {
     children: React.ReactNode
     position: [number, number]
     eventHandlers?: Record<string, () => void>
@@ -61,16 +67,24 @@ vi.mock('next/dynamic', () => ({
       // We already mock react-leaflet above, so just render from the mock
       const name = loader.toString()
       if (name.includes('MapContainer')) {
-        return <div data-testid="map-container" {...props}>{(props as { children?: React.ReactNode }).children}</div>
+        return (
+          <div data-testid="map-container" {...props}>
+            {(props as { children?: React.ReactNode }).children}
+          </div>
+        )
       }
       if (name.includes('TileLayer')) {
         return <div data-testid="tile-layer" />
       }
       if (name.includes('Marker')) {
-        return <div data-testid="map-marker">{(props as { children?: React.ReactNode }).children}</div>
+        return (
+          <div data-testid="map-marker">{(props as { children?: React.ReactNode }).children}</div>
+        )
       }
       if (name.includes('Popup')) {
-        return <div data-testid="map-popup">{(props as { children?: React.ReactNode }).children}</div>
+        return (
+          <div data-testid="map-popup">{(props as { children?: React.ReactNode }).children}</div>
+        )
       }
       return null
     }
@@ -81,8 +95,18 @@ vi.mock('next/dynamic', () => ({
 
 // ── Mock next/link ───────────────────────────────────────────────────
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode
+    href: string
+    [key: string]: unknown
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }))
 
@@ -120,7 +144,13 @@ vi.mock('lucide-react', () => {
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, className, ...props }: Record<string, unknown>) => (
-      <div className={className as string} data-testid="motion-div" onClick={props.onClick as undefined} onMouseEnter={props.onMouseEnter as undefined} onMouseLeave={props.onMouseLeave as undefined}>
+      <div
+        className={className as string}
+        data-testid="motion-div"
+        onClick={props.onClick as undefined}
+        onMouseEnter={props.onMouseEnter as undefined}
+        onMouseLeave={props.onMouseLeave as undefined}
+      >
         {children as React.ReactNode}
       </div>
     ),
@@ -142,7 +172,13 @@ vi.mock('@/lib/utils', () => ({
 
 // ── Mock AttorneyCard ────────────────────────────────────────────────
 vi.mock('@/components/AttorneyCard', () => ({
-  default: ({ provider, isHovered }: { provider: { name: string; id: string }; isHovered?: boolean }) => (
+  default: ({
+    provider,
+    isHovered,
+  }: {
+    provider: { name: string; id: string }
+    isHovered?: boolean
+  }) => (
     <div data-testid={`attorney-card-${provider.id}`} data-hovered={isHovered}>
       {provider.name}
     </div>
@@ -205,22 +241,12 @@ describe('Map component', () => {
   it('renders map container (mocked leaflet loads synchronously)', () => {
     // In jsdom with mocked react-leaflet, useEffect fires synchronously
     // so isMounted becomes true immediately -> MapContainer renders
-    render(
-      <Map
-        providers={[]}
-        center={[40.7128, -74.006]}
-      />
-    )
+    render(<Map providers={[]} center={[40.7128, -74.006]} />)
     expect(screen.getByTestId('map-container')).toBeInTheDocument()
   })
 
   it('renders map container after mount', async () => {
-    render(
-      <Map
-        providers={[]}
-        center={[40.7128, -74.006]}
-      />
-    )
+    render(<Map providers={[]} center={[40.7128, -74.006]} />)
     // useEffect sets isMounted -> re-renders with MapContainer
     await waitFor(() => {
       expect(screen.getByTestId('map-container')).toBeInTheDocument()
@@ -228,12 +254,7 @@ describe('Map component', () => {
   })
 
   it('renders tile layer', async () => {
-    render(
-      <Map
-        providers={[]}
-        center={[40.7128, -74.006]}
-      />
-    )
+    render(<Map providers={[]} center={[40.7128, -74.006]} />)
     await waitFor(() => {
       expect(screen.getByTestId('tile-layer')).toBeInTheDocument()
     })
@@ -244,12 +265,7 @@ describe('Map component', () => {
       mockLegacyProvider({ id: 'p1', latitude: 40.71, longitude: -74.0 }),
       mockLegacyProvider({ id: 'p2', latitude: 40.72, longitude: -74.01 }),
     ]
-    render(
-      <Map
-        providers={providers as never[]}
-        center={[40.7128, -74.006]}
-      />
-    )
+    render(<Map providers={providers as never[]} center={[40.7128, -74.006]} />)
     await waitFor(() => {
       const markers = screen.getAllByTestId('map-marker')
       expect(markers).toHaveLength(2)
@@ -262,12 +278,7 @@ describe('Map component', () => {
       mockLegacyProvider({ id: 'p2', latitude: null, longitude: null }),
       mockLegacyProvider({ id: 'p3', latitude: undefined, longitude: undefined }),
     ]
-    render(
-      <Map
-        providers={providers as never[]}
-        center={[40.7128, -74.006]}
-      />
-    )
+    render(<Map providers={providers as never[]} center={[40.7128, -74.006]} />)
     await waitFor(() => {
       const markers = screen.getAllByTestId('map-marker')
       expect(markers).toHaveLength(1)
@@ -275,27 +286,15 @@ describe('Map component', () => {
   })
 
   it('filters out providers with NaN coordinates', async () => {
-    const providers = [
-      mockLegacyProvider({ id: 'p1', latitude: NaN, longitude: NaN }),
-    ]
-    render(
-      <Map
-        providers={providers as never[]}
-        center={[40.7128, -74.006]}
-      />
-    )
+    const providers = [mockLegacyProvider({ id: 'p1', latitude: NaN, longitude: NaN })]
+    render(<Map providers={providers as never[]} center={[40.7128, -74.006]} />)
     await waitFor(() => {
       expect(screen.queryByTestId('map-marker')).not.toBeInTheDocument()
     })
   })
 
   it('handles empty providers array', async () => {
-    render(
-      <Map
-        providers={[]}
-        center={[40.7128, -74.006]}
-      />
-    )
+    render(<Map providers={[]} center={[40.7128, -74.006]} />)
     await waitFor(() => {
       expect(screen.getByTestId('map-container')).toBeInTheDocument()
       expect(screen.queryByTestId('map-marker')).not.toBeInTheDocument()
@@ -304,12 +303,7 @@ describe('Map component', () => {
 
   it('renders popup with provider name', async () => {
     const providers = [mockLegacyProvider({ name: 'Alice Attorney' })]
-    render(
-      <Map
-        providers={providers as never[]}
-        center={[40.7128, -74.006]}
-      />
-    )
+    render(<Map providers={providers as never[]} center={[40.7128, -74.006]} />)
     await waitFor(() => {
       expect(screen.getByText('Alice Attorney')).toBeInTheDocument()
     })
@@ -317,12 +311,7 @@ describe('Map component', () => {
 
   it('renders popup with city and zip', async () => {
     const providers = [mockLegacyProvider({ address_city: 'Chicago', address_zip: '60601' })]
-    render(
-      <Map
-        providers={providers as never[]}
-        center={[40.7128, -74.006]}
-      />
-    )
+    render(<Map providers={providers as never[]} center={[40.7128, -74.006]} />)
     await waitFor(() => {
       expect(screen.getByText('60601 Chicago')).toBeInTheDocument()
     })
@@ -330,12 +319,7 @@ describe('Map component', () => {
 
   it('renders phone link in popup when provider has phone', async () => {
     const providers = [mockLegacyProvider({ phone: '(312) 555-0199' })]
-    render(
-      <Map
-        providers={providers as never[]}
-        center={[40.7128, -74.006]}
-      />
-    )
+    render(<Map providers={providers as never[]} center={[40.7128, -74.006]} />)
     await waitFor(() => {
       const phoneLink = screen.getByText('(312) 555-0199')
       expect(phoneLink.closest('a')).toHaveAttribute('href', 'tel:(312) 555-0199')
@@ -360,12 +344,7 @@ describe('Map component', () => {
   })
 
   it('uses default zoom of 12', async () => {
-    render(
-      <Map
-        providers={[]}
-        center={[40.7128, -74.006]}
-      />
-    )
+    render(<Map providers={[]} center={[40.7128, -74.006]} />)
     await waitFor(() => {
       expect(screen.getByTestId('map-container')).toBeInTheDocument()
     })
@@ -441,10 +420,9 @@ describe('DesktopResultsSidebar', () => {
   it('shows phone button when provider has phone', () => {
     const providers = [mockMapProvider({ phone: '(555) 111-2222' })]
     render(<DesktopResultsSidebar {...defaultProps} providers={providers} />)
-    const phoneLink = screen.getByRole('link', { name: '' }) // the phone <a> has no text, just icon
     // Check at least one link has tel:
     const allLinks = screen.getAllByRole('link')
-    const telLink = allLinks.find(l => l.getAttribute('href')?.startsWith('tel:'))
+    const telLink = allLinks.find((l) => l.getAttribute('href')?.startsWith('tel:'))
     expect(telLink).toBeDefined()
   })
 
@@ -452,7 +430,7 @@ describe('DesktopResultsSidebar', () => {
     const providers = [mockMapProvider({ phone: undefined })]
     render(<DesktopResultsSidebar {...defaultProps} providers={providers} />)
     const allLinks = screen.getAllByRole('link')
-    const telLink = allLinks.find(l => l.getAttribute('href')?.startsWith('tel:'))
+    const telLink = allLinks.find((l) => l.getAttribute('href')?.startsWith('tel:'))
     expect(telLink).toBeUndefined()
   })
 
@@ -464,9 +442,7 @@ describe('DesktopResultsSidebar', () => {
 
   it('does not render when viewMode is map', () => {
     const providers = [mockMapProvider()]
-    const { container } = render(
-      <DesktopResultsSidebar {...defaultProps} providers={providers} viewMode="map" />
-    )
+    render(<DesktopResultsSidebar {...defaultProps} providers={providers} viewMode="map" />)
     expect(screen.queryByText('attorneys')).not.toBeInTheDocument()
   })
 
@@ -501,7 +477,7 @@ describe('DesktopResultsSidebar', () => {
     )
     // Find the heart button (contains Heart icon)
     const heartButtons = screen.getAllByRole('button')
-    const heartBtn = heartButtons.find(btn => btn.querySelector('[data-testid="icon-Heart"]'))
+    const heartBtn = heartButtons.find((btn) => btn.querySelector('[data-testid="icon-Heart"]'))
     expect(heartBtn).toBeDefined()
     fireEvent.click(heartBtn!)
     expect(onToggleFavorite).toHaveBeenCalledWith('fav-1')
@@ -510,9 +486,7 @@ describe('DesktopResultsSidebar', () => {
   it('shows filled heart for favorited providers', () => {
     const providers = [mockMapProvider({ id: 'fav-1' })]
     const favorites = new Set(['fav-1'])
-    render(
-      <DesktopResultsSidebar {...defaultProps} providers={providers} favorites={favorites} />
-    )
+    render(<DesktopResultsSidebar {...defaultProps} providers={providers} favorites={favorites} />)
     const heartIcon = screen.getByTestId('icon-Heart')
     expect(heartIcon.className).toContain('fill-red-500')
   })
@@ -530,60 +504,30 @@ describe('DesktopResultsSidebar', () => {
 
 describe('MobileResultsToggle', () => {
   it('renders attorney count', () => {
-    render(
-      <MobileResultsToggle
-        attorneyCount={15}
-        mobileDrawerOpen={false}
-        onToggle={vi.fn()}
-      />
-    )
+    render(<MobileResultsToggle attorneyCount={15} mobileDrawerOpen={false} onToggle={vi.fn()} />)
     expect(screen.getByText('15')).toBeInTheDocument()
     expect(screen.getByText('attorneys found')).toBeInTheDocument()
   })
 
   it('shows ChevronUp when drawer is closed', () => {
-    render(
-      <MobileResultsToggle
-        attorneyCount={5}
-        mobileDrawerOpen={false}
-        onToggle={vi.fn()}
-      />
-    )
+    render(<MobileResultsToggle attorneyCount={5} mobileDrawerOpen={false} onToggle={vi.fn()} />)
     expect(screen.getByTestId('icon-ChevronUp')).toBeInTheDocument()
   })
 
   it('shows ChevronDown when drawer is open', () => {
-    render(
-      <MobileResultsToggle
-        attorneyCount={5}
-        mobileDrawerOpen={true}
-        onToggle={vi.fn()}
-      />
-    )
+    render(<MobileResultsToggle attorneyCount={5} mobileDrawerOpen={true} onToggle={vi.fn()} />)
     expect(screen.getByTestId('icon-ChevronDown')).toBeInTheDocument()
   })
 
   it('calls onToggle when button clicked', () => {
     const onToggle = vi.fn()
-    render(
-      <MobileResultsToggle
-        attorneyCount={5}
-        mobileDrawerOpen={false}
-        onToggle={onToggle}
-      />
-    )
+    render(<MobileResultsToggle attorneyCount={5} mobileDrawerOpen={false} onToggle={onToggle} />)
     fireEvent.click(screen.getByRole('button'))
     expect(onToggle).toHaveBeenCalledTimes(1)
   })
 
   it('renders zero count correctly', () => {
-    render(
-      <MobileResultsToggle
-        attorneyCount={0}
-        mobileDrawerOpen={false}
-        onToggle={vi.fn()}
-      />
-    )
+    render(<MobileResultsToggle attorneyCount={0} mobileDrawerOpen={false} onToggle={vi.fn()} />)
     expect(screen.getByText('0')).toBeInTheDocument()
   })
 })
@@ -598,38 +542,20 @@ describe('MobileResultsDrawer', () => {
       mockMapProvider({ id: '1', name: 'Alice' }),
       mockMapProvider({ id: '2', name: 'Bob' }),
     ]
-    render(
-      <MobileResultsDrawer
-        providers={providers}
-        mobileDrawerOpen={true}
-        onClose={vi.fn()}
-      />
-    )
+    render(<MobileResultsDrawer providers={providers} mobileDrawerOpen={true} onClose={vi.fn()} />)
     expect(screen.getByText('Alice')).toBeInTheDocument()
     expect(screen.getByText('Bob')).toBeInTheDocument()
   })
 
   it('renders nothing when closed', () => {
     const providers = [mockMapProvider({ id: '1', name: 'Alice' })]
-    render(
-      <MobileResultsDrawer
-        providers={providers}
-        mobileDrawerOpen={false}
-        onClose={vi.fn()}
-      />
-    )
+    render(<MobileResultsDrawer providers={providers} mobileDrawerOpen={false} onClose={vi.fn()} />)
     expect(screen.queryByText('Alice')).not.toBeInTheDocument()
   })
 
   it('shows provider count in header', () => {
     const providers = [mockMapProvider({ id: '1' }), mockMapProvider({ id: '2' })]
-    render(
-      <MobileResultsDrawer
-        providers={providers}
-        mobileDrawerOpen={true}
-        onClose={vi.fn()}
-      />
-    )
+    render(<MobileResultsDrawer providers={providers} mobileDrawerOpen={true} onClose={vi.fn()} />)
     expect(screen.getByText('2 attorneys')).toBeInTheDocument()
   })
 
@@ -649,48 +575,24 @@ describe('MobileResultsDrawer', () => {
 
   it('renders provider initials as avatar', () => {
     const providers = [mockMapProvider({ name: 'Zara Kingsley' })]
-    render(
-      <MobileResultsDrawer
-        providers={providers}
-        mobileDrawerOpen={true}
-        onClose={vi.fn()}
-      />
-    )
+    render(<MobileResultsDrawer providers={providers} mobileDrawerOpen={true} onClose={vi.fn()} />)
     expect(screen.getByText('Z')).toBeInTheDocument()
   })
 
   it('renders specialty for each provider', () => {
     const providers = [mockMapProvider({ specialty: 'Tax Law' })]
-    render(
-      <MobileResultsDrawer
-        providers={providers}
-        mobileDrawerOpen={true}
-        onClose={vi.fn()}
-      />
-    )
+    render(<MobileResultsDrawer providers={providers} mobileDrawerOpen={true} onClose={vi.fn()} />)
     expect(screen.getByText('Tax Law')).toBeInTheDocument()
   })
 
   it('renders rating for each provider', () => {
     const providers = [mockMapProvider({ rating_average: 4.3 })]
-    render(
-      <MobileResultsDrawer
-        providers={providers}
-        mobileDrawerOpen={true}
-        onClose={vi.fn()}
-      />
-    )
+    render(<MobileResultsDrawer providers={providers} mobileDrawerOpen={true} onClose={vi.fn()} />)
     expect(screen.getByText('4.3')).toBeInTheDocument()
   })
 
   it('handles empty providers array when open', () => {
-    render(
-      <MobileResultsDrawer
-        providers={[]}
-        mobileDrawerOpen={true}
-        onClose={vi.fn()}
-      />
-    )
+    render(<MobileResultsDrawer providers={[]} mobileDrawerOpen={true} onClose={vi.fn()} />)
     expect(screen.getByText('0 attorneys')).toBeInTheDocument()
   })
 })

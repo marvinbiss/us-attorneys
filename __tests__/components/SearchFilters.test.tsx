@@ -2,7 +2,7 @@
  * SearchFilters Component — Unit Tests
  */
 
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 
 // Mock lucide-react icons
@@ -79,9 +79,7 @@ describe('SearchFilters', () => {
     render(<SearchFilters {...defaultProps} onFilterChange={onFilterChange} />)
     const select = screen.getByRole('combobox')
     fireEvent.change(select, { target: { value: 'rating' } })
-    expect(onFilterChange).toHaveBeenCalledWith(
-      expect.objectContaining({ sortBy: 'rating' }),
-    )
+    expect(onFilterChange).toHaveBeenCalledWith(expect.objectContaining({ sortBy: 'rating' }))
   })
 
   it('calls onFilterChange when sort changes to name', () => {
@@ -89,9 +87,7 @@ describe('SearchFilters', () => {
     render(<SearchFilters {...defaultProps} onFilterChange={onFilterChange} />)
     const select = screen.getByRole('combobox')
     fireEvent.change(select, { target: { value: 'name' } })
-    expect(onFilterChange).toHaveBeenCalledWith(
-      expect.objectContaining({ sortBy: 'name' }),
-    )
+    expect(onFilterChange).toHaveBeenCalledWith(expect.objectContaining({ sortBy: 'name' }))
   })
 
   // ── Filter Panel Toggle ──────────────────────────────────────────
@@ -132,9 +128,7 @@ describe('SearchFilters', () => {
     fireEvent.click(screen.getByText('Filters'))
     // Click Verified
     fireEvent.click(screen.getByText('Verified'))
-    expect(onFilterChange).toHaveBeenCalledWith(
-      expect.objectContaining({ verified: true }),
-    )
+    expect(onFilterChange).toHaveBeenCalledWith(expect.objectContaining({ verified: true }))
   })
 
   it('toggles verified filter off on second click', () => {
@@ -144,9 +138,7 @@ describe('SearchFilters', () => {
     const verifiedBtn = screen.getByText('Verified').closest('button')!
     fireEvent.click(verifiedBtn) // on
     fireEvent.click(verifiedBtn) // off
-    expect(onFilterChange).toHaveBeenLastCalledWith(
-      expect.objectContaining({ verified: false }),
-    )
+    expect(onFilterChange).toHaveBeenLastCalledWith(expect.objectContaining({ verified: false }))
   })
 
   it('Verified button has aria-pressed attribute', () => {
@@ -165,9 +157,7 @@ describe('SearchFilters', () => {
     render(<SearchFilters {...defaultProps} onFilterChange={onFilterChange} />)
     fireEvent.click(screen.getByText('Filters'))
     fireEvent.click(screen.getByLabelText('Minimum 4 stars'))
-    expect(onFilterChange).toHaveBeenCalledWith(
-      expect.objectContaining({ minRating: 4 }),
-    )
+    expect(onFilterChange).toHaveBeenCalledWith(expect.objectContaining({ minRating: 4 }))
   })
 
   it('calls onFilterChange with minRating=4.5 when 4.5+ button is clicked', () => {
@@ -175,9 +165,7 @@ describe('SearchFilters', () => {
     render(<SearchFilters {...defaultProps} onFilterChange={onFilterChange} />)
     fireEvent.click(screen.getByText('Filters'))
     fireEvent.click(screen.getByLabelText('Minimum 4.5 stars'))
-    expect(onFilterChange).toHaveBeenCalledWith(
-      expect.objectContaining({ minRating: 4.5 }),
-    )
+    expect(onFilterChange).toHaveBeenCalledWith(expect.objectContaining({ minRating: 4.5 }))
   })
 
   it('toggles rating filter off when same button is clicked again', () => {
@@ -187,9 +175,7 @@ describe('SearchFilters', () => {
     const ratingBtn = screen.getByLabelText('Minimum 4 stars')
     fireEvent.click(ratingBtn) // on
     fireEvent.click(ratingBtn) // off
-    expect(onFilterChange).toHaveBeenLastCalledWith(
-      expect.objectContaining({ minRating: null }),
-    )
+    expect(onFilterChange).toHaveBeenLastCalledWith(expect.objectContaining({ minRating: null }))
   })
 
   it('rating buttons have aria-pressed', () => {
@@ -273,15 +259,11 @@ describe('SearchFilters', () => {
   it('rating filter group has proper aria label', () => {
     render(<SearchFilters {...defaultProps} />)
     fireEvent.click(screen.getByText('Filters'))
-    expect(
-      screen.getByRole('group', { name: 'Filter by minimum rating' }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('group', { name: 'Filter by minimum rating' })).toBeInTheDocument()
   })
 
   it('sort and filter controls group has proper aria label', () => {
     render(<SearchFilters {...defaultProps} />)
-    expect(
-      screen.getByRole('group', { name: 'Sort and filter controls' }),
-    ).toBeInTheDocument()
+    expect(screen.getByRole('group', { name: 'Sort and filter controls' })).toBeInTheDocument()
   })
 })

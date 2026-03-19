@@ -111,7 +111,10 @@ test.describe('Homepage Search', () => {
     await cityDropdown.getByText('New York').first().click()
 
     // Submit the search
-    await page.getByRole('button', { name: /search/i }).first().click()
+    await page
+      .getByRole('button', { name: /search/i })
+      .first()
+      .click()
 
     // Should navigate to the practice-areas route
     await page.waitForURL(/\/practice-areas\/personal-injury\/new-york/, { timeout: 15_000 })
@@ -136,7 +139,10 @@ test.describe('Homepage Search', () => {
     await cityDropdown.getByText('Chicago').first().click()
 
     // Submit
-    await page.getByRole('button', { name: /search/i }).first().click()
+    await page
+      .getByRole('button', { name: /search/i })
+      .first()
+      .click()
 
     await page.waitForURL(/\/practice-areas\/criminal-defense\/chicago/, { timeout: 15_000 })
     expect(page.url()).toContain('/practice-areas/criminal-defense/chicago')
@@ -296,9 +302,7 @@ test.describe('Practice Area + Location Page', () => {
     expect(hasCollectionOrService).toBe(true)
 
     // Should have BreadcrumbList schema
-    const hasBreadcrumb = jsonLdBlocks.some(
-      (block) => block['@type'] === 'BreadcrumbList'
-    )
+    const hasBreadcrumb = jsonLdBlocks.some((block) => block['@type'] === 'BreadcrumbList')
     expect(hasBreadcrumb).toBe(true)
   })
 
@@ -315,9 +319,19 @@ test.describe('Practice Area + Location Page', () => {
     await waitForHydration(page)
 
     // Either shows attorney cards or an empty state message
-    const hasCards = await page.locator('[data-provider-id]').first().isVisible().catch(() => false)
-    const hasEmptyState = await page.getByText(/no attorney/i).isVisible().catch(() => false)
-    const hasContent = await page.getByRole('heading', { level: 1 }).isVisible().catch(() => false)
+    const hasCards = await page
+      .locator('[data-provider-id]')
+      .first()
+      .isVisible()
+      .catch(() => false)
+    const hasEmptyState = await page
+      .getByText(/no attorney/i)
+      .isVisible()
+      .catch(() => false)
+    const hasContent = await page
+      .getByRole('heading', { level: 1 })
+      .isVisible()
+      .catch(() => false)
 
     // At minimum, the page should have an h1 and either attorneys or empty state
     expect(hasContent).toBe(true)
@@ -331,8 +345,15 @@ test.describe('Practice Area + Location Page', () => {
 
     // The PageClient has sort options: default, name, rating
     // On desktop, these might be in a select or button group
-    const sortControl = page.locator('select[aria-label="Sort results"]').first()
-      .or(page.locator('select').filter({ hasText: /name|rating|sort/i }).first())
+    const sortControl = page
+      .locator('select[aria-label="Sort results"]')
+      .first()
+      .or(
+        page
+          .locator('select')
+          .filter({ hasText: /name|rating|sort/i })
+          .first()
+      )
 
     const hasSortControl = await sortControl.isVisible().catch(() => false)
     // Sort controls may only be visible on desktop or when there are providers
@@ -410,9 +431,12 @@ test.describe('Attorney Profile Page', () => {
     await waitForHydration(page)
 
     // Get first attorney profile link
-    const profileLink = page.locator('a[href*="/practice-areas/"][href*="/"]').filter({
-      has: page.locator('text=/[A-Z]/')  // Contains at least a capital letter (name)
-    }).first()
+    const profileLink = page
+      .locator('a[href*="/practice-areas/"][href*="/"]')
+      .filter({
+        has: page.locator('text=/[A-Z]/'), // Contains at least a capital letter (name)
+      })
+      .first()
 
     const href = await profileLink.getAttribute('href').catch(() => null)
     if (!href || href.split('/').length < 5) {
@@ -469,9 +493,7 @@ test.describe('Attorney Profile Page', () => {
     expect(jsonLdBlocks.length).toBeGreaterThan(0)
 
     // Should have at least one schema with a recognized type
-    const hasSchema = jsonLdBlocks.some(
-      (block) => block['@type'] || block['@graph']
-    )
+    const hasSchema = jsonLdBlocks.some((block) => block['@type'] || block['@graph'])
     expect(hasSchema).toBe(true)
   })
 
@@ -494,8 +516,6 @@ test.describe('Attorney Profile Page', () => {
         await waitForHydration(page)
 
         // Profile page should display bar number somewhere
-        const barInfo = page.locator('text=/bar|Bar #|Bar Number/i').first()
-        const hasBar = await barInfo.isVisible().catch(() => false)
         // Data-dependent: bar number display depends on the attorney data
         expect(true).toBe(true)
       }
@@ -542,7 +562,9 @@ test.describe('Attorney Profile Page', () => {
     await waitForHydration(page)
 
     // ShareButton component should be rendered
-    const shareButton = page.getByRole('button', { name: /share/i }).first()
+    const shareButton = page
+      .getByRole('button', { name: /share/i })
+      .first()
       .or(page.locator('[aria-label*="share" i]').first())
     const hasShare = await shareButton.isVisible().catch(() => false)
 
@@ -576,7 +598,9 @@ test.describe('Attorney Profile Page', () => {
   })
 
   test('not-found attorney returns 404', async ({ page }) => {
-    const response = await page.goto('/practice-areas/personal-injury/new-york/nonexistent-attorney-xyz-12345')
+    const response = await page.goto(
+      '/practice-areas/personal-injury/new-york/nonexistent-attorney-xyz-12345'
+    )
     // Should return 404 for a non-existent attorney
     expect(response?.status()).toBe(404)
   })
@@ -673,7 +697,10 @@ test.describe('Mobile Search (375px viewport)', () => {
     await cityDropdown.getByText('Houston').first().tap()
 
     // Submit
-    await page.getByRole('button', { name: /search/i }).first().tap()
+    await page
+      .getByRole('button', { name: /search/i })
+      .first()
+      .tap()
 
     await page.waitForURL(/\/practice-areas\/family-law\/houston/, { timeout: 15_000 })
     expect(page.url()).toContain('/practice-areas/family-law/houston')
@@ -728,9 +755,12 @@ test.describe('Mobile Search (375px viewport)', () => {
     await waitForHydration(page)
 
     // Mobile view toggle should be present
-    const viewToggle = page.locator('.flex.md\\:hidden').filter({
-      has: page.locator('button'),
-    }).first()
+    const viewToggle = page
+      .locator('.flex.md\\:hidden')
+      .filter({
+        has: page.locator('button'),
+      })
+      .first()
 
     const hasToggle = await viewToggle.isVisible().catch(() => false)
     if (hasToggle) {

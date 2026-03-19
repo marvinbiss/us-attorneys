@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import BookingWidget from '@/components/booking/BookingWidget'
 
 // ── Mocks ────────────────────────────────────────────────────────────────
@@ -110,10 +110,7 @@ describe('BookingWidget', () => {
 
   it('shows loading state while fetching availability', () => {
     // Make fetch hang (never resolve)
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockReturnValue(new Promise(() => {}))
-    )
+    vi.stubGlobal('fetch', vi.fn().mockReturnValue(new Promise(() => {})))
 
     render(<BookingWidget {...defaultProps} />)
 
@@ -150,12 +147,7 @@ describe('BookingWidget', () => {
   })
 
   it('uses default consultation fee of $19 when not provided', () => {
-    render(
-      <BookingWidget
-        attorneyId="att-uuid-123"
-        attorneyName="John Doe"
-      />
-    )
+    render(<BookingWidget attorneyId="att-uuid-123" attorneyName="John Doe" />)
 
     expect(screen.getByText(/\$19/)).toBeInTheDocument()
   })

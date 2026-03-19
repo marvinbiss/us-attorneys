@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import Breadcrumb, { type BreadcrumbItem } from '@/components/Breadcrumb'
 
 describe('Breadcrumb', () => {
@@ -47,9 +47,7 @@ describe('Breadcrumb', () => {
   })
 
   it('renders the last item as plain text even if it has an href', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'Only Item', href: '/only' },
-    ]
+    const items: BreadcrumbItem[] = [{ label: 'Only Item', href: '/only' }]
     render(<Breadcrumb items={items} />)
 
     // Last item should be a span, not a link, regardless of href
@@ -73,10 +71,7 @@ describe('Breadcrumb', () => {
   })
 
   it('renders ChevronRight separators with aria-hidden', () => {
-    const items: BreadcrumbItem[] = [
-      { label: 'A', href: '/a' },
-      { label: 'B' },
-    ]
+    const items: BreadcrumbItem[] = [{ label: 'A', href: '/a' }, { label: 'B' }]
     const { container } = render(<Breadcrumb items={items} />)
 
     // Each item in the items array gets a ChevronRight separator
@@ -122,9 +117,7 @@ describe('Breadcrumb', () => {
   // --- Styling ---
 
   it('applies custom className to the nav element', () => {
-    const { container } = render(
-      <Breadcrumb items={[{ label: 'Test' }]} className="mb-4 mt-2" />
-    )
+    const { container } = render(<Breadcrumb items={[{ label: 'Test' }]} className="mb-4 mt-2" />)
     const nav = container.querySelector('nav')
     expect(nav).toHaveClass('mb-4')
     expect(nav).toHaveClass('mt-2')
