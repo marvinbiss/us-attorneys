@@ -10,8 +10,7 @@ import { createApiHandler } from '@/lib/api/handler'
 import { getCachedData } from '@/lib/cache'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
-import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limit'
-import { headers } from 'next/headers'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
 // ---------------------------------------------------------------------------
 // Validation
@@ -23,16 +22,18 @@ const messageSchema = z.object({
 })
 
 const contextSchema = z.object({
-  metier: z.string().min(1),               // legacy field name — matches EstimationContext interface
-  metierSlug: z.string().optional(),        // legacy field name
-  ville: z.string().min(1),                 // legacy field name
-  departement: z.string().max(3).optional().default(''),  // legacy field name
+  metier: z.string().min(1),
+  metierSlug: z.string().optional(),
+  ville: z.string().min(1),
+  departement: z.string().max(3).optional().default(''),
   pageUrl: z.string().optional(),
-  artisan: z.object({                       // legacy field name — do not rename without migration
-    name: z.string().min(1),
-    slug: z.string().optional().default(''),
-    publicId: z.string().optional().default(''),
-  }).optional(),
+  attorney: z
+    .object({
+      name: z.string().min(1),
+      slug: z.string().optional().default(''),
+      publicId: z.string().optional().default(''),
+    })
+    .optional(),
 })
 
 const requestSchema = z.object({
@@ -44,12 +45,11 @@ const requestSchema = z.object({
 // Types
 // ---------------------------------------------------------------------------
 
-// DB-bound: column names from prestations_tarifs table (legacy French names, do not rename without migration)
-interface Tarif {
-  prestation: string
-  prix_min: number
-  prix_max: number
-  unite: string
+interface ServicePricing {
+  service_name: string
+  price_min: number
+  price_max: number
+  unit_type: string
 }
 
 interface CoefficientGeo {
@@ -60,12 +60,12 @@ interface CoefficientGeo {
 // Helpers
 // ---------------------------------------------------------------------------
 
-function formatGrid(tarifs: Tarif[]): string {
-  if (!tarifs.length) return 'No fee schedule available for this practice area.'
+function formatGrid(pricing: ServicePricing[]): string {
+  if (!pricing.length) return 'No fee schedule available for this practice area.'
 
   const header = '| Service | Min Price | Max Price | Unit |\n|---|---|---|---|'
-  const rows = tarifs
-    .map((t) => `| ${t.prestation} | $${t.prix_min} | $${t.prix_max} | ${t.unite} |`)
+  const rows = pricing
+    .map((t) => `| ${t.service_name} | $${t.price_min} | $${t.price_max} | ${t.unit_type} |`)
     .join('\n')
   return `${header}\n${rows}`
 }
@@ -76,7 +76,7 @@ function buildSystemPrompt(
   stateCode: string,
   coefficient: number,
   formattedGrid: string,
-  attorneyName?: string,
+  attorneyName?: string
 ): string {
   const attorneyLine = attorneyName
     ? `\n• Attorney: ${attorneyName}\nThe visitor is viewing the profile of ${attorneyName}, a ${practiceAreaName.toLowerCase()} attorney in ${cityName}.`
@@ -118,11 +118,14 @@ STRICT RULES:
  * Strips newlines, control characters, limits length, allows only safe chars.
  */
 function sanitizeForPrompt(str: string): string {
-  return str
-    .replace(/[\n\r]/g, '')
-    .replace(/[\x00-\x1f\x7f-\x9f]/g, '')
-    .slice(0, 100)
-    .replace(/[^a-zA-ZÀ-ÿ0-9 \-']/g, '')
+  return (
+    str
+      .replace(/[\n\r]/g, '')
+      // eslint-disable-next-line no-control-regex
+      .replace(/[\x00-\x1f\x7f-\x9f]/g, '')
+      .slice(0, 100)
+      .replace(/[^a-zA-ZÀ-ÿ0-9 \-']/g, '')
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -130,104 +133,109 @@ function sanitizeForPrompt(str: string): string {
 // ---------------------------------------------------------------------------
 
 export const POST = createApiHandler(async ({ request }) => {
-    // 0. Rate limiting (10 requests per minute per IP)
-    const headersList = await headers()
-    const ip =
-      headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      headersList.get('x-real-ip') ||
-      'unknown'
-    const rateLimitResult = rateLimit(ip, 10, 60_000)
+  // 0. Rate limiting (15 requests per minute per IP, Redis-backed)
+  const rateLimitResult = await rateLimit(request, RATE_LIMITS.estimation)
 
-    if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: 'Too many requests. Please try again in a minute.' },
-        { status: 429, headers: getRateLimitHeaders(rateLimitResult) },
-      )
-    }
-
-    // 1. Parse & validate body
-    const body = await request.json()
-    const validation = requestSchema.safeParse(body)
-
-    if (!validation.success) {
-      return NextResponse.json(
-        { error: 'Invalid data', details: validation.error.flatten() },
-        { status: 400 },
-      )
-    }
-
-    const { messages, context } = validation.data
-    const { metier: practiceArea, ville: city, departement: stateCode } = context
-
-    // Normalize practice area to lowercase for DB lookup
-    const practiceAreaLower = practiceArea.toLowerCase()
-
-    // Guard: max 20 messages
-    if (messages.length > 20) {
-      return NextResponse.json(
-        { error: 'Conversation too long (max 20 messages)' },
-        { status: 400 },
-      )
-    }
-
-    // 2. Fetch fee schedule grid (cached 24h)
-    const supabase = createAdminClient()
-
-    const tarifs = await getCachedData<Tarif[]>(
-      `tarifs:${practiceAreaLower}`,
-      async () => {
-        const { data, error } = await supabase
-          .from('prestations_tarifs')
-          .select('prestation, prix_min, prix_max, unite')
-          .eq('metier', practiceAreaLower)
-
-        if (error) {
-          logger.error('Error fetching fee schedule', error, { action: 'estimation' })
-          return []
-        }
-        return (data as Tarif[]) ?? []
-      },
-      86400, // 24h
-      { skipNull: true },
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again in a minute.' },
+      { status: 429 }
     )
+  }
 
-    // 3. Fetch geographic coefficient (cached 7d)
-    const coeffData = await getCachedData<CoefficientGeo | null>(
-      `coeff:${stateCode}`,
-      async () => {
-        const { data, error } = await supabase
-          .from('coefficients_geo')
-          .select('coefficient')
-          .eq('departement', stateCode)
-          .single()
+  // 1. Parse & validate body
+  const body = await request.json()
+  const validation = requestSchema.safeParse(body)
 
-        if (error) {
-          logger.warn('Geographic coefficient not found, using 1.0', { action: 'estimation', state: stateCode })
-          return null
-        }
-        return data as CoefficientGeo
-      },
-      604800, // 7 days
+  if (!validation.success) {
+    return NextResponse.json(
+      { error: 'Invalid data', details: validation.error.flatten() },
+      { status: 400 }
     )
+  }
 
-    const coefficient = coeffData?.coefficient ?? 1.0
+  const { messages, context } = validation.data
+  const { metier: practiceArea, ville: city, departement: stateCode } = context
 
-    // 4. Build system prompt (sanitize context fields to prevent prompt injection)
-    const safePracticeArea = sanitizeForPrompt(practiceArea)
-    const safeCity = sanitizeForPrompt(city)
-    const safeState = sanitizeForPrompt(stateCode)
-    const safeAttorneyName = context.artisan?.name ? sanitizeForPrompt(context.artisan.name) : undefined
+  // Normalize practice area to lowercase for DB lookup
+  const practiceAreaLower = practiceArea.toLowerCase()
 
-    const formattedGrid = formatGrid(tarifs)
-    const systemPrompt = buildSystemPrompt(safePracticeArea, safeCity, safeState, coefficient, formattedGrid, safeAttorneyName)
+  // Guard: max 20 messages
+  if (messages.length > 20) {
+    return NextResponse.json({ error: 'Conversation too long (max 20 messages)' }, { status: 400 })
+  }
 
-    // 5. Call Anthropic with streaming + timeout
-    const anthropic = new Anthropic()
+  // 2. Fetch fee schedule grid (cached 24h)
+  const supabase = createAdminClient()
 
-    const abortController = new AbortController()
-    const timeout = setTimeout(() => abortController.abort(), 15_000)
+  const pricing = await getCachedData<ServicePricing[]>(
+    `pricing:${practiceAreaLower}`,
+    async () => {
+      const { data, error } = await supabase
+        .from('service_pricing')
+        .select('service_name, price_min, price_max, unit_type')
+        .eq('service_type', practiceAreaLower)
 
-    const stream = anthropic.messages.stream({
+      if (error) {
+        logger.error('Error fetching fee schedule', error, { action: 'estimation' })
+        return []
+      }
+      return (data as ServicePricing[]) ?? []
+    },
+    86400, // 24h
+    { skipNull: true }
+  )
+
+  // 3. Fetch geographic coefficient (cached 7d)
+  const coeffData = await getCachedData<CoefficientGeo | null>(
+    `coeff:${stateCode}`,
+    async () => {
+      const { data, error } = await supabase
+        .from('geographic_coefficients')
+        .select('coefficient')
+        .eq('state_code', stateCode)
+        .single()
+
+      if (error) {
+        logger.warn('Geographic coefficient not found, using 1.0', {
+          action: 'estimation',
+          state: stateCode,
+        })
+        return null
+      }
+      return data as CoefficientGeo
+    },
+    604800 // 7 days
+  )
+
+  const coefficient = coeffData?.coefficient ?? 1.0
+
+  // 4. Build system prompt (sanitize context fields to prevent prompt injection)
+  const safePracticeArea = sanitizeForPrompt(practiceArea)
+  const safeCity = sanitizeForPrompt(city)
+  const safeState = sanitizeForPrompt(stateCode)
+  const safeAttorneyName = context.attorney?.name
+    ? sanitizeForPrompt(context.attorney.name)
+    : undefined
+
+  const formattedGrid = formatGrid(pricing)
+  const systemPrompt = buildSystemPrompt(
+    safePracticeArea,
+    safeCity,
+    safeState,
+    coefficient,
+    formattedGrid,
+    safeAttorneyName
+  )
+
+  // 5. Call Anthropic with streaming + timeout
+  const anthropic = new Anthropic()
+
+  const abortController = new AbortController()
+  const timeout = setTimeout(() => abortController.abort(), 15_000)
+
+  const stream = anthropic.messages.stream(
+    {
       model: 'claude-sonnet-4-20250514',
       max_tokens: 512,
       system: systemPrompt,
@@ -235,43 +243,46 @@ export const POST = createApiHandler(async ({ request }) => {
         role: m.role,
         content: m.content,
       })),
-    }, { signal: abortController.signal })
+    },
+    { signal: abortController.signal }
+  )
 
-    // 6. Return a ReadableStream
-    const encoder = new TextEncoder()
+  // 6. Return a ReadableStream
+  const encoder = new TextEncoder()
 
-    const readable = new ReadableStream({
-      async start(controller) {
-        try {
-          for await (const event of stream) {
-            if (
-              event.type === 'content_block_delta' &&
-              event.delta.type === 'text_delta'
-            ) {
-              controller.enqueue(encoder.encode(event.delta.text))
-            }
-          }
-          clearTimeout(timeout)
-          controller.close()
-        } catch (streamError) {
-          clearTimeout(timeout)
-          if (abortController.signal.aborted) {
-            logger.error('Anthropic stream timed out after 15s', streamError, { action: 'estimation' })
-            controller.enqueue(encoder.encode('\n\nSorry, the service is temporarily overloaded. Please try again.'))
-            controller.close()
-          } else {
-            logger.error('Anthropic streaming error', streamError, { action: 'estimation' })
-            controller.error(streamError)
+  const readable = new ReadableStream({
+    async start(controller) {
+      try {
+        for await (const event of stream) {
+          if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+            controller.enqueue(encoder.encode(event.delta.text))
           }
         }
-      },
-    })
+        clearTimeout(timeout)
+        controller.close()
+      } catch (streamError) {
+        clearTimeout(timeout)
+        if (abortController.signal.aborted) {
+          logger.error('Anthropic stream timed out after 15s', streamError, {
+            action: 'estimation',
+          })
+          controller.enqueue(
+            encoder.encode('\n\nSorry, the service is temporarily overloaded. Please try again.')
+          )
+          controller.close()
+        } else {
+          logger.error('Anthropic streaming error', streamError, { action: 'estimation' })
+          controller.error(streamError)
+        }
+      }
+    },
+  })
 
-    return new NextResponse(readable, {
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'no-cache',
-        'Transfer-Encoding': 'chunked',
-      },
-    })
+  return new NextResponse(readable, {
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Cache-Control': 'no-cache',
+      'Transfer-Encoding': 'chunked',
+    },
+  })
 }, {})
