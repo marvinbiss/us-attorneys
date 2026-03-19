@@ -463,11 +463,22 @@ CREATE INDEX IF NOT EXISTS idx_availability_slots_attorney_date
   ON availability_slots (attorney_id, date);
 
 -- 5d. attorney_availability(attorney_id, day_of_week) WHERE is_active = true
---     Migration 406 has idx_attorney_availability_lookup on (attorney_id, day_of_week, start_time);
---     this is a more targeted partial index for active-only lookups.
-CREATE INDEX IF NOT EXISTS idx_attorney_availability_active_day
-  ON attorney_availability (attorney_id, day_of_week)
-  WHERE is_active = true;
+--     Only if table exists (created by migration 404, may not be present yet)
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.tables
+    WHERE table_schema = 'public' AND table_name = 'attorney_availability'
+  ) THEN
+    CREATE INDEX IF NOT EXISTS idx_attorney_availability_active_day
+      ON attorney_availability (attorney_id, day_of_week)
+      WHERE is_active = true;
+    RAISE NOTICE 'Created index on attorney_availability';
+  ELSE
+    RAISE NOTICE 'attorney_availability table not found — skipping index';
+  END IF;
+END
+$$;
 
 
 -- ============================================================================
