@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { useToast } from '@/hooks/useToast'
 import { ToastContainer } from '@/components/ui/Toast'
@@ -83,12 +84,10 @@ export default function LeaveReviewPage() {
       setSubmitted(true)
       toastSuccess('Review submitted!', 'Thank you for your feedback.')
 
-      // Redirect to attorney profile after 3 seconds if slug is available
-      if (bookingInfo?.attorneySlug) {
-        setTimeout(() => {
-          router.push(`/attorney/${bookingInfo.attorneySlug}`)
-        }, 3000)
-      }
+      // Redirect to client dashboard reviews after 3 seconds
+      setTimeout(() => {
+        router.push('/client-dashboard/my-reviews')
+      }, 3000)
     } catch (err: unknown) {
       setApiError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
@@ -101,8 +100,8 @@ export default function LeaveReviewPage() {
   // ---------------------------------------------------------------------------
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-violet-600" />
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <Loader2 className="h-8 w-8 animate-spin text-violet-600" />
       </div>
     )
   }
@@ -112,19 +111,17 @@ export default function LeaveReviewPage() {
   // ---------------------------------------------------------------------------
   if (error && !bookingInfo) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-md w-full text-center">
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-            Invalid Link
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
-          <a
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4 dark:bg-gray-900">
+        <div className="w-full max-w-md rounded-xl bg-white p-8 text-center shadow-lg dark:bg-gray-800">
+          <AlertCircle className="mx-auto mb-4 h-16 w-16 text-red-500" />
+          <h1 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">Invalid Link</h1>
+          <p className="mb-6 text-gray-600 dark:text-gray-400">{error}</p>
+          <Link
             href="/"
-            className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition"
+            className="inline-block rounded-lg bg-violet-600 px-6 py-3 text-white transition hover:bg-violet-700"
           >
             Back to Home
-          </a>
+          </Link>
         </div>
       </div>
     )
@@ -135,32 +132,31 @@ export default function LeaveReviewPage() {
   // ---------------------------------------------------------------------------
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-md w-full text-center">
-          <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4 dark:bg-gray-900">
+        <div className="w-full max-w-md rounded-xl bg-white p-8 text-center shadow-lg dark:bg-gray-800">
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+            <CheckCircle className="h-10 w-10 text-green-600 dark:text-green-400" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
             Thank You for Your Review!
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Your detailed feedback helps {bookingInfo?.attorneyName} improve and helps other clients make informed decisions.
+          <p className="mb-6 text-gray-600 dark:text-gray-400">
+            Your detailed feedback helps {bookingInfo?.attorneyName} improve and helps other clients
+            make informed decisions.
           </p>
           <div className="space-y-3">
-            {bookingInfo?.attorneySlug && (
-              <a
-                href={`/attorney/${bookingInfo.attorneySlug}`}
-                className="inline-block bg-violet-600 text-white px-6 py-3 rounded-lg hover:bg-violet-700 transition w-full"
-              >
-                View Attorney Profile
-              </a>
-            )}
-            <a
+            <Link
+              href="/client-dashboard/my-reviews"
+              className="inline-block w-full rounded-lg bg-violet-600 px-6 py-3 text-white transition hover:bg-violet-700"
+            >
+              View My Reviews
+            </Link>
+            <Link
               href="/"
-              className="inline-block text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 px-6 py-3 transition font-medium"
+              className="inline-block px-6 py-3 font-medium text-violet-600 transition hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
             >
               Browse Attorneys
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -171,30 +167,26 @@ export default function LeaveReviewPage() {
   // Review form
   // ---------------------------------------------------------------------------
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
+    <div className="min-h-screen bg-gray-50 px-4 py-8 dark:bg-gray-900">
       <ToastContainer toasts={toasts} onDismiss={removeToast} />
 
-      <div className="max-w-lg mx-auto">
+      <div className="mx-auto max-w-lg">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            Leave a Review
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            How was your consultation?
-          </p>
+        <div className="mb-8 text-center">
+          <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">Leave a Review</h1>
+          <p className="text-gray-600 dark:text-gray-400">How was your consultation?</p>
         </div>
 
         {/* Booking info card */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
+        <div className="mb-6 rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-violet-100 dark:bg-violet-900/30 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-violet-600 dark:text-violet-400 font-bold text-lg">
+            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-violet-100 dark:bg-violet-900/30">
+              <span className="text-lg font-bold text-violet-600 dark:text-violet-400">
                 {bookingInfo?.attorneyName?.charAt(0) || 'A'}
               </span>
             </div>
             <div className="min-w-0">
-              <h2 className="font-semibold text-gray-900 dark:text-white truncate">
+              <h2 className="truncate font-semibold text-gray-900 dark:text-white">
                 {bookingInfo?.attorneyName}
               </h2>
               <p className="text-sm text-gray-500 dark:text-gray-400">

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Star, MapPin, Phone, CheckCircle, Clock } from 'lucide-react'
 import { BLUR_PLACEHOLDER } from '@/lib/data/images'
+import { getAttorneyUrl } from '@/lib/utils'
 
 interface AttorneyCardProps {
   provider: {
@@ -24,18 +25,24 @@ interface AttorneyCardProps {
 }
 
 export function AttorneyCard({ provider, showContact = false }: AttorneyCardProps) {
+  const profileUrl = getAttorneyUrl({
+    slug: provider.slug,
+    specialty: provider.service_type || null,
+    city: provider.address_city || null,
+  })
+
   const renderStars = (rating: number) => {
     return (
       <div className="flex items-center gap-0.5">
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`w-4 h-4 ${
+            className={`h-4 w-4 ${
               star <= rating
                 ? 'fill-amber-400 text-amber-400'
                 : star - 0.5 <= rating
-                ? 'fill-amber-400/50 text-amber-400'
-                : 'text-gray-300'
+                  ? 'fill-amber-400/50 text-amber-400'
+                  : 'text-gray-300'
             }`}
           />
         ))}
@@ -44,11 +51,11 @@ export function AttorneyCard({ provider, showContact = false }: AttorneyCardProp
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+    <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
       <div className="p-6">
         <div className="flex items-start gap-4">
           {/* Avatar */}
-          <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+          <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
             {provider.image_url ? (
               <Image
                 src={provider.image_url}
@@ -60,84 +67,80 @@ export function AttorneyCard({ provider, showContact = false }: AttorneyCardProp
                 blurDataURL={BLUR_PLACEHOLDER}
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400 text-2xl font-bold">
+              <div className="flex h-full w-full items-center justify-center text-2xl font-bold text-gray-400">
                 {provider.name.charAt(0)}
               </div>
             )}
           </div>
 
           {/* Info */}
-          <div className="flex-1 min-w-0">
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <Link
-                href={`/attorney/${provider.slug}`}
-                className="font-semibold text-gray-900 hover:text-blue-600 transition-colors truncate"
+                href={profileUrl}
+                className="truncate font-semibold text-gray-900 transition-colors hover:text-blue-600"
               >
                 {provider.name}
               </Link>
               {provider.is_verified && (
-                <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                <CheckCircle className="h-5 w-5 flex-shrink-0 text-blue-600" />
               )}
             </div>
 
             {provider.service_type && (
-              <p className="text-sm text-blue-600 font-medium mt-0.5">
-                {provider.service_type}
-              </p>
+              <p className="mt-0.5 text-sm font-medium text-blue-600">{provider.service_type}</p>
             )}
 
-            <div className="flex items-center gap-1 mt-1">
+            <div className="mt-1 flex items-center gap-1">
               {renderStars(provider.rating_average)}
-              <span className="text-sm font-medium text-gray-700 ml-1">
+              <span className="ml-1 text-sm font-medium text-gray-700">
                 {provider.rating_average.toFixed(1)}
               </span>
-              <span className="text-sm text-gray-500">
-                ({provider.review_count} reviews)
-              </span>
+              <span className="text-sm text-gray-500">({provider.review_count} reviews)</span>
             </div>
 
-            <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">
-              <MapPin className="w-4 h-4" />
-              <span>{provider.address_city}, {provider.address_region}</span>
+            <div className="mt-1 flex items-center gap-1 text-sm text-gray-500">
+              <MapPin className="h-4 w-4" />
+              <span>
+                {provider.address_city}, {provider.address_region}
+              </span>
             </div>
           </div>
         </div>
 
         {provider.description && (
-          <p className="mt-4 text-gray-600 text-sm line-clamp-2">
-            {provider.description}
-          </p>
+          <p className="mt-4 line-clamp-2 text-sm text-gray-600">{provider.description}</p>
         )}
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-2 mt-4">
+        <div className="mt-4 flex flex-wrap gap-2">
           {provider.is_available_24h && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
-              <Clock className="w-3 h-3" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+              <Clock className="h-3 w-3" />
               24/7
             </span>
           )}
           {provider.response_time && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+            <span className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
               Responds in {provider.response_time}
             </span>
           )}
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-3 mt-4 pt-4 border-t border-gray-100">
+        <div className="mt-4 flex items-center gap-3 border-t border-gray-100 pt-4">
           <Link
-            href={`/attorney/${provider.slug}`}
-            className="flex-1 text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            href={profileUrl}
+            className="flex-1 rounded-lg bg-blue-600 px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700"
           >
             View profile
           </Link>
           {showContact && provider.phone && (
             <a
               href={`tel:${provider.phone}`}
-              className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700"
+              className="flex items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
             >
-              <Phone className="w-4 h-4" />
+              <Phone className="h-4 w-4" />
               Call
             </a>
           )}

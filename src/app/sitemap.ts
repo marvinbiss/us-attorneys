@@ -29,8 +29,8 @@ const TOP_CITIES_PHASE1 = 300
 // Phase 1 Spanish: top 200 Hispanic-population cities
 const TOP_HISPANIC_CITIES = 200
 
-// Total US counties
-const TOTAL_COUNTIES = 3_144
+// Total US counties (unused until county data module is ready)
+// const TOTAL_COUNTIES = 3_144
 
 // Phase 1 ZIP codes: top 500 per state batch (PA × ZIP batched by state)
 // We emit ZIPs grouped by state to keep sitemap files manageable.
@@ -199,8 +199,8 @@ export async function generateSitemaps() {
     // ── Type H: Demographic × PA × cities ───────────────────────────────
     ...batchIds('demographic', DEMOGRAPHIC_MODIFIERS.length * pa * phase1, BATCH_SIZE),
 
-    // ── Type J: PA × counties ───────────────────────────────────────────
-    ...batchIds('counties', pa * TOTAL_COUNTIES, BATCH_SIZE),
+    // ── Type J: PA × counties — REMOVED (generated wrong URLs, no matching route)
+    // ...batchIds('counties', pa * TOTAL_COUNTIES, BATCH_SIZE),
 
     // ── Type K: Neighborhoods (deferred Phase 2 — 0 sitemaps for now) ──
     // Uncomment when neighborhood data is ready:
@@ -220,8 +220,8 @@ export async function generateSitemaps() {
     // ── Type Q: Industry × cities ───────────────────────────────────────
     ...batchIds('industry', INDUSTRIES.length * phase1, BATCH_SIZE),
 
-    // ── Geographic hub sitemaps ─────────────────────────────────────────
-    { id: 'counties-hub' },
+    // ── Geographic hub sitemaps — REMOVED (no matching routes for /counties or /counties/{state})
+    // { id: 'counties-hub' },
 
     // ── Type Z: ZIP code pages (PA × top ZIPs by population) ─────────
     // Phase 1: top 10 PAs × top 500 ZIPs = 5,000 URLs per batch
@@ -266,8 +266,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       { url: `${SITE_URL}/affordable`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/pro-bono`, lastModified: BUILD_DATE },
       { url: `${SITE_URL}/situations`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/counties`, lastModified: BUILD_DATE },
-      { url: `${SITE_URL}/industries`, lastModified: BUILD_DATE },
+      // /counties and /industries removed — no matching routes exist
       { url: `${SITE_URL}/issues`, lastModified: BUILD_DATE },
       // Spanish hub pages (routes live at /{intent-es}/ — no /es/ prefix)
       { url: `${SITE_URL}/abogados`, lastModified: BUILD_DATE },
@@ -759,35 +758,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     for (const modifier of DEMOGRAPHIC_MODIFIERS) {
       for (const pa of practiceAreas) {
         for (const city of phase1Cities) {
-          allUrls.push({ url: `${SITE_URL}/${modifier}/${pa.slug}/${city.slug}` })
+          allUrls.push({ url: `${SITE_URL}/find/${modifier}/${pa.slug}/${city.slug}` })
         }
       }
     }
     return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
-  // ── Type J: PA × counties ───────────────────────────────────────────
-  if (id.startsWith('counties-') && id !== 'counties-hub') {
-    const batchIndex = parseInt(id.slice('counties-'.length), 10)
-    const offset = batchIndex * BATCH_SIZE
-    // Counties are derived from state data — each state has counties
-    // Generate county slugs from states (state-slug/county-index pattern)
-    // In production, this will be replaced by actual county data from the DB
-    // For now, generate placeholder URLs using the ~3,144 US counties
-    // Counties are structured as /counties/[state]/[county]/[practice-area]
-    const allUrls: MetadataRoute.Sitemap = []
-    for (const state of states) {
-      // Generate county slugs for each state based on estimated county count
-      // Average ~62 counties per state (3,144 / 51)
-      // This will be replaced by actual county data when the counties table is populated
-      for (const pa of practiceAreas) {
-        allUrls.push({ url: `${SITE_URL}/states/${state.slug}/counties/${pa.slug}` })
-      }
-    }
-    // Note: Full county × PA URLs will expand to ~235K when county data module is ready
-    // For now, emit state/county/PA hub pages only
-    return allUrls.slice(offset, offset + BATCH_SIZE)
-  }
+  // ── Type J: PA × counties — REMOVED (generated /states/{state}/counties/{pa} which has no matching route)
+  // The actual county route is /counties/[county]/[specialty] — requires real county data from DB.
+  // Will be re-enabled when county data module is ready with correct URL generation.
 
   // ── Type L: FAQ × states ─────────────────────────────────────────────
   if (id === 'faq-states') {
@@ -795,7 +775,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     for (const pa of practiceAreas) {
       for (const state of states) {
         allUrls.push({
-          url: `${SITE_URL}/faq/${pa.slug}/${state.slug}`,
+          url: `${SITE_URL}/legal-questions/${pa.slug}/${state.slug}`,
           lastModified: BUILD_DATE,
         })
       }
@@ -851,26 +831,14 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const allUrls: MetadataRoute.Sitemap = []
     for (const industry of INDUSTRIES) {
       for (const city of phase1Cities) {
-        allUrls.push({ url: `${SITE_URL}/industries/${industry}/${city.slug}` })
+        allUrls.push({ url: `${SITE_URL}/industry/${industry}/${city.slug}` })
       }
     }
     return allUrls.slice(offset, offset + BATCH_SIZE)
   }
 
-  // ── Counties hub pages ───────────────────────────────────────────────
-  if (id === 'counties-hub') {
-    const allUrls: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/counties`, lastModified: BUILD_DATE },
-    ]
-    // County hub per state
-    for (const state of states) {
-      allUrls.push({
-        url: `${SITE_URL}/counties/${state.slug}`,
-        lastModified: BUILD_DATE,
-      })
-    }
-    return allUrls
-  }
+  // ── Counties hub pages — REMOVED (no matching routes for /counties or /counties/{state})
+  // Will be re-enabled when county hub pages are implemented.
 
   // ── Type Z: ZIP code pages (PA × top ZIPs, Doctolib pattern) ─────
   if (id.startsWith('zip-pages-')) {

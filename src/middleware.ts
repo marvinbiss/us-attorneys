@@ -182,7 +182,7 @@ function addSecurityHeaders(
 const LEGACY_REDIRECTS: Record<string, string> = {
   '/issues-courants': '/issues', // legacy French URL redirect
   '/tools/diagnostic-artisan': '/tools/diagnostic', // legacy French URL redirect
-  '/tools/calculator-prix': '/tools/calculator', // legacy French URL redirect
+  '/tools/calculator-prix': '/tools/cost-estimator', // legacy French URL redirect
 }
 
 // URL canonicalization — all fixes combined into a single 301 hop

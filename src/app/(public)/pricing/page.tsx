@@ -529,7 +529,7 @@ export default async function PricingPage() {
                     <ChevronRight className="h-3 w-3" /> Client reviews
                   </Link>
                   <Link
-                    href="/tools/calculator"
+                    href="/tools/cost-estimator"
                     className="flex items-center gap-2 py-1 text-sm text-gray-600 transition-colors hover:text-blue-600"
                   >
                     <ChevronRight className="h-3 w-3" /> Fee calculator

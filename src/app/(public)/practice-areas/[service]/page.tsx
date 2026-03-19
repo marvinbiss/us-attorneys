@@ -808,7 +808,7 @@ export default async function ServicePage({ params }: PageProps) {
                   {service.name} Legal Guide
                 </Link>
                 <Link
-                  href="/tools/calculator"
+                  href="/tools/cost-estimator"
                   className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-blue-100 hover:text-blue-700"
                 >
                   Fee Calculator

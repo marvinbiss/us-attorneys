@@ -47,7 +47,7 @@ const categories = [
         scope: 'Electrical installation standards',
         requirements:
           'Minimum number of outlets per room, GFCI protection required in wet areas, circuit breaker panel requirements, safety zones in bathrooms, dedicated circuits for major appliances (oven, dryer, washer).',
-        link: '/guides/normes-electriques',
+        link: '/guides/find-attorney',
         linkLabel: 'Electrical Code Guide',
         service: '/practice-areas/criminal-defense',
         serviceLabel: 'Find an electrician',
@@ -353,7 +353,7 @@ export default function RegulationsPage() {
           </h2>
           <div className="grid gap-4 md:grid-cols-3">
             <Link
-              href="/guides/normes-electriques"
+              href="/guides/find-attorney"
               className="group rounded-xl border border-gray-100 bg-white p-5 transition-all hover:border-blue-200 hover:shadow-md"
             >
               <h3 className="mb-1 font-semibold text-gray-900 transition-colors group-hover:text-blue-600">
