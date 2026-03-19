@@ -8,8 +8,18 @@ import { ErrorBoundary, withErrorBoundary } from '@/components/ErrorBoundary'
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode
+    href: string
+    [key: string]: unknown
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }))
 
@@ -59,7 +69,9 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     )
     expect(screen.getByText('Something went wrong')).toBeInTheDocument()
-    expect(screen.getByText('Please try again or return to the home page.')).toBeInTheDocument()
+    expect(
+      screen.getByText('An unexpected error occurred. Please try again or return to the home page.')
+    ).toBeInTheDocument()
   })
 
   it('renders custom fallback when provided', () => {
@@ -78,7 +90,7 @@ describe('ErrorBoundary', () => {
         <ThrowingComponent shouldThrow={true} />
       </ErrorBoundary>
     )
-    expect(screen.getByText('Retry')).toBeInTheDocument()
+    expect(screen.getByText('Try again')).toBeInTheDocument()
   })
 
   it('renders Home link in default fallback', () => {
@@ -100,7 +112,7 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('Something went wrong')).toBeInTheDocument()
 
     // Click retry, then rerender with non-throwing component
-    fireEvent.click(screen.getByText('Retry'))
+    fireEvent.click(screen.getByText('Try again'))
 
     // After retry, the boundary tries to re-render children
     // Since ThrowingComponent still throws, it will show error again

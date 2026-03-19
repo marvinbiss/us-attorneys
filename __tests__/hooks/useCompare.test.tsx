@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import React from 'react'
 
@@ -58,6 +58,10 @@ describe('useCompare (without provider)', () => {
 // ---------------------------------------------------------------------------
 
 describe('useCompare (with provider)', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
   it('starts with an empty compare list', () => {
     const { result } = renderHook(() => useCompare(), { wrapper })
 
@@ -88,7 +92,7 @@ describe('useCompare (with provider)', () => {
     expect(result.current.compareList).toHaveLength(1)
   })
 
-  it('enforces maximum of 3 attorneys', () => {
+  it('enforces maximum of 4 attorneys', () => {
     vi.useFakeTimers()
 
     const { result } = renderHook(() => useCompare(), { wrapper })
@@ -98,13 +102,16 @@ describe('useCompare (with provider)', () => {
       result.current.addToCompare(makeAttorney({ id: '2' }))
       result.current.addToCompare(makeAttorney({ id: '3' }))
       result.current.addToCompare(makeAttorney({ id: '4' }))
+      result.current.addToCompare(makeAttorney({ id: '5' }))
     })
 
     // Flush the setTimeout used for the warning toast
-    act(() => { vi.runAllTimers() })
+    act(() => {
+      vi.runAllTimers()
+    })
 
-    expect(result.current.compareList).toHaveLength(3)
-    expect(result.current.compareList.map(a => a.id)).toEqual(['1', '2', '3'])
+    expect(result.current.compareList).toHaveLength(4)
+    expect(result.current.compareList.map((a) => a.id)).toEqual(['1', '2', '3', '4'])
 
     vi.useRealTimers()
   })

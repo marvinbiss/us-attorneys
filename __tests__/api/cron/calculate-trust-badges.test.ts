@@ -131,12 +131,10 @@ describe('No attorneys to process', () => {
 // ---------------------------------------------------------------------------
 describe('Attorney batch processing', () => {
   it('updates metrics for attorneys whose values changed', async () => {
-    const mockAttorneys = [
-      { id: 'a1', user_id: 'u1', rating_average: 0, review_count: 0 },
-    ]
+    const mockAttorneys = [{ id: 'a1', rating_average: 0, review_count: 0 }]
     const mockReviews = [
-      { attorney_id: 'u1', rating: 5 },
-      { attorney_id: 'u1', rating: 3 },
+      { attorney_id: 'a1', rating: 5 },
+      { attorney_id: 'a1', rating: 3 },
     ]
 
     const mockUpdate = vi.fn().mockReturnValue({
@@ -182,12 +180,10 @@ describe('Attorney batch processing', () => {
   })
 
   it('skips attorneys when rating and count have not changed', async () => {
-    const mockAttorneys = [
-      { id: 'a1', user_id: 'u1', rating_average: 4.5, review_count: 2 },
-    ]
+    const mockAttorneys = [{ id: 'a1', rating_average: 4.5, review_count: 2 }]
     const mockReviews = [
-      { attorney_id: 'u1', rating: 5 },
-      { attorney_id: 'u1', rating: 4 },
+      { attorney_id: 'a1', rating: 5 },
+      { attorney_id: 'a1', rating: 4 },
     ]
 
     const mockUpdate = vi.fn().mockReturnValue({
@@ -230,24 +226,33 @@ describe('Attorney batch processing', () => {
     expect(mockUpdate).not.toHaveBeenCalled()
   })
 
-  it('skips attorneys without user_id', async () => {
-    const mockAttorneys = [
-      { id: 'a1', user_id: null, rating_average: 0, review_count: 0 },
-    ]
+  it('skips attorneys with no reviews (nothing changed)', async () => {
+    const mockAttorneys = [{ id: 'a1', rating_average: 0, review_count: 0 }]
 
     let selectCallCount = 0
-    mockFrom.mockImplementation(() => ({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          range: vi.fn().mockReturnValue({
-            order: vi.fn().mockResolvedValue({
-              data: selectCallCount++ === 0 ? mockAttorneys : [],
-              error: null,
+    mockFrom.mockImplementation((table: string) => {
+      if (table === 'reviews') {
+        return {
+          select: vi.fn().mockReturnValue({
+            in: vi.fn().mockReturnValue({
+              eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+            }),
+          }),
+        }
+      }
+      return {
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            range: vi.fn().mockReturnValue({
+              order: vi.fn().mockResolvedValue({
+                data: selectCallCount++ === 0 ? mockAttorneys : [],
+                error: null,
+              }),
             }),
           }),
         }),
-      }),
-    }))
+      }
+    })
     mockRpc.mockResolvedValue({ error: null })
 
     const { GET } = await import('@/app/api/cron/calculate-trust-badges/route')
@@ -265,9 +270,7 @@ describe('Attorney batch processing', () => {
 // ---------------------------------------------------------------------------
 describe('Review fetch error', () => {
   it('increments error count when fetching reviews fails', async () => {
-    const mockAttorneys = [
-      { id: 'a1', user_id: 'u1', rating_average: 0, review_count: 0 },
-    ]
+    const mockAttorneys = [{ id: 'a1', user_id: 'u1', rating_average: 0, review_count: 0 }]
 
     let selectCallCount = 0
     mockFrom.mockImplementation((table: string) => {
@@ -405,7 +408,9 @@ describe('Unexpected exception', () => {
   it('returns 500 when an unexpected error is thrown', async () => {
     mockVerifyCronSecret.mockReturnValue(true)
     // Make createClient throw by having .from throw
-    mockFrom.mockImplementation(() => { throw new Error('Catastrophic failure') })
+    mockFrom.mockImplementation(() => {
+      throw new Error('Catastrophic failure')
+    })
 
     const { GET } = await import('@/app/api/cron/calculate-trust-badges/route')
     const res = await GET(makeRequest('Bearer valid'))

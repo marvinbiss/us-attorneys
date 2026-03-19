@@ -10,12 +10,32 @@ import { render, screen } from '@testing-library/react'
 
 // Mock next/link to render a simple anchor
 vi.mock('next/link', () => ({
-  default: ({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) => (
-    <a href={href} className={className}>{children}</a>
+  default: ({
+    href,
+    children,
+    className,
+  }: {
+    href: string
+    children: React.ReactNode
+    className?: string
+  }) => (
+    <a href={href} className={className}>
+      {children}
+    </a>
   ),
 }))
 
 import Breadcrumbs from '@/components/seo/Breadcrumbs'
+
+function parseJsonLd(container: HTMLElement) {
+  const script = container.querySelector('script[type="application/ld+json"]')
+  expect(script).not.toBeNull()
+  const content = (script as HTMLScriptElement).innerHTML
+    .replace(/\u003c/g, '<')
+    .replace(/\u003e/g, '>')
+    .replace(/\u0026/g, '&')
+  return JSON.parse(content)
+}
 
 describe('Breadcrumbs component', () => {
   const items = [
@@ -38,8 +58,8 @@ describe('Breadcrumbs component', () => {
     // First item should be Home link
     const homeLink = listItems[0].querySelector('a')
     expect(homeLink).not.toBeNull()
-    expect(homeLink!.textContent).toBe('Home')
-    expect(homeLink!.getAttribute('href')).toBe('/')
+    expect((homeLink as HTMLAnchorElement).textContent).toBe('Home')
+    expect((homeLink as HTMLAnchorElement).getAttribute('href')).toBe('/')
   })
 
   it('renders intermediate items as links', () => {
@@ -66,69 +86,49 @@ describe('Breadcrumbs component', () => {
 
   it('renders JSON-LD BreadcrumbList script tag', () => {
     const { container } = render(<Breadcrumbs items={items} />)
-    const script = container.querySelector('script[type="application/ld+json"]')
-    expect(script).not.toBeNull()
-    const content = script!.innerHTML
-      .replace(/\u003c/g, '<')
-      .replace(/\u003e/g, '>')
-      .replace(/\u0026/g, '&')
-    const jsonLd = JSON.parse(content)
+    const jsonLd = parseJsonLd(container)
     expect(jsonLd['@context']).toBe('https://schema.org')
     expect(jsonLd['@type']).toBe('BreadcrumbList')
   })
 
   it('JSON-LD has correct number of items (including Home)', () => {
     const { container } = render(<Breadcrumbs items={items} />)
-    const script = container.querySelector('script[type="application/ld+json"]')
-    const content = script!.innerHTML
-      .replace(/\u003c/g, '<')
-      .replace(/\u003e/g, '>')
-      .replace(/\u0026/g, '&')
-    const jsonLd = JSON.parse(content)
+    const jsonLd = parseJsonLd(container)
     expect(jsonLd.itemListElement).toHaveLength(4)
   })
 
   it('JSON-LD last item has no "item" property', () => {
     const { container } = render(<Breadcrumbs items={items} />)
-    const script = container.querySelector('script[type="application/ld+json"]')
-    const content = script!.innerHTML
-      .replace(/\u003c/g, '<')
-      .replace(/\u003e/g, '>')
-      .replace(/\u0026/g, '&')
-    const jsonLd = JSON.parse(content)
+    const jsonLd = parseJsonLd(container)
     const lastItem = jsonLd.itemListElement[jsonLd.itemListElement.length - 1]
     expect(lastItem.item).toBeUndefined()
     expect(lastItem.name).toBe('Houston')
     expect(lastItem.position).toBe(4)
   })
 
-  it('JSON-LD non-last items have "item" as full URL', () => {
+  it('JSON-LD non-last items have "item" property', () => {
     const { container } = render(<Breadcrumbs items={items} />)
-    const script = container.querySelector('script[type="application/ld+json"]')
-    const content = script!.innerHTML
-      .replace(/\u003c/g, '<')
-      .replace(/\u003e/g, '>')
-      .replace(/\u0026/g, '&')
-    const jsonLd = JSON.parse(content)
-    // Home (has href /)
+    const jsonLd = parseJsonLd(container)
+    // Home has semanticType 'Organization' so item is an object with @type, @id, url
     expect(jsonLd.itemListElement[0].item).toBeDefined()
-    expect(jsonLd.itemListElement[0].item).toContain('/')
-    // Practice Areas
+    expect(jsonLd.itemListElement[0].item['@type']).toBe('Organization')
+    expect(jsonLd.itemListElement[0].item.url).toContain('/')
+    // Practice Areas (no semanticType) — item is a full URL string
     expect(jsonLd.itemListElement[1].item).toContain('/practice-areas')
   })
 
-  it('renders separator slashes between items', () => {
+  it('renders separator chevrons between items', () => {
     const { container } = render(<Breadcrumbs items={items} />)
     const separators = container.querySelectorAll('[aria-hidden="true"]')
-    // 3 separators (between 4 items)
-    expect(separators).toHaveLength(3)
-    expect(separators[0].textContent).toBe('/')
+    // 3 separator ChevronRight icons + 1 Home icon = 4 aria-hidden elements
+    expect(separators).toHaveLength(4)
   })
 
   it('applies custom className', () => {
     const { container } = render(<Breadcrumbs items={items} className="mt-4" />)
     const nav = container.querySelector('nav')
-    expect(nav!.className).toContain('mt-4')
+    expect(nav).not.toBeNull()
+    expect((nav as HTMLElement).className).toContain('mt-4')
   })
 
   it('renders ordered list (ol) for proper semantics', () => {
@@ -141,7 +141,7 @@ describe('Breadcrumbs component', () => {
     // Items without href that are not last should render as span
     const itemsNoHref = [
       { label: 'Category' }, // no href, not last
-      { label: 'Page' },    // no href, last
+      { label: 'Page' }, // no href, last
     ]
     const { container } = render(<Breadcrumbs items={itemsNoHref} />)
     const listItems = container.querySelectorAll('li')

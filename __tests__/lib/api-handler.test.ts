@@ -28,8 +28,12 @@ vi.mock('@/lib/logger', () => ({
 }))
 
 vi.mock('@/lib/api/timeout', () => ({
-  isTimeoutError: (err: unknown) =>
-    err instanceof Error && err.message.startsWith('Query timeout'),
+  isTimeoutError: (err: unknown) => err instanceof Error && err.message.startsWith('Query timeout'),
+}))
+
+vi.mock('@/lib/session-timeout', () => ({
+  checkSessionIdle: vi.fn().mockResolvedValue({ expired: false }),
+  touchSession: vi.fn().mockResolvedValue(undefined),
 }))
 
 import {
@@ -103,10 +107,9 @@ describe('createApiHandler — body validation', () => {
   })
 
   it('parses and passes valid body to handler', async () => {
-    const handler = createApiHandler(
-      async (ctx) => NextResponse.json({ parsed: ctx.body }),
-      { bodySchema: schema }
-    )
+    const handler = createApiHandler(async (ctx) => NextResponse.json({ parsed: ctx.body }), {
+      bodySchema: schema,
+    })
 
     const res = await handler(makeRequest('POST', { name: 'Alice', age: 30 }))
     const body = await res.json()
@@ -114,10 +117,9 @@ describe('createApiHandler — body validation', () => {
   })
 
   it('returns 400 for invalid body (Zod error)', async () => {
-    const handler = createApiHandler(
-      async () => NextResponse.json({ ok: true }),
-      { bodySchema: schema }
-    )
+    const handler = createApiHandler(async () => NextResponse.json({ ok: true }), {
+      bodySchema: schema,
+    })
 
     const res = await handler(makeRequest('POST', { name: '', age: -1 }))
     expect(res.status).toBe(400)
@@ -127,10 +129,9 @@ describe('createApiHandler — body validation', () => {
   })
 
   it('returns 400 for non-JSON body', async () => {
-    const handler = createApiHandler(
-      async () => NextResponse.json({ ok: true }),
-      { bodySchema: schema }
-    )
+    const handler = createApiHandler(async () => NextResponse.json({ ok: true }), {
+      bodySchema: schema,
+    })
 
     // NextRequest with no body — json() will throw
     const req = new NextRequest('http://localhost/api/test', { method: 'POST' })
@@ -153,10 +154,9 @@ describe('createApiHandler — requireAuth', () => {
   it('returns 401 when no user is authenticated', async () => {
     mockGetUser.mockResolvedValue({ data: { user: null } })
 
-    const handler = createApiHandler(
-      async () => NextResponse.json({ ok: true }),
-      { requireAuth: true }
-    )
+    const handler = createApiHandler(async () => NextResponse.json({ ok: true }), {
+      requireAuth: true,
+    })
 
     const res = await handler(makeRequest())
     expect(res.status).toBe(401)
@@ -169,10 +169,9 @@ describe('createApiHandler — requireAuth', () => {
       data: { user: { id: 'u1', email: 'a@b.com' } },
     })
 
-    const handler = createApiHandler(
-      async (ctx) => NextResponse.json({ userId: ctx.user?.id }),
-      { requireAuth: true }
-    )
+    const handler = createApiHandler(async (ctx) => NextResponse.json({ userId: ctx.user?.id }), {
+      requireAuth: true,
+    })
 
     const res = await handler(makeRequest())
     const body = await res.json()
@@ -184,10 +183,9 @@ describe('createApiHandler — requireAuth', () => {
       data: { user: { id: 'u2', email: null } },
     })
 
-    const handler = createApiHandler(
-      async (ctx) => NextResponse.json({ email: ctx.user?.email }),
-      { requireAuth: true }
-    )
+    const handler = createApiHandler(async (ctx) => NextResponse.json({ email: ctx.user?.email }), {
+      requireAuth: true,
+    })
 
     const res = await handler(makeRequest())
     const body = await res.json()
@@ -216,10 +214,9 @@ describe('createApiHandler — requireAttorney', () => {
       }),
     })
 
-    const handler = createApiHandler(
-      async () => NextResponse.json({ ok: true }),
-      { requireAttorney: true }
-    )
+    const handler = createApiHandler(async () => NextResponse.json({ ok: true }), {
+      requireAttorney: true,
+    })
 
     const res = await handler(makeRequest())
     expect(res.status).toBe(403)
@@ -266,18 +263,20 @@ describe('createApiHandler — requireAdmin', () => {
     mockGetUser.mockResolvedValue({
       data: { user: { id: 'u1', email: 'a@b.com' } },
     })
+    // Admin check: .from('profiles').select('id').eq('id', user.id).eq('is_admin', true).single()
     mockFrom.mockReturnValue({
       select: vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({ data: null }),
+          eq: vi.fn().mockReturnValue({
+            single: vi.fn().mockResolvedValue({ data: null }),
+          }),
         }),
       }),
     })
 
-    const handler = createApiHandler(
-      async () => NextResponse.json({ ok: true }),
-      { requireAdmin: true }
-    )
+    const handler = createApiHandler(async () => NextResponse.json({ ok: true }), {
+      requireAdmin: true,
+    })
 
     const res = await handler(makeRequest())
     expect(res.status).toBe(403)
@@ -290,15 +289,16 @@ describe('createApiHandler — requireAdmin', () => {
     mockFrom.mockReturnValue({
       select: vi.fn().mockReturnValue({
         eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue({ data: { id: 'admin1' } }),
+          eq: vi.fn().mockReturnValue({
+            single: vi.fn().mockResolvedValue({ data: { id: 'admin1' } }),
+          }),
         }),
       }),
     })
 
-    const handler = createApiHandler(
-      async () => NextResponse.json({ ok: true }),
-      { requireAdmin: true }
-    )
+    const handler = createApiHandler(async () => NextResponse.json({ ok: true }), {
+      requireAdmin: true,
+    })
 
     const res = await handler(makeRequest())
     expect(res.status).toBe(200)
@@ -375,9 +375,11 @@ describe('apiSuccess', () => {
     expect(res.status).toBe(200)
   })
 
-  it('accepts custom status', async () => {
-    const res = apiSuccess({ id: 'new' }, 201)
-    expect(res.status).toBe(201)
+  it('accepts meta parameter', async () => {
+    const res = apiSuccess({ id: 'new' }, { source: 'cache' })
+    const body = await res.json()
+    expect(body.meta).toEqual({ source: 'cache' })
+    expect(res.status).toBe(200)
   })
 })
 

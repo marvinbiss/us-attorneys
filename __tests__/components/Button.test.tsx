@@ -13,7 +13,7 @@ describe('Button', () => {
     render(<Button>Click me</Button>)
     const btn = screen.getByRole('button', { name: 'Click me' })
     expect(btn).toBeInTheDocument()
-    expect(btn.className).toContain('bg-blue-600')
+    expect(btn.className).toContain('bg-brand')
   })
 
   it('renders outline variant', () => {
@@ -92,7 +92,11 @@ describe('Button', () => {
 
   it('does not fire onClick when disabled', () => {
     const handleClick = vi.fn()
-    render(<Button disabled onClick={handleClick}>Nope</Button>)
+    render(
+      <Button disabled onClick={handleClick}>
+        Nope
+      </Button>
+    )
     fireEvent.click(screen.getByRole('button'))
     expect(handleClick).not.toHaveBeenCalled()
   })

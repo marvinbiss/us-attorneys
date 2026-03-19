@@ -12,22 +12,48 @@ import { render, screen, fireEvent } from '@testing-library/react'
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode
+    href: string
+    [key: string]: unknown
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }))
 
 // Mock lucide-react icons
 vi.mock('lucide-react', () => ({
-  FileText: ({ className }: { className?: string }) => <span data-testid="icon-file-text" className={className} />,
+  FileText: ({ className }: { className?: string }) => (
+    <span data-testid="icon-file-text" className={className} />
+  ),
   X: ({ className }: { className?: string }) => <span data-testid="icon-x" className={className} />,
-  Shield: ({ className }: { className?: string }) => <span data-testid="icon-shield" className={className} />,
-  CheckCircle: ({ className }: { className?: string }) => <span data-testid="icon-check-circle" className={className} />,
-  Lock: ({ className }: { className?: string }) => <span data-testid="icon-lock" className={className} />,
-  Clock: ({ className }: { className?: string }) => <span data-testid="icon-clock" className={className} />,
-  TrendingUp: ({ className }: { className?: string }) => <span data-testid="icon-trending-up" className={className} />,
-  Users: ({ className }: { className?: string }) => <span data-testid="icon-users" className={className} />,
-  Eye: ({ className }: { className?: string }) => <span data-testid="icon-eye" className={className} />,
+  Shield: ({ className }: { className?: string }) => (
+    <span data-testid="icon-shield" className={className} />
+  ),
+  CheckCircle: ({ className }: { className?: string }) => (
+    <span data-testid="icon-check-circle" className={className} />
+  ),
+  Lock: ({ className }: { className?: string }) => (
+    <span data-testid="icon-lock" className={className} />
+  ),
+  Clock: ({ className }: { className?: string }) => (
+    <span data-testid="icon-clock" className={className} />
+  ),
+  TrendingUp: ({ className }: { className?: string }) => (
+    <span data-testid="icon-trending-up" className={className} />
+  ),
+  Users: ({ className }: { className?: string }) => (
+    <span data-testid="icon-users" className={className} />
+  ),
+  Eye: ({ className }: { className?: string }) => (
+    <span data-testid="icon-eye" className={className} />
+  ),
 }))
 
 // Mock analytics tracking
@@ -40,9 +66,15 @@ const sessionStorageMock = (() => {
   let store: Record<string, string> = {}
   return {
     getItem: vi.fn((key: string) => store[key] ?? null),
-    setItem: vi.fn((key: string, value: string) => { store[key] = value }),
-    removeItem: vi.fn((key: string) => { delete store[key] }),
-    clear: vi.fn(() => { store = {} }),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key]
+    }),
+    clear: vi.fn(() => {
+      store = {}
+    }),
   }
 })()
 Object.defineProperty(window, 'sessionStorage', { value: sessionStorageMock })
@@ -214,63 +246,36 @@ describe('TrustGuarantee', () => {
 })
 
 // ---------------------------------------------------------------------------
-// DemandIndicator
+// DemandIndicator (deprecated — renders null, dark pattern removed)
 // ---------------------------------------------------------------------------
 import DemandIndicator from '@/components/DemandIndicator'
 
 describe('DemandIndicator', () => {
   describe('inline variant (default)', () => {
-    it('renders requests and views text', () => {
-      render(<DemandIndicator specialtySlug="personal-injury" />)
-      expect(screen.getByText(/\d+ requests this week/)).toBeInTheDocument()
-      expect(screen.getByText(/\d+ views today/)).toBeInTheDocument()
+    it('renders nothing (component deprecated)', () => {
+      const { container } = render(<DemandIndicator specialtySlug="personal-injury" />)
+      expect(container.innerHTML).toBe('')
     })
 
-    it('produces deterministic output for the same slug', () => {
+    it('renders nothing for any slug', () => {
       const { container: c1 } = render(<DemandIndicator specialtySlug="family-law" />)
-      const { container: c2 } = render(<DemandIndicator specialtySlug="family-law" />)
-      expect(c1.textContent).toBe(c2.textContent)
-    })
-
-    it('produces different output for different slugs', () => {
-      const { container: c1 } = render(<DemandIndicator specialtySlug="slug-a" />)
       const { container: c2 } = render(<DemandIndicator specialtySlug="slug-b" />)
-      // Extremely unlikely to match with different seeds
-      // We just check both render properly
-      expect(c1.textContent).toContain('requests this week')
-      expect(c2.textContent).toContain('requests this week')
+      expect(c1.innerHTML).toBe('')
+      expect(c2.innerHTML).toBe('')
     })
   })
 
   describe('banner variant', () => {
-    it('renders "High demand this week" without cityName', () => {
-      render(<DemandIndicator specialtySlug="tax-law" variant="banner" />)
-      expect(screen.getByText('High demand this week')).toBeInTheDocument()
+    it('renders nothing in banner variant without cityName', () => {
+      const { container } = render(<DemandIndicator specialtySlug="tax-law" variant="banner" />)
+      expect(container.innerHTML).toBe('')
     })
 
-    it('renders "High demand in {cityName}" with cityName', () => {
-      render(<DemandIndicator specialtySlug="tax-law" variant="banner" cityName="Houston" />)
-      expect(screen.getByText('High demand in Houston')).toBeInTheDocument()
-    })
-
-    it('renders requests and views in banner', () => {
-      render(<DemandIndicator specialtySlug="criminal-defense" variant="banner" />)
-      expect(screen.getByText(/\d+ requests this week/)).toBeInTheDocument()
-      expect(screen.getByText(/\d+ views today/)).toBeInTheDocument()
-    })
-
-    it('values are within expected range (8-35 requests, 15-85 views)', () => {
-      render(<DemandIndicator specialtySlug="estate-planning" variant="banner" />)
-
-      const requestsText = screen.getByText(/\d+ requests this week/).textContent!
-      const requestsNum = parseInt(requestsText.match(/(\d+)/)?.[1] || '0')
-      expect(requestsNum).toBeGreaterThanOrEqual(8)
-      expect(requestsNum).toBeLessThanOrEqual(35)
-
-      const viewsText = screen.getByText(/\d+ views today/).textContent!
-      const viewsNum = parseInt(viewsText.match(/(\d+)/)?.[1] || '0')
-      expect(viewsNum).toBeGreaterThanOrEqual(15)
-      expect(viewsNum).toBeLessThanOrEqual(85)
+    it('renders nothing in banner variant with cityName', () => {
+      const { container } = render(
+        <DemandIndicator specialtySlug="tax-law" variant="banner" cityName="Houston" />
+      )
+      expect(container.innerHTML).toBe('')
     })
   })
 })

@@ -138,9 +138,10 @@ describe('VideoConsultationButton', () => {
   // ── Join flow (success) ──────────────────────────────────────────────
 
   it('calls fetch and opens room URL on successful join', async () => {
-    const mockFetch = vi.fn().mockResolvedValue({
+    const mockFetch = vi.fn().mockResolvedValueOnce({
       ok: true,
-      json: () => Promise.resolve({ room_url: 'https://daily.co/room-123' }),
+      json: () =>
+        Promise.resolve({ success: true, data: { room_url: 'https://daily.co/room-123' } }),
     })
     vi.stubGlobal('fetch', mockFetch)
 
@@ -172,7 +173,7 @@ describe('VideoConsultationButton', () => {
   it('shows error message when join API fails', async () => {
     const mockFetch = vi.fn().mockResolvedValue({
       ok: false,
-      json: () => Promise.resolve({ error: 'Room not available' }),
+      json: () => Promise.resolve({ error: { message: 'Room not available' } }),
     })
     vi.stubGlobal('fetch', mockFetch)
 
@@ -217,7 +218,9 @@ describe('VideoConsultationButton', () => {
 
   it('shows "Opening..." while join request is in flight', async () => {
     let resolvePromise!: (v: unknown) => void
-    const pending = new Promise((r) => { resolvePromise = r })
+    const pending = new Promise((r) => {
+      resolvePromise = r
+    })
 
     const mockFetch = vi.fn().mockReturnValue(pending)
     vi.stubGlobal('fetch', mockFetch)
@@ -250,7 +253,9 @@ describe('VideoConsultationButton', () => {
 
   it('disables the button while join is processing', async () => {
     let resolvePromise!: (v: unknown) => void
-    const pending = new Promise((r) => { resolvePromise = r })
+    const pending = new Promise((r) => {
+      resolvePromise = r
+    })
 
     vi.stubGlobal('fetch', vi.fn().mockReturnValue(pending))
 

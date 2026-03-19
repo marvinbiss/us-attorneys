@@ -85,7 +85,7 @@ describe('sendEmail', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer test-resend-key',
+          Authorization: 'Bearer test-resend-key',
         },
       })
     )
@@ -169,7 +169,7 @@ describe('sendEmail', () => {
     })
 
     const body = JSON.parse(mockFetch.mock.calls[0][1].body)
-    expect(body.from).toBe('US Attorneys <noreply@us-attorneys.com>')
+    expect(body.from).toBe('US Attorneys <noreply@lawtendr.com>')
 
     vi.unstubAllGlobals()
   })
@@ -323,7 +323,12 @@ describe('emailTemplates', () => {
 
   describe('newBooking', () => {
     it('returns a valid template with booking details', () => {
-      const tpl = emailTemplates.newBooking('Att. Johnson', 'Client Smith', 'Personal Injury', '2026-04-01')
+      const tpl = emailTemplates.newBooking(
+        'Att. Johnson',
+        'Client Smith',
+        'Personal Injury',
+        '2026-04-01'
+      )
       validateTemplate(tpl)
       expect(tpl.subject).toBe('New booking from Client Smith')
       expect(tpl.html).toContain('Hello Att. Johnson')
@@ -356,7 +361,12 @@ describe('emailTemplates', () => {
   describe('bookingConfirmationClient', () => {
     it('returns a valid template with all consultation details', () => {
       const tpl = emailTemplates.bookingConfirmationClient(
-        'Client Doe', 'Att. Lee', 'Family Law', '2026-05-01', '10:00 AM', 'https://daily.co/room-xyz'
+        'Client Doe',
+        'Att. Lee',
+        'Family Law',
+        '2026-05-01',
+        '10:00 AM',
+        'https://daily.co/room-xyz'
       )
       validateTemplate(tpl)
       expect(tpl.subject).toContain('Att. Lee')
@@ -373,8 +383,13 @@ describe('emailTemplates', () => {
   describe('bookingNotificationAttorney', () => {
     it('returns a valid template with full booking info', () => {
       const tpl = emailTemplates.bookingNotificationAttorney(
-        'Att. Green', 'Client White', 'client@test.com',
-        'Criminal Defense', '2026-06-15', '2:00 PM', 'I need help with my case',
+        'Att. Green',
+        'Client White',
+        'client@test.com',
+        'Criminal Defense',
+        '2026-06-15',
+        '2:00 PM',
+        'I need help with my case',
         'https://us-attorneys.com/attorney-dashboard'
       )
       validateTemplate(tpl)
@@ -387,14 +402,28 @@ describe('emailTemplates', () => {
 
     it('omits notes section when notes are empty', () => {
       const tpl = emailTemplates.bookingNotificationAttorney(
-        'Att.', 'Client', 'c@test.com', 'Tax', '2026-01-01', '9:00', '', '/dash'
+        'Att.',
+        'Client',
+        'c@test.com',
+        'Tax',
+        '2026-01-01',
+        '9:00',
+        '',
+        '/dash'
       )
       expect(tpl.html).not.toContain('Client Notes')
     })
 
     it('includes notes section when notes are provided', () => {
       const tpl = emailTemplates.bookingNotificationAttorney(
-        'Att.', 'Client', 'c@test.com', 'Tax', '2026-01-01', '9:00', 'Some notes here', '/dash'
+        'Att.',
+        'Client',
+        'c@test.com',
+        'Tax',
+        '2026-01-01',
+        '9:00',
+        'Some notes here',
+        '/dash'
       )
       expect(tpl.html).toContain('Client Notes')
       expect(tpl.html).toContain('Some notes here')
@@ -404,7 +433,11 @@ describe('emailTemplates', () => {
   describe('bookingReminder', () => {
     it('returns a valid template with reminder details', () => {
       const tpl = emailTemplates.bookingReminder(
-        'Client Taylor', 'Att. Adams', '2026-07-01', '3:00 PM', 'https://daily.co/reminder-room'
+        'Client Taylor',
+        'Att. Adams',
+        '2026-07-01',
+        '3:00 PM',
+        'https://daily.co/reminder-room'
       )
       validateTemplate(tpl)
       expect(tpl.subject).toContain('Att. Adams')
@@ -416,7 +449,10 @@ describe('emailTemplates', () => {
 
   describe('passwordReset', () => {
     it('returns a valid template with reset link', () => {
-      const tpl = emailTemplates.passwordReset('User Zero', 'https://us-attorneys.com/reset?token=abc123')
+      const tpl = emailTemplates.passwordReset(
+        'User Zero',
+        'https://us-attorneys.com/reset?token=abc123'
+      )
       validateTemplate(tpl)
       expect(tpl.subject).toBe('Password Reset - US Attorneys')
       expect(tpl.html).toContain('Hello User Zero')

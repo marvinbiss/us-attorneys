@@ -7,8 +7,18 @@ import { render, screen } from '@testing-library/react'
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode
+    href: string
+    [key: string]: unknown
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }))
 
@@ -26,6 +36,16 @@ vi.mock('@/components/attorney/TrustScore', () => ({
   ),
 }))
 
+// Mock CompareButton
+vi.mock('@/components/ui/CompareButton', () => ({
+  CompareButton: () => <button>Compare</button>,
+}))
+
+// Mock AvailabilityBadge
+vi.mock('@/components/ui/AvailabilityBadge', () => ({
+  AvailabilityBadge: () => null,
+}))
+
 // Mock lucide-react icons
 vi.mock('lucide-react', () => ({
   MapPin: () => <span data-testid="icon-map-pin" />,
@@ -34,6 +54,16 @@ vi.mock('lucide-react', () => ({
   ChevronRight: () => <span data-testid="icon-chevron-right" />,
   ShieldCheck: () => <span data-testid="icon-shield-check" />,
   Award: () => <span data-testid="icon-award" />,
+  Scale: () => <span data-testid="icon-scale" />,
+  X: () => <span data-testid="icon-x" />,
+  CheckCircle: () => <span data-testid="icon-check-circle" />,
+  AlertCircle: () => <span data-testid="icon-alert-circle" />,
+  AlertTriangle: () => <span data-testid="icon-alert-triangle" />,
+  Info: () => <span data-testid="icon-info" />,
+  CalendarDays: () => <span data-testid="icon-calendar-days" />,
+  Clock: () => <span data-testid="icon-clock" />,
+  CalendarX: () => <span data-testid="icon-calendar-x" />,
+  Loader2: () => <span data-testid="icon-loader" />,
 }))
 
 // Mock getAttorneyUrl and getAvatarColor
@@ -111,29 +141,17 @@ describe('AttorneyCard', () => {
   })
 
   it('shows "New" badge when rating is missing (0 reviews)', () => {
-    render(
-      <AttorneyCard
-        provider={mockProvider({ rating_average: undefined, review_count: 0 })}
-      />,
-    )
+    render(<AttorneyCard provider={mockProvider({ rating_average: undefined, review_count: 0 })} />)
     expect(screen.getByText('New')).toBeInTheDocument()
   })
 
   it('shows "New" badge when review_count is null', () => {
-    render(
-      <AttorneyCard
-        provider={mockProvider({ rating_average: 4.5, review_count: null })}
-      />,
-    )
+    render(<AttorneyCard provider={mockProvider({ rating_average: 4.5, review_count: null })} />)
     expect(screen.getByText('New')).toBeInTheDocument()
   })
 
   it('shows "New" badge when rating_average is null', () => {
-    render(
-      <AttorneyCard
-        provider={mockProvider({ rating_average: null, review_count: 10 })}
-      />,
-    )
+    render(<AttorneyCard provider={mockProvider({ rating_average: null, review_count: 10 })} />)
     expect(screen.getByText('New')).toBeInTheDocument()
   })
 
@@ -195,18 +213,13 @@ describe('AttorneyCard', () => {
   it('renders consultation link with #quote anchor', () => {
     render(<AttorneyCard provider={mockProvider()} />)
     const consultLink = screen.getByText('Request a Consultation')
-    expect(consultLink.closest('a')).toHaveAttribute(
-      'href',
-      '/attorney/stable-1#quote',
-    )
+    expect(consultLink.closest('a')).toHaveAttribute('href', '/attorney/stable-1#quote')
   })
 
   // ── Hover State ──────────────────────────────────────────────────
 
   it('applies hover styling when isHovered is true', () => {
-    const { container } = render(
-      <AttorneyCard provider={mockProvider()} isHovered={true} />,
-    )
+    const { container } = render(<AttorneyCard provider={mockProvider()} isHovered={true} />)
     const card = container.firstChild as HTMLElement
     expect(card.className).toContain('-translate-y-1.5')
     expect(card.className).toContain('scale-[1.02]')
@@ -214,9 +227,7 @@ describe('AttorneyCard', () => {
   })
 
   it('does not apply hover styling when isHovered is false', () => {
-    const { container } = render(
-      <AttorneyCard provider={mockProvider()} isHovered={false} />,
-    )
+    const { container } = render(<AttorneyCard provider={mockProvider()} isHovered={false} />)
     const card = container.firstChild as HTMLElement
     expect(card.className).not.toContain('-translate-y-1.5')
     expect(card.className).toContain('border-gray-100')
@@ -266,29 +277,19 @@ describe('AttorneyCard', () => {
   // ── Address Rendering Edge Cases ─────────────────────────────────
 
   it('hides address section when address_line1 is missing', () => {
-    render(
-      <AttorneyCard
-        provider={mockProvider({ address_line1: undefined })}
-      />,
-    )
+    render(<AttorneyCard provider={mockProvider({ address_line1: undefined })} />)
     expect(screen.queryByTestId('icon-map-pin')).not.toBeInTheDocument()
   })
 
   it('hides bar number section when bar_number is missing', () => {
-    render(
-      <AttorneyCard provider={mockProvider({ bar_number: undefined })} />,
-    )
+    render(<AttorneyCard provider={mockProvider({ bar_number: undefined })} />)
     expect(screen.queryByText(/Bar #/)).not.toBeInTheDocument()
   })
 
   // ── Minimal Provider (only required fields) ──────────────────────
 
   it('renders with minimal provider (id + name only)', () => {
-    render(
-      <AttorneyCard
-        provider={{ id: 'min-1', name: 'Minimal Attorney' }}
-      />,
-    )
+    render(<AttorneyCard provider={{ id: 'min-1', name: 'Minimal Attorney' }} />)
     expect(screen.getByText('Minimal Attorney')).toBeInTheDocument()
     expect(screen.getByText('New')).toBeInTheDocument()
   })

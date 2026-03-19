@@ -21,10 +21,38 @@ vi.mock('next/server', () => ({
 
 vi.mock('@/lib/logger', () => ({
   logger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  apiLogger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }))
 
 vi.mock('@/lib/notifications/unified-notification-service', () => ({
   sendBookingNotifications: vi.fn().mockResolvedValue(undefined),
+}))
+
+vi.mock('@/lib/session-timeout', () => ({
+  checkSessionIdle: vi.fn().mockResolvedValue({ expired: false }),
+  touchSession: vi.fn().mockResolvedValue(undefined),
+}))
+
+vi.mock('@/lib/api/idempotency', () => ({
+  getIdempotentResponse: vi.fn().mockResolvedValue(null),
+  setIdempotentResponse: vi.fn().mockResolvedValue(undefined),
+}))
+
+vi.mock('@/lib/api/timeout', () => ({
+  withTimeout: vi.fn((promise: Promise<unknown>) => promise),
+  isTimeoutError: vi.fn(() => false),
+}))
+
+vi.mock('@/lib/push/notifications', () => ({
+  NOTIFICATION_TEMPLATES: {
+    BOOKING_CONFIRMED: vi.fn().mockReturnValue({ title: 'Confirmed', body: 'test' }),
+    ATTORNEY_NEW_LEAD: vi.fn().mockReturnValue({ title: 'New Lead', body: 'test' }),
+  },
+}))
+
+vi.mock('@/lib/push/send', () => ({
+  sendPushToUser: vi.fn().mockResolvedValue(undefined),
+  sendPushNotification: vi.fn().mockResolvedValue(undefined),
 }))
 
 // Supabase builder state
@@ -62,9 +90,11 @@ const mockSupabase = {
     if (fromCallCount > 1) return makeBuilder(mockProfileResult)
     return makeBuilder(mockQueryResult)
   }),
-  rpc: vi.fn().mockImplementation(() =>
-    Promise.resolve({ data: mockRpcResult.data, error: mockRpcResult.error })
-  ),
+  rpc: vi
+    .fn()
+    .mockImplementation(() =>
+      Promise.resolve({ data: mockRpcResult.data, error: mockRpcResult.error })
+    ),
 }
 
 vi.mock('@/lib/supabase/server', () => ({
@@ -85,7 +115,9 @@ const ATTORNEY_UUID = '550e8400-e29b-41d4-a716-446655440001'
 
 function makeGetRequest(params: Record<string, string> = {}) {
   const searchParams = new URLSearchParams(params)
-  return new Request(`http://localhost/api/bookings?${searchParams.toString()}`) as unknown as NextRequest
+  return new Request(
+    `http://localhost/api/bookings?${searchParams.toString()}`
+  ) as unknown as NextRequest
 }
 
 function makePostRequest(body: Record<string, unknown>) {
@@ -119,14 +151,20 @@ beforeEach(() => {
 describe('GET /api/bookings', () => {
   it('returns 400 when attorneyId is missing', async () => {
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest()) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await GET(makeGetRequest())) as unknown as {
+      body: Record<string, unknown>
+      status: number
+    }
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
   })
 
   it('returns 400 when attorneyId is not a UUID', async () => {
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest({ attorneyId: 'not-a-uuid' })) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await GET(makeGetRequest({ attorneyId: 'not-a-uuid' }))) as unknown as {
+      body: Record<string, unknown>
+      status: number
+    }
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
   })
@@ -134,16 +172,40 @@ describe('GET /api/bookings', () => {
   it('returns slots grouped by date when month param provided', async () => {
     mockQueryResult = {
       data: [
-        { id: 's1', attorney_id: ATTORNEY_UUID, date: '2026-03-05', start_time: '09:00', end_time: '10:00', is_available: true },
-        { id: 's2', attorney_id: ATTORNEY_UUID, date: '2026-03-05', start_time: '14:00', end_time: '15:00', is_available: true },
-        { id: 's3', attorney_id: ATTORNEY_UUID, date: '2026-03-10', start_time: '10:00', end_time: '11:00', is_available: true },
+        {
+          id: 's1',
+          attorney_id: ATTORNEY_UUID,
+          date: '2026-03-05',
+          start_time: '09:00',
+          end_time: '10:00',
+          is_available: true,
+        },
+        {
+          id: 's2',
+          attorney_id: ATTORNEY_UUID,
+          date: '2026-03-05',
+          start_time: '14:00',
+          end_time: '15:00',
+          is_available: true,
+        },
+        {
+          id: 's3',
+          attorney_id: ATTORNEY_UUID,
+          date: '2026-03-10',
+          start_time: '10:00',
+          end_time: '11:00',
+          is_available: true,
+        },
       ],
       error: null,
     }
 
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest({ attorneyId: ATTORNEY_UUID, month: '2026-03' })) as unknown as {
-      body: { success: boolean; data: { slots: Record<string, unknown[]> } }; status: number
+    const result = (await GET(
+      makeGetRequest({ attorneyId: ATTORNEY_UUID, month: '2026-03' })
+    )) as unknown as {
+      body: { success: boolean; data: { slots: Record<string, unknown[]> } }
+      status: number
     }
 
     expect(result.status).toBe(200)
@@ -155,14 +217,25 @@ describe('GET /api/bookings', () => {
   it('returns slots with booking info when date param provided', async () => {
     mockQueryResult = {
       data: [
-        { id: 's1', attorney_id: ATTORNEY_UUID, date: '2026-03-05', start_time: '09:00', end_time: '10:00', is_available: false, booking: { id: 'b1', client_name: 'Alice', status: 'confirmed' } },
+        {
+          id: 's1',
+          attorney_id: ATTORNEY_UUID,
+          date: '2026-03-05',
+          start_time: '09:00',
+          end_time: '10:00',
+          is_available: false,
+          booking: { id: 'b1', client_name: 'Alice', status: 'confirmed' },
+        },
       ],
       error: null,
     }
 
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest({ attorneyId: ATTORNEY_UUID, date: '2026-03-05' })) as unknown as {
-      body: { success: boolean; data: { slots: unknown[] } }; status: number
+    const result = (await GET(
+      makeGetRequest({ attorneyId: ATTORNEY_UUID, date: '2026-03-05' })
+    )) as unknown as {
+      body: { success: boolean; data: { slots: unknown[] } }
+      status: number
     }
 
     expect(result.status).toBe(200)
@@ -173,15 +246,28 @@ describe('GET /api/bookings', () => {
   it('returns bookings list by default (no date/month)', async () => {
     mockQueryResult = {
       data: [
-        { id: 'b1', provider_id: ATTORNEY_UUID, status: 'confirmed', client_name: 'Alice', created_at: '2026-02-01T00:00:00Z' },
-        { id: 'b2', provider_id: ATTORNEY_UUID, status: 'pending', client_name: 'Bob', created_at: '2026-02-02T00:00:00Z' },
+        {
+          id: 'b1',
+          provider_id: ATTORNEY_UUID,
+          status: 'confirmed',
+          client_name: 'Alice',
+          created_at: '2026-02-01T00:00:00Z',
+        },
+        {
+          id: 'b2',
+          provider_id: ATTORNEY_UUID,
+          status: 'pending',
+          client_name: 'Bob',
+          created_at: '2026-02-02T00:00:00Z',
+        },
       ],
       error: null,
     }
 
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest({ attorneyId: ATTORNEY_UUID })) as unknown as {
-      body: { success: boolean; data: { bookings: unknown[] } }; status: number
+    const result = (await GET(makeGetRequest({ attorneyId: ATTORNEY_UUID }))) as unknown as {
+      body: { success: boolean; data: { bookings: unknown[] } }
+      status: number
     }
 
     expect(result.status).toBe(200)
@@ -193,7 +279,10 @@ describe('GET /api/bookings', () => {
     mockQueryResult = { data: null, error: { message: 'DB connection failed', code: '08000' } }
 
     const { GET } = await import('@/app/api/bookings/route')
-    const result = await GET(makeGetRequest({ attorneyId: ATTORNEY_UUID })) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await GET(makeGetRequest({ attorneyId: ATTORNEY_UUID }))) as unknown as {
+      body: Record<string, unknown>
+      status: number
+    }
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)
@@ -207,7 +296,10 @@ describe('GET /api/bookings', () => {
 describe('POST /api/bookings', () => {
   it('returns 400 on missing required fields', async () => {
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest({ attorneyId: ATTORNEY_UUID })) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await POST(makePostRequest({ attorneyId: ATTORNEY_UUID }))) as unknown as {
+      body: Record<string, unknown>
+      status: number
+    }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -215,7 +307,9 @@ describe('POST /api/bookings', () => {
 
   it('returns 400 on invalid email', async () => {
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest({ ...validBookingBody, clientEmail: 'not-an-email' })) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await POST(
+      makePostRequest({ ...validBookingBody, clientEmail: 'not-an-email' })
+    )) as unknown as { body: Record<string, unknown>; status: number }
 
     expect(result.status).toBe(400)
     expect(result.body.success).toBe(false)
@@ -230,11 +324,15 @@ describe('POST /api/bookings', () => {
       },
       error: null,
     }
-    mockProfileResult = { data: { full_name: 'Attorney Williams', email: 'williams@example.com' }, error: null }
+    mockProfileResult = {
+      data: { full_name: 'Attorney Williams', email: 'williams@example.com' },
+      error: null,
+    }
 
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest(validBookingBody)) as unknown as {
-      body: { success: boolean; data: { booking: Record<string, unknown>; message: string } }; status: number
+    const result = (await POST(makePostRequest(validBookingBody))) as unknown as {
+      body: { success: boolean; data: { booking: Record<string, unknown>; message: string } }
+      status: number
     }
 
     expect(result.status).toBe(201)
@@ -250,7 +348,10 @@ describe('POST /api/bookings', () => {
     }
 
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest(validBookingBody)) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await POST(makePostRequest(validBookingBody))) as unknown as {
+      body: Record<string, unknown>
+      status: number
+    }
 
     expect(result.status).toBe(409)
     expect(result.body.success).toBe(false)
@@ -263,7 +364,10 @@ describe('POST /api/bookings', () => {
     }
 
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest(validBookingBody)) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await POST(makePostRequest(validBookingBody))) as unknown as {
+      body: Record<string, unknown>
+      status: number
+    }
 
     expect(result.status).toBe(409)
   })
@@ -272,7 +376,10 @@ describe('POST /api/bookings', () => {
     mockRpcResult = { data: null, error: { message: 'Internal server error', code: '500' } }
 
     const { POST } = await import('@/app/api/bookings/route')
-    const result = await POST(makePostRequest(validBookingBody)) as unknown as { body: Record<string, unknown>; status: number }
+    const result = (await POST(makePostRequest(validBookingBody))) as unknown as {
+      body: Record<string, unknown>
+      status: number
+    }
 
     expect(result.status).toBe(500)
     expect(result.body.success).toBe(false)

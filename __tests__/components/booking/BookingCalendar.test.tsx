@@ -13,7 +13,13 @@ import { BookingCalendar } from '@/components/booking/BookingCalendar'
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => {
-      const { initial, animate, exit, transition, ...domProps } = props
+      const {
+        initial: _initial,
+        animate: _animate,
+        exit: _exit,
+        transition: _transition,
+        ...domProps
+      } = props
       return <div {...domProps}>{children}</div>
     },
   },
@@ -135,23 +141,21 @@ describe('BookingCalendar', () => {
 
   it('shows loading state initially then loads slots', async () => {
     render(<BookingCalendar {...defaultProps} />)
-    // Should show loading initially
-    expect(screen.getByText('Loading availability...')).toBeInTheDocument()
+    // Should show loading skeleton initially (aria-busy)
+    expect(document.querySelector('[aria-busy="true"]')).toBeInTheDocument()
     // Wait for slots to load
     await waitFor(() => {
-      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+      expect(document.querySelector('[aria-busy="true"]')).not.toBeInTheDocument()
     })
   })
 
   it('renders 7 day buttons after loading', async () => {
     render(<BookingCalendar {...defaultProps} />)
     await waitFor(() => {
-      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+      expect(document.querySelector('[aria-busy="true"]')).not.toBeInTheDocument()
     })
-    const allButtons = screen.getAllByRole('button')
-    const dayButtons = allButtons.filter((btn) =>
-      btn.className.includes('rounded-xl') && btn.className.includes('text-center')
-    )
+    // Day buttons have role="option" in the listbox
+    const dayButtons = screen.getAllByRole('option')
     expect(dayButtons).toHaveLength(7)
   })
 
@@ -163,33 +167,31 @@ describe('BookingCalendar', () => {
   })
 
   it('uses default specialtyName when not provided', async () => {
-    render(
-      <BookingCalendar
-        attorneyId="att-1"
-        attorneyName="Jane Smith"
-      />
-    )
+    render(<BookingCalendar attorneyId="att-1" attorneyName="Jane Smith" />)
     expect(screen.getByText(/Consultation/)).toBeInTheDocument()
   })
 
   // ── No availability fallback ──────────────────────────────────────────
 
-  it('shows "Contact for availability" when no slots exist', async () => {
+  it('shows "No slots available this week" when no slots exist', async () => {
     vi.spyOn(globalThis, 'fetch').mockImplementation(async () => {
-      return new Response(JSON.stringify({
-        attorney_id: 'att-1',
-        timezone: 'America/New_York',
-        slots: [],
-        generated_at: new Date().toISOString(),
-      }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      })
+      return new Response(
+        JSON.stringify({
+          attorney_id: 'att-1',
+          timezone: 'America/New_York',
+          slots: [],
+          generated_at: new Date().toISOString(),
+        }),
+        {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
     })
 
     render(<BookingCalendar {...defaultProps} />)
     await waitFor(() => {
-      expect(screen.getByText('Contact for availability')).toBeInTheDocument()
+      expect(screen.getByText('No slots available this week')).toBeInTheDocument()
     })
   })
 
@@ -208,7 +210,7 @@ describe('BookingCalendar', () => {
   it('disables previous-week button when on current week', async () => {
     render(<BookingCalendar {...defaultProps} />)
     await waitFor(() => {
-      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+      expect(document.querySelector('[aria-busy="true"]')).not.toBeInTheDocument()
     })
     const allButtons = screen.getAllByRole('button')
     const disabledNavButton = allButtons.find(
@@ -224,12 +226,12 @@ describe('BookingCalendar', () => {
     render(<BookingCalendar {...defaultProps} onSlotSelect={onSlotSelect} />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+      expect(document.querySelector('[aria-busy="true"]')).not.toBeInTheDocument()
     })
 
-    const availButtons = screen.getAllByRole('button').filter(
-      (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
-    )
+    const availButtons = screen
+      .getAllByRole('button')
+      .filter((btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail'))
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
@@ -242,12 +244,12 @@ describe('BookingCalendar', () => {
     render(<BookingCalendar {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+      expect(document.querySelector('[aria-busy="true"]')).not.toBeInTheDocument()
     })
 
-    const availButtons = screen.getAllByRole('button').filter(
-      (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
-    )
+    const availButtons = screen
+      .getAllByRole('button')
+      .filter((btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail'))
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
@@ -261,12 +263,12 @@ describe('BookingCalendar', () => {
     render(<BookingCalendar {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+      expect(document.querySelector('[aria-busy="true"]')).not.toBeInTheDocument()
     })
 
-    const availButtons = screen.getAllByRole('button').filter(
-      (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
-    )
+    const availButtons = screen
+      .getAllByRole('button')
+      .filter((btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail'))
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
@@ -280,12 +282,12 @@ describe('BookingCalendar', () => {
     render(<BookingCalendar {...defaultProps} onSlotSelect={onSlotSelect} />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+      expect(document.querySelector('[aria-busy="true"]')).not.toBeInTheDocument()
     })
 
-    const availButtons = screen.getAllByRole('button').filter(
-      (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
-    )
+    const availButtons = screen
+      .getAllByRole('button')
+      .filter((btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail'))
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
@@ -304,12 +306,12 @@ describe('BookingCalendar', () => {
     render(<BookingCalendar {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+      expect(document.querySelector('[aria-busy="true"]')).not.toBeInTheDocument()
     })
 
-    const availButtons = screen.getAllByRole('button').filter(
-      (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
-    )
+    const availButtons = screen
+      .getAllByRole('button')
+      .filter((btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail'))
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
@@ -324,12 +326,12 @@ describe('BookingCalendar', () => {
     render(<BookingCalendar {...defaultProps} onConfirm={onConfirm} />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+      expect(document.querySelector('[aria-busy="true"]')).not.toBeInTheDocument()
     })
 
-    const availButtons = screen.getAllByRole('button').filter(
-      (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
-    )
+    const availButtons = screen
+      .getAllByRole('button')
+      .filter((btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail'))
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
@@ -355,20 +357,20 @@ describe('BookingCalendar', () => {
     render(<BookingCalendar {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.queryByText('Loading availability...')).not.toBeInTheDocument()
+      expect(document.querySelector('[aria-busy="true"]')).not.toBeInTheDocument()
     })
 
-    const availButtons = screen.getAllByRole('button').filter(
-      (btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail')
-    )
+    const availButtons = screen
+      .getAllByRole('button')
+      .filter((btn) => !btn.hasAttribute('disabled') && btn.textContent?.includes('avail'))
 
     if (availButtons.length > 0) {
       fireEvent.click(availButtons[0])
       expect(screen.getByText('Choose your time slot')).toBeInTheDocument()
 
-      const backButtons = screen.getAllByRole('button').filter(
-        (btn) => btn.className.includes('hover:bg-slate-100') && !btn.textContent?.trim()
-      )
+      const backButtons = screen
+        .getAllByRole('button')
+        .filter((btn) => btn.className.includes('hover:bg-slate-100') && !btn.textContent?.trim())
 
       if (backButtons.length > 0) {
         fireEvent.click(backButtons[0])
@@ -380,9 +382,7 @@ describe('BookingCalendar', () => {
   // ── className prop ───────────────────────────────────────────────────
 
   it('applies custom className', () => {
-    const { container } = render(
-      <BookingCalendar {...defaultProps} className="custom-class" />
-    )
+    const { container } = render(<BookingCalendar {...defaultProps} className="custom-class" />)
     expect(container.firstElementChild?.className).toContain('custom-class')
   })
 })

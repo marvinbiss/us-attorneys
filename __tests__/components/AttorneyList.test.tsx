@@ -8,8 +8,18 @@ import type { Provider } from '@/types'
 
 // Mock next/link
 vi.mock('next/link', () => ({
-  default: ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => (
-    <a href={href} {...props}>{children}</a>
+  default: ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode
+    href: string
+    [key: string]: unknown
+  }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
   ),
 }))
 
@@ -23,11 +33,21 @@ vi.mock('@/components/attorney/TrustScore', () => ({
   TrustScore: () => <span data-testid="trust-score" />,
 }))
 
+// Mock CompareButton
+vi.mock('@/components/ui/CompareButton', () => ({
+  CompareButton: () => <button>Compare</button>,
+}))
+
+// Mock AvailabilityBadge
+vi.mock('@/components/ui/AvailabilityBadge', () => ({
+  AvailabilityBadge: () => null,
+}))
+
 // Mock lucide-react icons
 vi.mock('lucide-react', () => ({
   MapPin: () => <span />,
   Phone: () => <span />,
-  Star: ({ className, ...props }: Record<string, unknown>) => <span {...props} />,
+  Star: ({ className: _className, ...props }: Record<string, unknown>) => <span {...props} />,
   ChevronRight: () => <span />,
   ShieldCheck: () => <span />,
   Award: () => <span />,
@@ -35,6 +55,15 @@ vi.mock('lucide-react', () => ({
   ChevronDown: () => <span />,
   X: () => <span />,
   BadgeCheck: () => <span />,
+  Scale: () => <span />,
+  CheckCircle: () => <span />,
+  AlertCircle: () => <span />,
+  AlertTriangle: () => <span />,
+  Info: () => <span />,
+  CalendarDays: () => <span />,
+  Clock: () => <span />,
+  CalendarX: () => <span />,
+  Loader2: () => <span />,
 }))
 
 // Mock utils
@@ -149,7 +178,7 @@ describe('AttorneyList', () => {
     render(<AttorneyList providers={[]} isLoading={true} />)
     expect(screen.getByRole('region', { name: 'Attorney listing' })).toHaveAttribute(
       'aria-busy',
-      'true',
+      'true'
     )
   })
 
@@ -190,9 +219,7 @@ describe('AttorneyList', () => {
   })
 
   it('shows empty state when search query matches nothing', () => {
-    render(
-      <AttorneyList providers={mockProviders()} searchQuery="zzz-no-match" />,
-    )
+    render(<AttorneyList providers={mockProviders()} searchQuery="zzz-no-match" />)
     expect(screen.getByText('No attorney found')).toBeInTheDocument()
   })
 
@@ -226,7 +253,12 @@ describe('AttorneyList', () => {
   it('relevance sort: providers with phone rank above those without', () => {
     const providers = [
       createProvider({ id: 'no-phone', name: 'No Phone', is_verified: true }),
-      createProvider({ id: 'has-phone', name: 'Has Phone', phone: '(555) 999-9999', is_verified: true }),
+      createProvider({
+        id: 'has-phone',
+        name: 'Has Phone',
+        phone: '(555) 999-9999',
+        is_verified: true,
+      }),
     ]
     // default sort is relevance
     render(<AttorneyList providers={providers} />)
@@ -237,8 +269,18 @@ describe('AttorneyList', () => {
 
   it('relevance sort: verified providers rank above unverified (same phone status)', () => {
     const providers = [
-      createProvider({ id: 'unverified', name: 'Unverified', phone: '(555) 111-1111', is_verified: false }),
-      createProvider({ id: 'verified', name: 'Verified', phone: '(555) 222-2222', is_verified: true }),
+      createProvider({
+        id: 'unverified',
+        name: 'Unverified',
+        phone: '(555) 111-1111',
+        is_verified: false,
+      }),
+      createProvider({
+        id: 'verified',
+        name: 'Verified',
+        phone: '(555) 222-2222',
+        is_verified: true,
+      }),
     ]
     render(<AttorneyList providers={providers} />)
     const items = screen.getAllByRole('listitem')
@@ -272,9 +314,7 @@ describe('AttorneyList', () => {
     render(<AttorneyList providers={mockProviders()} onProviderHover={onHover} />)
     const items = screen.getAllByRole('listitem')
     fireEvent.mouseEnter(items[0])
-    expect(onHover).toHaveBeenCalledWith(
-      expect.objectContaining({ id: 'p1', name: 'Alice Adams' }),
-    )
+    expect(onHover).toHaveBeenCalledWith(expect.objectContaining({ id: 'p1', name: 'Alice Adams' }))
   })
 
   it('calls onProviderHover with null on mouse leave', () => {
@@ -308,12 +348,7 @@ describe('AttorneyList', () => {
   it('highlights card when highlightedProviderId matches', () => {
     // scrollIntoView is not natively supported in jsdom
     Element.prototype.scrollIntoView = vi.fn()
-    render(
-      <AttorneyList
-        providers={mockProviders()}
-        highlightedProviderId="p2"
-      />,
-    )
+    render(<AttorneyList providers={mockProviders()} highlightedProviderId="p2" />)
     // The component should have called scrollIntoView
     expect(Element.prototype.scrollIntoView).toHaveBeenCalled()
   })

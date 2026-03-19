@@ -515,12 +515,10 @@ describe('GET /api/cron/calculate-trust-badges', () => {
   })
 
   it('recalculates review metrics for attorneys with reviews', async () => {
-    const mockAttorneys = [
-      { id: 'a1', user_id: 'u1', rating_average: 0, review_count: 0 },
-    ]
+    const mockAttorneys = [{ id: 'a1', rating_average: 0, review_count: 0 }]
     const mockReviews = [
-      { attorney_id: 'u1', rating: 5 },
-      { attorney_id: 'u1', rating: 4 },
+      { attorney_id: 'a1', rating: 5 },
+      { attorney_id: 'a1', rating: 4 },
     ]
 
     const mockUpdate = vi.fn().mockReturnValue({
@@ -588,14 +586,17 @@ describe('GET /api/cron/data-refresh', () => {
     mockRpc.mockResolvedValue({ error: null })
     // Permissive mock: all Supabase chains return sensible defaults
     const chainProxy = (): unknown =>
-      new Proxy({}, {
-        get(_t, prop: string) {
-          if (prop === 'then') return undefined
-          if (['data', 'error'].includes(prop)) return prop === 'data' ? [] : null
-          if (prop === 'count') return 1500
-          return vi.fn().mockImplementation(() => chainProxy())
-        },
-      })
+      new Proxy(
+        {},
+        {
+          get(_t, prop: string) {
+            if (prop === 'then') return undefined
+            if (['data', 'error'].includes(prop)) return prop === 'data' ? [] : null
+            if (prop === 'count') return 1500
+            return vi.fn().mockImplementation(() => chainProxy())
+          },
+        }
+      )
     mockFrom.mockImplementation(() => chainProxy())
 
     const res = await callRoute(true)
@@ -974,9 +975,27 @@ describe('GET /api/cron/voice-stats', () => {
 
   it('aggregates call stats and upserts to voice_stats_daily', async () => {
     const mockCalls = [
-      { status: 'completed', duration_seconds: 120, qualification_score: 'A', vapi_cost: '0.50', lead_id: 'l1' },
-      { status: 'completed', duration_seconds: 60, qualification_score: 'B', vapi_cost: '0.30', lead_id: null },
-      { status: 'failed', duration_seconds: 0, qualification_score: 'C', vapi_cost: '0.10', lead_id: null },
+      {
+        status: 'completed',
+        duration_seconds: 120,
+        qualification_score: 'A',
+        vapi_cost: '0.50',
+        lead_id: 'l1',
+      },
+      {
+        status: 'completed',
+        duration_seconds: 60,
+        qualification_score: 'B',
+        vapi_cost: '0.30',
+        lead_id: null,
+      },
+      {
+        status: 'failed',
+        duration_seconds: 0,
+        qualification_score: 'C',
+        vapi_cost: '0.10',
+        lead_id: null,
+      },
     ]
 
     mockFrom.mockImplementation((table: string) => {

@@ -28,13 +28,32 @@ vi.mock('@/lib/logger', () => ({
   logger: { debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() },
 }))
 
-// Supabase mock
+// Supabase auth mock (createClient from server.ts — used for auth check)
+const mockGetUser = vi.fn()
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn().mockResolvedValue({
+    auth: {
+      getUser: () => mockGetUser(),
+    },
+  }),
+}))
+
+// Supabase admin mock (createAdminClient — used for DB queries)
 const mockSupabaseFrom = vi.fn()
 vi.mock('@/lib/supabase/admin', () => ({
   createAdminClient: () => ({
     from: (...args: unknown[]) => mockSupabaseFrom(...args),
   }),
 }))
+
+// apiError re-export from handler (route imports from @/lib/api/handler)
+vi.mock('@/lib/api/handler', async () => {
+  const { NextResponse } = await import('next/server')
+  return {
+    apiError: (code: string, message: string, status: number = 400) =>
+      NextResponse.json({ success: false, error: { code, message } }, { status }),
+  }
+})
 
 vi.mock('@/lib/daily', () => ({
   createDailyRoom: vi.fn().mockResolvedValue({ url: 'https://daily.co/room', name: 'test-room' }),
@@ -55,7 +74,10 @@ vi.mock('@/lib/services/email-service', () => ({
 const ATTORNEY_UUID = '550e8400-e29b-41d4-a716-446655440001'
 // Reserved for future use in specialty-specific booking tests
 
-function makePostRequest(body: Record<string, unknown>, headers?: Record<string, string>): NextRequest {
+function makePostRequest(
+  body: Record<string, unknown>,
+  headers?: Record<string, string>
+): NextRequest {
   return new NextRequest('http://localhost/api/bookings/create', {
     method: 'POST',
     headers: {
@@ -96,6 +118,8 @@ beforeEach(() => {
   vi.clearAllMocks()
   fromCallCount = 0
 
+  // Default: authenticated user
+  mockGetUser.mockResolvedValue({ data: { user: { id: 'user-123', email: 'john@example.com' } } })
   // Default: rate limit passes
   mockRateLimit.mockResolvedValue({ success: true, reset: Date.now() + 60000 })
   // Default: no idempotency
@@ -388,9 +412,7 @@ describe('Successful booking', () => {
     })
 
     const { POST } = await import('@/app/api/bookings/create/route')
-    const result = await POST(
-      makePostRequest({ ...validBody, payment_intent_id: 'pi_test123' })
-    )
+    const result = await POST(makePostRequest({ ...validBody, payment_intent_id: 'pi_test123' }))
     const body = await result.json()
 
     expect(result.status).toBe(201)

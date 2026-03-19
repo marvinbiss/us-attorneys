@@ -12,20 +12,23 @@ import { NextRequest } from 'next/server'
 
 let capturedHeaders: Record<string, string> = {}
 
-const mockJsonFn = vi.fn((body: unknown, init?: { status?: number; headers?: Record<string, string> }) => {
-  if (init?.headers) {
-    capturedHeaders = init.headers
+const mockJsonFn = vi.fn(
+  (body: unknown, init?: { status?: number; headers?: Record<string, string> }) => {
+    if (init?.headers) {
+      capturedHeaders = init.headers
+    }
+    return {
+      body,
+      status: init?.status ?? 200,
+      headers: init?.headers ?? {},
+    }
   }
-  return {
-    body,
-    status: init?.status ?? 200,
-    headers: init?.headers ?? {},
-  }
-})
+)
 
 vi.mock('next/server', () => ({
   NextResponse: {
-    json: (body: unknown, init?: { status?: number; headers?: Record<string, string> }) => mockJsonFn(body, init),
+    json: (body: unknown, init?: { status?: number; headers?: Record<string, string> }) =>
+      mockJsonFn(body, init),
   },
 }))
 
@@ -52,6 +55,19 @@ vi.mock('@/lib/supabase/admin', () => ({
   createAdminClient: vi.fn(() => mockAdminSupabase),
 }))
 
+vi.mock('@/lib/session-timeout', () => ({
+  checkSessionIdle: vi.fn().mockResolvedValue({ expired: false }),
+  touchSession: vi.fn().mockResolvedValue(undefined),
+}))
+
+vi.mock('@/lib/cache', () => ({
+  getCacheMetrics: vi.fn(() => ({
+    l1: { size: 0, hitRate: 0, evictions: 0 },
+    l2: { hitRate: 0 },
+    total: { requests: 0 },
+  })),
+}))
+
 // Save original env and fetch
 const originalEnv = { ...process.env }
 const originalFetch = globalThis.fetch
@@ -68,12 +84,20 @@ beforeEach(() => {
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'anon-key'
   process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-key'
 
-  // Remove optional env vars
-  delete process.env.UPSTASH_REDIS_REST_URL
-  delete process.env.UPSTASH_REDIS_REST_TOKEN
+  // Set optional env vars that affect health status
+  process.env.CRON_SECRET = 'test-cron-secret'
+  process.env.NEXT_PUBLIC_SITE_URL = 'https://us-attorneys.com'
+  process.env.RESEND_API_KEY = 'test-resend-key'
+  process.env.UPSTASH_REDIS_REST_URL = 'https://test-redis.upstash.io'
+  process.env.UPSTASH_REDIS_REST_TOKEN = 'test-redis-token'
 
-  // Restore fetch
-  globalThis.fetch = originalFetch
+  // Mock fetch for Redis PING check
+  globalThis.fetch = vi.fn().mockImplementation(async (url: string) => {
+    if (typeof url === 'string' && url.includes('/ping')) {
+      return { ok: true, json: () => Promise.resolve({ result: 'PONG' }) }
+    }
+    return originalFetch(url)
+  }) as typeof fetch
 })
 
 // Restore env after all tests
@@ -90,7 +114,9 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: null }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET(new Request('http://localhost/api/health') as unknown as NextRequest) as unknown as {
+    const result = (await GET(
+      new Request('http://localhost/api/health') as unknown as NextRequest
+    )) as unknown as {
       body: { status: string; checks: Record<string, { status: string }> }
       status: number
     }
@@ -108,7 +134,9 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: null }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET(new Request('http://localhost/api/health') as unknown as NextRequest) as unknown as {
+    const result = (await GET(
+      new Request('http://localhost/api/health') as unknown as NextRequest
+    )) as unknown as {
       body: { status: string; checks: Record<string, { status: string }> }
       status: number
     }
@@ -121,14 +149,16 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: { message: 'Connection refused' } }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET(new Request('http://localhost/api/health') as unknown as NextRequest) as unknown as {
+    const result = (await GET(
+      new Request('http://localhost/api/health') as unknown as NextRequest
+    )) as unknown as {
       body: { status: string; checks: Record<string, { status: string; error?: string }> }
       status: number
     }
 
-    // DB is unhealthy but env + stripe are healthy -> overall = degraded -> 200
-    expect(result.status).toBe(200)
-    expect(result.body.status).toBe('degraded')
+    // DB is unhealthy (critical dependency) -> overall = unhealthy -> 503
+    expect(result.status).toBe(503)
+    expect(result.body.status).toBe('unhealthy')
     expect(result.body.checks.database.status).toBe('unhealthy')
     expect(result.body.checks.database.error).toBe('Connection refused')
   })
@@ -137,7 +167,9 @@ describe('GET /api/health', () => {
     mockDbResult = { data: null, error: null }
 
     const { GET } = await import('@/app/api/health/route')
-    const result = await GET(new Request('http://localhost/api/health') as unknown as NextRequest) as unknown as {
+    const result = (await GET(
+      new Request('http://localhost/api/health') as unknown as NextRequest
+    )) as unknown as {
       body: Record<string, unknown>
       status: number
     }

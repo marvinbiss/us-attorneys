@@ -35,7 +35,9 @@ vi.mock('next/server', () => ({
       this.url = url
       this.method = init?.method || 'GET'
     }
-    json() { return Promise.resolve({}) }
+    json() {
+      return Promise.resolve({})
+    }
   },
 }))
 
@@ -145,25 +147,56 @@ vi.mock('@/lib/api/handler', () => ({
   createApiHandler: vi.fn().mockImplementation((handler) => {
     return async (request: unknown) => handler({ request })
   }),
-  apiSuccess: vi.fn().mockImplementation((data, status = 200) => mockJsonResponse({ success: true, data }, { status })),
-  apiError: vi.fn().mockImplementation((code, message, status = 400) => mockJsonResponse({ success: false, error: { code, message } }, { status })),
-  jsonResponse: vi.fn().mockImplementation((data, status = 200) => mockJsonResponse({ success: true, data }, { status })),
+  apiSuccess: vi
+    .fn()
+    .mockImplementation((data, status = 200) =>
+      mockJsonResponse({ success: true, data }, { status })
+    ),
+  apiError: vi
+    .fn()
+    .mockImplementation((code, message, status = 400) =>
+      mockJsonResponse({ success: false, error: { code, message } }, { status })
+    ),
+  jsonResponse: vi
+    .fn()
+    .mockImplementation((data, status = 200) =>
+      mockJsonResponse({ success: true, data }, { status })
+    ),
 }))
 
 // Mock errors module
 vi.mock('@/lib/errors', () => ({
   AppError: class AppError extends Error {
     statusCode: number
-    constructor(message: string, statusCode = 500) { super(message); this.statusCode = statusCode }
+    constructor(message: string, statusCode = 500) {
+      super(message)
+      this.statusCode = statusCode
+    }
   },
-  ValidationError: class extends Error { statusCode = 400 },
-  AuthenticationError: class extends Error { statusCode = 401 },
-  AuthorizationError: class extends Error { statusCode = 403 },
-  NotFoundError: class extends Error { statusCode = 404 },
-  RateLimitError: class extends Error { statusCode = 429 },
-  ExternalServiceError: class extends Error { statusCode = 502 },
-  ConflictError: class extends Error { statusCode = 409 },
-  PaymentError: class extends Error { statusCode = 402 },
+  ValidationError: class extends Error {
+    statusCode = 400
+  },
+  AuthenticationError: class extends Error {
+    statusCode = 401
+  },
+  AuthorizationError: class extends Error {
+    statusCode = 403
+  },
+  NotFoundError: class extends Error {
+    statusCode = 404
+  },
+  RateLimitError: class extends Error {
+    statusCode = 429
+  },
+  ExternalServiceError: class extends Error {
+    statusCode = 502
+  },
+  ConflictError: class extends Error {
+    statusCode = 409
+  },
+  PaymentError: class extends Error {
+    statusCode = 402
+  },
   isAppError: vi.fn().mockReturnValue(false),
   toAppError: vi.fn(),
   formatErrorResponse: vi.fn().mockImplementation((err) => ({
@@ -175,7 +208,12 @@ vi.mock('@/lib/errors', () => ({
 // ── Helpers ─────────────────────────────────────────────────────────
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type MockResponse = { body: any; status: number; headers?: any; cookies?: { set: ReturnType<typeof vi.fn> } }
+type MockResponse = {
+  body: any
+  status: number
+  headers?: any
+  cookies?: { set: ReturnType<typeof vi.fn> }
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function makeRequest(body: unknown, url = 'http://localhost/api/auth/test'): any {
@@ -252,14 +290,14 @@ describe('POST /api/auth/signin', () => {
     const res = await callSignin({ email: 'bad@example.com', password: 'WrongPass1' })
 
     expect(res.status).toBe(401)
-    expect(res.body.success).toBe(false)
+    expect(res.body.error).toBeDefined()
   })
 
   it('returns 400 on missing fields', async () => {
     const res = await callSignin({ email: '' })
 
     expect(res.status).toBe(400)
-    expect(res.body.success).toBe(false)
+    expect(res.body.error).toBeDefined()
     expect(res.body.error.code).toBe('VALIDATION_ERROR')
   })
 
@@ -281,7 +319,7 @@ describe('POST /api/auth/signin', () => {
     const res = await callSignin({ email: 'unverified@example.com', password: 'Password1' })
 
     expect(res.status).toBe(401)
-    expect(res.body.success).toBe(false)
+    expect(res.body.error).toBeDefined()
     expect(res.body.error.message).toContain('confirm your email')
   })
 
@@ -322,7 +360,7 @@ describe('POST /api/auth/signin', () => {
     const res = await callSignin({ email: 'test@example.com', password: 'Password1' })
 
     expect(res.status).toBe(401)
-    expect(res.body.success).toBe(false)
+    expect(res.body.error).toBeDefined()
     // Should not leak internal error details
     expect(res.body.error.message).not.toContain('Supabase')
   })
@@ -394,7 +432,7 @@ describe('POST /api/auth/signup', () => {
     const res = await callSignup({ email: 'bad' })
 
     expect(res.status).toBe(400)
-    expect(res.body.success).toBe(false)
+    expect(res.body.error).toBeDefined()
   })
 
   it('returns 429 when rate limited', async () => {
@@ -416,7 +454,7 @@ describe('POST /api/auth/signup', () => {
     const res = await callSignup(validBody)
 
     expect(res.status).toBe(500)
-    expect(res.body.success).toBe(false)
+    expect(res.body.error).toBeDefined()
   })
 
   it('still returns 201 even if profile insert fails', async () => {
