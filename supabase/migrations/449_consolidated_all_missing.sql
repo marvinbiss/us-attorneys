@@ -10,16 +10,6 @@
 -- SAFE TO RUN MULTIPLE TIMES: all statements are idempotent.
 -- ============================================================================
 
--- Helper function used by RLS policies (referenced in 6+ policies below)
-CREATE OR REPLACE FUNCTION is_admin() RETURNS BOOLEAN AS $$
-BEGIN
-  RETURN EXISTS (
-    SELECT 1 FROM profiles
-    WHERE id = auth.uid() AND is_admin = true
-  );
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
-
 -- Required extension for booking overlap constraint (migration 415)
 CREATE EXTENSION IF NOT EXISTS btree_gist;
 
@@ -920,7 +910,7 @@ EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
 DO $$ BEGIN
-  CREATE POLICY lead_charges_admin_all ON lead_charges FOR ALL USING (is_admin());
+  CREATE POLICY lead_charges_admin_all ON lead_charges FOR ALL USING ((SELECT is_admin FROM profiles WHERE id = auth.uid()));
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -2135,7 +2125,7 @@ EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
 DO $$ BEGIN
-  CREATE POLICY "Admins can manage subscription plans" ON subscription_plans FOR ALL USING (is_admin());
+  CREATE POLICY "Admins can manage subscription plans" ON subscription_plans FOR ALL USING ((SELECT is_admin FROM profiles WHERE id = auth.uid()));
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -2191,7 +2181,7 @@ EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
 DO $$ BEGIN
-  CREATE POLICY "Admins can manage lead usage" ON lead_usage FOR ALL USING (is_admin());
+  CREATE POLICY "Admins can manage lead usage" ON lead_usage FOR ALL USING ((SELECT is_admin FROM profiles WHERE id = auth.uid()));
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -2324,7 +2314,7 @@ EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
 DO $$ BEGIN
-  CREATE POLICY atty_lead_assign_admin_all ON attorney_lead_assignments FOR ALL USING (is_admin());
+  CREATE POLICY atty_lead_assign_admin_all ON attorney_lead_assignments FOR ALL USING ((SELECT is_admin FROM profiles WHERE id = auth.uid()));
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -2364,7 +2354,7 @@ EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
 DO $$ BEGIN
-  CREATE POLICY "Admins can manage email sends" ON email_sends FOR ALL USING (is_admin());
+  CREATE POLICY "Admins can manage email sends" ON email_sends FOR ALL USING ((SELECT is_admin FROM profiles WHERE id = auth.uid()));
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
@@ -2400,7 +2390,7 @@ EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
 DO $$ BEGIN
-  CREATE POLICY "Admins can manage email preferences" ON email_preferences FOR ALL USING (is_admin());
+  CREATE POLICY "Admins can manage email preferences" ON email_preferences FOR ALL USING ((SELECT is_admin FROM profiles WHERE id = auth.uid()));
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
