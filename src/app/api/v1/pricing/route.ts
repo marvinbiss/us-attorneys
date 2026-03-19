@@ -21,27 +21,26 @@ export async function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: CORS_HEADERS })
 }
 
-const pricingQuerySchema = z.object({
-  specialty: z.string().max(100).optional(),
-  metier: z.string().max(100).optional(), // legacy compat
-  city: z.string().max(100).optional(),
-  ville: z.string().max(100).optional(), // legacy compat
-  state: z.string().max(10).optional(),
-  departement: z.string().max(10).optional(), // legacy compat
-  region: z.string().max(100).optional(),
-}).transform((data) => ({
-  specialty: data.specialty || data.metier,
-  city: data.city || data.ville,
-  state: data.state || data.departement,
-  region: data.region,
-}))
+const pricingQuerySchema = z
+  .object({
+    specialty: z.string().max(100).optional(),
+    city: z.string().max(100).optional(),
+    state: z.string().max(10).optional(),
+    region: z.string().max(100).optional(),
+  })
+  .transform((data) => ({
+    specialty: data.specialty,
+    city: data.city,
+    state: data.state,
+    region: data.region,
+  }))
 
 export const GET = withErrorHandler(async (request: NextRequest) => {
   const { specialty, city, state, region } = validateQuery(request, pricingQuerySchema)
 
   if (!specialty) {
     throw new ValidationError(
-      'The "specialty" parameter is required. Example: ?specialty=personal-injury',
+      'The "specialty" parameter is required. Example: ?specialty=personal-injury'
     )
   }
 
@@ -49,17 +48,19 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
 
   let query = supabase
     .from('barometre_stats')
-    .select('metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_attorneys, note_moyenne, nb_avis, taux_verification, updated_at')
-    .eq('metier_slug', specialty)
+    .select(
+      'specialty, specialty_slug, city, city_slug, state_name, state_code, region, region_slug, attorney_count, average_rating, review_count, verification_rate, updated_at'
+    )
+    .eq('specialty_slug', specialty)
 
   if (city) {
-    query = query.eq('ville_slug', city)
+    query = query.eq('city_slug', city)
   } else if (state) {
-    query = query.eq('departement_code', state).is('ville', null)
+    query = query.eq('state_code', state).is('city', null)
   } else if (region) {
-    query = query.eq('region_slug', region).is('ville', null).is('departement', null)
+    query = query.eq('region_slug', region).is('city', null).is('state_name', null)
   } else {
-    query = query.is('ville', null).is('departement', null).is('region', null)
+    query = query.is('city', null).is('state_name', null).is('region', null)
   }
 
   const { data, error } = await query.limit(50)
@@ -89,6 +90,6 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
         ...CORS_HEADERS,
         'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
       },
-    },
+    }
   )
 })

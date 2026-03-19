@@ -49,10 +49,38 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogArticlePage({ params }: PageProps) {
   const { slug } = await params
+
+  // Check CMS first for a published blog article override
+  const cmsPage = await getPageContent(slug, 'blog')
+
+  if (cmsPage?.content_html) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <section className="border-b bg-white">
+          <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+            <Breadcrumb
+              items={[{ label: 'Blog', href: '/blog' }, { label: cmsPage.title }]}
+              className="mb-4"
+            />
+            <h1 className="font-heading text-3xl font-bold text-gray-900">{cmsPage.title}</h1>
+            {cmsPage.excerpt && <p className="mt-2 text-gray-600">{cmsPage.excerpt}</p>}
+          </div>
+        </section>
+        <section className="py-12">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div className="rounded-xl bg-white p-8 shadow-sm">
+              <CmsContent html={cmsPage.content_html} />
+            </div>
+          </div>
+        </section>
+      </div>
+    )
+  }
+
   const article = allArticles[slug]
   if (!article) notFound()
 
-  const cmsPage = await getPageContent(`blog-${slug}`, 'blog')
+  const cmsExtra = await getPageContent(`blog-${slug}`, 'blog')
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Home', url: '/', semanticType: 'Organization' },
@@ -63,20 +91,15 @@ export default async function BlogArticlePage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       <JsonLd data={breadcrumbSchema} />
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
         <Breadcrumb
-          items={[
-            { label: 'Blog', href: '/blog' },
-            { label: article.title },
-          ]}
+          items={[{ label: 'Blog', href: '/blog' }, { label: article.title }]}
           className="mb-6"
         />
-        <h1 className="font-heading text-3xl font-bold text-gray-900">
-          {article.title}
-        </h1>
-        {cmsPage?.content_html && (
-          <div className="bg-white rounded-xl shadow-sm p-8 mt-8">
-            <CmsContent html={cmsPage.content_html} />
+        <h1 className="font-heading text-3xl font-bold text-gray-900">{article.title}</h1>
+        {cmsExtra?.content_html && (
+          <div className="mt-8 rounded-xl bg-white p-8 shadow-sm">
+            <CmsContent html={cmsExtra.content_html} />
           </div>
         )}
       </div>

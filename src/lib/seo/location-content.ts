@@ -78,14 +78,22 @@ export function generateLocationContent(
   specialtyName: string,
   cityRaw: unknown,
   attorneyCount: number = 0,
-  locationDataRaw?: unknown | null | undefined,
+  locationDataRaw?: unknown | null | undefined
 ): LocationContent {
   // Cast locationData — only used if it has the expected shape (census_data field)
-  const locationData = (locationDataRaw && typeof locationDataRaw === 'object' && 'census_data' in locationDataRaw)
-    ? locationDataRaw as LocationData
-    : null
+  const locationData =
+    locationDataRaw && typeof locationDataRaw === 'object' && 'census_data' in locationDataRaw
+      ? (locationDataRaw as LocationData)
+      : null
   // Extract city data from the raw object (shape: { name, slug, state, stateAbbr, population, county })
-  const city = cityRaw as { name?: string; slug?: string; state?: string; stateAbbr?: string; population?: number; county?: string } | null
+  const city = cityRaw as {
+    name?: string
+    slug?: string
+    state?: string
+    stateAbbr?: string
+    population?: number
+    county?: string
+  } | null
   if (!city?.name || !city?.state) {
     return {
       introText: '',
@@ -175,14 +183,18 @@ export interface NeighborhoodContent {
   profile: NeighborhoodProfile
   intro: string
   buildingContext: string
-  demandedServices: string
+  requestedServices: string
   advice: string
   proximity: string
   faqItems: { question: string; answer: string }[]
   dataDriven: NeighborhoodDataDrivenContent | null
 }
 
-export function generateNeighborhoodContent(_cityRaw: unknown, _neighborhoodName: string, _specialtySlug?: string): NeighborhoodContent {
+export function generateNeighborhoodContent(
+  _cityRaw: unknown,
+  _neighborhoodName: string,
+  _specialtySlug?: string
+): NeighborhoodContent {
   return {
     profile: {
       era: 'mixed',
@@ -195,7 +207,7 @@ export function generateNeighborhoodContent(_cityRaw: unknown, _neighborhoodName
     },
     intro: '',
     buildingContext: '',
-    demandedServices: '',
+    requestedServices: '',
     advice: '',
     proximity: '',
     faqItems: [],
@@ -271,7 +283,10 @@ export interface RegionContent {
   faqItems: { question: string; answer: string }[]
 }
 
-export function generateRegionContent(_regionRaw: unknown, _cityCountOverride?: number): RegionContent {
+export function generateRegionContent(
+  _regionRaw: unknown,
+  _cityCountOverride?: number
+): RegionContent {
   return {
     profile: {
       climate: 'semi-oceanic',

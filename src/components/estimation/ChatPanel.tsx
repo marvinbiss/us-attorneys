@@ -17,12 +17,7 @@ interface ChatPanelProps {
   prompts: string[]
 }
 
-export const ChatPanel = memo(function ChatPanel({
-  context,
-  chat,
-  lead,
-  prompts,
-}: ChatPanelProps) {
+export const ChatPanel = memo(function ChatPanel({ context, chat, lead, prompts }: ChatPanelProps) {
   const reducedMotion = useReducedMotion()
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -40,11 +35,7 @@ export const ChatPanel = memo(function ChatPanel({
   return (
     <>
       {/* Chat messages area */}
-      <div
-        className="flex-1 overflow-y-auto px-4 py-3 space-y-3"
-        role="log"
-        aria-live="polite"
-      >
+      <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3" role="log" aria-live="polite">
         {/* Welcome message */}
         {chat.messages.length === 0 && (
           <motion.div
@@ -54,21 +45,18 @@ export const ChatPanel = memo(function ChatPanel({
             className="flex justify-start"
           >
             <div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-gray-100 px-4 py-3 text-sm text-gray-800">
-              {context.artisan ? (
+              {context.attorney ? (
                 <>
                   Hello! I&apos;m the AI estimation assistant for{' '}
-                  <strong>{context.artisan.name}</strong>,{' '}
-                  {context.metier.toLowerCase()} in{' '}
-                  <strong>{context.ville}</strong>. Describe your
-                  case and I&apos;ll give you a cost estimate.
+                  <strong>{context.attorney.name}</strong>, {context.metier.toLowerCase()} in{' '}
+                  <strong>{context.ville}</strong>. Describe your case and I&apos;ll give you a cost
+                  estimate.
                 </>
               ) : (
                 <>
-                  Hello! I&apos;m the AI estimation assistant.
-                  Tell me about your legal needs with a{' '}
+                  Hello! I&apos;m the AI estimation assistant. Tell me about your legal needs with a{' '}
                   <strong>{context.metier.toLowerCase()}</strong> in{' '}
-                  <strong>{context.ville}</strong>, and I&apos;ll
-                  give you a cost estimate.
+                  <strong>{context.ville}</strong>, and I&apos;ll give you a cost estimate.
                 </>
               )}
             </div>
@@ -82,28 +70,21 @@ export const ChatPanel = memo(function ChatPanel({
             initial={reducedMotion ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={reducedMotion ? { duration: 0 } : { duration: 0.2 }}
-            className={
-              'flex ' +
-              (msg.role === 'user' ? 'justify-end' : 'justify-start')
-            }
+            className={'flex ' + (msg.role === 'user' ? 'justify-end' : 'justify-start')}
           >
             <div
               className={
-                'max-w-[85%] rounded-2xl px-4 py-3 text-sm whitespace-pre-wrap ' +
+                'max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm ' +
                 (msg.role === 'user'
                   ? 'rounded-tr-sm bg-[#E07040] text-white'
                   : 'rounded-tl-sm bg-gray-100 text-gray-800')
               }
             >
-              {msg.role === 'assistant'
-                ? renderMarkdown(msg.content)
-                : msg.content}
+              {msg.role === 'assistant' ? renderMarkdown(msg.content) : msg.content}
               {/* Streaming cursor */}
-              {msg.role === 'assistant' &&
-                idx === chat.messages.length - 1 &&
-                chat.isStreaming && (
-                  <span className="inline-block w-1.5 h-4 ml-0.5 bg-gray-400 animate-pulse rounded-sm align-text-bottom" />
-                )}
+              {msg.role === 'assistant' && idx === chat.messages.length - 1 && chat.isStreaming && (
+                <span className="ml-0.5 inline-block h-4 w-1.5 animate-pulse rounded-sm bg-gray-400 align-text-bottom" />
+              )}
             </div>
           </motion.div>
         ))}
@@ -121,7 +102,7 @@ export const ChatPanel = memo(function ChatPanel({
                 key={prompt}
                 onClick={() => chat.sendMessage(prompt)}
                 disabled={chat.isStreaming}
-                className="rounded-full border border-[#E07040]/30 bg-[#E07040]/5 px-3 py-1.5 text-xs font-medium text-[#E07040] hover:bg-[#E07040]/10 transition-colors disabled:opacity-50"
+                className="rounded-full border border-[#E07040]/30 bg-[#E07040]/5 px-3 py-1.5 text-xs font-medium text-[#E07040] transition-colors hover:bg-[#E07040]/10 disabled:opacity-50"
               >
                 {prompt}
               </button>
@@ -136,11 +117,15 @@ export const ChatPanel = memo(function ChatPanel({
               initial={reducedMotion ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              transition={reducedMotion ? { duration: 0 } : {
-                type: 'spring',
-                stiffness: 300,
-                damping: 25,
-              }}
+              transition={
+                reducedMotion
+                  ? { duration: 0 }
+                  : {
+                      type: 'spring',
+                      stiffness: 300,
+                      damping: 25,
+                    }
+              }
             >
               <LeadForm context={context} lead={lead} />
             </motion.div>
@@ -153,7 +138,7 @@ export const ChatPanel = memo(function ChatPanel({
       {/* Chat input */}
       <form
         onSubmit={chat.handleChatSubmit}
-        className="flex items-center gap-2 border-t border-gray-200 px-3 py-2.5 shrink-0"
+        className="flex shrink-0 items-center gap-2 border-t border-gray-200 px-3 py-2.5"
         style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 10px)' }}
       >
         <input
@@ -170,7 +155,7 @@ export const ChatPanel = memo(function ChatPanel({
           type="submit"
           disabled={chat.isStreaming || !chat.inputValue.trim()}
           aria-label="Send message"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E07040] text-white hover:bg-[#c9603a] transition-colors disabled:opacity-40"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E07040] text-white transition-colors hover:bg-[#c9603a] disabled:opacity-40"
         >
           {chat.isStreaming ? (
             <Loader2 className="h-4 w-4 animate-spin" />

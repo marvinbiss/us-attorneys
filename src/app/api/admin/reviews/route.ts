@@ -10,7 +10,10 @@ import { withTimeout } from '@/lib/api/timeout'
 const reviewsQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  filter: z.enum(['pending', 'flagged', 'approved', 'rejected', 'all']).optional().default('pending'),
+  filter: z
+    .enum(['pending', 'flagged', 'approved', 'rejected', 'all'])
+    .optional()
+    .default('pending'),
 })
 
 export const dynamic = 'force-dynamic'
@@ -19,7 +22,7 @@ export const GET = createApiHandler(async ({ request }) => {
   // Verify admin with reviews:read permission
   const authResult = await requirePermission('reviews', 'read')
   if (!authResult.success || !authResult.admin) {
-    return authResult.error!
+    return authResult.error as NextResponse
   }
 
   const supabase = createAdminClient()
@@ -41,12 +44,13 @@ export const GET = createApiHandler(async ({ request }) => {
 
   const offset = (page - 1) * limit
 
-  let query = supabase
-    .from('reviews')
-    .select(`
+  let query = supabase.from('reviews').select(
+    `
       *,
       attorney:attorneys!attorney_id(id, name)
-    `, { count: 'exact' })
+    `,
+    { count: 'exact' }
+  )
 
   // Apply filters — reviews.status: 'published' | 'pending_review' | 'hidden' | 'flagged'
   if (filter === 'pending') {
@@ -59,14 +63,19 @@ export const GET = createApiHandler(async ({ request }) => {
     query = query.eq('status', 'hidden')
   }
 
-  const { data: reviews, count, error } = await withTimeout(
-    query
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+  const {
+    data: reviews,
+    count,
+    error,
+  } = await withTimeout(
+    query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
   )
 
   if (error) {
-    logger.warn('Reviews query failed, returning empty list', { code: error.code, message: error.message })
+    logger.warn('Reviews query failed, returning empty list', {
+      code: error.code,
+      message: error.message,
+    })
     return NextResponse.json({
       success: true,
       reviews: [],
@@ -85,11 +94,15 @@ export const GET = createApiHandler(async ({ request }) => {
     attorney_id: review.attorney_id,
     rating: review.rating,
     comment: review.comment,
-    response: review.artisan_response,
-    moderation_status: review.status === 'published' ? 'approved'
-      : review.status === 'hidden' ? 'rejected'
-      : review.status === 'pending_review' || review.status === 'flagged' ? 'pending'
-      : 'pending',
+    response: review.attorney_response,
+    moderation_status:
+      review.status === 'published'
+        ? 'approved'
+        : review.status === 'hidden'
+          ? 'rejected'
+          : review.status === 'pending_review' || review.status === 'flagged'
+            ? 'pending'
+            : 'pending',
     is_visible: review.status === 'published',
     is_flagged: review.status === 'flagged',
     created_at: review.created_at,

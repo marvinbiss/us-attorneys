@@ -63,8 +63,7 @@ export interface Artisan {
   longitude?: number
   prices_are_estimated?: boolean
   available_24h?: boolean
-  // DB-bound: keys from database (ouvert/debut/fin stored in Supabase JSONB -- legacy column names, do not rename without migration)
-  opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }>
+  opening_hours?: Record<string, { open: boolean; start: string; end: string }>
   free_quote?: boolean
   intervention_radius_km?: number
   bio?: string

@@ -6,12 +6,12 @@ import { LEAD_TRIGGER_KEYWORDS } from './constants'
 // ---------------------------------------------------------------------------
 
 export interface EstimationContext {
-  metier: string         // DB column name (prestations_tarifs.metier) — legacy, do not rename without migration
-  metierSlug: string     // DB column name — legacy, do not rename without migration
-  ville: string          // DB column name (coefficients_geo) — legacy, do not rename without migration
-  departement: string    // DB column name (coefficients_geo.departement) — legacy, do not rename without migration
+  metier: string
+  metierSlug: string
+  ville: string
+  departement: string
   pageUrl: string
-  artisan?: {            // legacy field name, sent to API — do not rename without migration
+  attorney?: {
     name: string
     slug: string
     publicId: string
@@ -69,24 +69,21 @@ export function renderMarkdown(text: string): React.ReactNode[] {
 // Greeting bubble: contextual proactive message
 // ---------------------------------------------------------------------------
 
-export function getGreetingMessage(
-  context: EstimationContext,
-  isReturning: boolean,
-): string {
+export function getGreetingMessage(context: EstimationContext, isReturning: boolean): string {
   const metier = context.metier.toLowerCase()
   const ville = context.ville
   const pageUrl = context.pageUrl || ''
 
   // Returning visitor — personalized message
   if (isReturning) {
-    if (context.artisan) {
-      return `Welcome back! Get your free consultation with ${context.artisan.name}`
+    if (context.attorney) {
+      return `Welcome back! Get your free consultation with ${context.attorney.name}`
     }
     return `Welcome back! Your ${metier} estimate in ${ville} is ready`
   }
 
-  if (context.artisan) {
-    return `Request a free consultation with ${context.artisan.name}`
+  if (context.attorney) {
+    return `Request a free consultation with ${context.attorney.name}`
   }
   if (pageUrl.includes('/emergency/')) {
     return `${metier} emergency in ${ville}? Estimate the cost and get a callback immediately`

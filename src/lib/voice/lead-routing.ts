@@ -61,7 +61,9 @@ export async function createVoiceLead(
   const urgency = (qualData.urgency as string) ?? 'normal'
 
   // Map vertical to service name
-  const specialtyName = projectType ? VERTICAL_SERVICE_MAP[projectType] ?? projectType : 'General Practice'
+  const specialtyName = projectType
+    ? (VERTICAL_SERVICE_MAP[projectType] ?? projectType)
+    : 'General Practice'
 
   // ------------------------------------------------------------------
   // 1. Create the consultation request (lead)
@@ -70,9 +72,9 @@ export async function createVoiceLead(
 
   const validUrgency = ['normal', 'urgent', 'very_urgent'].includes(urgency) ? urgency : 'normal'
 
-  // Table 'devis_requests' = consultation requests (legacy DB table name, do not rename without migration)
+  // Quote requests table
   const { data: lead, error: leadError } = await admin
-    .from('devis_requests')
+    .from('quote_requests')
     .insert({
       service_name: specialtyName,
       postal_code: postalCode || '00000',
@@ -152,19 +154,20 @@ export async function createVoiceLead(
   }
 
   const matchedAttorney = providers[0]
-  log.info('Matched attorney', { attorneyId: matchedAttorney.id, attorneyName: matchedAttorney.name })
+  log.info('Matched attorney', {
+    attorneyId: matchedAttorney.id,
+    attorneyName: matchedAttorney.name,
+  })
 
   // ------------------------------------------------------------------
   // 5. Create lead_assignment
   // ------------------------------------------------------------------
-  const { error: assignError } = await admin
-    .from('lead_assignments')
-    .insert({
-      lead_id: lead.id,
-      attorney_id: matchedAttorney.id,
-      status: 'pending',
-      source_table: 'devis_requests', // legacy DB table name, do not rename without migration
-    })
+  const { error: assignError } = await admin.from('lead_assignments').insert({
+    lead_id: lead.id,
+    attorney_id: matchedAttorney.id,
+    status: 'pending',
+    source_table: 'quote_requests',
+  })
 
   if (assignError) {
     log.error('Failed to create lead_assignment', assignError)
@@ -191,13 +194,13 @@ export async function createVoiceLead(
   // ------------------------------------------------------------------
   // 5b. Track billing charge with CPA tier pricing
   // ------------------------------------------------------------------
-  getAttorneyTier(matchedAttorney.id).then((tier) => {
-    const city = (qualData.city as string) ?? null
-    const cost = calculateLeadCost(tier, 'voice', city)
-    return trackLeadCharge(matchedAttorney.id, lead.id, 'voice', cost.finalCents)
-  }).catch((err) =>
-    log.error('Failed to track voice lead charge', { error: err })
-  )
+  getAttorneyTier(matchedAttorney.id)
+    .then((tier) => {
+      const city = (qualData.city as string) ?? null
+      const cost = calculateLeadCost(tier, 'voice', city)
+      return trackLeadCharge(matchedAttorney.id, lead.id, 'voice', cost.finalCents)
+    })
+    .catch((err) => log.error('Failed to track voice lead charge', { error: err }))
 
   // ------------------------------------------------------------------
   // 6. Notify attorney via SMS
@@ -213,9 +216,15 @@ export async function createVoiceLead(
     const smsResult = await sendSMS(matchedAttorney.phone, smsMessage)
 
     if (smsResult.success) {
-      log.info('Attorney notified via SMS', { attorneyId: matchedAttorney.id, messageId: smsResult.messageId })
+      log.info('Attorney notified via SMS', {
+        attorneyId: matchedAttorney.id,
+        messageId: smsResult.messageId,
+      })
     } else {
-      log.warn('SMS notification failed', { attorneyId: matchedAttorney.id, error: smsResult.error })
+      log.warn('SMS notification failed', {
+        attorneyId: matchedAttorney.id,
+        error: smsResult.error,
+      })
     }
   } else {
     log.warn('Attorney has no phone number, SMS skipped', { attorneyId: matchedAttorney.id })

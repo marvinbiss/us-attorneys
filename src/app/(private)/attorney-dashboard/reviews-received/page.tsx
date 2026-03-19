@@ -13,7 +13,7 @@ interface ReviewItem {
   created_at: string
   rating: number
   comment: string | null
-  artisan_response: string | null  // DB column name — do not rename
+  attorney_response: string | null
 }
 
 interface ReviewStats {
@@ -28,7 +28,7 @@ export default function ReviewsReceivedPage() {
   const [stats, setStats] = useState<ReviewStats>({
     average: 0,
     total: 0,
-    distribution: [5, 4, 3, 2, 1].map(rating => ({ rating, count: 0 })),
+    distribution: [5, 4, 3, 2, 1].map((rating) => ({ rating, count: 0 })),
   })
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [replyText, setReplyText] = useState('')
@@ -37,6 +37,7 @@ export default function ReviewsReceivedPage() {
 
   useEffect(() => {
     fetchReviews()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchReviews = async () => {
@@ -69,10 +70,8 @@ export default function ReviewsReceivedPage() {
 
       if (response.ok) {
         // Update local state
-        setReviews(prev =>
-          prev.map(a =>
-            a.id === reviewId ? { ...a, artisan_response: replyText.trim() } : a
-          )
+        setReviews((prev) =>
+          prev.map((a) => (a.id === reviewId ? { ...a, attorney_response: replyText.trim() } : a))
         )
         setReplyingTo(null)
         setReplyText('')
@@ -88,9 +87,9 @@ export default function ReviewsReceivedPage() {
   }
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+          <Loader2 className="mx-auto mb-4 h-8 w-8 animate-spin text-blue-600" />
           <p className="text-gray-600">Loading reviews...</p>
         </div>
       </div>
@@ -101,10 +100,14 @@ export default function ReviewsReceivedPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
-            <Link href="/attorney-dashboard/dashboard" className="text-white/80 hover:text-white" aria-label="Back to dashboard">
-              <ArrowLeft className="w-5 h-5" />
+            <Link
+              href="/attorney-dashboard/dashboard"
+              className="text-white/80 hover:text-white"
+              aria-label="Back to dashboard"
+            >
+              <ArrowLeft className="h-5 w-5" />
             </Link>
             <div>
               <h1 className="text-2xl font-bold">Reviews Received</h1>
@@ -114,24 +117,32 @@ export default function ReviewsReceivedPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
           <AttorneySidebar activePage="reviews-received" />
 
           {/* Content */}
-          <div className="lg:col-span-3 space-y-8">
+          <div className="space-y-8 lg:col-span-3">
             {/* Stats */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="grid md:grid-cols-2 gap-8">
+            <div className="rounded-xl bg-white p-6 shadow-sm">
+              <div className="grid gap-8 md:grid-cols-2">
                 <div className="text-center">
-                  <div className="text-5xl font-bold text-gray-900 mb-2">{Number(stats.average).toFixed(1)}</div>
-                  <div className="flex justify-center mb-2" aria-label={`Rating: ${Number(stats.average).toFixed(1)} out of 5`} role="img">
+                  <div className="mb-2 text-5xl font-bold text-gray-900">
+                    {Number(stats.average).toFixed(1)}
+                  </div>
+                  <div
+                    className="mb-2 flex justify-center"
+                    aria-label={`Rating: ${Number(stats.average).toFixed(1)} out of 5`}
+                    role="img"
+                  >
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
                         aria-hidden="true"
-                        className={`w-6 h-6 ${
-                          i < Math.round(stats.average) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                        className={`h-6 w-6 ${
+                          i < Math.round(stats.average)
+                            ? 'fill-current text-yellow-400'
+                            : 'text-gray-300'
                         }`}
                       />
                     ))}
@@ -141,14 +152,16 @@ export default function ReviewsReceivedPage() {
                 <div className="space-y-2">
                   {stats.distribution.map((item) => (
                     <div key={item.rating} className="flex items-center gap-3">
-                      <span className="text-sm text-gray-600 w-12">{item.rating} stars</span>
-                      <div className="flex-1 bg-gray-200 rounded-full h-2">
+                      <span className="w-12 text-sm text-gray-600">{item.rating} stars</span>
+                      <div className="h-2 flex-1 rounded-full bg-gray-200">
                         <div
-                          className="bg-yellow-400 rounded-full h-2"
-                          style={{ width: `${stats.total > 0 ? (item.count / stats.total) * 100 : 0}%` }}
+                          className="h-2 rounded-full bg-yellow-400"
+                          style={{
+                            width: `${stats.total > 0 ? (item.count / stats.total) * 100 : 0}%`,
+                          }}
                         />
                       </div>
-                      <span className="text-sm text-gray-500 w-8">{item.count}</span>
+                      <span className="w-8 text-sm text-gray-500">{item.count}</span>
                     </div>
                   ))}
                 </div>
@@ -156,10 +169,8 @@ export default function ReviewsReceivedPage() {
             </div>
 
             {/* Reviews list */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-lg font-semibold text-gray-900 mb-6">
-                Latest Reviews
-              </h2>
+            <div className="rounded-xl bg-white p-6 shadow-sm">
+              <h2 className="mb-6 text-lg font-semibold text-gray-900">Latest Reviews</h2>
               {reviews.length === 0 ? (
                 <EmptyState
                   variant="inbox"
@@ -168,104 +179,111 @@ export default function ReviewsReceivedPage() {
                   action={{ label: 'View Dashboard', href: '/attorney-dashboard/dashboard' }}
                 />
               ) : (
-              <div className="space-y-6">
-                {reviews.map((item) => (
-                  <div key={item.id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <div className="flex items-center gap-3 mb-1">
-                          <span className="font-medium text-gray-900">{item.client_name}</span>
-                          <div className="flex" aria-label={`Rating: ${item.rating} out of 5`} role="img">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                aria-hidden="true"
-                                className={`w-4 h-4 ${
-                                  i < item.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                                }`}
-                              />
-                            ))}
+                <div className="space-y-6">
+                  {reviews.map((item) => (
+                    <div
+                      key={item.id}
+                      className="border-b border-gray-100 pb-6 last:border-0 last:pb-0"
+                    >
+                      <div className="mb-3 flex items-start justify-between">
+                        <div>
+                          <div className="mb-1 flex items-center gap-3">
+                            <span className="font-medium text-gray-900">{item.client_name}</span>
+                            <div
+                              className="flex"
+                              aria-label={`Rating: ${item.rating} out of 5`}
+                              role="img"
+                            >
+                              {[...Array(5)].map((_, i) => (
+                                <Star
+                                  key={i}
+                                  aria-hidden="true"
+                                  className={`h-4 w-4 ${
+                                    i < item.rating
+                                      ? 'fill-current text-yellow-400'
+                                      : 'text-gray-300'
+                                  }`}
+                                />
+                              ))}
+                            </div>
                           </div>
+                          <p className="text-sm text-gray-500">
+                            {new Date(item.created_at).toLocaleDateString('en-US')}
+                          </p>
                         </div>
-                        <p className="text-sm text-gray-500">
-                          {new Date(item.created_at).toLocaleDateString('en-US')}
-                        </p>
-                      </div>
-                      {!item.artisan_response && (
-                        <button
-                          onClick={() => setReplyingTo(item.id)}
-                          aria-label="Reply to this review"
-                          title="Reply"
-                          className="flex items-center gap-2 text-blue-600 text-sm hover:underline"
-                        >
-                          <MessageCircle className="w-4 h-4" />
-                          Reply
-                        </button>
-                      )}
-                    </div>
-                    <p className="text-gray-700 mb-3">{item.comment}</p>
-
-                    {/* Reply form */}
-                    {replyingTo === item.id && (
-                      <div className="bg-gray-50 rounded-lg p-4 ml-4 mb-3">
-                        <div className="flex items-center justify-between mb-2">
-                          <p className="text-sm text-gray-600 font-medium">Your Response:</p>
+                        {!item.attorney_response && (
                           <button
-                            onClick={() => {
-                              setReplyingTo(null)
-                              setReplyText('')
-                              setReplyError(null)
-                            }}
-                            aria-label="Cancel reply"
-                            title="Cancel"
-                            className="text-gray-400 hover:text-gray-600"
+                            onClick={() => setReplyingTo(item.id)}
+                            aria-label="Reply to this review"
+                            title="Reply"
+                            className="flex items-center gap-2 text-sm text-blue-600 hover:underline"
                           >
-                            <X className="w-4 h-4" />
+                            <MessageCircle className="h-4 w-4" />
+                            Reply
+                          </button>
+                        )}
+                      </div>
+                      <p className="mb-3 text-gray-700">{item.comment}</p>
+
+                      {/* Reply form */}
+                      {replyingTo === item.id && (
+                        <div className="mb-3 ml-4 rounded-lg bg-gray-50 p-4">
+                          <div className="mb-2 flex items-center justify-between">
+                            <p className="text-sm font-medium text-gray-600">Your Response:</p>
+                            <button
+                              onClick={() => {
+                                setReplyingTo(null)
+                                setReplyText('')
+                                setReplyError(null)
+                              }}
+                              aria-label="Cancel reply"
+                              title="Cancel"
+                              className="text-gray-400 hover:text-gray-600"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
+                          <textarea
+                            value={replyText}
+                            onChange={(e) => setReplyText(e.target.value)}
+                            placeholder="Write your reply..."
+                            className="mb-2 w-full rounded-lg border border-gray-200 px-3 py-2 focus:ring-2 focus:ring-blue-500"
+                            rows={3}
+                          />
+                          {replyError && <p className="mb-2 text-sm text-red-600">{replyError}</p>}
+                          <button
+                            onClick={() => handleReply(item.id)}
+                            disabled={submitting || !replyText.trim()}
+                            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
+                          >
+                            {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
+                            Send
                           </button>
                         </div>
-                        <textarea
-                          value={replyText}
-                          onChange={(e) => setReplyText(e.target.value)}
-                          placeholder="Write your reply..."
-                          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 mb-2"
-                          rows={3}
-                        />
-                        {replyError && (
-                          <p className="text-red-600 text-sm mb-2">{replyError}</p>
-                        )}
-                        <button
-                          onClick={() => handleReply(item.id)}
-                          disabled={submitting || !replyText.trim()}
-                          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
-                        >
-                          {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                          Send
-                        </button>
-                      </div>
-                    )}
+                      )}
 
-                    {item.artisan_response && (
-                      <div className="bg-blue-50 rounded-lg p-4 ml-4">
-                        <p className="text-sm text-blue-600 font-medium mb-1">Your Response:</p>
-                        <p className="text-gray-700 text-sm">{item.artisan_response}</p>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                      {item.attorney_response && (
+                        <div className="ml-4 rounded-lg bg-blue-50 p-4">
+                          <p className="mb-1 text-sm font-medium text-blue-600">Your Response:</p>
+                          <p className="text-sm text-gray-700">{item.attorney_response}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
 
             {/* Tips */}
-            <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-6 text-white">
+            <div className="rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 p-6 text-white">
               <div className="flex items-start gap-4">
-                <ThumbsUp className="w-8 h-8 flex-shrink-0" />
+                <ThumbsUp className="h-8 w-8 flex-shrink-0" />
                 <div>
-                  <h3 className="font-semibold mb-2">Tips to Improve Your Reviews</h3>
-                  <p className="text-green-100 text-sm">
-                    Respond quickly to client reviews, even positive ones. This demonstrates your professionalism
-                    and encourages other clients to leave reviews. Attorneys who respond to reviews
-                    tend to receive more case inquiries.
+                  <h3 className="mb-2 font-semibold">Tips to Improve Your Reviews</h3>
+                  <p className="text-sm text-green-100">
+                    Respond quickly to client reviews, even positive ones. This demonstrates your
+                    professionalism and encourages other clients to leave reviews. Attorneys who
+                    respond to reviews tend to receive more case inquiries.
                   </p>
                 </div>
               </div>

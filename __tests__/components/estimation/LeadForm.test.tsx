@@ -14,7 +14,15 @@ import type { UseLeadSubmitReturn } from '@/components/estimation/hooks/useLeadS
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => {
-      const { initial, animate, exit, transition, whileHover, whileTap, ...rest } = props
+      const {
+        initial: _initial,
+        animate: _animate,
+        exit: _exit,
+        transition: _transition,
+        whileHover: _whileHover,
+        whileTap: _whileTap,
+        ...rest
+      } = props
       return <div {...rest}>{children}</div>
     },
   },
@@ -41,7 +49,7 @@ const baseContext: EstimationContext = {
 
 const contextWithAttorney: EstimationContext = {
   ...baseContext,
-  artisan: {
+  attorney: {
     name: 'John Smith',
     slug: 'john-smith',
     publicId: 'abc123',
@@ -177,7 +185,11 @@ describe('LeadForm', () => {
   // --- Loading state ---
 
   it('shows spinner icon when loading', () => {
-    const lead = createMockLead({ leadLoading: true, leadPhone: '5551234567', privacyConsent: true })
+    const lead = createMockLead({
+      leadLoading: true,
+      leadPhone: '5551234567',
+      privacyConsent: true,
+    })
     render(<LeadForm context={baseContext} lead={lead} />)
 
     expect(screen.getByTestId('icon-loader')).toBeInTheDocument()
@@ -185,7 +197,11 @@ describe('LeadForm', () => {
   })
 
   it('disables submit button when loading', () => {
-    const lead = createMockLead({ leadLoading: true, leadPhone: '5551234567', privacyConsent: true })
+    const lead = createMockLead({
+      leadLoading: true,
+      leadPhone: '5551234567',
+      privacyConsent: true,
+    })
     render(<LeadForm context={baseContext} lead={lead} />)
 
     const button = screen.getByRole('button')
@@ -235,7 +251,7 @@ describe('LeadForm', () => {
     })
     render(<LeadForm context={baseContext} lead={lead} />)
 
-    const form = document.querySelector('form')!
+    const form = document.querySelector('form') as HTMLFormElement
     fireEvent.submit(form)
 
     expect(handleLeadSubmit).toHaveBeenCalledTimes(1)

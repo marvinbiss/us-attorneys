@@ -7,13 +7,26 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { apiLogger } from '@/lib/logger'
+import { rateLimit } from '@/lib/rate-limiter'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    // Rate limit: 10 requests per minute
+    const rl = await rateLimit(request, { maxRequests: 10, windowMs: 60_000 })
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      )
+    }
+
     const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -24,11 +37,13 @@ export async function GET() {
     // Fetch bookings where client_id matches OR client_email matches
     const { data: bookings, error } = await adminSupabase
       .from('bookings')
-      .select(`
+      .select(
+        `
         id, attorney_id, specialty_id, scheduled_at, duration_minutes, status,
         daily_room_url, booking_fee, client_email, client_name, client_phone,
         notes, cancellation_reason, created_at, updated_at
-      `)
+      `
+      )
       .or(`client_id.eq.${user.id},client_email.eq.${user.email}`)
       .order('scheduled_at', { ascending: false })
 
@@ -53,7 +68,9 @@ export async function GET() {
     }
 
     // Fetch specialty names
-    const specialtyIds = Array.from(new Set((bookings || []).filter((b) => b.specialty_id).map((b) => b.specialty_id as string)))
+    const specialtyIds = Array.from(
+      new Set((bookings || []).filter((b) => b.specialty_id).map((b) => b.specialty_id as string))
+    )
     let specialtyMap: Record<string, string> = {}
 
     if (specialtyIds.length > 0) {
@@ -70,7 +87,7 @@ export async function GET() {
     const enrichedBookings = (bookings || []).map((b) => ({
       ...b,
       attorney_name: attorneyMap[b.attorney_id] || 'Attorney',
-      specialty_name: b.specialty_id ? (specialtyMap[b.specialty_id] || null) : null,
+      specialty_name: b.specialty_id ? specialtyMap[b.specialty_id] || null : null,
     }))
 
     return NextResponse.json({ success: true, data: { bookings: enrichedBookings } })

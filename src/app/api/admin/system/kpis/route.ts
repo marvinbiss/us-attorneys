@@ -13,7 +13,7 @@ export const dynamic = 'force-dynamic'
 export const GET = createApiHandler(async () => {
   // Verify admin with settings:read permission (system KPIs)
   const auth = await requirePermission('settings', 'read')
-  if (!auth.success || !auth.admin) return auth.error!
+  if (!auth.success || !auth.admin) return auth.error as NextResponse
 
   const adminClient = createAdminClient()
   const now = new Date()
@@ -24,25 +24,60 @@ export const GET = createApiHandler(async () => {
 
   // --- Batch 1: All independent count queries in parallel ---
   const [
-    totalLeadsRes, leadsTodayRes, leadsWeekRes, leadsMonthRes,
-    totalEventsRes, eventsTodayRes,
-    totalAssignmentsRes, assignPendingRes, assignViewedRes, assignQuotedRes, assignDeclinedRes,
-    totalProvidersRes, activeProvidersRes,
+    totalLeadsRes,
+    leadsTodayRes,
+    leadsWeekRes,
+    leadsMonthRes,
+    totalEventsRes,
+    eventsTodayRes,
+    totalAssignmentsRes,
+    assignPendingRes,
+    assignViewedRes,
+    assignQuotedRes,
+    assignDeclinedRes,
+    totalProvidersRes,
+    activeProvidersRes,
   ] = await Promise.all([
-    // legacy table name 'devis_requests' = consultation requests
-    adminClient.from('devis_requests').select('id', { count: 'exact', head: true }),
-    adminClient.from('devis_requests').select('id', { count: 'exact', head: true }).gte('created_at', todayStart.toISOString()),
-    adminClient.from('devis_requests').select('id', { count: 'exact', head: true }).gte('created_at', weekStart.toISOString()),
-    adminClient.from('devis_requests').select('id', { count: 'exact', head: true }).gte('created_at', monthStart.toISOString()),
+    adminClient.from('quote_requests').select('id', { count: 'exact', head: true }),
+    adminClient
+      .from('quote_requests')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', todayStart.toISOString()),
+    adminClient
+      .from('quote_requests')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', weekStart.toISOString()),
+    adminClient
+      .from('quote_requests')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', monthStart.toISOString()),
     adminClient.from('lead_events').select('id', { count: 'exact', head: true }),
-    adminClient.from('lead_events').select('id', { count: 'exact', head: true }).gte('created_at', todayStart.toISOString()),
+    adminClient
+      .from('lead_events')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', todayStart.toISOString()),
     adminClient.from('lead_assignments').select('id', { count: 'exact', head: true }),
-    adminClient.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-    adminClient.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'viewed'),
-    adminClient.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'quoted'),
-    adminClient.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'declined'),
+    adminClient
+      .from('lead_assignments')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'pending'),
+    adminClient
+      .from('lead_assignments')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'viewed'),
+    adminClient
+      .from('lead_assignments')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'quoted'),
+    adminClient
+      .from('lead_assignments')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'declined'),
     adminClient.from('attorneys').select('id', { count: 'exact', head: true }),
-    adminClient.from('attorneys').select('id', { count: 'exact', head: true }).eq('is_active', true),
+    adminClient
+      .from('attorneys')
+      .select('id', { count: 'exact', head: true })
+      .eq('is_active', true),
   ])
 
   const totalLeads = totalLeadsRes.count
@@ -71,16 +106,24 @@ export const GET = createApiHandler(async () => {
 
   // --- Batch 2: All independent data queries in parallel ---
   const [
-    provWithLeadsRes, allAssignmentsRes, expiredCountRes, eventTypeCountsRes,
-    recentLeadsRes, allLeadServicesRes, allLeadCitiesRes,
+    provWithLeadsRes,
+    allAssignmentsRes,
+    expiredCountRes,
+    eventTypeCountsRes,
+    recentLeadsRes,
+    allLeadServicesRes,
+    allLeadCitiesRes,
   ] = await Promise.all([
     adminClient.from('lead_assignments').select('attorney_id'),
     adminClient.from('lead_assignments').select('status, assigned_at, viewed_at'),
-    adminClient.from('lead_events').select('id', { count: 'exact', head: true }).eq('event_type', 'expired'),
+    adminClient
+      .from('lead_events')
+      .select('id', { count: 'exact', head: true })
+      .eq('event_type', 'expired'),
     adminClient.from('lead_events').select('event_type'),
-    adminClient.from('devis_requests').select('created_at').gte('created_at', dailyTrend[0].date), // legacy table name 'devis_requests' = consultation requests
-    adminClient.from('devis_requests').select('service_name'),
-    adminClient.from('devis_requests').select('city'),
+    adminClient.from('quote_requests').select('created_at').gte('created_at', dailyTrend[0].date),
+    adminClient.from('quote_requests').select('service_name'),
+    adminClient.from('quote_requests').select('city'),
   ])
 
   // --- Providers with leads ---
@@ -90,19 +133,21 @@ export const GET = createApiHandler(async () => {
   const allA = allAssignmentsRes.data || []
   const responseTimes = allA
     .filter((a) => a.viewed_at)
-    .map((a) => (new Date(a.viewed_at!).getTime() - new Date(a.assigned_at).getTime()) / 60000)
-  const avgResponseMinutes = responseTimes.length > 0
-    ? Math.round(responseTimes.reduce((s, t) => s + t, 0) / responseTimes.length)
-    : 0
+    .map(
+      (a) => (new Date(a.viewed_at as string).getTime() - new Date(a.assigned_at).getTime()) / 60000
+    )
+  const avgResponseMinutes =
+    responseTimes.length > 0
+      ? Math.round(responseTimes.reduce((s, t) => s + t, 0) / responseTimes.length)
+      : 0
 
   const totalA = allA.length || 1
   const conversionRate = Math.round(((assignQuoted || 0) / totalA) * 100)
   const declineRate = Math.round(((assignDeclined || 0) / totalA) * 100)
 
   const expiredCount = expiredCountRes.count
-  const expiredRate = (totalLeads || 0) > 0
-    ? Math.round(((expiredCount || 0) / (totalLeads || 1)) * 100)
-    : 0
+  const expiredRate =
+    (totalLeads || 0) > 0 ? Math.round(((expiredCount || 0) / (totalLeads || 1)) * 100) : 0
 
   // --- Funnel ---
   const etCounts: Record<string, number> = {}

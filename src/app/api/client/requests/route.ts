@@ -15,18 +15,22 @@ export async function GET() {
     const supabase = await createClient()
 
     // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
       return apiError('AUTHENTICATION_ERROR', 'Not authenticated', 401)
     }
 
     // Fetch consultation requests for this client
-    // Table 'devis_requests' = consultation requests (legacy French name)
+
     const { data: requests, error: requestsError } = await withTimeout(
       supabase
-        .from('devis_requests')
-        .select(`
+        .from('quote_requests')
+        .select(
+          `
           *,
           quotes(
             id,
@@ -37,7 +41,8 @@ export async function GET() {
             created_at,
             attorney:attorneys!attorney_id(id, name)
           )
-        `)
+        `
+        )
         .eq('client_id', user.id)
         .order('created_at', { ascending: false })
     )
@@ -50,11 +55,11 @@ export async function GET() {
     // Calculate stats
     const stats = {
       total: requests?.length || 0,
-      pending: requests?.filter(d => d.status === 'pending').length || 0,
-      quotesReceived: requests?.filter(d => d.status === 'sent').length || 0,
-      accepted: requests?.filter(d => d.status === 'accepted').length || 0,
-      declined: requests?.filter(d => d.status === 'refused').length || 0,
-      completed: requests?.filter(d => d.status === 'completed').length || 0,
+      pending: requests?.filter((d) => d.status === 'pending').length || 0,
+      quotesReceived: requests?.filter((d) => d.status === 'sent').length || 0,
+      accepted: requests?.filter((d) => d.status === 'accepted').length || 0,
+      declined: requests?.filter((d) => d.status === 'refused').length || 0,
+      completed: requests?.filter((d) => d.status === 'completed').length || 0,
     }
 
     return apiSuccess({

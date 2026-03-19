@@ -8,7 +8,10 @@ import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
 import type { CmsPage } from '@/types/cms'
 
-type CMSPageListItem = Pick<CmsPage, 'id' | 'title' | 'slug' | 'page_type' | 'status' | 'updated_at' | 'is_active'>
+type CMSPageListItem = Pick<
+  CmsPage,
+  'id' | 'title' | 'slug' | 'page_type' | 'status' | 'updated_at' | 'is_active'
+>
 
 interface CMSResponse {
   success: boolean
@@ -98,9 +101,7 @@ export default function AdminContentPage() {
   if (status) params.set('status', status)
   if (search) params.set('search', search)
 
-  const { data, isLoading, error, mutate } = useAdminFetch<CMSResponse>(
-    `/api/admin/cms?${params}`
-  )
+  const { data, isLoading, error, mutate } = useAdminFetch<CMSResponse>(`/api/admin/cms?${params}`)
 
   const pages = data?.data || []
   const total = data?.pagination?.total || 0
@@ -125,32 +126,34 @@ export default function AdminContentPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+        <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Content Management</h1>
-            <p className="text-gray-500 mt-1">{total} page{total !== 1 ? 's' : ''}</p>
+            <p className="mt-1 text-gray-500">
+              {total} page{total !== 1 ? 's' : ''}
+            </p>
           </div>
           <Link
-            href="/admin/content/nouveau"
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            href="/admin/content/new"
+            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="h-5 w-5" />
             New page
           </Link>
         </div>
 
         {/* Tab filters for page_type */}
-        <div className="flex flex-wrap gap-1 mb-4">
+        <div className="mb-4 flex flex-wrap gap-1">
           {PAGE_TYPES.map((pt) => (
             <button
               key={pt.value}
               onClick={() => setPageType(pt.value)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                 pageType === pt.value
                   ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                  : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-100'
               }`}
             >
               {pt.label}
@@ -159,10 +162,10 @@ export default function AdminContentPage() {
         </div>
 
         {/* Search and status filter */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <div className="mb-6 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+          <div className="flex flex-col gap-4 md:flex-row">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search pages..."
@@ -170,14 +173,14 @@ export default function AdminContentPage() {
                 value={searchInput}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 maxLength={200}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               aria-label="Filter by status"
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-700"
+              className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
             >
               {STATUS_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -189,43 +192,58 @@ export default function AdminContentPage() {
         </div>
 
         {/* Data Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
               <p className="mt-4 text-gray-500">Loading...</p>
             </div>
           ) : error ? (
             <div className="p-8">
-              <ErrorBanner
-                message={error.message}
-                onRetry={() => mutate()}
-              />
+              <ErrorBanner message={error.message} onRetry={() => mutate()} />
             </div>
           ) : pages.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
-              <FileEdit className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+              <FileEdit className="mx-auto mb-4 h-12 w-12 text-gray-300" />
               <p>No pages found</p>
             </div>
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[400px] sm:min-w-[700px]" aria-label="CMS pages list">
+                <table
+                  className="w-full min-w-[400px] sm:min-w-[700px]"
+                  aria-label="CMS pages list"
+                >
                   <thead>
                     <tr className="border-b border-gray-200 bg-gray-50">
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Title
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Type
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Status
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Last modified
                       </th>
-                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Actions
                       </th>
                     </tr>
@@ -246,7 +264,7 @@ export default function AdminContentPage() {
                           }}
                           tabIndex={0}
                           role="link"
-                          className="cursor-pointer hover:bg-gray-50 focus:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-colors"
+                          className="cursor-pointer transition-colors hover:bg-gray-50 focus:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
                         >
                           <td className="px-6 py-4">
                             <div>
@@ -261,14 +279,14 @@ export default function AdminContentPage() {
                           </td>
                           <td className="px-6 py-4">
                             <span
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${tb.classes}`}
+                              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${tb.classes}`}
                             >
                               {tb.label}
                             </span>
                           </td>
                           <td className="px-6 py-4">
                             <span
-                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${sb.classes}`}
+                              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${sb.classes}`}
                             >
                               {sb.label}
                             </span>
@@ -280,7 +298,7 @@ export default function AdminContentPage() {
                             <Link
                               href={`/admin/content/${page.id}`}
                               onClick={(e) => e.stopPropagation()}
-                              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                              className="text-sm font-medium text-blue-600 hover:text-blue-800"
                             >
                               Edit
                             </Link>
@@ -294,7 +312,7 @@ export default function AdminContentPage() {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-4 border-t border-gray-200">
+                <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-200 px-4 py-4 sm:flex-row sm:px-6">
                   <p className="text-sm text-gray-500">
                     Page {currentPage} of {totalPages} ({total} results)
                   </p>
@@ -302,18 +320,18 @@ export default function AdminContentPage() {
                     <button
                       onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
-                      className="flex items-center gap-1 px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                      <ChevronLeft className="w-4 h-4" />
+                      <ChevronLeft className="h-4 w-4" />
                       Previous
                     </button>
                     <button
                       onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
-                      className="flex items-center gap-1 px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center gap-1 rounded-lg border border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       Next
-                      <ChevronRight className="w-4 h-4" />
+                      <ChevronRight className="h-4 w-4" />
                     </button>
                   </div>
                 </div>

@@ -36,7 +36,7 @@ export function useLeadSubmit(
   context: EstimationContext,
   messages: ChatMessage[],
   onLeadSubmitted?: (confirmationMsg: string) => void,
-  onCallbackSubmitted?: () => void,
+  onCallbackSubmitted?: () => void
 ): UseLeadSubmitReturn {
   // Lead form fields
   const [leadName, setLeadName] = useState('')
@@ -84,7 +84,7 @@ export function useLeadSubmit(
             source: 'chat' as const,
             conversation_history: messages,
             page_url: context.pageUrl,
-            artisan_public_id: context.artisan?.publicId, // DB field: artisan_public_id (legacy name for attorney_public_id)
+            attorney_public_id: context.attorney?.publicId,
           }),
         })
 
@@ -99,8 +99,8 @@ export function useLeadSubmit(
 
         setLeadSubmitted(true)
 
-        const confirmationMsg = context.artisan
-          ? `Your request has been sent to ${context.artisan.name}. They will contact you as soon as possible.`
+        const confirmationMsg = context.attorney
+          ? `Your request has been sent to ${context.attorney.name}. They will contact you as soon as possible.`
           : `Your request has been submitted. A qualified ${context.metier.toLowerCase()} attorney in ${context.ville} will contact you as soon as possible.`
 
         onLeadSubmitted?.(confirmationMsg)
@@ -111,7 +111,7 @@ export function useLeadSubmit(
         setLeadLoading(false)
       }
     },
-    [leadPhone, leadName, leadEmail, privacyConsent, context, messages, onLeadSubmitted],
+    [leadPhone, leadName, leadEmail, privacyConsent, context, messages, onLeadSubmitted]
   )
 
   const handleCallbackSubmit = useCallback(
@@ -139,7 +139,7 @@ export function useLeadSubmit(
             state: context.departement || undefined,
             source: 'callback' as const,
             page_url: context.pageUrl,
-            artisan_public_id: context.artisan?.publicId, // DB field: artisan_public_id (legacy name for attorney_public_id)
+            attorney_public_id: context.attorney?.publicId,
           }),
         })
 
@@ -160,7 +160,7 @@ export function useLeadSubmit(
         setCallbackLoading(false)
       }
     },
-    [callbackPhone, privacyCallbackConsent, context, onCallbackSubmitted],
+    [callbackPhone, privacyCallbackConsent, context, onCallbackSubmitted]
   )
 
   return {

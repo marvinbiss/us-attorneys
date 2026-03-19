@@ -16,7 +16,7 @@ const estimationLeadSchema = z.object({
   name: z.string().optional(),
   phone: z.string().min(10, 'Invalid phone number (min 10 characters)'),
   email: z.string().email('Invalid email').optional().or(z.literal('')),
-  specialty: z.string().min(1, 'Practice area is required'),  // frontend sends 'specialty' from context.metier
+  specialty: z.string().min(1, 'Practice area is required'),
   city: z.string().min(1, 'City is required'),
   state: z.string().default(''),
   projectDescription: z.string().optional(),
@@ -25,122 +25,119 @@ const estimationLeadSchema = z.object({
   source: z.enum(['chat', 'callback'], { message: 'Source is required' }),
   conversation_history: z.array(z.unknown()).optional(),
   page_url: z.string().optional(),
-  artisan_public_id: z.string().optional(),  // DB column name (legacy) — do not rename without migration
+  attorney_public_id: z.string().optional(),
 })
 
 export const POST = createApiHandler(async ({ request }) => {
-    // 0. Rate limiting (5 submissions per hour per IP)
-    const headersList = await headers()
-    const ip =
-      headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      headersList.get('x-real-ip') ||
-      'unknown'
-    const rateLimitResult = rateLimit(ip, 5, 3_600_000)
+  // 0. Rate limiting (5 submissions per hour per IP)
+  const headersList = await headers()
+  const ip =
+    headersList.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    headersList.get('x-real-ip') ||
+    'unknown'
+  const rateLimitResult = rateLimit(ip, 5, 3_600_000)
 
-    if (!rateLimitResult.success) {
-      return NextResponse.json(
-        { error: 'Too many requests. Please try again in a minute.' },
-        { status: 429, headers: getRateLimitHeaders(rateLimitResult) },
-      )
-    }
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again in a minute.' },
+      { status: 429, headers: getRateLimitHeaders(rateLimitResult) }
+    )
+  }
 
-    const body = await request.json()
+  const body = await request.json()
 
-    // Validate input
-    const validation = estimationLeadSchema.safeParse(body)
-    if (!validation.success) {
-      return NextResponse.json(
-        { error: 'Invalid data', details: validation.error.flatten() },
-        { status: 400 }
-      )
-    }
+  // Validate input
+  const validation = estimationLeadSchema.safeParse(body)
+  if (!validation.success) {
+    return NextResponse.json(
+      { error: 'Invalid data', details: validation.error.flatten() },
+      { status: 400 }
+    )
+  }
 
-    const data = validation.data
+  const data = validation.data
 
-    // Sanitize page_url: must start with "/" or "https://lawtendr.com"
-    if (data.page_url && !data.page_url.startsWith('/') && !data.page_url.startsWith('https://lawtendr.com')) {
-      data.page_url = undefined
-    }
-    const supabase = createAdminClient()
+  // Sanitize page_url: must start with "/" or "https://lawtendr.com"
+  if (
+    data.page_url &&
+    !data.page_url.startsWith('/') &&
+    !data.page_url.startsWith('https://lawtendr.com')
+  ) {
+    data.page_url = undefined
+  }
+  const supabase = createAdminClient()
 
-    // Normalize empty email to null
-    const email = data.email && data.email.length > 0 ? data.email : null
+  // Normalize empty email to null
+  const email = data.email && data.email.length > 0 ? data.email : null
 
-    // Table 'estimation_leads' = fee estimation leads (legacy French name)
-    // DB columns use French names: nom=name, telephone=phone, metier=practiceArea, ville=city, departement=state
-    const { data: lead, error: dbError } = await supabase
-      .from('estimation_leads')
-      .insert({
-        nom: data.name || null,
-        telephone: data.phone,
-        email,
-        metier: data.specialty,
-        ville: data.city,
-        departement: data.state,
-        description_projet: data.projectDescription || null,
-        estimation_min: data.estimation_min ?? null,
-        estimation_max: data.estimation_max ?? null,
+  const { data: lead, error: dbError } = await supabase
+    .from('estimation_leads')
+    .insert({
+      name: data.name || null,
+      phone: data.phone,
+      email,
+      specialty: data.specialty,
+      city: data.city,
+      state: data.state,
+      project_description: data.projectDescription || null,
+      estimation_min: data.estimation_min ?? null,
+      estimation_max: data.estimation_max ?? null,
+      source: data.source,
+      conversation_history: data.conversation_history ?? null,
+      page_url: data.page_url || null,
+      attorney_public_id: data.attorney_public_id || null,
+    })
+    .select('id')
+    .single()
+
+  if (dbError) {
+    logger.error('Estimation lead DB error', dbError)
+    return NextResponse.json({ error: 'Error saving record' }, { status: 500 })
+  }
+
+  // Log in audit_logs via admin client (no user session required)
+  const ipAddress =
+    headersList.get('x-forwarded-for')?.split(',')[0] || headersList.get('x-real-ip') || null
+  const userAgent = headersList.get('user-agent') || null
+
+  supabase
+    .from('audit_logs')
+    .insert({
+      action: 'estimation_lead.create',
+      resource_type: 'estimation_lead',
+      resource_id: lead.id,
+      new_value: {
+        practiceArea: data.specialty,
+        city: data.city,
+        state: data.state,
         source: data.source,
-        conversation_history: data.conversation_history ?? null,
+        attorney_public_id: data.attorney_public_id || null,
+      },
+      metadata: {
+        ip_address: ipAddress,
+        user_agent: userAgent,
         page_url: data.page_url || null,
-        artisan_public_id: data.artisan_public_id || null, // DB field: artisan_public_id (legacy name for attorney_public_id)
-      })
-      .select('id')
-      .single()
-
-    if (dbError) {
-      logger.error('Estimation lead DB error', dbError)
-      return NextResponse.json(
-        { error: 'Error saving record' },
-        { status: 500 }
-      )
-    }
-
-    // Log in audit_logs via admin client (no user session required)
-    const ipAddress =
-      headersList.get('x-forwarded-for')?.split(',')[0] ||
-      headersList.get('x-real-ip') ||
-      null
-    const userAgent = headersList.get('user-agent') || null
-
-    supabase
-      .from('audit_logs')
-      .insert({
-        action: 'estimation_lead.create',
-        resource_type: 'estimation_lead',
-        resource_id: lead.id,
-        new_value: {
-          practiceArea: data.specialty,
-          city: data.city,
-          state: data.state,
-          source: data.source,
-          attorney_public_id: data.artisan_public_id || null,
-        },
-        metadata: {
-          ip_address: ipAddress,
-          user_agent: userAgent,
-          page_url: data.page_url || null,
-        },
-        created_at: new Date().toISOString(),
-      })
-      .then(({ error }) => {
-        if (error) {
-          logger.error('Failed to log estimation lead audit event', error)
-        }
-      })
-
-    // Fire-and-forget: notify admin + confirm client
-    notifyAdminNewEstimationLead(data, lead.id).catch((err) => {
-      logger.error('Failed to send estimation lead notification email', err)
+      },
+      created_at: new Date().toISOString(),
+    })
+    .then(({ error }) => {
+      if (error) {
+        logger.error('Failed to log estimation lead audit event', error)
+      }
     })
 
-    if (email) {
-      sendClientConfirmationEmail(data, lead.id).catch((err) => {
-        logger.error('Failed to send estimation lead client confirmation email', err)
-      })
-    }
+  // Fire-and-forget: notify admin + confirm client
+  notifyAdminNewEstimationLead(data, lead.id).catch((err) => {
+    logger.error('Failed to send estimation lead notification email', err)
+  })
 
-    return NextResponse.json({ success: true, id: lead.id })
+  if (email) {
+    sendClientConfirmationEmail(data, lead.id).catch((err) => {
+      logger.error('Failed to send estimation lead client confirmation email', err)
+    })
+  }
+
+  return NextResponse.json({ success: true, id: lead.id })
 }, {})
 
 // ============================================================
@@ -151,12 +148,15 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
 
 async function notifyAdminNewEstimationLead(
   data: z.infer<typeof estimationLeadSchema>,
-  leadId: string,
+  leadId: string
 ): Promise<void> {
   const adminEmails = process.env.ADMIN_EMAILS
   if (!adminEmails) return
 
-  const recipients = adminEmails.split(',').map((e) => e.trim()).filter(Boolean)
+  const recipients = adminEmails
+    .split(',')
+    .map((e) => e.trim())
+    .filter(Boolean)
   if (recipients.length === 0) return
 
   const now = new Date()
@@ -194,7 +194,7 @@ async function notifyAdminNewEstimationLead(
         <p style="margin: 0 0 10px 0;"><strong>Practice area:</strong> ${data.specialty}</p>
         <p style="margin: 0 0 10px 0;"><strong>City:</strong> ${data.city} (${data.state})</p>
         <p style="margin: 0 0 10px 0;"><strong>Estimate:</strong> ${estimation}</p>
-        ${data.artisan_public_id ? `<p style="margin: 0 0 10px 0;"><strong>Attorney:</strong> ${htmlEscape(data.artisan_public_id)}</p>` : ''}
+        ${data.attorney_public_id ? `<p style="margin: 0 0 10px 0;"><strong>Attorney:</strong> ${htmlEscape(data.attorney_public_id)}</p>` : ''}
         ${data.page_url ? `<p style="margin: 0;"><strong>Page:</strong> <a href="${htmlEscape(data.page_url)}" style="color: #059669;">${htmlEscape(data.page_url)}</a></p>` : ''}
       </div>
       <div style="text-align: center; margin: 28px 0;">
@@ -234,7 +234,7 @@ function htmlEscape(str: string): string {
 
 async function sendClientConfirmationEmail(
   data: z.infer<typeof estimationLeadSchema>,
-  leadId: string,
+  leadId: string
 ): Promise<void> {
   const clientEmail = data.email
   if (!clientEmail || clientEmail.length === 0) return
@@ -243,7 +243,7 @@ async function sendClientConfirmationEmail(
   const salutation = firstName ? `Hello ${firstName}` : 'Hello'
   const practiceArea = htmlEscape(data.specialty.toLowerCase())
   const city = htmlEscape(data.city)
-  const isAttorneyPage = !!data.artisan_public_id
+  const isAttorneyPage = !!data.attorney_public_id
 
   const nextSteps = isAttorneyPage
     ? `<p style="color: #333; font-size: 15px; line-height: 1.6;">

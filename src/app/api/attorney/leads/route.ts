@@ -59,12 +59,7 @@ export async function GET(request: NextRequest) {
 
     // Get provider linked to this user
     const { data: provider } = await withTimeout(
-      supabase
-        .from('attorneys')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('is_active', true)
-        .single()
+      supabase.from('attorneys').select('id').eq('user_id', user.id).eq('is_active', true).single()
     )
 
     if (!provider) {
@@ -89,7 +84,8 @@ export async function GET(request: NextRequest) {
       return apiError('VALIDATION_ERROR', 'Invalid data', 400)
     }
 
-    const { page, pageSize, status, practiceArea, priority, dateFrom, dateTo, sortBy, search } = parsed.data
+    const { page, pageSize, status, practiceArea, priority, dateFrom, dateTo, sortBy, search } =
+      parsed.data
     const from = (page - 1) * pageSize
     const to = from + pageSize - 1
 
@@ -120,17 +116,18 @@ export async function GET(request: NextRequest) {
     const totalPages = Math.max(1, Math.ceil(totalItems / pageSize))
 
     // Data query with pagination
-    // Table 'devis_requests' = consultation requests (legacy French name)
+
     let dataQuery = supabase
       .from('lead_assignments')
-      .select(`
+      .select(
+        `
         id,
         status,
         score,
         assigned_at,
         viewed_at,
         responded_at,
-        lead:devis_requests (
+        lead:quote_requests (
           id,
           service_name,
           city,
@@ -143,7 +140,8 @@ export async function GET(request: NextRequest) {
           created_at,
           status
         )
-      `)
+      `
+      )
       .eq('attorney_id', provider.id)
 
     if (status !== 'all') {
@@ -182,8 +180,15 @@ export async function GET(request: NextRequest) {
     // Post-fetch filtering for nested lead fields
     let leadList = assignments || []
 
-    // Supabase embedded join: `lead` (devis_requests FK) resolves to a single object at runtime
-    type LeadJoin = { id: string; service_name?: string; urgency?: string; client_name?: string; city?: string; postal_code?: string }
+    // Supabase embedded join: `lead` (quote_requests FK) resolves to a single object at runtime
+    type LeadJoin = {
+      id: string
+      service_name?: string
+      urgency?: string
+      client_name?: string
+      city?: string
+      postal_code?: string
+    }
     const unwrapLead = (lead: unknown): LeadJoin | null =>
       Array.isArray(lead) ? (lead[0] ?? null) : (lead as LeadJoin | null)
 
@@ -219,9 +224,20 @@ export async function GET(request: NextRequest) {
     // Fetch quotes for these leads so attorney can see sent quote info
     const requestIds = leadList
       .filter((a) => a.lead && a.status === 'quoted')
-      .map((a) => unwrapLead(a.lead)!.id)
+      .map((a) => unwrapLead(a.lead)?.id)
+      .filter((id): id is string => !!id)
 
-    const quotesMap: Record<string, { id: string; amount: number; description: string; valid_until: string; status: string; created_at: string }> = {}
+    const quotesMap: Record<
+      string,
+      {
+        id: string
+        amount: number
+        description: string
+        valid_until: string
+        status: string
+        created_at: string
+      }
+    > = {}
     if (requestIds.length > 0) {
       const { data: quotes } = await supabase
         .from('quotes')
@@ -268,13 +284,19 @@ export async function GET(request: NextRequest) {
     const enrichedLeads = leadList.map((a, index) => {
       const lead = unwrapLead(a.lead)
       const requestId = lead ? lead.id : null
-      const quote = requestId ? quotesMap[requestId] ?? null : null
+      const quote = requestId ? (quotesMap[requestId] ?? null) : null
 
       // Free tier: blur contact info after first N leads
       if (!tierConfig.fullAccess && index >= FREE_VISIBLE_LEADS && a.lead) {
-        const blurredLead = typeof a.lead === 'object' && a.lead !== null
-          ? { ...(a.lead as unknown as Record<string, unknown>), client_phone: '***-***-****', client_email: null, _blurred: true }
-          : a.lead
+        const blurredLead =
+          typeof a.lead === 'object' && a.lead !== null
+            ? {
+                ...(a.lead as unknown as Record<string, unknown>),
+                client_phone: '***-***-****',
+                client_email: null,
+                _blurred: true,
+              }
+            : a.lead
         return { ...a, lead: blurredLead, quote }
       }
 

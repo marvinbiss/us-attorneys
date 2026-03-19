@@ -19,15 +19,32 @@ import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getAttorneyUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
-import { practiceAreas as staticPracticeAreas, cities, getCityBySlug, getNearbyCities, getCitiesByState, getStateByCode } from '@/lib/data/usa'
+import {
+  practiceAreas as staticPracticeAreas,
+  cities,
+  getCityBySlug,
+  getNearbyCities,
+  getCitiesByState,
+  getStateByCode,
+} from '@/lib/data/usa'
 import { resolveZipToCity, getNearbyZipCodes, isZipSlug } from '@/lib/location-resolver'
-import { parseZipPageSlug, getZipMetadata, getNearbyZips, zipMetadataToCity, TOP_ZIP_CODES } from '@/lib/zip-pages'
+import {
+  parseZipPageSlug,
+  getZipMetadata,
+  getNearbyZips,
+  zipMetadataToCity,
+  TOP_ZIP_CODES,
+} from '@/lib/zip-pages'
 import NearbyZipCodes from '@/components/seo/NearbyZipCodes'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAlternateLanguages } from '@/lib/seo/hreflang'
-import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
+import {
+  generateLocationContent,
+  hashCode,
+  getRegionalMultiplier,
+} from '@/lib/seo/location-content'
 import { getNaturalTerm } from '@/lib/seo/natural-terms'
 import { getPageContent } from '@/lib/cms'
 import { logger } from '@/lib/logger'
@@ -45,25 +62,17 @@ import type { Service, Location as LocationType, Provider } from '@/types'
 import { REVALIDATE } from '@/lib/cache'
 import PaginationNav from '@/components/ui/PaginationNav'
 
-const EstimationWidget = dynamic(
-  () => import('@/components/estimation/EstimationWidget'),
-  { ssr: false }
-)
+const EstimationWidget = dynamic(() => import('@/components/estimation/EstimationWidget'), {
+  ssr: false,
+})
 
-const MicroConversions = dynamic(
-  () => import('@/components/MicroConversions'),
-  { ssr: false }
-)
+const MicroConversions = dynamic(() => import('@/components/MicroConversions'), { ssr: false })
 
-const ProactiveChatPrompt = dynamic(
-  () => import('@/components/ProactiveChatPrompt'),
-  { ssr: false }
-)
+const ProactiveChatPrompt = dynamic(() => import('@/components/ProactiveChatPrompt'), {
+  ssr: false,
+})
 
-const CallbackRequest = dynamic(
-  () => import('@/components/CallbackRequest'),
-  { ssr: false }
-)
+const CallbackRequest = dynamic(() => import('@/components/CallbackRequest'), { ssr: false })
 
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
@@ -84,14 +93,14 @@ const TOP_CITIES_COUNT = 15
 export function generateStaticParams() {
   const topCities = cities.slice(0, TOP_CITIES_COUNT)
   // City pages: 46 PAs x 15 cities = 690 pages
-  const cityParams = staticPracticeAreas.flatMap(s =>
-    topCities.map(v => ({ service: s.slug, location: v.slug }))
+  const cityParams = staticPracticeAreas.flatMap((s) =>
+    topCities.map((v) => ({ service: s.slug, location: v.slug }))
   )
   // ZIP pages: top 5 PAs x first 20 ZIPs = 100 seed pages (rest via ISR)
   const topPAs = staticPracticeAreas.slice(0, 5)
   const topZips = TOP_ZIP_CODES.slice(0, 20)
-  const zipParams = topPAs.flatMap(s =>
-    topZips.map(z => ({ service: s.slug, location: `${z.citySlug}-${z.zip}` }))
+  const zipParams = topPAs.flatMap((s) =>
+    topZips.map((z) => ({ service: s.slug, location: `${z.citySlug}-${z.zip}` }))
   )
   return [...cityParams, ...zipParams]
 }
@@ -143,10 +152,7 @@ interface PageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-function getParam(
-  params: { [key: string]: string | string[] | undefined },
-  key: string,
-): string {
+function getParam(params: { [key: string]: string | string[] | undefined }, key: string): string {
   const v = params[key]
   return typeof v === 'string' ? v : ''
 }
@@ -175,7 +181,9 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   try {
     const [service, location, count] = await Promise.all([
       getSpecialtyBySlug(specialtySlug),
-      getLocationBySlug(zipPageInfo ? zipPageInfo.citySlug : locationSlug) as Promise<import('@/types').Location | null>,
+      getLocationBySlug(zipPageInfo ? zipPageInfo.citySlug : locationSlug) as Promise<
+        import('@/types').Location | null
+      >,
       // Lightweight count-only check — avoids fetching all provider rows
       getAttorneyCountByServiceAndLocation(specialtySlug, locationSlug),
     ])
@@ -191,7 +199,7 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     attorneyCount = count
   } catch {
     // DB down — fallback to static data
-    const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+    const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
     const citySlug = zipPageInfo ? zipPageInfo.citySlug : locationSlug
     const fallbackCity = getCityBySlug(citySlug)
     if (staticSvc) specialtyName = staticSvc.name
@@ -216,18 +224,48 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
 
   const seoPairs = hasProviders
     ? [
-        { title: `${specialtyName} ${locationName} — ${attorneyCount} attorneys`, h1: `${specialtyName} in ${locationName}` },
-        { title: `${specialtyName} in ${locationName} — Free Consultation`, h1: `Find ${naturalTerm.article} in ${locationName}` },
-        { title: `${specialtyName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Consultation`, h1: `${specialtyName} in ${locationName} — ${attorneyCount} verified pros` },
-        { title: `${specialtyName} in ${locationName} — Compare`, h1: `${specialtyName} in ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `${specialtyName} ${locationName}: reviews and consultation`, h1: `Best ${naturalTerm.plural} in ${locationName}` },
+        {
+          title: `${specialtyName} ${locationName} — ${attorneyCount} attorneys`,
+          h1: `${specialtyName} in ${locationName}`,
+        },
+        {
+          title: `${specialtyName} in ${locationName} — Free Consultation`,
+          h1: `Find ${naturalTerm.article} in ${locationName}`,
+        },
+        {
+          title: `${specialtyName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''} — Consultation`,
+          h1: `${specialtyName} in ${locationName} — ${attorneyCount} verified pros`,
+        },
+        {
+          title: `${specialtyName} in ${locationName} — Compare`,
+          h1: `${specialtyName} in ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`,
+        },
+        {
+          title: `${specialtyName} ${locationName}: reviews and consultation`,
+          h1: `Best ${naturalTerm.plural} in ${locationName}`,
+        },
       ]
     : [
-        { title: `${specialtyName} ${locationName} — Directory`, h1: `${specialtyName} in ${locationName}` },
-        { title: `${specialtyName} in ${locationName} — Free Consultation`, h1: `Find ${naturalTerm.article} in ${locationName}` },
-        { title: `${specialtyName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`, h1: `${specialtyName} in ${locationName} — Qualified Attorneys` },
-        { title: `${specialtyName} in ${locationName} — Attorneys`, h1: `${specialtyName} in ${locationName}${departmentCode ? ` (${departmentCode})` : ''}` },
-        { title: `${specialtyName} ${locationName}: directory`, h1: `Best ${naturalTerm.plural} in ${locationName}` },
+        {
+          title: `${specialtyName} ${locationName} — Directory`,
+          h1: `${specialtyName} in ${locationName}`,
+        },
+        {
+          title: `${specialtyName} in ${locationName} — Free Consultation`,
+          h1: `Find ${naturalTerm.article} in ${locationName}`,
+        },
+        {
+          title: `${specialtyName} ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`,
+          h1: `${specialtyName} in ${locationName} — Qualified Attorneys`,
+        },
+        {
+          title: `${specialtyName} in ${locationName} — Attorneys`,
+          h1: `${specialtyName} in ${locationName}${departmentCode ? ` (${departmentCode})` : ''}`,
+        },
+        {
+          title: `${specialtyName} ${locationName}: directory`,
+          h1: `Best ${naturalTerm.plural} in ${locationName}`,
+        },
       ]
 
   const baseTitle = truncateTitle(seoPairs[seoHash % seoPairs.length].title)
@@ -264,7 +302,13 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     title,
     description,
     robots: shouldIndex
-      ? { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const }
+      ? {
+          index: true,
+          follow: true,
+          'max-snippet': -1 as const,
+          'max-image-preview': 'large' as const,
+          'max-video-preview': -1 as const,
+        }
       : { index: false, follow: true },
     openGraph: {
       title,
@@ -281,12 +325,23 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
     },
     alternates: {
       canonical,
-      languages: page <= 1 ? getAlternateLanguages(`/practice-areas/${specialtySlug}/${locationSlug}`) : undefined,
+      languages:
+        page <= 1
+          ? getAlternateLanguages(`/practice-areas/${specialtySlug}/${locationSlug}`)
+          : undefined,
     },
     // rel prev/next for crawl discovery (still helps Bing + crawl efficiency)
     other: {
-      ...(page > 1 ? { 'link-prev': `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}${page > 2 ? `?page=${page - 1}` : ''}` } : {}),
-      ...(attorneyCount > page * ATTORNEYS_PER_PAGE ? { 'link-next': `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}?page=${page + 1}` } : {}),
+      ...(page > 1
+        ? {
+            'link-prev': `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}${page > 2 ? `?page=${page - 1}` : ''}`,
+          }
+        : {}),
+      ...(attorneyCount > page * ATTORNEYS_PER_PAGE
+        ? {
+            'link-next': `${SITE_URL}/practice-areas/${specialtySlug}/${locationSlug}?page=${page + 1}`,
+          }
+        : {}),
     },
   }
 }
@@ -340,7 +395,11 @@ function generateJsonLd(
     { name: 'Home', url: '/', semanticType: 'Organization' },
     { name: 'Practice Areas', url: '/services', semanticType: 'CollectionPage' },
     { name: service.name, url: `/practice-areas/${specialtySlug}`, semanticType: 'LegalService' },
-    { name: location.name, url: `/practice-areas/${specialtySlug}/${locationSlug}`, semanticType: 'City' },
+    {
+      name: location.name,
+      url: `/practice-areas/${specialtySlug}/${locationSlug}`,
+      semanticType: 'City',
+    },
   ])
 
   return [collectionPageSchema, serviceSchema, breadcrumbSchema]
@@ -356,23 +415,27 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   // CMS override — if admin published content for this specific service+city page
   let cmsPage = null
   try {
-    cmsPage = await getPageContent(`${specialtySlug}-${locationSlug}`, 'location', { specialtySlug, locationSlug })
+    cmsPage = await getPageContent(`${specialtySlug}-${locationSlug}`, 'location', {
+      specialtySlug,
+      locationSlug,
+    })
   } catch (err: unknown) {
-    logger.error('[CMS] Error fetching page content for', { slug: `${specialtySlug}-${locationSlug}`, error: err })
+    logger.error('[CMS] Error fetching page content for', {
+      slug: `${specialtySlug}-${locationSlug}`,
+      error: err,
+    })
   }
 
   if (cmsPage?.content_html) {
     return (
       <div className="min-h-screen bg-sand-100">
-        <section className="bg-white border-b">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
+        <section className="border-b bg-white">
+          <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+            <h1 className="font-heading text-3xl font-bold text-gray-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
-          <div className="max-w-6xl mx-auto px-4">
+          <div className="mx-auto max-w-6xl px-4">
             <CmsContent html={cmsPage.content_html} />
           </div>
         </section>
@@ -385,14 +448,26 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   try {
     service = await getSpecialtyBySlug(specialtySlug)
     if (!service) {
-      const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+      const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
       if (!staticSvc) notFound()
-      service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+      service = {
+        id: '',
+        name: staticSvc.name,
+        slug: staticSvc.slug,
+        is_active: true,
+        created_at: '',
+      }
     }
   } catch {
-    const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+    const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
     if (!staticSvc) notFound()
-    service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+    service = {
+      id: '',
+      name: staticSvc.name,
+      slug: staticSvc.slug,
+      is_active: true,
+      created_at: '',
+    }
   }
 
   // 2. Resolve location (DB → static data fallback)
@@ -408,7 +483,10 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       if (!fallback) notFound()
       location = fallback
     } else {
-      location = { ...dbLocation, id: (dbLocation as Record<string, unknown>).code_insee as string || '' }
+      location = {
+        ...dbLocation,
+        id: ((dbLocation as Record<string, unknown>).code_insee as string) || '',
+      }
     }
   } catch {
     const fallback = cityToLocation(locationLookupSlug)
@@ -418,7 +496,11 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
 
   // For ZIP pages, update location name to include ZIP code
   if (zipParsedBody) {
-    location = { ...location, name: `${location.name} ${zipParsedBody.zipCode}`, postal_code: zipParsedBody.zipCode }
+    location = {
+      ...location,
+      name: `${location.name} ${zipParsedBody.zipCode}`,
+      postal_code: zipParsedBody.zipCode,
+    }
   }
 
   // 3. Fetch providers (paginated) + total count in parallel
@@ -440,7 +522,14 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
     // Location table may not exist yet — continue without data
   }
 
-  const baseSchemas = generateJsonLd(service, location, providers || [], specialtySlug, locationSlug, locationData)
+  const baseSchemas = generateJsonLd(
+    service,
+    location,
+    providers || [],
+    specialtySlug,
+    locationSlug,
+    locationData
+  )
 
   // Count recent quote requests for freshness signal
   let recentQuoteCount = 0
@@ -450,9 +539,9 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       const supabase = createAdminClient()
       const thirtyDaysAgo = new Date()
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-      // legacy table name 'devis_requests' = consultation requests
+
       const { count } = await supabase
-        .from('devis_requests')
+        .from('quote_requests')
         .select('*', { count: 'exact', head: true })
         .ilike('city', location.name)
         .gte('created_at', thirtyDaysAgo.toISOString())
@@ -469,7 +558,9 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
     : null
 
   // Regional pricing multiplier for localized pricing
-  const pricingMultiplier = cityData ? getRegionalMultiplier(getStateByCode(cityData.stateCode)?.region || '') : 1.0
+  const pricingMultiplier = cityData
+    ? getRegionalMultiplier(getStateByCode(cityData.stateCode)?.region || '')
+    : 1.0
 
   // FAQ: combine 2 trade FAQ (hash-selected) + 4 location-specific FAQ
   const combinedFaq: { question: string; answer: string }[] = []
@@ -484,21 +575,27 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
   const faqSchema = combinedFaq.length > 0 ? getFAQSchema(combinedFaq) : null
 
   // Task 2: ItemList JSON-LD for provider listings
-  const itemListSchema = providers.length > 0
-    ? getItemListSchema({
-        name: `${service.name} in ${location.name}`,
-        description: `List of verified ${service.name.toLowerCase()}s in ${location.name}`,
-        url: `/practice-areas/${specialtySlug}/${locationSlug}`,
-        items: providers.slice(0, 20).map((p, i) => ({
-          name: p.name,
-          url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city }),
-          position: i + 1,
-          image: getServiceImage(specialtySlug).src,
-          rating: p.rating_average ?? undefined,
-          reviewCount: p.review_count ?? undefined,
-        })),
-      })
-    : null
+  const itemListSchema =
+    providers.length > 0
+      ? getItemListSchema({
+          name: `${service.name} in ${location.name}`,
+          description: `List of verified ${service.name.toLowerCase()}s in ${location.name}`,
+          url: `/practice-areas/${specialtySlug}/${locationSlug}`,
+          items: providers.slice(0, 20).map((p, i) => ({
+            name: p.name,
+            url: getAttorneyUrl({
+              stable_id: p.stable_id,
+              slug: p.slug,
+              specialty: p.specialty?.name,
+              city: p.address_city,
+            }),
+            position: i + 1,
+            image: getServiceImage(specialtySlug).src,
+            rating: p.rating_average ?? undefined,
+            reviewCount: p.review_count ?? undefined,
+          })),
+        })
+      : null
 
   const jsonLdSchemas: Record<string, unknown>[] = [
     ...baseSchemas,
@@ -539,24 +636,28 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
 
   // Cross-link to semantically related services (with fallback to popular)
   const relatedSlugs = relatedServices[specialtySlug] || []
-  const otherServices = relatedSlugs.length > 0
-    ? relatedSlugs.slice(0, 6).map(slug => {
-        const svc = staticPracticeAreas.find(s => s.slug === slug)
-        return svc ? { slug: svc.slug, name: svc.name, icon: svc.icon } : null
-      }).filter(Boolean) as { slug: string; name: string; icon: string }[]
-    : popularServices.filter(s => s.slug !== specialtySlug).slice(0, 6)
+  const otherServices =
+    relatedSlugs.length > 0
+      ? (relatedSlugs
+          .slice(0, 6)
+          .map((slug) => {
+            const svc = staticPracticeAreas.find((s) => s.slug === slug)
+            return svc ? { slug: svc.slug, name: svc.name, icon: svc.icon } : null
+          })
+          .filter(Boolean) as { slug: string; name: string; icon: string }[])
+      : popularServices.filter((s) => s.slug !== specialtySlug).slice(0, 6)
 
   // Fetch nearby ZIPs for ZIP pages, nearby cities for city pages
-  const nearbyZipsData = isZipPage
-    ? await getNearbyZips(zipPageParsed!.zipCode, 10, 12)
-    : []
+  const nearbyZipsData = isZipPage ? await getNearbyZips(zipPageParsed?.zipCode ?? '', 10, 12) : []
   const nearbyCities = isZipSlug(locationSlug)
     ? await getNearbyZipCodes(locationSlug, 12)
     : isZipPage
-      ? getNearbyCities(zipPageParsed!.citySlug, 6) // For ZIP pages, also show nearby cities
+      ? getNearbyCities(zipPageParsed?.citySlug ?? '', 6) // For ZIP pages, also show nearby cities
       : getNearbyCities(locationSlug, 12)
   const deptCities = location.department_code
-    ? getCitiesByState(location.department_code).filter(v => v.slug !== locationSlug).slice(0, 10)
+    ? getCitiesByState(location.department_code)
+        .filter((v) => v.slug !== locationSlug)
+        .slice(0, 10)
     : []
 
   // H1 uses same seed as title for coherence (seo- prefix)
@@ -601,22 +702,27 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       ))}
 
       {/* Visual breadcrumb for navigation and SEO */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <Breadcrumb items={
-            isZipPage && zipPageParsed
-              ? [
-                  { label: 'Services', href: '/services' },
-                  { label: service.name, href: `/practice-areas/${specialtySlug}` },
-                  { label: location.name.replace(` ${zipPageParsed.zipCode}`, ''), href: `/practice-areas/${specialtySlug}/${zipPageParsed.citySlug}` },
-                  { label: zipPageParsed.zipCode },
-                ]
-              : [
-                  { label: 'Services', href: '/services' },
-                  { label: service.name, href: `/practice-areas/${specialtySlug}` },
-                  { label: location.name },
-                ]
-          } />
+      <div className="border-b bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-3">
+          <Breadcrumb
+            items={
+              isZipPage && zipPageParsed
+                ? [
+                    { label: 'Services', href: '/services' },
+                    { label: service.name, href: `/practice-areas/${specialtySlug}` },
+                    {
+                      label: location.name.replace(` ${zipPageParsed.zipCode}`, ''),
+                      href: `/practice-areas/${specialtySlug}/${zipPageParsed.citySlug}`,
+                    },
+                    { label: zipPageParsed.zipCode },
+                  ]
+                : [
+                    { label: 'Services', href: '/services' },
+                    { label: service.name, href: `/practice-areas/${specialtySlug}` },
+                    { label: location.name },
+                  ]
+            }
+          />
         </div>
       </div>
 
@@ -627,12 +733,12 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       />
 
       {/* Demand indicator — urgency/scarcity signal */}
-      <div className="max-w-7xl mx-auto px-4 py-3">
+      <div className="mx-auto max-w-7xl px-4 py-3">
         <DemandIndicator specialtySlug={specialtySlug} cityName={location.name} variant="banner" />
       </div>
 
       {/* Trust elements — above the provider listing for credibility */}
-      <div className="max-w-7xl mx-auto px-4 py-2">
+      <div className="mx-auto max-w-7xl px-4 py-2">
         <TrustGuarantee variant="compact" />
       </div>
 
@@ -652,7 +758,7 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
 
       {/* Server-rendered pagination */}
       {totalAttorneyCount > limit && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <PaginationNav
             currentPage={page}
             totalItems={totalAttorneyCount}
@@ -663,7 +769,7 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
       )}
 
       {trade && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <div className="mx-auto mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
           <SpeakableAnswerBox
             answer={`${trade.name} in ${location.name}: ${trade.priceRange.min}–${trade.priceRange.max} ${trade.priceRange.unit}. ${totalAttorneyCount} bar-verified attorneys available in ${location.department_code}. Average response time: ${trade.averageResponseTime}.${trade.emergencyInfo ? ' Emergency services available 24/7.' : ''}`}
           />
@@ -727,7 +833,7 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
         locationData={locationData as LocationData | null}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
+      <div className="mx-auto my-8 max-w-7xl px-4 sm:px-6 lg:px-8">
         <CallbackRequest specialtySlug={specialtySlug} cityName={location.name} />
       </div>
 
@@ -755,24 +861,27 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
 
       {/* Nearby cities for internal linking mesh */}
       <NearbyCities
-        citySlug={isZipPage ? zipPageParsed!.citySlug : locationSlug}
+        citySlug={isZipPage ? (zipPageParsed?.citySlug ?? '') : locationSlug}
         specialtySlug={specialtySlug}
         specialtyName={service.name}
         limit={8}
-        className="bg-sand-50 border-t border-stone-200/40"
+        className="border-t border-stone-200/40 bg-sand-50"
       />
 
       {/* ZIP code pages — internal links from city to ZIP-level pages */}
       {cityData?.zipCode && (
-        <section className="py-6 bg-white border-t border-stone-200/40" aria-label={`Browse ${service.name} by ZIP code in ${location.name}`}>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">
+        <section
+          className="border-t border-stone-200/40 bg-white py-6"
+          aria-label={`Browse ${service.name} by ZIP code in ${location.name}`}
+        >
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h3 className="mb-3 text-sm font-semibold text-gray-700">
               Browse {service.name} by ZIP Code in {location.name}
             </h3>
             <div className="flex flex-wrap gap-2">
               <a
                 href={`/practice-areas/${specialtySlug}/zip/${cityData.zipCode}`}
-                className="inline-flex items-center gap-1 px-3 py-1.5 bg-sand-50 hover:bg-clay-50 text-stone-600 hover:text-clay-600 rounded text-sm border border-stone-200/40 hover:border-clay-200 transition-colors"
+                className="inline-flex items-center gap-1 rounded border border-stone-200/40 bg-sand-50 px-3 py-1.5 text-sm text-stone-600 transition-colors hover:border-clay-200 hover:bg-clay-50 hover:text-clay-600"
               >
                 {cityData.zipCode}
               </a>
@@ -781,20 +890,29 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
         </section>
       )}
 
-      <StickyMobileCTA specialtySlug={specialtySlug} citySlug={locationSlug} attorneyCount={totalAttorneyCount} />
+      <StickyMobileCTA
+        specialtySlug={specialtySlug}
+        citySlug={locationSlug}
+        attorneyCount={totalAttorneyCount}
+      />
 
-      <EstimationWidget context={{
-        metier: service.name,
-        metierSlug: specialtySlug,
-        ville: location.name,
-        departement: location.department_code || '',
-        pageUrl: `/practice-areas/${specialtySlug}/${locationSlug}`,
-      }} />
+      <EstimationWidget
+        context={{
+          metier: service.name,
+          metierSlug: specialtySlug,
+          ville: location.name,
+          departement: location.department_code || '',
+          pageUrl: `/practice-areas/${specialtySlug}/${locationSlug}`,
+        }}
+      />
 
-      <MicroConversions pageType="service-city" specialtySlug={specialtySlug} cityName={location.name} />
+      <MicroConversions
+        pageType="service-city"
+        specialtySlug={specialtySlug}
+        cityName={location.name}
+      />
 
       <ProactiveChatPrompt specialtySlug={specialtySlug} citySlug={locationSlug} />
     </>
   )
 }
-

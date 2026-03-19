@@ -59,8 +59,7 @@ export interface Provider {
   review_count?: number
   available_24h?: boolean
   phone_secondary?: string
-  // DB-bound: legacy column names in Supabase JSONB (ouvert/debut/fin), do not rename without migration
-  opening_hours?: Record<string, { ouvert: boolean; debut: string; fin: string }>
+  opening_hours?: Record<string, { open: boolean; start: string; end: string }>
   accepts_new_clients?: boolean
   free_quote?: boolean
   intervention_radius_km?: number

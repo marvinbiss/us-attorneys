@@ -43,7 +43,8 @@ export async function GET(request: Request) {
 
       // Redirect to appropriate dashboard if no specific next URL
       if (next === '/') {
-        const defaultRedirect = (existingProfile?.role === 'artisan' || existingProfile?.role === 'attorney') ? '/attorney-dashboard' : '/client-dashboard' // DB value: 'artisan' maps to attorney role
+        const defaultRedirect =
+          existingProfile?.role === 'attorney' ? '/attorney-dashboard' : '/client-dashboard'
         return NextResponse.redirect(`${origin}${defaultRedirect}`)
       }
 

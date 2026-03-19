@@ -40,8 +40,8 @@ const sampleReviews = [
     would_recommend: true,
     client_name: 'John Doe',
     created_at: new Date().toISOString(),
-    artisan_response: null,
-    artisan_responded_at: null,
+    attorney_response: null,
+    attorney_responded_at: null,
     helpful_count: 3,
     booking_id: 'b1',
     user_id: 'u1',
@@ -54,8 +54,8 @@ const sampleReviews = [
     would_recommend: true,
     client_name: 'Jane Smith',
     created_at: new Date(Date.now() - 86400000 * 2).toISOString(), // 2 days ago
-    artisan_response: 'Thank you for your feedback!',
-    artisan_responded_at: new Date().toISOString(),
+    attorney_response: 'Thank you for your feedback!',
+    attorney_responded_at: new Date().toISOString(),
     helpful_count: 1,
     booking_id: null,
     user_id: null,
@@ -68,8 +68,8 @@ const sampleReviews = [
     would_recommend: false,
     client_name: 'Bob Wilson',
     created_at: new Date(Date.now() - 86400000 * 10).toISOString(), // 10 days ago
-    artisan_response: null,
-    artisan_responded_at: null,
+    attorney_response: null,
+    attorney_responded_at: null,
     helpful_count: 0,
     booking_id: null,
     user_id: null,
@@ -87,7 +87,11 @@ function mockSuccessResponse() {
 function mockEmptyResponse() {
   mockFetch.mockResolvedValue({
     ok: true,
-    json: () => Promise.resolve({ reviews: [], stats: { total: 0, average: 0, recommendRate: 0, distribution: [0, 0, 0, 0, 0] } }),
+    json: () =>
+      Promise.resolve({
+        reviews: [],
+        stats: { total: 0, average: 0, recommendRate: 0, distribution: [0, 0, 0, 0, 0] },
+      }),
   })
 }
 
@@ -253,8 +257,8 @@ describe('ReviewsSection — helpful vote', () => {
       expect(screen.getByText('Helpful (3)')).toBeInTheDocument()
     })
 
-    const helpfulBtn = screen.getByText('Helpful (3)').closest('button')!
-    fireEvent.click(helpfulBtn)
+    const helpfulBtn = screen.getByText('Helpful (3)').closest('button')
+    fireEvent.click(helpfulBtn as HTMLElement)
 
     await waitFor(() => {
       expect(screen.getByText('Helpful (4)')).toBeInTheDocument()
@@ -278,15 +282,15 @@ describe('ReviewsSection — helpful vote', () => {
       expect(screen.getByText('Helpful (3)')).toBeInTheDocument()
     })
 
-    const helpfulBtn = screen.getByText('Helpful (3)').closest('button')!
-    fireEvent.click(helpfulBtn)
+    const helpfulBtn = screen.getByText('Helpful (3)').closest('button')
+    fireEvent.click(helpfulBtn as HTMLElement)
 
     await waitFor(() => {
       expect(screen.getByText('Helpful (4)')).toBeInTheDocument()
     })
 
     // Second click should be disabled
-    const updatedBtn = screen.getByText('Helpful (4)').closest('button')!
+    const updatedBtn = screen.getByText('Helpful (4)').closest('button') as HTMLElement
     expect(updatedBtn).toBeDisabled()
   })
 })

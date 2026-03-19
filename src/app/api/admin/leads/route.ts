@@ -22,7 +22,7 @@ export const dynamic = 'force-dynamic'
 export const GET = createApiHandler(async ({ request }) => {
   // Verify admin with services:read permission
   const auth = await requirePermission('services', 'read')
-  if (!auth.success || !auth.admin) return auth.error!
+  if (!auth.success || !auth.admin) return auth.error as NextResponse
 
   const supabase = createAdminClient()
   const { searchParams } = new URL(request.url)
@@ -33,29 +33,32 @@ export const GET = createApiHandler(async ({ request }) => {
   })
 
   if (!parsed.success) {
-    return NextResponse.json({ success: false, error: { message: 'Invalid data' } }, { status: 400 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid data' } },
+      { status: 400 }
+    )
   }
 
   // Sanitize search inputs to prevent ILIKE injection
   const city = parsed.data.city ? sanitizeSearchQuery(parsed.data.city) : null
   const service = parsed.data.service ? sanitizeSearchQuery(parsed.data.service) : null
 
-  // Build all 3 queries — legacy table name 'devis_requests' = consultation requests
-  let leadsQuery = supabase
-    .from('devis_requests')
-    .select('id', { count: 'exact', head: true })
+  // Build all 3 queries
+  let leadsQuery = supabase.from('quote_requests').select('id', { count: 'exact', head: true })
   if (city) leadsQuery = leadsQuery.ilike('city', `%${city}%`)
   if (service) leadsQuery = leadsQuery.ilike('service_name', `%${service}%`)
 
   let assignedQuery = supabase
     .from('lead_assignments')
-    .select('id, lead:devis_requests!inner(city, service_name)', { count: 'exact', head: true })
+    .select('id, lead:quote_requests!inner(city, service_name)', { count: 'exact', head: true })
   if (city) assignedQuery = assignedQuery.ilike('lead.city', `%${city}%`)
   if (service) assignedQuery = assignedQuery.ilike('lead.service_name', `%${service}%`)
 
   let attorneysQuery = supabase
     .from('attorneys')
-    .select('id, stable_id, name, slug, address_city, is_verified, specialty:specialties!primary_specialty_id(name, slug)')
+    .select(
+      'id, stable_id, name, slug, address_city, is_verified, specialty:specialties!primary_specialty_id(name, slug)'
+    )
     .eq('is_active', true)
     .order('name', { ascending: true })
     .limit(100)
@@ -85,7 +88,10 @@ export const GET = createApiHandler(async ({ request }) => {
 
   const attorneys = attorneysResult.data
   if (attorneysResult.error) {
-    logger.warn('Admin leads attorneys query failed', { code: attorneysResult.error.code, message: attorneysResult.error.message })
+    logger.warn('Admin leads attorneys query failed', {
+      code: attorneysResult.error.code,
+      message: attorneysResult.error.message,
+    })
   }
 
   return NextResponse.json({

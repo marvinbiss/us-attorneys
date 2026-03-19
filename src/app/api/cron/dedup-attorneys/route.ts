@@ -130,7 +130,8 @@ async function fetchAttorneys(
   const allAttorneys: AttorneyRow[] = []
   let offset = 0
 
-  const selectCols = [
+  // Full column set -- all verified to exist in migrations 400 + 419
+  const fullCols = [
     'id',
     'name',
     'bar_number',
@@ -154,27 +155,77 @@ async function fetchAttorneys(
     'canonical_attorney_id',
     'review_count',
     'created_at',
-  ].join(', ')
+  ]
+
+  // Minimal fallback if a column was dropped or renamed
+  const minimalCols = [
+    'id',
+    'name',
+    'bar_number',
+    'bar_state',
+    'email',
+    'phone',
+    'address_city',
+    'address_state',
+    'is_verified',
+    'created_at',
+  ]
+
+  // Try full columns first; fall back to minimal set if the query fails
+  // (e.g. a column was removed and migrations haven't been re-run)
+  let selectCols = fullCols.join(', ')
+  let usingFallback = false
+
+  // Probe with a single-row query to validate column set
+  try {
+    const { error: probeErr } = await supabase.from('attorneys').select(selectCols).limit(1)
+
+    if (probeErr) {
+      logger.warn('[Dedup] Full column set failed, falling back to minimal', {
+        error: probeErr.message,
+      })
+      selectCols = minimalCols.join(', ')
+      usingFallback = true
+    }
+  } catch (probeEx) {
+    logger.warn('[Dedup] Probe query threw, falling back to minimal columns', {
+      error: probeEx instanceof Error ? probeEx.message : 'Unknown',
+    })
+    selectCols = minimalCols.join(', ')
+    usingFallback = true
+  }
+
+  if (usingFallback) {
+    logger.info('[Dedup] Using minimal column set for dedup query')
+  }
 
   while (allAttorneys.length < MAX_ATTORNEYS) {
-    const { data, error } = await supabase
-      .from('attorneys')
-      .select(selectCols)
-      .eq('is_active', true)
-      .is('canonical_attorney_id', null)
-      .order('id', { ascending: true })
-      .range(offset, offset + BATCH_SIZE - 1)
+    try {
+      const { data, error } = await supabase
+        .from('attorneys')
+        .select(selectCols)
+        .eq('is_active', true)
+        .is('canonical_attorney_id', null)
+        .order('id', { ascending: true })
+        .range(offset, offset + BATCH_SIZE - 1)
 
-    if (error) {
-      logger.error('[Dedup] Error fetching attorneys', { offset, error: error.message })
+      if (error) {
+        logger.error('[Dedup] Error fetching attorneys', { offset, error: error.message })
+        break
+      }
+
+      if (!data || data.length === 0) break
+
+      allAttorneys.push(...(data as unknown as AttorneyRow[]))
+      offset += data.length
+      if (data.length < BATCH_SIZE) break
+    } catch (fetchErr) {
+      logger.error('[Dedup] Exception fetching attorneys batch', {
+        offset,
+        error: fetchErr instanceof Error ? fetchErr.message : 'Unknown',
+      })
       break
     }
-
-    if (!data || data.length === 0) break
-
-    allAttorneys.push(...(data as unknown as AttorneyRow[]))
-    offset += data.length
-    if (data.length < BATCH_SIZE) break
   }
 
   return allAttorneys

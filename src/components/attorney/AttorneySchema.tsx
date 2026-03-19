@@ -25,7 +25,8 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
       width: 512,
       height: 512,
     },
-    description: 'Platform connecting individuals with qualified attorneys across the United States',
+    description:
+      'Platform connecting individuals with qualified attorneys across the United States',
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',
@@ -52,7 +53,9 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
     areaServed: {
       '@type': 'City',
       name: attorney.city,
-      ...(attorney.region && { containedInPlace: { '@type': 'AdministrativeArea', name: attorney.region } }),
+      ...(attorney.region && {
+        containedInPlace: { '@type': 'AdministrativeArea', name: attorney.region },
+      }),
     },
     ...(() => {
       if (!service.price) return {}
@@ -63,7 +66,9 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
           '@type': 'Offer',
           price: numericPrice,
           priceCurrency: 'USD',
-          availability: attorney.accepts_new_clients ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+          availability: attorney.accepts_new_clients
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
         },
       }
     })(),
@@ -80,17 +85,19 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
     '@type': ['Attorney', 'LegalService'],
     '@id': `${attorneyUrl}#business`,
     name: displayName,
-    description: attorney.description || `${displayName} - ${attorney.specialty} in ${attorney.city}`,
+    description:
+      attorney.description || `${displayName} - ${attorney.specialty} in ${attorney.city}`,
     image: attorney.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
     // Add knowsAbout for E-E-A-T signals — array of practice areas for rich snippets
     knowsAbout: [
       attorney.specialty,
       ...(attorney.services || []),
-      ...attorney.service_prices.map(sp => sp.name),
+      ...attorney.service_prices.map((sp) => sp.name),
     ].filter((v, i, arr) => v && arr.indexOf(v) === i),
-    ...(attorney.phone && attorney.phone.replace(/\D/g, '').length >= 10 && {
-      telephone: attorney.phone,
-    }),
+    ...(attorney.phone &&
+      attorney.phone.replace(/\D/g, '').length >= 10 && {
+        telephone: attorney.phone,
+      }),
     ...(attorney.email && { email: attorney.email }),
     url: attorneyUrl,
     parentOrganization: {
@@ -103,51 +110,62 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
       '@type': 'PostalAddress',
       ...(attorney.address ? { streetAddress: attorney.address } : {}),
       addressLocality: attorney.city,
-      ...(attorney.region || attorney.department ? { addressRegion: attorney.region || attorney.department } : {}),
+      ...(attorney.region || attorney.department
+        ? { addressRegion: attorney.region || attorney.department }
+        : {}),
       postalCode: attorney.postal_code,
       addressCountry: 'US',
     },
 
-    ...(attorney.latitude && attorney.longitude && {
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: attorney.latitude,
-        longitude: attorney.longitude,
-      },
-    }),
+    ...(attorney.latitude &&
+      attorney.longitude && {
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: attorney.latitude,
+          longitude: attorney.longitude,
+        },
+      }),
 
-    ...(reviews.length > 0 ? {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: Number((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)),
-        reviewCount: reviews.length,
-        bestRating: 5,
-        worstRating: 1,
-      },
-    } : {}),
-
-    ...((() => {
-      const validReviews = reviews.filter(r => r.comment && r.comment.trim().length > 0).slice(0, 5)
-      return validReviews.length > 0 ? {
-        review: validReviews.map(r => ({
-          '@type': 'Review',
-          author: { '@type': 'Person', name: r.author },
-          ...(r.dateISO || r.date ? { datePublished: r.dateISO || r.date } : {}),
-          reviewRating: {
-            '@type': 'Rating',
-            ratingValue: r.rating,
+    ...(reviews.length > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: Number(
+              (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
+            ),
+            reviewCount: reviews.length,
             bestRating: 5,
             worstRating: 1,
           },
-          reviewBody: r.comment,
-          itemReviewed: {
-            '@type': 'LocalBusiness',
-            '@id': `${attorneyUrl}#business`,
-            name: displayName,
-          },
-        })),
-      } : {}
-    })()),
+        }
+      : {}),
+
+    ...(() => {
+      const validReviews = reviews
+        .filter((r) => r.comment && r.comment.trim().length > 0)
+        .slice(0, 5)
+      return validReviews.length > 0
+        ? {
+            review: validReviews.map((r) => ({
+              '@type': 'Review',
+              author: { '@type': 'Person', name: r.author },
+              ...(r.dateISO || r.date ? { datePublished: r.dateISO || r.date } : {}),
+              reviewRating: {
+                '@type': 'Rating',
+                ratingValue: r.rating,
+                bestRating: 5,
+                worstRating: 1,
+              },
+              reviewBody: r.comment,
+              itemReviewed: {
+                '@type': 'LocalBusiness',
+                '@id': `${attorneyUrl}#business`,
+                name: displayName,
+              },
+            })),
+          }
+        : {}
+    })(),
 
     ...(attorney.service_prices.length > 0 && {
       hasOfferCatalog: {
@@ -177,20 +195,21 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
     }),
 
     // Area served — GeoCircle when radius is known, otherwise administrative area
-    areaServed: attorney.intervention_radius_km && attorney.latitude && attorney.longitude
-      ? {
-          '@type': 'GeoCircle',
-          geoMidpoint: {
-            '@type': 'GeoCoordinates',
-            latitude: attorney.latitude,
-            longitude: attorney.longitude,
+    areaServed:
+      attorney.intervention_radius_km && attorney.latitude && attorney.longitude
+        ? {
+            '@type': 'GeoCircle',
+            geoMidpoint: {
+              '@type': 'GeoCoordinates',
+              latitude: attorney.latitude,
+              longitude: attorney.longitude,
+            },
+            geoRadius: attorney.intervention_radius_km * 1000,
+          }
+        : {
+            '@type': 'AdministrativeArea',
+            name: attorney.region || attorney.department || attorney.city,
           },
-          geoRadius: attorney.intervention_radius_km * 1000,
-        }
-      : {
-          '@type': 'AdministrativeArea',
-          name: attorney.region || attorney.department || attorney.city,
-        },
 
     ...(attorney.bar_number && {
       identifier: {
@@ -222,23 +241,31 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
     currenciesAccepted: 'USD',
 
     // Opening hours for Google Knowledge Panel
-    // DB-bound: French keys from database (opening_hours JSONB column in Supabase)
-    ...(attorney.opening_hours && Object.keys(attorney.opening_hours).length > 0 && {
-      openingHoursSpecification: (() => {
-        const dayMap: Record<string, string> = {
-          lundi: 'Monday', mardi: 'Tuesday', mercredi: 'Wednesday',
-          jeudi: 'Thursday', vendredi: 'Friday', samedi: 'Saturday', dimanche: 'Sunday',
-        }
-        return Object.entries(attorney.opening_hours)
-          .filter(([, val]: [string, any]) => val?.ouvert)
-          .map(([day, val]: [string, any]) => ({
-            '@type': 'OpeningHoursSpecification',
-            dayOfWeek: dayMap[day] || day,
-            opens: val.debut || '08:00',
-            closes: val.fin || '18:00',
-          }))
-      })(),
-    }),
+    ...(attorney.opening_hours &&
+      Object.keys(attorney.opening_hours).length > 0 && {
+        openingHoursSpecification: (() => {
+          const dayMap: Record<string, string> = {
+            monday: 'Monday',
+            tuesday: 'Tuesday',
+            wednesday: 'Wednesday',
+            thursday: 'Thursday',
+            friday: 'Friday',
+            saturday: 'Saturday',
+            sunday: 'Sunday',
+          }
+          return Object.entries(attorney.opening_hours)
+            .filter(([, val]: [string, unknown]) => (val as { open?: boolean })?.open)
+            .map(([day, val]: [string, unknown]) => {
+              const hours = val as { start?: string; end?: string }
+              return {
+                '@type': 'OpeningHoursSpecification',
+                dayOfWeek: dayMap[day] || day,
+                opens: hours.start || '08:00',
+                closes: hours.end || '18:00',
+              }
+            })
+        })(),
+      }),
 
     // Quote request action for rich results
     potentialAction: {
@@ -249,17 +276,20 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
   }
 
   // FAQPage Schema
-  const faqSchema = attorney.faq && attorney.faq.length > 0 ? {
-    '@type': 'FAQPage',
-    mainEntity: attorney.faq.map(faq => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  } : null
+  const faqSchema =
+    attorney.faq && attorney.faq.length > 0
+      ? {
+          '@type': 'FAQPage',
+          mainEntity: attorney.faq.map((faq) => ({
+            '@type': 'Question',
+            name: faq.question,
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: faq.answer,
+            },
+          })),
+        }
+      : null
 
   // BreadcrumbList Schema — 5 levels matching visible breadcrumb
   // Structure: Home > Practice Areas > {Service} > {City} > {Attorney name}
@@ -281,13 +311,15 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
         '@type': 'ListItem',
         position: index + 1,
         name: item.name,
-        ...(!isLast && item.item ? {
-          item: {
-            '@type': 'WebPage',
-            '@id': item.item,
-            name: item.name,
-          },
-        } : {}),
+        ...(!isLast && item.item
+          ? {
+              item: {
+                '@type': 'WebPage',
+                '@id': item.item,
+                name: item.name,
+              },
+            }
+          : {}),
       }
     }),
   }
@@ -300,9 +332,11 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
     ...(attorney.member_since && {
       dateCreated: `${attorney.member_since}-01-01`,
     }),
-    ...(attorney.updated_at ? {
-      dateModified: new Date(attorney.updated_at).toISOString(),
-    } : {}),
+    ...(attorney.updated_at
+      ? {
+          dateModified: new Date(attorney.updated_at).toISOString(),
+        }
+      : {}),
   }
 
   // Person Schema — the individual attorney (separate from the business entity)
@@ -314,7 +348,9 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
     ...(attorney.first_name && { givenName: attorney.first_name }),
     ...(attorney.last_name && { familyName: attorney.last_name }),
     jobTitle: `${attorney.specialty} Attorney`,
-    description: attorney.description || `${displayName}, ${attorney.specialty?.toLowerCase()} attorney in ${attorney.city}`,
+    description:
+      attorney.description ||
+      `${displayName}, ${attorney.specialty?.toLowerCase()} attorney in ${attorney.city}`,
     url: attorneyUrl,
     image: attorney.portfolio?.[0]?.imageUrl || `${baseUrl}/opengraph-image`,
 
@@ -322,13 +358,14 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
     knowsAbout: [
       attorney.specialty,
       ...(attorney.services || []),
-      ...attorney.service_prices.map(sp => sp.name),
+      ...attorney.service_prices.map((sp) => sp.name),
     ].filter((v, i, arr) => v && arr.indexOf(v) === i),
 
     // Contact information
-    ...(attorney.phone && attorney.phone.replace(/\D/g, '').length >= 10 && {
-      telephone: attorney.phone,
-    }),
+    ...(attorney.phone &&
+      attorney.phone.replace(/\D/g, '').length >= 10 && {
+        telephone: attorney.phone,
+      }),
     ...(attorney.email && { email: attorney.email }),
     ...(attorney.website && { sameAs: [attorney.website] }),
 
@@ -337,7 +374,9 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
       '@type': 'PostalAddress',
       ...(attorney.address ? { streetAddress: attorney.address } : {}),
       addressLocality: attorney.city,
-      ...(attorney.region || attorney.department ? { addressRegion: attorney.region || attorney.department } : {}),
+      ...(attorney.region || attorney.department
+        ? { addressRegion: attorney.region || attorney.department }
+        : {}),
       postalCode: attorney.postal_code,
       addressCountry: 'US',
     },
@@ -356,34 +395,39 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
     }),
 
     // Area served
-    areaServed: attorney.intervention_radius_km && attorney.latitude && attorney.longitude
-      ? {
-          '@type': 'GeoCircle',
-          geoMidpoint: {
-            '@type': 'GeoCoordinates',
-            latitude: attorney.latitude,
-            longitude: attorney.longitude,
+    areaServed:
+      attorney.intervention_radius_km && attorney.latitude && attorney.longitude
+        ? {
+            '@type': 'GeoCircle',
+            geoMidpoint: {
+              '@type': 'GeoCoordinates',
+              latitude: attorney.latitude,
+              longitude: attorney.longitude,
+            },
+            geoRadius: attorney.intervention_radius_km * 1000,
+          }
+        : {
+            '@type': 'AdministrativeArea',
+            name: attorney.region || attorney.department || attorney.city,
           },
-          geoRadius: attorney.intervention_radius_km * 1000,
-        }
-      : {
-          '@type': 'AdministrativeArea',
-          name: attorney.region || attorney.department || attorney.city,
-        },
 
     // Works for the attorney business entity
     worksFor: { '@id': `${attorneyUrl}#business` },
 
     // Aggregate rating (mirrors business for person card)
-    ...(reviews.length > 0 ? {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: Number((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)),
-        reviewCount: reviews.length,
-        bestRating: 5,
-        worstRating: 1,
-      },
-    } : {}),
+    ...(reviews.length > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: Number(
+              (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
+            ),
+            reviewCount: reviews.length,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        }
+      : {}),
   }
 
   // Combined schema graph for better SEO (single JSON-LD with @graph)
@@ -407,7 +451,7 @@ export function AttorneySchema({ attorney, reviews }: AttorneySchemaProps) {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(combinedSchema, null, 0)
             .replace(/</g, '\\u003c')
-            .replace(/>/g, '\\u003e')
+            .replace(/>/g, '\\u003e'),
         }}
       />
     </>

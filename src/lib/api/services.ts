@@ -93,13 +93,20 @@ export async function getAttorneys(params: {
       const supabase = await createClient()
       let query = supabase
         .from('attorneys')
-        .select('id, name, slug, primary_specialty_id, address_city, address_zip, rating_average, review_count, is_verified, is_active, specialty:specialties!primary_specialty_id(slug,name)', { count: 'exact' })
+        .select(
+          'id, name, slug, primary_specialty_id, address_city, address_zip, rating_average, review_count, is_verified, is_active, specialty:specialties!primary_specialty_id(slug,name)',
+          { count: 'exact' }
+        )
         .eq('is_active', true)
         .eq('is_verified', true)
 
       if (params.service) {
         // Resolve specialty slug to ID for filtering
-        const { data: specData } = await supabase.from('specialties').select('id').eq('slug', params.service).single()
+        const { data: specData } = await supabase
+          .from('specialties')
+          .select('id')
+          .eq('slug', params.service)
+          .single()
         if (specData) {
           query = query.eq('primary_specialty_id', specData.id)
         }
@@ -114,8 +121,7 @@ export async function getAttorneys(params: {
       }
 
       // Order by rating
-      query = query
-        .order('rating_average', { ascending: false, nullsFirst: false })
+      query = query.order('rating_average', { ascending: false, nullsFirst: false })
 
       if (params.limit) {
         query = query.limit(params.limit)
@@ -137,7 +143,10 @@ export async function getAttorneys(params: {
           id: a.id,
           name: a.name || 'Attorney',
           // Supabase embedded join returns array type but resolves to single object at runtime
-          specialty: (Array.isArray(a.specialty) ? a.specialty[0] ?? null : a.specialty) as { slug: string; name: string } | null,
+          specialty: (Array.isArray(a.specialty) ? (a.specialty[0] ?? null) : a.specialty) as {
+            slug: string
+            name: string
+          } | null,
           address_city: a.address_city || '',
           address_zip: a.address_zip || '',
           rating_average: a.rating_average || 0,
@@ -162,7 +171,9 @@ export async function getAttorneyById(id: string): Promise<Attorney | null> {
       const supabase = await createClient()
       const { data, error } = await supabase
         .from('attorneys')
-        .select('id, name, slug, primary_specialty_id, address_city, address_zip, rating_average, review_count, is_verified, is_active, specialty:specialties!primary_specialty_id(slug,name)')
+        .select(
+          'id, name, slug, primary_specialty_id, address_city, address_zip, rating_average, review_count, is_verified, is_active, specialty:specialties!primary_specialty_id(slug,name)'
+        )
         .eq('id', id)
         .eq('is_active', true)
         .single()
@@ -176,7 +187,9 @@ export async function getAttorneyById(id: string): Promise<Attorney | null> {
         id: data.id,
         name: data.name || 'Attorney',
         // Supabase embedded join returns array type but resolves to single object at runtime
-        specialty: (Array.isArray(data.specialty) ? data.specialty[0] ?? null : data.specialty) as { slug: string; name: string } | null,
+        specialty: (Array.isArray(data.specialty)
+          ? (data.specialty[0] ?? null)
+          : data.specialty) as { slug: string; name: string } | null,
         address_city: data.address_city || '',
         address_zip: data.address_zip || '',
         rating_average: data.rating_average || 0,
@@ -199,9 +212,11 @@ export async function getAttorneyReviews(attorneyId: string, limit = 10) {
       const supabase = await createClient()
       const { data, error } = await supabase
         .from('reviews')
-        .select(`
-          id, attorney_id, rating, comment, client_name, would_recommend, status, artisan_response, artisan_responded_at, helpful_count, created_at
-        `)
+        .select(
+          `
+          id, attorney_id, rating, comment, client_name, would_recommend, status, attorney_response, attorney_responded_at, helpful_count, created_at
+        `
+        )
         .eq('attorney_id', attorneyId)
         // REMOVED: .eq('is_verified', true) to show ALL real reviews
         .order('created_at', { ascending: false })

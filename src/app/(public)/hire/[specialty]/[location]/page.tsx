@@ -11,12 +11,23 @@ import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import { getAttorneyUrl } from '@/lib/utils'
 import { getServiceImage } from '@/lib/data/images'
-import { practiceAreas as staticPracticeAreas, cities, getCityBySlug, getNearbyCities, getCitiesByState, getStateByCode } from '@/lib/data/usa'
+import {
+  practiceAreas as staticPracticeAreas,
+  cities,
+  getCityBySlug,
+  getNearbyCities,
+  getCitiesByState,
+  getStateByCode,
+} from '@/lib/data/usa'
 import { resolveZipToCity, isZipSlug, getNearbyZipCodes } from '@/lib/location-resolver'
 import { getTradeContent } from '@/lib/data/trade-content'
 import { SITE_URL } from '@/lib/seo/config'
 import { getAlternateLanguages } from '@/lib/seo/hreflang'
-import { generateLocationContent, hashCode, getRegionalMultiplier } from '@/lib/seo/location-content'
+import {
+  generateLocationContent,
+  hashCode,
+  getRegionalMultiplier,
+} from '@/lib/seo/location-content'
 import { getPageContent } from '@/lib/cms'
 import { logger } from '@/lib/logger'
 import { CmsContent } from '@/components/CmsContent'
@@ -38,25 +49,17 @@ import CrossLinks from '@/app/(public)/practice-areas/[service]/[location]/_comp
 import { getFAQSchema } from '@/lib/seo/jsonld'
 import { REVALIDATE } from '@/lib/cache'
 
-const EstimationWidget = dynamic(
-  () => import('@/components/estimation/EstimationWidget'),
-  { ssr: false }
-)
+const EstimationWidget = dynamic(() => import('@/components/estimation/EstimationWidget'), {
+  ssr: false,
+})
 
-const MicroConversions = dynamic(
-  () => import('@/components/MicroConversions'),
-  { ssr: false }
-)
+const MicroConversions = dynamic(() => import('@/components/MicroConversions'), { ssr: false })
 
-const ProactiveChatPrompt = dynamic(
-  () => import('@/components/ProactiveChatPrompt'),
-  { ssr: false }
-)
+const ProactiveChatPrompt = dynamic(() => import('@/components/ProactiveChatPrompt'), {
+  ssr: false,
+})
 
-const CallbackRequest = dynamic(
-  () => import('@/components/CallbackRequest'),
-  { ssr: false }
-)
+const CallbackRequest = dynamic(() => import('@/components/CallbackRequest'), { ssr: false })
 
 // Safely escape JSON for script tags to prevent XSS
 function safeJsonStringify(data: unknown): string {
@@ -74,8 +77,8 @@ export const dynamicParams = true
 const TOP_CITIES_COUNT = 1
 export function generateStaticParams() {
   const topCities = cities.slice(0, TOP_CITIES_COUNT)
-  return staticPracticeAreas.flatMap(s =>
-    topCities.map(v => ({ specialty: s.slug, location: v.slug }))
+  return staticPracticeAreas.flatMap((s) =>
+    topCities.map((v) => ({ specialty: s.slug, location: v.slug }))
   )
 }
 
@@ -133,7 +136,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
     attorneyCount = count
   } catch {
-    const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+    const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
     const fallbackCity = getCityBySlug(locationSlug)
     if (staticSvc) specialtyName = staticSvc.name
     if (fallbackCity) {
@@ -157,18 +160,48 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const seoPairs = hasProviders
     ? [
-        { title: `Hire a ${specialtyName} Attorney in ${locationName}`, h1: `Hire a Top ${specialtyName} Lawyer in ${locationName}${stateLabel}` },
-        { title: `Hire ${specialtyName} Lawyer — ${locationName}`, h1: `Hire a ${specialtyName} Attorney in ${locationName}${stateLabel}` },
-        { title: `${specialtyName} Attorney for Hire — ${locationName}`, h1: `${attorneyCount} ${specialtyName} Attorneys Available in ${locationName}` },
-        { title: `Hire a ${specialtyName} Lawyer${stateLabel}`, h1: `Hire a Qualified ${specialtyName} Attorney in ${locationName}${stateLabel}` },
-        { title: `${locationName} ${specialtyName} Attorney — Hire Now`, h1: `Ready to Hire a ${specialtyName} Lawyer in ${locationName}?` },
+        {
+          title: `Hire a ${specialtyName} Attorney in ${locationName}`,
+          h1: `Hire a Top ${specialtyName} Lawyer in ${locationName}${stateLabel}`,
+        },
+        {
+          title: `Hire ${specialtyName} Lawyer — ${locationName}`,
+          h1: `Hire a ${specialtyName} Attorney in ${locationName}${stateLabel}`,
+        },
+        {
+          title: `${specialtyName} Attorney for Hire — ${locationName}`,
+          h1: `${attorneyCount} ${specialtyName} Attorneys Available in ${locationName}`,
+        },
+        {
+          title: `Hire a ${specialtyName} Lawyer${stateLabel}`,
+          h1: `Hire a Qualified ${specialtyName} Attorney in ${locationName}${stateLabel}`,
+        },
+        {
+          title: `${locationName} ${specialtyName} Attorney — Hire Now`,
+          h1: `Ready to Hire a ${specialtyName} Lawyer in ${locationName}?`,
+        },
       ]
     : [
-        { title: `Hire a ${specialtyName} Attorney in ${locationName}`, h1: `Hire a ${specialtyName} Attorney in ${locationName}${stateLabel}` },
-        { title: `Hire ${specialtyName} Lawyer — ${locationName}`, h1: `Find and Hire a ${specialtyName} Attorney in ${locationName}` },
-        { title: `${specialtyName} Attorney for Hire — ${locationName}`, h1: `Hire a Qualified ${specialtyName} Lawyer in ${locationName}${stateLabel}` },
-        { title: `Hire a ${specialtyName} Lawyer${stateLabel}`, h1: `${specialtyName} Attorneys for Hire in ${locationName}${stateLabel}` },
-        { title: `${locationName} ${specialtyName} Attorney — Hire`, h1: `Hire a Top ${specialtyName} Attorney in ${locationName}` },
+        {
+          title: `Hire a ${specialtyName} Attorney in ${locationName}`,
+          h1: `Hire a ${specialtyName} Attorney in ${locationName}${stateLabel}`,
+        },
+        {
+          title: `Hire ${specialtyName} Lawyer — ${locationName}`,
+          h1: `Find and Hire a ${specialtyName} Attorney in ${locationName}`,
+        },
+        {
+          title: `${specialtyName} Attorney for Hire — ${locationName}`,
+          h1: `Hire a Qualified ${specialtyName} Lawyer in ${locationName}${stateLabel}`,
+        },
+        {
+          title: `Hire a ${specialtyName} Lawyer${stateLabel}`,
+          h1: `${specialtyName} Attorneys for Hire in ${locationName}${stateLabel}`,
+        },
+        {
+          title: `${locationName} ${specialtyName} Attorney — Hire`,
+          h1: `Hire a Top ${specialtyName} Attorney in ${locationName}`,
+        },
       ]
 
   const title = truncateTitle(seoPairs[seoHash % seoPairs.length].title)
@@ -196,9 +229,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     // Noindex thin-content pages (0 attorneys) — fail-open: attorneyCount defaults to 1 if DB is down
-    robots: attorneyCount > 0
-      ? { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const }
-      : { index: false, follow: true },
+    robots:
+      attorneyCount > 0
+        ? {
+            index: true,
+            follow: true,
+            'max-snippet': -1 as const,
+            'max-image-preview': 'large' as const,
+            'max-video-preview': -1 as const,
+          }
+        : { index: false, follow: true },
     openGraph: {
       title,
       description,
@@ -225,7 +265,7 @@ function generateJsonLd(
   location: LocationType,
   _providers: unknown[],
   specialtySlug: string,
-  locationSlug: string,
+  locationSlug: string
 ) {
   const svcLower = service.name.toLowerCase()
 
@@ -289,23 +329,27 @@ export default async function HireAttorneyPage({ params }: PageProps) {
   // CMS override
   let cmsPage = null
   try {
-    cmsPage = await getPageContent(`hire-${specialtySlug}-${locationSlug}`, 'location', { specialtySlug, locationSlug })
+    cmsPage = await getPageContent(`hire-${specialtySlug}-${locationSlug}`, 'location', {
+      specialtySlug,
+      locationSlug,
+    })
   } catch (err: unknown) {
-    logger.error('[CMS] Error fetching page content for', { slug: `hire-${specialtySlug}-${locationSlug}`, error: err })
+    logger.error('[CMS] Error fetching page content for', {
+      slug: `hire-${specialtySlug}-${locationSlug}`,
+      error: err,
+    })
   }
 
   if (cmsPage?.content_html) {
     return (
       <div className="min-h-screen bg-sand-100">
-        <section className="bg-white border-b">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
+        <section className="border-b bg-white">
+          <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+            <h1 className="font-heading text-3xl font-bold text-gray-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
-          <div className="max-w-6xl mx-auto px-4">
+          <div className="mx-auto max-w-6xl px-4">
             <CmsContent html={cmsPage.content_html} />
           </div>
         </section>
@@ -318,14 +362,26 @@ export default async function HireAttorneyPage({ params }: PageProps) {
   try {
     service = await getSpecialtyBySlug(specialtySlug)
     if (!service) {
-      const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+      const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
       if (!staticSvc) notFound()
-      service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+      service = {
+        id: '',
+        name: staticSvc.name,
+        slug: staticSvc.slug,
+        is_active: true,
+        created_at: '',
+      }
     }
   } catch {
-    const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+    const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
     if (!staticSvc) notFound()
-    service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+    service = {
+      id: '',
+      name: staticSvc.name,
+      slug: staticSvc.slug,
+      is_active: true,
+      created_at: '',
+    }
   }
 
   // 2. Resolve location
@@ -337,7 +393,10 @@ export default async function HireAttorneyPage({ params }: PageProps) {
       if (!fallback) notFound()
       location = fallback
     } else {
-      location = { ...dbLocation, id: (dbLocation as Record<string, unknown>).code_insee as string || '' }
+      location = {
+        ...dbLocation,
+        id: ((dbLocation as Record<string, unknown>).code_insee as string) || '',
+      }
     }
   } catch {
     const fallback = cityToLocation(locationSlug)
@@ -361,7 +420,13 @@ export default async function HireAttorneyPage({ params }: PageProps) {
     // Continue without data
   }
 
-  const baseSchemas = generateJsonLd(service, location, providers || [], specialtySlug, locationSlug)
+  const baseSchemas = generateJsonLd(
+    service,
+    location,
+    providers || [],
+    specialtySlug,
+    locationSlug
+  )
 
   // Recent consultation requests
   let recentQuoteCount = 0
@@ -372,7 +437,7 @@ export default async function HireAttorneyPage({ params }: PageProps) {
       const thirtyDaysAgo = new Date()
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
       const { count } = await supabase
-        .from('devis_requests')
+        .from('quote_requests')
         .select('*', { count: 'exact', head: true })
         .ilike('city', location.name)
         .gte('created_at', thirtyDaysAgo.toISOString())
@@ -383,12 +448,14 @@ export default async function HireAttorneyPage({ params }: PageProps) {
   }
 
   // Generate unique SEO content
-  const cityData = getCityBySlug(locationSlug) || await resolveZipToCity(locationSlug)
+  const cityData = getCityBySlug(locationSlug) || (await resolveZipToCity(locationSlug))
   const locationContent = cityData
     ? generateLocationContent(specialtySlug, service.name, cityData, providers.length, locationData)
     : null
 
-  const pricingMultiplier = cityData ? getRegionalMultiplier(getStateByCode(cityData.stateCode)?.region || '') : 1.0
+  const pricingMultiplier = cityData
+    ? getRegionalMultiplier(getStateByCode(cityData.stateCode)?.region || '')
+    : 1.0
 
   // FAQ
   const combinedFaq: { question: string; answer: string }[] = []
@@ -403,21 +470,27 @@ export default async function HireAttorneyPage({ params }: PageProps) {
   const faqSchema = combinedFaq.length > 0 ? getFAQSchema(combinedFaq) : null
 
   // ItemList JSON-LD
-  const itemListSchema = providers.length > 0
-    ? getItemListSchema({
-        name: `${service.name} Attorneys for Hire in ${location.name}`,
-        description: `Verified ${service.name.toLowerCase()} attorneys available for hire in ${location.name}`,
-        url: `/hire/${specialtySlug}/${locationSlug}`,
-        items: providers.slice(0, 20).map((p, i) => ({
-          name: p.name,
-          url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city }),
-          position: i + 1,
-          image: getServiceImage(specialtySlug).src,
-          rating: p.rating_average ?? undefined,
-          reviewCount: p.review_count ?? undefined,
-        })),
-      })
-    : null
+  const itemListSchema =
+    providers.length > 0
+      ? getItemListSchema({
+          name: `${service.name} Attorneys for Hire in ${location.name}`,
+          description: `Verified ${service.name.toLowerCase()} attorneys available for hire in ${location.name}`,
+          url: `/hire/${specialtySlug}/${locationSlug}`,
+          items: providers.slice(0, 20).map((p, i) => ({
+            name: p.name,
+            url: getAttorneyUrl({
+              stable_id: p.stable_id,
+              slug: p.slug,
+              specialty: p.specialty?.name,
+              city: p.address_city,
+            }),
+            position: i + 1,
+            image: getServiceImage(specialtySlug).src,
+            rating: p.rating_average ?? undefined,
+            reviewCount: p.review_count ?? undefined,
+          })),
+        })
+      : null
 
   const jsonLdSchemas: Record<string, unknown>[] = [
     ...baseSchemas,
@@ -427,38 +500,45 @@ export default async function HireAttorneyPage({ params }: PageProps) {
 
   // Cross-links
   const relatedSlugs = relatedServices[specialtySlug] || []
-  const otherServices = relatedSlugs.length > 0
-    ? relatedSlugs.slice(0, 6).map(slug => {
-        const svc = staticPracticeAreas.find(s => s.slug === slug)
-        return svc ? { slug: svc.slug, name: svc.name, icon: svc.icon } : null
-      }).filter(Boolean) as { slug: string; name: string; icon: string }[]
-    : popularServices.filter(s => s.slug !== specialtySlug).slice(0, 6)
+  const otherServices =
+    relatedSlugs.length > 0
+      ? (relatedSlugs
+          .slice(0, 6)
+          .map((slug) => {
+            const svc = staticPracticeAreas.find((s) => s.slug === slug)
+            return svc ? { slug: svc.slug, name: svc.name, icon: svc.icon } : null
+          })
+          .filter(Boolean) as { slug: string; name: string; icon: string }[])
+      : popularServices.filter((s) => s.slug !== specialtySlug).slice(0, 6)
   const nearbyCities = isZipSlug(locationSlug)
     ? await getNearbyZipCodes(locationSlug, 12)
     : getNearbyCities(locationSlug, 12)
   const deptCities = location.department_code
-    ? getCitiesByState(location.department_code).filter(v => v.slug !== locationSlug).slice(0, 10)
+    ? getCitiesByState(location.department_code)
+        .filter((v) => v.slug !== locationSlug)
+        .slice(0, 10)
     : []
 
   // H1
   const attorneyCount = totalAttorneyCount
   const seoHashH1 = Math.abs(hashCode(`hire-seo-${specialtySlug}-${locationSlug}`))
   const stateLabel = location.department_code ? `, ${location.department_code}` : ''
-  const h1Variants = attorneyCount > 0
-    ? [
-        `Hire a Top ${service.name} Lawyer in ${location.name}${stateLabel}`,
-        `Hire a ${service.name} Attorney in ${location.name}${stateLabel}`,
-        `${attorneyCount} ${service.name} Attorneys Available in ${location.name}`,
-        `Hire a Qualified ${service.name} Attorney in ${location.name}${stateLabel}`,
-        `Ready to Hire a ${service.name} Lawyer in ${location.name}?`,
-      ]
-    : [
-        `Hire a ${service.name} Attorney in ${location.name}${stateLabel}`,
-        `Find and Hire a ${service.name} Attorney in ${location.name}`,
-        `Hire a Qualified ${service.name} Lawyer in ${location.name}${stateLabel}`,
-        `${service.name} Attorneys for Hire in ${location.name}${stateLabel}`,
-        `Hire a Top ${service.name} Attorney in ${location.name}`,
-      ]
+  const h1Variants =
+    attorneyCount > 0
+      ? [
+          `Hire a Top ${service.name} Lawyer in ${location.name}${stateLabel}`,
+          `Hire a ${service.name} Attorney in ${location.name}${stateLabel}`,
+          `${attorneyCount} ${service.name} Attorneys Available in ${location.name}`,
+          `Hire a Qualified ${service.name} Attorney in ${location.name}${stateLabel}`,
+          `Ready to Hire a ${service.name} Lawyer in ${location.name}?`,
+        ]
+      : [
+          `Hire a ${service.name} Attorney in ${location.name}${stateLabel}`,
+          `Find and Hire a ${service.name} Attorney in ${location.name}`,
+          `Hire a Qualified ${service.name} Lawyer in ${location.name}${stateLabel}`,
+          `${service.name} Attorneys for Hire in ${location.name}${stateLabel}`,
+          `Hire a Top ${service.name} Attorney in ${location.name}`,
+        ]
   const h1Text = h1Variants[seoHashH1 % h1Variants.length]
 
   const speakableSchema = getSpeakableSchema({
@@ -479,13 +559,15 @@ export default async function HireAttorneyPage({ params }: PageProps) {
       ))}
 
       {/* Breadcrumb */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <Breadcrumb items={[
-            { label: 'Hire an Attorney', href: '/hire' },
-            { label: service.name, href: `/hire/${specialtySlug}` },
-            { label: location.name },
-          ]} />
+      <div className="border-b bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-3">
+          <Breadcrumb
+            items={[
+              { label: 'Hire an Attorney', href: '/hire' },
+              { label: service.name, href: `/hire/${specialtySlug}` },
+              { label: location.name },
+            ]}
+          />
         </div>
       </div>
 
@@ -496,24 +578,23 @@ export default async function HireAttorneyPage({ params }: PageProps) {
       />
 
       {/* Hire CTA banner — primary action */}
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 text-center">
-          <h2 className="text-lg font-semibold text-blue-900 mb-2">
-            Free Consultation Available
-          </h2>
-          <p className="text-blue-700 text-sm mb-4">
-            Connect with a verified {service.name.toLowerCase()} attorney in {location.name}. No obligation, no fees for the initial consultation.
+      <div className="mx-auto max-w-7xl px-4 py-4">
+        <div className="rounded-xl border border-blue-200 bg-blue-50 p-6 text-center">
+          <h2 className="mb-2 text-lg font-semibold text-blue-900">Free Consultation Available</h2>
+          <p className="mb-4 text-sm text-blue-700">
+            Connect with a verified {service.name.toLowerCase()} attorney in {location.name}. No
+            obligation, no fees for the initial consultation.
           </p>
         </div>
       </div>
 
       {/* Demand indicator */}
-      <div className="max-w-7xl mx-auto px-4 py-3">
+      <div className="mx-auto max-w-7xl px-4 py-3">
         <DemandIndicator specialtySlug={specialtySlug} cityName={location.name} variant="banner" />
       </div>
 
       {/* Trust elements */}
-      <div className="max-w-7xl mx-auto px-4 py-2">
+      <div className="mx-auto max-w-7xl px-4 py-2">
         <TrustGuarantee variant="compact" />
       </div>
 
@@ -530,7 +611,7 @@ export default async function HireAttorneyPage({ params }: PageProps) {
       />
 
       {trade && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <div className="mx-auto mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
           <SpeakableAnswerBox
             answer={`Hire a ${trade.name.toLowerCase()} attorney in ${location.name}: ${totalAttorneyCount} bar-verified professionals available. Free initial consultation. Average response time: ${trade.averageResponseTime}.${trade.emergencyInfo ? ' Emergency services available 24/7.' : ''}`}
           />
@@ -578,7 +659,7 @@ export default async function HireAttorneyPage({ params }: PageProps) {
         locationData={locationData as LocationData | null}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8">
+      <div className="mx-auto my-8 max-w-7xl px-4 sm:px-6 lg:px-8">
         <CallbackRequest specialtySlug={specialtySlug} cityName={location.name} />
       </div>
 
@@ -590,17 +671,27 @@ export default async function HireAttorneyPage({ params }: PageProps) {
         currentIntent="services"
       />
 
-      <StickyMobileCTA specialtySlug={specialtySlug} citySlug={locationSlug} attorneyCount={totalAttorneyCount} />
+      <StickyMobileCTA
+        specialtySlug={specialtySlug}
+        citySlug={locationSlug}
+        attorneyCount={totalAttorneyCount}
+      />
 
-      <EstimationWidget context={{
-        metier: service.name,
-        metierSlug: specialtySlug,
-        ville: location.name,
-        departement: location.department_code || '',
-        pageUrl: `/hire/${specialtySlug}/${locationSlug}`,
-      }} />
+      <EstimationWidget
+        context={{
+          metier: service.name,
+          metierSlug: specialtySlug,
+          ville: location.name,
+          departement: location.department_code || '',
+          pageUrl: `/hire/${specialtySlug}/${locationSlug}`,
+        }}
+      />
 
-      <MicroConversions pageType="service-city" specialtySlug={specialtySlug} cityName={location.name} />
+      <MicroConversions
+        pageType="service-city"
+        specialtySlug={specialtySlug}
+        cityName={location.name}
+      />
 
       <ProactiveChatPrompt specialtySlug={specialtySlug} citySlug={locationSlug} />
     </>

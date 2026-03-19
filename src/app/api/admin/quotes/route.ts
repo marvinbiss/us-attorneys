@@ -10,19 +10,22 @@ import { createApiHandler } from '@/lib/api/handler'
 const quotesQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'pending', 'sent', 'accepted', 'refused', 'completed']).optional().default('all'),
+  status: z
+    .enum(['all', 'pending', 'sent', 'accepted', 'refused', 'completed'])
+    .optional()
+    .default('all'),
   search: z.string().max(100).optional().default(''),
 })
 
 export const dynamic = 'force-dynamic'
 
 // GET - List consultation requests
-// Table 'devis_requests' = consultation requests (legacy French name)
+
 export const GET = createApiHandler(async ({ request }) => {
   // Verify admin with services:read permission
   const authResult = await requirePermission('services', 'read')
   if (!authResult.success || !authResult.admin) {
-    return authResult.error!
+    return authResult.error as NextResponse
   }
 
   const supabase = createAdminClient()
@@ -46,7 +49,7 @@ export const GET = createApiHandler(async ({ request }) => {
   const offset = (page - 1) * limit
 
   let query = supabase
-    .from('devis_requests')
+    .from('quote_requests')
     .select(
       'id, client_id, service_name, postal_code, city, description, budget, urgency, client_name, client_email, client_phone, status, created_at',
       { count: 'exact' }
@@ -67,12 +70,17 @@ export const GET = createApiHandler(async ({ request }) => {
     }
   }
 
-  const { data: consultationRequests, count, error } = await query
-    .order('created_at', { ascending: false })
-    .range(offset, offset + limit - 1)
+  const {
+    data: consultationRequests,
+    count,
+    error,
+  } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
 
   if (error) {
-    logger.warn('Quote requests query failed, returning empty list', { code: error.code, message: error.message })
+    logger.warn('Quote requests query failed, returning empty list', {
+      code: error.code,
+      message: error.message,
+    })
     return NextResponse.json({
       success: true,
       requests: [],
@@ -85,7 +93,16 @@ export const GET = createApiHandler(async ({ request }) => {
 
   // Fetch lead_assignments for these requests to show which attorney(s) received each request
   const requestIds = (consultationRequests || []).map((d) => d.id)
-  const assignmentsByLead: Record<string, Array<{ id: string; status: string; assigned_at: string; provider_name: string; attorney_id: string }>> = {}
+  const assignmentsByLead: Record<
+    string,
+    Array<{
+      id: string
+      status: string
+      assigned_at: string
+      provider_name: string
+      attorney_id: string
+    }>
+  > = {}
 
   if (requestIds.length > 0) {
     const { data: assignments } = await supabase
@@ -97,7 +114,10 @@ export const GET = createApiHandler(async ({ request }) => {
     if (assignments) {
       for (const a of assignments) {
         // Supabase embedded join: attorney resolves to single object at runtime
-        const provider = (Array.isArray(a.attorney) ? a.attorney[0] : a.attorney) as { id: string; name: string } | null
+        const provider = (Array.isArray(a.attorney) ? a.attorney[0] : a.attorney) as {
+          id: string
+          name: string
+        } | null
         const entry = {
           id: a.id,
           status: a.status,
@@ -127,33 +147,24 @@ export const GET = createApiHandler(async ({ request }) => {
 export const DELETE = createApiHandler(async ({ request }) => {
   const authResult = await requirePermission('services', 'delete')
   if (!authResult.success || !authResult.admin) {
-    return authResult.error!
+    return authResult.error as NextResponse
   }
 
   const body = await request.json()
   const id = body?.id
 
   if (!id || !isValidUuid(id)) {
-    return NextResponse.json(
-      { success: false, error: { message: 'Invalid ID' } },
-      { status: 400 }
-    )
+    return NextResponse.json({ success: false, error: { message: 'Invalid ID' } }, { status: 400 })
   }
 
   const supabase = createAdminClient()
 
   // Delete related lead_assignments first (FK-free polymorphic link)
-  await supabase
-    .from('lead_assignments')
-    .delete()
-    .eq('lead_id', id)
+  await supabase.from('lead_assignments').delete().eq('lead_id', id)
 
   // Delete the consultation request
-  // Table 'devis_requests' = consultation requests (legacy French name)
-  const { error } = await supabase
-    .from('devis_requests')
-    .delete()
-    .eq('id', id)
+
+  const { error } = await supabase.from('quote_requests').delete().eq('id', id)
 
   if (error) {
     logger.error('Quote request delete error', error)

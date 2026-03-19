@@ -343,12 +343,10 @@ export async function middleware(request: NextRequest) {
       }
 
       if (profile) {
-        if (pathname.startsWith('/attorney-dashboard') && profile.role !== 'artisan') {
-          // DB role value 'artisan' = attorney (legacy, do not change without migration)
+        if (pathname.startsWith('/attorney-dashboard') && profile.role !== 'attorney') {
           return NextResponse.redirect(new URL('/client-dashboard', request.url))
         }
-        if (pathname.startsWith('/client-dashboard') && profile.role === 'artisan') {
-          // DB role value 'artisan' = attorney (legacy, do not change without migration)
+        if (pathname.startsWith('/client-dashboard') && profile.role === 'attorney') {
           return NextResponse.redirect(new URL('/attorney-dashboard', request.url))
         }
       }

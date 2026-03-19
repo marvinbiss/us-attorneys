@@ -33,17 +33,21 @@ export async function GET() {
     const { data: provider } = await supabase
       .from('attorneys')
       .select('id')
-      .eq('user_id', user!.id)
+      .eq('user_id', user?.id ?? '')
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Attorney profile not found' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Attorney profile not found' } },
+        { status: 404 }
+      )
     }
 
     // Fetch quotes sent by this provider
     const { data: quotes, error: quotesError } = await supabase
       .from('quotes')
-      .select(`
+      .select(
+        `
         id,
         request_id,
         attorney_id,
@@ -52,9 +56,10 @@ export async function GET() {
         valid_until,
         status,
         created_at,
-        request:devis_requests!request_id(id, service_name, city, postal_code, description, status, created_at)
-      `)
-      // Table 'devis_requests' = consultation requests (legacy French name)
+        request:quote_requests!request_id(id, service_name, city, postal_code, description, status, created_at)
+      `
+      )
+
       .eq('attorney_id', provider.id)
       .order('created_at', { ascending: false })
 
@@ -69,7 +74,10 @@ export async function GET() {
     return NextResponse.json({ quotes: quotes || [] })
   } catch (error: unknown) {
     logger.error('Attorney quote GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Server error' } },
+      { status: 500 }
+    )
   }
 }
 
@@ -82,11 +90,14 @@ export async function POST(request: Request) {
     const { data: provider } = await supabase
       .from('attorneys')
       .select('id')
-      .eq('user_id', user!.id)
+      .eq('user_id', user?.id ?? '')
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Attorney profile not found' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Attorney profile not found' } },
+        { status: 404 }
+      )
     }
 
     const body = await request.json()
@@ -113,15 +124,18 @@ export async function POST(request: Request) {
     }
 
     // Verify the consultation request exists
-    // Table 'devis_requests' = consultation requests (legacy French name)
+
     const { data: devisRequest } = await supabase
-      .from('devis_requests')
+      .from('quote_requests')
       .select('id, status')
       .eq('id', request_id)
       .single()
 
     if (!devisRequest) {
-      return NextResponse.json({ success: false, error: { message: 'Request not found' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Request not found' } },
+        { status: 404 }
+      )
     }
 
     // Reject quotes on closed/completed requests
@@ -142,7 +156,10 @@ export async function POST(request: Request) {
 
     if (existing) {
       return NextResponse.json(
-        { success: false, error: { message: 'A consultation has already been sent for this request' } },
+        {
+          success: false,
+          error: { message: 'A consultation has already been sent for this request' },
+        },
         { status: 409 }
       )
     }
@@ -176,7 +193,10 @@ export async function POST(request: Request) {
     })
   } catch (error: unknown) {
     logger.error('Attorney quote POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Server error' } },
+      { status: 500 }
+    )
   }
 }
 
@@ -198,11 +218,14 @@ export async function PUT(request: Request) {
     const { data: provider } = await supabase
       .from('attorneys')
       .select('id')
-      .eq('user_id', user!.id)
+      .eq('user_id', user?.id ?? '')
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'Attorney profile not found' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Attorney profile not found' } },
+        { status: 404 }
+      )
     }
 
     const body = await request.json()
@@ -237,7 +260,10 @@ export async function PUT(request: Request) {
       .single()
 
     if (!existingQuote) {
-      return NextResponse.json({ success: false, error: { message: 'Consultation not found' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Consultation not found' } },
+        { status: 404 }
+      )
     }
     if (existingQuote.status !== 'pending') {
       return NextResponse.json(
@@ -270,6 +296,9 @@ export async function PUT(request: Request) {
     return NextResponse.json({ success: true, quote: quote })
   } catch (error: unknown) {
     logger.error('Attorney quote PUT error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Server error' } },
+      { status: 500 }
+    )
   }
 }

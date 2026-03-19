@@ -22,19 +22,19 @@ import { useAdminFetch, adminMutate } from '@/hooks/admin/useAdminFetch'
 
 interface EstimationLead {
   id: string
-  lastName: string | null
-  telephone: string
+  name: string | null
+  phone: string
   email: string | null
-  practice_area: string
+  specialty: string
   city: string
   state: string
-  description_projet: string | null
+  project_description: string | null
   estimation_min: number | null
   estimation_max: number | null
   source: 'chat' | 'callback'
   conversation_history: Array<{ role: string; content: string }> | null
   page_url: string | null
-  artisan_public_id: string | null // DB field: artisan_public_id (legacy name for attorney_public_id)
+  attorney_public_id: string | null
   created_at: string
 }
 
@@ -131,19 +131,31 @@ export default function AdminEstimationLeadsPage() {
 
   const handleExportCSV = () => {
     if (!leads.length) return
-    const headers = ['Date', 'Source', 'Name', 'Phone', 'Email', 'Specialty', 'City', 'State', 'Attorney ID']
-    const rows = leads.map(l => [
+    const headers = [
+      'Date',
+      'Source',
+      'Name',
+      'Phone',
+      'Email',
+      'Specialty',
+      'City',
+      'State',
+      'Attorney ID',
+    ]
+    const rows = leads.map((l) => [
       formatDate(l.created_at),
       l.source,
-      l.lastName || '',
-      l.telephone,
+      l.name || '',
+      l.phone,
       l.email || '',
-      l.practice_area,
+      l.specialty,
       l.city,
       l.state,
-      l.artisan_public_id || '', // DB field: artisan_public_id (legacy name for attorney_public_id)
+      l.attorney_public_id || '',
     ])
-    const csv = [headers, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n')
+    const csv = [headers, ...rows]
+      .map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
+      .join('\n')
     const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -156,11 +168,11 @@ export default function AdminEstimationLeadsPage() {
   // --- Render --------------------------------------------------------------
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto">
+    <div className="mx-auto max-w-7xl p-4 md:p-8">
       {/* Toast */}
       {toast && (
         <div
-          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg text-white text-sm font-medium ${
+          className={`fixed right-4 top-4 z-50 rounded-lg px-4 py-3 text-sm font-medium text-white shadow-lg ${
             toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'
           }`}
           onClick={() => setToast(null)}
@@ -170,63 +182,66 @@ export default function AdminEstimationLeadsPage() {
       )}
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">AI Estimation Leads</h1>
-          <p className="text-sm text-gray-500 mt-1">{stats.total} total</p>
+          <p className="mt-1 text-sm text-gray-500">{stats.total} total</p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={handleExportCSV}
             disabled={!leads.length}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
           >
-            <Download className="w-4 h-4" />
+            <Download className="h-4 w-4" />
             Export CSV
           </button>
           <button
             onClick={() => mutate()}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className="h-4 w-4" />
             Refresh
           </button>
         </div>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+      <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
           <p className="text-sm text-gray-500">Total leads</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{stats.total}</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">{stats.total}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
           <p className="text-sm text-gray-500">Today</p>
-          <p className="text-2xl font-bold text-blue-600 mt-1">{stats.today}</p>
+          <p className="mt-1 text-2xl font-bold text-blue-600">{stats.today}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
           <div className="flex items-center gap-1.5 text-sm text-gray-500">
-            <MessageSquare className="w-3.5 h-3.5" /> Via chat
+            <MessageSquare className="h-3.5 w-3.5" /> Via chat
           </div>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{stats.chat}</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">{stats.chat}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
           <div className="flex items-center gap-1.5 text-sm text-gray-500">
-            <Phone className="w-3.5 h-3.5" /> Callback
+            <Phone className="h-3.5 w-3.5" /> Callback
           </div>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{stats.callback}</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">{stats.callback}</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 mb-6">
-        <div className="flex flex-col sm:flex-row gap-3">
+      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-4">
+        <div className="flex flex-col gap-3 sm:flex-row">
           {/* Source filter */}
-          <div className="flex rounded-lg border border-gray-200 overflow-hidden">
+          <div className="flex overflow-hidden rounded-lg border border-gray-200">
             {(['all', 'chat', 'callback'] as const).map((s) => (
               <button
                 key={s}
-                onClick={() => { setSourceFilter(s); setPage(1) }}
+                onClick={() => {
+                  setSourceFilter(s)
+                  setPage(1)
+                }}
                 className={`px-3 py-2 text-sm font-medium transition-colors ${
                   sourceFilter === s
                     ? 'bg-[#E07040] text-white'
@@ -241,25 +256,29 @@ export default function AdminEstimationLeadsPage() {
           {/* Search */}
           <form onSubmit={handleSearch} className="flex flex-1 gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder="Search by name, phone, email, city..."
-                className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#E07040]/20 focus:border-[#E07040]"
+                className="w-full rounded-lg border border-gray-200 py-2 pl-9 pr-3 text-sm focus:border-[#E07040] focus:outline-none focus:ring-2 focus:ring-[#E07040]/20"
               />
             </div>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#E07040] text-white text-sm font-medium rounded-lg hover:bg-[#c9603a]"
+              className="rounded-lg bg-[#E07040] px-4 py-2 text-sm font-medium text-white hover:bg-[#c9603a]"
             >
               Filter
             </button>
             {search && (
               <button
                 type="button"
-                onClick={() => { setSearch(''); setSearchInput(''); setPage(1) }}
+                onClick={() => {
+                  setSearch('')
+                  setSearchInput('')
+                  setPage(1)
+                }}
                 className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700"
               >
                 Clear
@@ -271,77 +290,80 @@ export default function AdminEstimationLeadsPage() {
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-          <p className="text-red-700 text-sm">{error.message}</p>
+        <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
+          <p className="text-sm text-red-700">{error.message}</p>
         </div>
       )}
 
       {/* Table */}
       {isLoading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="w-8 h-8 animate-spin text-[#E07040]" />
+          <Loader2 className="h-8 w-8 animate-spin text-[#E07040]" />
         </div>
       ) : leads.length === 0 ? (
-        <div className="text-center py-16 text-gray-500">
-          <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+        <div className="py-16 text-center text-gray-500">
+          <MessageSquare className="mx-auto mb-3 h-12 w-12 text-gray-300" />
           <p className="font-medium">No leads yet</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Date</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Source</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Contact</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Specialty</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">City</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Attorney</th>
-                  <th className="text-right px-4 py-3 font-semibold text-gray-600">Actions</th>
+                <tr className="border-b border-gray-200 bg-gray-50">
+                  <th className="px-4 py-3 text-left font-semibold text-gray-600">Date</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-600">Source</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-600">Contact</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-600">Specialty</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-600">City</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-600">Attorney</th>
+                  <th className="px-4 py-3 text-right font-semibold text-gray-600">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {leads.map((lead) => (
-                  <tr key={lead.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
+                  <tr
+                    key={lead.id}
+                    className="border-b border-gray-100 transition-colors hover:bg-gray-50"
+                  >
+                    <td className="whitespace-nowrap px-4 py-3 text-gray-500">
                       {formatDate(lead.created_at)}
                     </td>
                     <td className="px-4 py-3">
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
+                        className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
                           lead.source === 'chat'
                             ? 'bg-blue-50 text-blue-700'
                             : 'bg-green-50 text-green-700'
                         }`}
                       >
                         {lead.source === 'chat' ? (
-                          <><MessageSquare className="w-3 h-3" /> Chat</>
+                          <>
+                            <MessageSquare className="h-3 w-3" /> Chat
+                          </>
                         ) : (
-                          <><Phone className="w-3 h-3" /> Callback</>
+                          <>
+                            <Phone className="h-3 w-3" /> Callback
+                          </>
                         )}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       <div className="font-medium text-gray-900">
-                        {lead.lastName || <span className="text-gray-400 italic">Anonymous</span>}
+                        {lead.name || <span className="italic text-gray-400">Anonymous</span>}
                       </div>
-                      <div className="text-gray-500">{formatPhone(lead.telephone)}</div>
-                      {lead.email && (
-                        <div className="text-gray-400 text-xs">{lead.email}</div>
-                      )}
+                      <div className="text-gray-500">{formatPhone(lead.phone)}</div>
+                      {lead.email && <div className="text-xs text-gray-400">{lead.email}</div>}
                     </td>
-                    <td className="px-4 py-3 text-gray-700">{lead.practice_area}</td>
+                    <td className="px-4 py-3 text-gray-700">{lead.specialty}</td>
                     <td className="px-4 py-3">
                       <span className="text-gray-700">{lead.city}</span>
-                      {lead.state && (
-                        <span className="text-gray-400 ml-1">({lead.state})</span>
-                      )}
+                      {lead.state && <span className="ml-1 text-gray-400">({lead.state})</span>}
                     </td>
                     <td className="px-4 py-3">
-                      {lead.artisan_public_id ? (
-                        <span className="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-medium">
-                          {lead.artisan_public_id}
+                      {lead.attorney_public_id ? (
+                        <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">
+                          {lead.attorney_public_id}
                         </span>
                       ) : (
                         <span className="text-gray-300">—</span>
@@ -352,25 +374,25 @@ export default function AdminEstimationLeadsPage() {
                         {lead.conversation_history && lead.conversation_history.length > 0 && (
                           <button
                             onClick={() => setSelectedLead(lead)}
-                            className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
                             title="View conversation"
                           >
-                            <Eye className="w-4 h-4" />
+                            <Eye className="h-4 w-4" />
                           </button>
                         )}
                         <a
-                          href={`tel:${lead.telephone}`}
-                          className="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                          href={`tel:${lead.phone}`}
+                          className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-green-50 hover:text-green-600"
                           title="Call"
                         >
-                          <Phone className="w-4 h-4" />
+                          <Phone className="h-4 w-4" />
                         </a>
                         <button
                           onClick={() => handleDelete(lead.id)}
-                          className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600"
                           title="Delete"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
                     </td>
@@ -382,7 +404,7 @@ export default function AdminEstimationLeadsPage() {
 
           {/* Pagination */}
           {pagination.totalPages > 1 && (
-            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
+            <div className="flex items-center justify-between border-t border-gray-200 px-4 py-3">
               <p className="text-sm text-gray-500">
                 {(pagination.page - 1) * pagination.limit + 1}–
                 {Math.min(pagination.page * pagination.limit, pagination.total)} of{' '}
@@ -392,9 +414,9 @@ export default function AdminEstimationLeadsPage() {
                 <button
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="rounded-lg p-2 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="h-4 w-4" />
                 </button>
                 <span className="px-3 py-1 text-sm font-medium text-gray-700">
                   {page} / {pagination.totalPages}
@@ -402,9 +424,9 @@ export default function AdminEstimationLeadsPage() {
                 <button
                   onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
                   disabled={page === pagination.totalPages}
-                  className="p-2 rounded-lg hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="rounded-lg p-2 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
             </div>
@@ -414,36 +436,40 @@ export default function AdminEstimationLeadsPage() {
 
       {/* Conversation Modal */}
       {selectedLead && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setSelectedLead(null)}>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          onClick={() => setSelectedLead(null)}
+        >
           <div
-            className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[80vh] flex flex-col"
+            className="flex max-h-[80vh] w-full max-w-lg flex-col rounded-2xl bg-white shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+            <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4">
               <div>
                 <h3 className="font-semibold text-gray-900">Conversation</h3>
                 <p className="text-xs text-gray-500">
-                  {selectedLead.lastName || 'Anonymous'} · {selectedLead.practice_area} · {selectedLead.city}
+                  {selectedLead.name || 'Anonymous'} · {selectedLead.specialty} ·{' '}
+                  {selectedLead.city}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedLead(null)}
-                className="p-1.5 hover:bg-gray-100 rounded-lg"
+                className="rounded-lg p-1.5 hover:bg-gray-100"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="h-5 w-5 text-gray-500" />
               </button>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
+            <div className="flex-1 space-y-3 overflow-y-auto px-5 py-4">
               {selectedLead.conversation_history?.map((msg, idx) => (
                 <div
                   key={idx}
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm whitespace-pre-wrap ${
+                    className={`max-w-[80%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm ${
                       msg.role === 'user'
                         ? 'rounded-tr-sm bg-[#E07040] text-white'
                         : 'rounded-tl-sm bg-gray-100 text-gray-800'
@@ -456,18 +482,29 @@ export default function AdminEstimationLeadsPage() {
             </div>
 
             {/* Modal Footer */}
-            <div className="px-5 py-3 border-t border-gray-200 flex items-center justify-between">
+            <div className="flex items-center justify-between border-t border-gray-200 px-5 py-3">
               <p className="text-xs text-gray-400">
                 {formatDate(selectedLead.created_at)}
                 {selectedLead.page_url && (
-                  <> · <a href={selectedLead.page_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{selectedLead.page_url}</a></>
+                  <>
+                    {' '}
+                    ·{' '}
+                    <a
+                      href={selectedLead.page_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
+                      {selectedLead.page_url}
+                    </a>
+                  </>
                 )}
               </p>
               <a
-                href={`tel:${selectedLead.telephone}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700"
+                href={`tel:${selectedLead.phone}`}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700"
               >
-                <Phone className="w-3.5 h-3.5" />
+                <Phone className="h-3.5 w-3.5" />
                 Call
               </a>
             </div>

@@ -25,7 +25,6 @@ function htmlEscape(str: string): string {
 
 const getResend = () => getResendClient()
 
-
 const consultationRequestSchema = z.object({
   service: z.string().min(1, 'Please select a service'),
   urgency: z.string().min(1, 'Please select the urgency'),
@@ -43,8 +42,8 @@ const specialtyNames: Record<string, string> = {
   'criminal-defense': 'Criminal Defense',
   'family-law': 'Family Law',
   'estate-planning': 'Estate Planning',
-  'bankruptcy': 'Bankruptcy',
-  'immigration': 'Immigration',
+  bankruptcy: 'Bankruptcy',
+  immigration: 'Immigration',
   'real-estate': 'Real Estate',
   'business-law': 'Business Law',
   'employment-law': 'Employment Law',
@@ -63,105 +62,110 @@ const urgencyLabels: Record<string, string> = {
   flexible: 'Flexible',
 }
 
-
 export const POST = createApiHandler(async ({ request }) => {
-    const supabase = createAdminClient()
-    const body = await request.json()
+  const supabase = createAdminClient()
+  const body = await request.json()
 
-    // Resolve authenticated user if present (null for anonymous submissions)
-    let clientId: string | null = null
-    try {
-      const serverSupabase = await createServerClient()
-      const { data: { user } } = await serverSupabase.auth.getUser()
-      clientId = user?.id ?? null
-    } catch {
-      // Anonymous submission — no session cookie
-    }
+  // Resolve authenticated user if present (null for anonymous submissions)
+  let clientId: string | null = null
+  try {
+    const serverSupabase = await createServerClient()
+    const {
+      data: { user },
+    } = await serverSupabase.auth.getUser()
+    clientId = user?.id ?? null
+  } catch {
+    // Anonymous submission — no session cookie
+  }
 
-    // Validate input
-    const validation = consultationRequestSchema.safeParse(body)
-    if (!validation.success) {
-      return NextResponse.json(
-        { error: 'Invalid data', details: validation.error.flatten() },
-        { status: 400 }
-      )
-    }
+  // Validate input
+  const validation = consultationRequestSchema.safeParse(body)
+  if (!validation.success) {
+    return NextResponse.json(
+      { error: 'Invalid data', details: validation.error.flatten() },
+      { status: 400 }
+    )
+  }
 
-    const data = validation.data
+  const data = validation.data
 
-    // Map urgency to consultation_requests CHECK values
-    const urgencyDbMap: Record<string, string> = {
+  // Map urgency to consultation_requests CHECK values
+  const urgencyDbMap: Record<string, string> = {
+    urgent: 'urgent',
+    week: 'normal',
+    month: 'normal',
+    flexible: 'normal',
+  }
+
+  // Store in consultation requests table
+
+  const { data: lead, error: dbError } = await supabase
+    .from('quote_requests')
+    .insert({
+      client_id: clientId,
+      client_name: data.name,
+      client_email: data.email,
+      client_phone: data.phone,
+      service_name: specialtyNames[data.service] || data.service,
+      description: data.description || 'Consultation request',
+      budget: data.budget || null,
+      urgency: urgencyDbMap[data.urgency] || 'normal',
+      city: data.city || null,
+      postal_code: data.postalCode || '',
+      status: 'pending',
+    })
+    .select()
+    .single()
+
+  if (dbError) {
+    logger.error('Database error', dbError)
+    // Continue even if DB fails - we'll still send emails
+  }
+
+  // Log 'created' event — triggers "Request received" notification to client
+  if (lead) {
+    logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch((err) =>
+      logger.error('Failed to log lead created event', err)
+    )
+  }
+
+  // Dispatch to eligible attorneys
+  let assignedProviders: string[] = []
+  if (lead) {
+    const urgencyMap: Record<string, string> = {
       urgent: 'urgent',
       week: 'normal',
       month: 'normal',
-      flexible: 'normal',
+      flexible: 'flexible',
     }
-
-    // Store in consultation requests table
-    // Table 'devis_requests' = consultation requests (legacy French name)
-    const { data: lead, error: dbError } = await supabase
-      .from('devis_requests')
-      .insert({
-        client_id: clientId,
-        client_name: data.name,
-        client_email: data.email,
-        client_phone: data.phone,
-        service_name: specialtyNames[data.service] || data.service,
-        description: data.description || 'Consultation request',
-        budget: data.budget || null,
-        urgency: urgencyDbMap[data.urgency] || 'normal',
-        city: data.city || null,
-        postal_code: data.postalCode || '',
-        status: 'pending',
-      })
-      .select()
-      .single()
-
-    if (dbError) {
-      logger.error('Database error', dbError)
-      // Continue even if DB fails - we'll still send emails
+    assignedProviders = await dispatchLead(lead.id, {
+      specialtyName: specialtyNames[data.service] || data.service,
+      city: data.city,
+      postalCode: data.postalCode,
+      urgency: urgencyMap[data.urgency] || 'normal',
+      sourceTable: 'quote_requests',
+    }).catch((err) => {
+      logger.error('Failed to dispatch lead', err)
+      return []
+    })
+    if (assignedProviders.length > 0) {
+      logLeadEvent(lead.id, 'dispatched', { metadata: { count: assignedProviders.length } }).catch(
+        (err) => logger.error('Failed to log lead dispatched event', err)
+      )
     }
+  }
 
-    // Log 'created' event — triggers "Request received" notification to client
-    if (lead) {
-      logLeadEvent(lead.id, 'created', { actorId: clientId ?? undefined }).catch((err) => logger.error('Failed to log lead created event', err))
-    }
+  // Send both confirmation emails in parallel (use allSettled so one failure doesn't block the other)
+  const resend = getResend()
+  const fromEmail = process.env.FROM_EMAIL || 'noreply@lawtendr.com'
 
-    // Dispatch to eligible attorneys
-    let assignedProviders: string[] = []
-    if (lead) {
-      const urgencyMap: Record<string, string> = {
-        urgent: 'urgent',
-        week: 'normal',
-        month: 'normal',
-        flexible: 'flexible',
-      }
-      assignedProviders = await dispatchLead(lead.id, {
-        specialtyName: specialtyNames[data.service] || data.service,
-        city: data.city,
-        postalCode: data.postalCode,
-        urgency: urgencyMap[data.urgency] || 'normal',
-        sourceTable: 'devis_requests', // legacy table name 'devis_requests' = consultation requests
-      }).catch((err) => {
-        logger.error('Failed to dispatch lead', err)
-        return []
-      })
-      if (assignedProviders.length > 0) {
-        logLeadEvent(lead.id, 'dispatched', { metadata: { count: assignedProviders.length } }).catch((err) => logger.error('Failed to log lead dispatched event', err))
-      }
-    }
-
-    // Send both confirmation emails in parallel (use allSettled so one failure doesn't block the other)
-    const resend = getResend()
-    const fromEmail = process.env.FROM_EMAIL || 'noreply@lawtendr.com'
-
-    const emailResults = await Promise.allSettled([
-      // Confirmation to client
-      resend.emails.send({
-        from: fromEmail,
-        to: data.email,
-        subject: 'Your consultation request - US Attorneys',
-        html: `
+  const emailResults = await Promise.allSettled([
+    // Confirmation to client
+    resend.emails.send({
+      from: fromEmail,
+      to: data.email,
+      subject: 'Your consultation request - US Attorneys',
+      html: `
           <h2>Hello ${htmlEscape(data.name)},</h2>
           <p>We have received your consultation request. Here is the summary:</p>
           <ul>
@@ -177,13 +181,13 @@ export const POST = createApiHandler(async ({ request }) => {
             <a href="https://lawtendr.com">lawtendr.com</a>
           </p>
         `,
-      }),
-      // Notification to admin
-      resend.emails.send({
-        from: fromEmail,
-        to: 'contact@lawtendr.com',
-        subject: `[New Consultation] ${specialtyNames[data.service] || data.service} - ${data.city || 'USA'}`,
-        html: `
+    }),
+    // Notification to admin
+    resend.emails.send({
+      from: fromEmail,
+      to: 'contact@lawtendr.com',
+      subject: `[New Consultation] ${specialtyNames[data.service] || data.service} - ${data.city || 'USA'}`,
+      html: `
           <h2>New consultation request</h2>
           <h3>Client</h3>
           <ul>
@@ -202,22 +206,22 @@ export const POST = createApiHandler(async ({ request }) => {
           </ul>
           ${lead ? `<p>ID: ${lead.id}</p>` : ''}
         `,
-      }),
-    ])
+    }),
+  ])
 
-    // Log any email failures (request is already saved in DB, so we still return success)
-    const emailLabels = ['client confirmation', 'admin notification']
-    emailResults.forEach((result, i) => {
-      if (result.status === 'rejected') {
-        logger.error(`Failed to send ${emailLabels[i]} email`, result.reason)
-      }
-    })
+  // Log any email failures (request is already saved in DB, so we still return success)
+  const emailLabels = ['client confirmation', 'admin notification']
+  emailResults.forEach((result, i) => {
+    if (result.status === 'rejected') {
+      logger.error(`Failed to send ${emailLabels[i]} email`, result.reason)
+    }
+  })
 
-    return NextResponse.json({
-      success: true,
-      message: 'Consultation request sent successfully',
-      id: lead?.id,
-      attorneys_notified: assignedProviders.length,
-      ...(assignedProviders.length === 0 && { attorneys_found: false }),
-    })
+  return NextResponse.json({
+    success: true,
+    message: 'Consultation request sent successfully',
+    id: lead?.id,
+    attorneys_notified: assignedProviders.length,
+    ...(assignedProviders.length === 0 && { attorneys_found: false }),
+  })
 }, {})

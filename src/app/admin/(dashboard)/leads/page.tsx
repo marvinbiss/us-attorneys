@@ -26,10 +26,9 @@ interface AttorneyRow {
   stable_id: string | null
   name: string
   slug: string
-  specialty: string
+  specialty: { name: string; slug: string } | null
   address_city: string | null
   is_verified: boolean
-  last_lead_assigned_at: string | null
 }
 
 interface LeadRow {
@@ -86,9 +85,12 @@ export default function AdminLeadsPage() {
   if (searchQuery) leadsParams.set('search', searchQuery)
   if (urgencyFilter) leadsParams.set('urgency', urgencyFilter)
 
-  const { data: leadsData, isLoading, error: leadsError, mutate: mutateLeads } = useAdminFetch<LeadsResponse>(
-    `/api/admin/leads?${leadsParams}`
-  )
+  const {
+    data: leadsData,
+    isLoading,
+    error: leadsError,
+    mutate: mutateLeads,
+  } = useAdminFetch<LeadsResponse>(`/api/admin/leads?${leadsParams}`)
 
   // Build attorneys URL
   const attorneysParams = new URLSearchParams()
@@ -135,98 +137,104 @@ export default function AdminLeadsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+        <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Leads — Overview</h1>
-            <p className="text-gray-500 mt-1">Lead management and dispatch</p>
+            <p className="mt-1 text-gray-500">Lead management and dispatch</p>
           </div>
           <button
             onClick={revalidateAll}
-            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg hover:bg-white transition-colors"
+            className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-600 transition-colors hover:bg-white hover:text-gray-900"
           >
-            <RefreshCw className="w-4 h-4" />
+            <RefreshCw className="h-4 w-4" />
             Refresh
           </button>
         </div>
 
         {/* KPI cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             title="Total leads"
             value={stats.totalLeads}
-            icon={<Inbox className="w-5 h-5" />}
+            icon={<Inbox className="h-5 w-5" />}
             color="blue"
           />
           <StatCard
             title="Pending"
             value={stats.pendingAssignments}
-            icon={<Clock className="w-5 h-5" />}
+            icon={<Clock className="h-5 w-5" />}
             color="yellow"
           />
           <StatCard
             title="Dispatched today"
             value={stats.dispatchedToday}
-            icon={<Send className="w-5 h-5" />}
+            icon={<Send className="h-5 w-5" />}
             color="green"
           />
           <StatCard
             title="Active attorneys"
             value={attorneys.length}
-            icon={<Users className="w-5 h-5" />}
+            icon={<Users className="h-5 w-5" />}
             color="blue"
           />
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-          <div className="flex flex-wrap gap-4 items-end">
+        <div className="mb-6 rounded-xl border border-gray-200 bg-white p-5">
+          <div className="flex flex-wrap items-end gap-4">
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">City</label>
+              <label className="mb-1 block text-xs font-medium uppercase text-gray-500">City</label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-40"
+                  className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-500 sm:w-40"
                   placeholder="New York"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Specialty</label>
+              <label className="mb-1 block text-xs font-medium uppercase text-gray-500">
+                Specialty
+              </label>
               <div className="relative">
-                <Wrench className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Wrench className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   value={service}
                   onChange={(e) => setService(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-40"
+                  className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-500 sm:w-40"
                   placeholder="Attorney"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Search</label>
+              <label className="mb-1 block text-xs font-medium uppercase text-gray-500">
+                Search
+              </label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-48"
+                  className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-500 sm:w-48"
                   placeholder="Name, service..."
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-500 uppercase mb-1">Urgency</label>
+              <label className="mb-1 block text-xs font-medium uppercase text-gray-500">
+                Urgency
+              </label>
               <select
                 value={urgencyFilter}
                 onChange={(e) => setUrgencyFilter(e.target.value)}
                 aria-label="Filter by urgency"
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">All</option>
                 <option value="normal">Normal</option>
@@ -235,71 +243,116 @@ export default function AdminLeadsPage() {
               </select>
             </div>
             <button
-              onClick={() => { revalidateAll(); setPage(1) }}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+              onClick={() => {
+                revalidateAll()
+                setPage(1)
+              }}
+              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
             >
-              <Search className="w-4 h-4" />
+              <Search className="h-4 w-4" />
               Filter
             </button>
           </div>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6 flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-red-500" />
-            <p className="text-red-700 text-sm">{error.message}</p>
+          <div className="mb-6 flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 p-4">
+            <AlertCircle className="h-5 w-5 text-red-500" />
+            <p className="text-sm text-red-700">{error.message}</p>
           </div>
         )}
 
         {/* Tab toggle */}
-        <div className="flex gap-2 mb-6">
+        <div className="mb-6 flex gap-2">
           <button
             onClick={() => setTab('leads')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              tab === 'leads' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              tab === 'leads'
+                ? 'bg-blue-600 text-white'
+                : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
             }`}
           >
-            <FileText className="w-4 h-4 inline mr-1.5" />
+            <FileText className="mr-1.5 inline h-4 w-4" />
             Leads
           </button>
           <button
             onClick={() => setTab('attorneys')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              tab === 'attorneys' ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              tab === 'attorneys'
+                ? 'bg-blue-600 text-white'
+                : 'border border-gray-200 bg-white text-gray-600 hover:bg-gray-50'
             }`}
           >
-            <Users className="w-4 h-4 inline mr-1.5" />
+            <Users className="mr-1.5 inline h-4 w-4" />
             Attorneys ({attorneys.length})
           </button>
         </div>
 
         {isLoading ? (
           <div className="flex justify-center py-16">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
           </div>
         ) : (
           <>
             {/* Leads table */}
             {tab === 'leads' && (
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[400px] sm:min-w-[800px] text-sm" aria-label="Leads list">
+                  <table
+                    className="w-full min-w-[400px] text-sm sm:min-w-[800px]"
+                    aria-label="Leads list"
+                  >
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Service</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Location</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Client</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Urgency</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Assignments</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Date</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Actions</th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Service
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Location
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Client
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Urgency
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Assignments
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Date
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {leads.length === 0 ? (
                         <tr>
                           <td colSpan={7} className="px-4 py-12 text-center text-gray-500">
-                            <FileText className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                            <FileText className="mx-auto mb-3 h-10 w-10 text-gray-300" />
                             No leads found
                           </td>
                         </tr>
@@ -309,21 +362,27 @@ export default function AdminLeadsPage() {
                           const leadAssignments = getLeadAssignments(lead.id)
 
                           return (
-                            <tr key={lead.id} className="hover:bg-gray-50/50 transition-colors">
+                            <tr key={lead.id} className="transition-colors hover:bg-gray-50/50">
                               <td className="px-4 py-3">
-                                <span className="font-medium text-gray-900">{lead.service_name}</span>
+                                <span className="font-medium text-gray-900">
+                                  {lead.service_name}
+                                </span>
                               </td>
                               <td className="px-4 py-3 text-gray-600">
                                 {lead.city ? (
                                   <span className="flex items-center gap-1">
-                                    <MapPin className="w-3.5 h-3.5 text-gray-400" />
+                                    <MapPin className="h-3.5 w-3.5 text-gray-400" />
                                     {lead.city} {lead.postal_code && `(${lead.postal_code})`}
                                   </span>
-                                ) : '—'}
+                                ) : (
+                                  '—'
+                                )}
                               </td>
                               <td className="px-4 py-3 text-gray-600">{lead.client_name}</td>
                               <td className="px-4 py-3">
-                                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${urg.cls}`}>
+                                <span
+                                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${urg.cls}`}
+                                >
                                   {urg.label}
                                 </span>
                               </td>
@@ -333,8 +392,13 @@ export default function AdminLeadsPage() {
                                     {leadAssignments.map((a) => {
                                       const st = STATUS_META[a.status] || STATUS_META.pending
                                       return (
-                                        <span key={a.id} className={`px-1.5 py-0.5 rounded text-xs font-medium ${st.cls}`}>
-                                          {attorneyNames[a.attorney_id]?.split(' ')[0] || a.attorney_id.slice(0, 6)}: {st.label}
+                                        <span
+                                          key={a.id}
+                                          className={`rounded px-1.5 py-0.5 text-xs font-medium ${st.cls}`}
+                                        >
+                                          {attorneyNames[a.attorney_id]?.split(' ')[0] ||
+                                            a.attorney_id.slice(0, 6)}
+                                          : {st.label}
                                         </span>
                                       )
                                     })}
@@ -343,19 +407,22 @@ export default function AdminLeadsPage() {
                                   <span className="text-xs text-gray-400">Unassigned</span>
                                 )}
                               </td>
-                              <td className="px-4 py-3 text-gray-500 text-xs whitespace-nowrap">
-                                {new Date(lead.created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
+                              <td className="whitespace-nowrap px-4 py-3 text-xs text-gray-500">
+                                {new Date(lead.created_at).toLocaleDateString('en-US', {
+                                  day: 'numeric',
+                                  month: 'short',
+                                })}
                               </td>
                               <td className="px-4 py-3">
                                 <button
                                   onClick={() => handleDispatch(lead.id)}
                                   disabled={dispatchLoading && dispatchLeadId === lead.id}
-                                  className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 disabled:opacity-50 transition-colors"
+                                  className="flex items-center gap-1 rounded-lg bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-100 disabled:opacity-50"
                                 >
                                   {dispatchLoading && dispatchLeadId === lead.id ? (
-                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                    <Loader2 className="h-3 w-3 animate-spin" />
                                   ) : (
-                                    <ArrowRight className="w-3 h-3" />
+                                    <ArrowRight className="h-3 w-3" />
                                   )}
                                   Dispatcher
                                 </button>
@@ -374,43 +441,60 @@ export default function AdminLeadsPage() {
 
             {/* Attorneys table */}
             {tab === 'attorneys' && (
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[400px] sm:min-w-[600px] text-sm" aria-label="Attorneys list for dispatch">
+                  <table
+                    className="w-full min-w-[400px] text-sm sm:min-w-[600px]"
+                    aria-label="Attorneys list for dispatch"
+                  >
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/50">
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Name</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Specialty</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">City</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Verified</th>
-                        <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">Last lead</th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Name
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Specialty
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          City
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                        >
+                          Verified
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {attorneys.length === 0 ? (
                         <tr>
-                          <td colSpan={5} className="px-4 py-12 text-center text-gray-500">
-                            <Users className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                          <td colSpan={4} className="px-4 py-12 text-center text-gray-500">
+                            <Users className="mx-auto mb-3 h-10 w-10 text-gray-300" />
                             No attorneys found
                           </td>
                         </tr>
                       ) : (
                         attorneys.map((a) => (
-                          <tr key={a.id} className="hover:bg-gray-50/50 transition-colors">
+                          <tr key={a.id} className="transition-colors hover:bg-gray-50/50">
                             <td className="px-4 py-3 font-medium text-gray-900">{a.name}</td>
-                            <td className="px-4 py-3 text-gray-600">{a.specialty}</td>
+                            <td className="px-4 py-3 text-gray-600">{a.specialty?.name || '—'}</td>
                             <td className="px-4 py-3 text-gray-600">{a.address_city || '—'}</td>
                             <td className="px-4 py-3">
                               {a.is_verified ? (
-                                <CheckCircle className="w-4 h-4 text-green-500" />
+                                <CheckCircle className="h-4 w-4 text-green-500" />
                               ) : (
-                                <span className="text-gray-400 text-xs">No</span>
+                                <span className="text-xs text-gray-400">No</span>
                               )}
-                            </td>
-                            <td className="px-4 py-3 text-gray-500 text-xs">
-                              {a.last_lead_assigned_at
-                                ? new Date(a.last_lead_assigned_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })
-                                : 'Never'}
                             </td>
                           </tr>
                         ))

@@ -36,226 +36,243 @@ const deleteReviewSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export const GET = createApiHandler(async ({ user }) => {
-  const supabase = await createClient()
+export const GET = createApiHandler(
+  async ({ user }) => {
+    const supabase = await createClient()
 
-  // Fetch published reviews by this client via bookings (reviews has no direct client FK)
-  // Step 1: get booking IDs for this client
-  const { data: clientBookings } = await withTimeout(
-    supabase
-      .from('bookings')
-      .select('id')
-      .eq('client_id', user!.id)
-  )
+    // Fetch published reviews by this client via bookings (reviews has no direct client FK)
+    // Step 1: get booking IDs for this client
+    const { data: clientBookings } = await withTimeout(
+      supabase
+        .from('bookings')
+        .select('id')
+        .eq('client_id', user?.id ?? '')
+    )
 
-  const bookingIds = clientBookings?.map((b: { id: string }) => b.id) || []
+    const bookingIds = clientBookings?.map((b: { id: string }) => b.id) || []
 
-  // Step 2: fetch reviews for those bookings
-  // Note: 'quotes' table does not exist yet (TODO: re-enable join when quotes table is created)
-  // Note: profiles does not have company_name or avatar_url
-  const { data: publishedReviews, error: reviewsError } = await withTimeout(
-    supabase
-      .from('reviews')
-      .select(`
+    // Step 2: fetch reviews for those bookings
+    // Note: 'quotes' table does not exist yet (TODO: re-enable join when quotes table is created)
+    // Note: profiles does not have company_name or avatar_url
+    const { data: publishedReviews, error: reviewsError } = await withTimeout(
+      supabase
+        .from('reviews')
+        .select(
+          `
         *,
         attorney:attorneys!attorney_id(id, name),
         booking:bookings!booking_id(id)
-      `)
-      .in('booking_id', bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000'])
-      .order('created_at', { ascending: false })
-  )
+      `
+        )
+        .in(
+          'booking_id',
+          bookingIds.length > 0 ? bookingIds : ['00000000-0000-0000-0000-000000000000']
+        )
+        .order('created_at', { ascending: false })
+    )
 
-  if (reviewsError) {
-    logger.error('Error fetching reviews:', reviewsError)
-    return apiError('DATABASE_ERROR', 'Error retrieving reviews', 500)
-  }
+    if (reviewsError) {
+      logger.error('Error fetching reviews:', reviewsError)
+      return apiError('DATABASE_ERROR', 'Error retrieving reviews', 500)
+    }
 
-  // TODO: quotes table does not exist yet -- pending reviews from completed quotes disabled
-  const pendingReviews: unknown[] = []
+    // TODO: quotes table does not exist yet -- pending reviews from completed quotes disabled
+    const pendingReviews: unknown[] = []
 
-  // Format published reviews
-  const formattedPublishedReviews = publishedReviews?.map(r => ({
-    id: r.id,
-    attorney: r.attorney?.name || 'Attorney',
-    attorney_id: r.attorney_id,
-    service: null, // bookings table service_name may not exist in all environments
-    date: r.created_at,
-    rating: r.rating,
-    comment: r.comment,
-    response: r.artisan_response,
-  })) || []
+    // Format published reviews
+    const formattedPublishedReviews =
+      publishedReviews?.map((r) => ({
+        id: r.id,
+        attorney: r.attorney?.name || 'Attorney',
+        attorney_id: r.attorney_id,
+        service: null, // bookings table service_name may not exist in all environments
+        date: r.created_at,
+        rating: r.rating,
+        comment: r.comment,
+        response: r.attorney_response,
+      })) || []
 
-  return apiSuccess({
-    publishedReviews: formattedPublishedReviews,
-    pendingReviews: pendingReviews,
-  })
-}, { requireAuth: true })
-
-export const POST = createApiHandler(async ({ request, user }) => {
-  const supabase = await createClient()
-
-  const body = await request.json()
-  const result = createReviewSchema.safeParse(body)
-  if (!result.success) {
-    return apiError('VALIDATION_ERROR', 'Validation error', 400)
-  }
-  const { attorney_id, booking_id, rating, comment } = result.data
-
-  // Fetch client profile to get name and email for the review record
-  const { data: clientProfile } = await supabase
-    .from('profiles')
-    .select('full_name, email')
-    .eq('id', user!.id)
-    .single()
-
-  // Insert review (reviews has client_name, client_email — no user_id FK)
-  const { data: review, error: insertError } = await supabase
-    .from('reviews')
-    .insert({
-      attorney_id,
-      booking_id: booking_id || null,
-      client_name: clientProfile?.full_name || user!.email || 'Client',
-      client_email: clientProfile?.email || user!.email || '',
-      rating,
-      comment,
+    return apiSuccess({
+      publishedReviews: formattedPublishedReviews,
+      pendingReviews: pendingReviews,
     })
-    .select()
-    .single()
+  },
+  { requireAuth: true }
+)
 
-  if (insertError) {
-    logger.error('Error inserting review:', insertError)
-    return apiError('DATABASE_ERROR', 'Error publishing review', 500)
-  }
+export const POST = createApiHandler(
+  async ({ request, user }) => {
+    const supabase = await createClient()
 
-  // On-demand revalidation of affected pages (non-blocking)
-  try {
-    const { data: attorneyData } = await supabase
-      .from('attorneys')
-      .select('address_city, slug, stable_id, primary_specialty:specialties!attorneys_primary_specialty_id_fkey(slug)')
-      .eq('user_id', attorney_id)
+    const body = await request.json()
+    const result = createReviewSchema.safeParse(body)
+    if (!result.success) {
+      return apiError('VALIDATION_ERROR', 'Validation error', 400)
+    }
+    const { attorney_id, booking_id, rating, comment } = result.data
+
+    // Fetch client profile to get name and email for the review record
+    const { data: clientProfile } = await supabase
+      .from('profiles')
+      .select('full_name, email')
+      .eq('id', user?.id ?? '')
       .single()
 
-    if (attorneyData) {
-      const primarySpec = attorneyData.primary_specialty as unknown as { slug: string } | null
-      const specialtySlug = primarySpec?.slug || 'attorney'
-      const locationSlug = slugify(attorneyData.address_city || 'united-states')
-      const publicId = attorneyData.slug || attorneyData.stable_id
-
-      if (publicId) {
-        revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, 'page')
-      }
-      revalidatePath(`/reviews/${specialtySlug}/${locationSlug}`, 'page')
-      revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}`, 'page')
-
-      logger.info('Revalidated paths after client review submission', {
-        attorneyId: attorney_id,
-        reviewId: review.id,
+    // Insert review (reviews has client_name, client_email — no user_id FK)
+    const { data: review, error: insertError } = await supabase
+      .from('reviews')
+      .insert({
+        attorney_id,
+        booking_id: booking_id || null,
+        client_name: clientProfile?.full_name || user?.email || 'Client',
+        client_email: clientProfile?.email || user?.email || '',
+        rating,
+        comment,
       })
+      .select()
+      .single()
+
+    if (insertError) {
+      logger.error('Error inserting review:', insertError)
+      return apiError('DATABASE_ERROR', 'Error publishing review', 500)
     }
-  } catch (revalError) {
-    logger.error('Revalidation failed after client review:', revalError)
-  }
 
-  return apiSuccess({
-    review,
-    message: 'Review published successfully',
-  })
-}, { requireAuth: true })
+    // On-demand revalidation of affected pages (non-blocking)
+    try {
+      const { data: attorneyData } = await supabase
+        .from('attorneys')
+        .select(
+          'address_city, slug, stable_id, primary_specialty:specialties!attorneys_primary_specialty_id_fkey(slug)'
+        )
+        .eq('user_id', attorney_id)
+        .single()
 
-export const PUT = createApiHandler(async ({ request, user }) => {
-  const supabase = await createClient()
+      if (attorneyData) {
+        const primarySpec = attorneyData.primary_specialty as unknown as { slug: string } | null
+        const specialtySlug = primarySpec?.slug || 'attorney'
+        const locationSlug = slugify(attorneyData.address_city || 'united-states')
+        const publicId = attorneyData.slug || attorneyData.stable_id
 
-  const body = await request.json()
-  const result = updateReviewSchema.safeParse(body)
-  if (!result.success) {
-    return apiError('VALIDATION_ERROR', 'Validation error', 400)
-  }
-  const { review_id, rating, comment } = result.data
+        if (publicId) {
+          revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, 'page')
+        }
+        revalidatePath(`/reviews/${specialtySlug}/${locationSlug}`, 'page')
+        revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}`, 'page')
 
-  // Verify the review belongs to this client via booking ownership
-  const { data: existingReview } = await supabase
-    .from('reviews')
-    .select('booking_id')
-    .eq('id', review_id)
-    .single()
+        logger.info('Revalidated paths after client review submission', {
+          attorneyId: attorney_id,
+          reviewId: review.id,
+        })
+      }
+    } catch (revalError) {
+      logger.error('Revalidation failed after client review:', revalError)
+    }
 
-  if (!existingReview) {
-    return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
-  }
-
-  const { data: ownerBooking } = await supabase
-    .from('bookings')
-    .select('id')
-    .eq('id', existingReview.booking_id)
-    .eq('client_id', user!.id)
-    .single()
-
-  if (!ownerBooking) {
-    return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
-  }
-
-  // Update review
-  const { error: updateError } = await supabase
-    .from('reviews')
-    .update({
-      rating,
-      comment,
+    return apiSuccess({
+      review,
+      message: 'Review published successfully',
     })
-    .eq('id', review_id)
+  },
+  { requireAuth: true }
+)
 
-  if (updateError) {
-    logger.error('Error updating review:', updateError)
-    return apiError('DATABASE_ERROR', 'Error updating the review', 500)
-  }
+export const PUT = createApiHandler(
+  async ({ request, user }) => {
+    const supabase = await createClient()
 
-  return apiSuccess({ message: 'Review updated successfully' })
-}, { requireAuth: true })
+    const body = await request.json()
+    const result = updateReviewSchema.safeParse(body)
+    if (!result.success) {
+      return apiError('VALIDATION_ERROR', 'Validation error', 400)
+    }
+    const { review_id, rating, comment } = result.data
 
-export const DELETE = createApiHandler(async ({ request, user }) => {
-  const supabase = await createClient()
+    // Verify the review belongs to this client via booking ownership
+    const { data: existingReview } = await supabase
+      .from('reviews')
+      .select('booking_id')
+      .eq('id', review_id)
+      .single()
 
-  const { searchParams } = new URL(request.url)
-  const queryParams = {
-    id: searchParams.get('id'),
-  }
-  const result = deleteReviewSchema.safeParse(queryParams)
-  if (!result.success) {
-    return apiError('VALIDATION_ERROR', 'Invalid parameters', 400)
-  }
-  const review_id = result.data.id
+    if (!existingReview) {
+      return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
+    }
 
-  // Verify the review belongs to this client via booking ownership
-  const { data: existingReview } = await supabase
-    .from('reviews')
-    .select('booking_id')
-    .eq('id', review_id)
-    .single()
+    const { data: ownerBooking } = await supabase
+      .from('bookings')
+      .select('id')
+      .eq('id', existingReview.booking_id)
+      .eq('client_id', user?.id ?? '')
+      .single()
 
-  if (!existingReview) {
-    return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
-  }
+    if (!ownerBooking) {
+      return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
+    }
 
-  const { data: ownerBooking } = await supabase
-    .from('bookings')
-    .select('id')
-    .eq('id', existingReview.booking_id)
-    .eq('client_id', user!.id)
-    .single()
+    // Update review
+    const { error: updateError } = await supabase
+      .from('reviews')
+      .update({
+        rating,
+        comment,
+      })
+      .eq('id', review_id)
 
-  if (!ownerBooking) {
-    return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
-  }
+    if (updateError) {
+      logger.error('Error updating review:', updateError)
+      return apiError('DATABASE_ERROR', 'Error updating the review', 500)
+    }
 
-  // Delete review
-  const { error: deleteError } = await supabase
-    .from('reviews')
-    .delete()
-    .eq('id', review_id)
+    return apiSuccess({ message: 'Review updated successfully' })
+  },
+  { requireAuth: true }
+)
 
-  if (deleteError) {
-    logger.error('Error deleting review:', deleteError)
-    return apiError('DATABASE_ERROR', 'Error deleting review', 500)
-  }
+export const DELETE = createApiHandler(
+  async ({ request, user }) => {
+    const supabase = await createClient()
 
-  return apiSuccess({ message: 'Review deleted successfully' })
-}, { requireAuth: true })
+    const { searchParams } = new URL(request.url)
+    const queryParams = {
+      id: searchParams.get('id'),
+    }
+    const result = deleteReviewSchema.safeParse(queryParams)
+    if (!result.success) {
+      return apiError('VALIDATION_ERROR', 'Invalid parameters', 400)
+    }
+    const review_id = result.data.id
+
+    // Verify the review belongs to this client via booking ownership
+    const { data: existingReview } = await supabase
+      .from('reviews')
+      .select('booking_id')
+      .eq('id', review_id)
+      .single()
+
+    if (!existingReview) {
+      return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
+    }
+
+    const { data: ownerBooking } = await supabase
+      .from('bookings')
+      .select('id')
+      .eq('id', existingReview.booking_id)
+      .eq('client_id', user?.id ?? '')
+      .single()
+
+    if (!ownerBooking) {
+      return apiError('AUTHORIZATION_ERROR', 'Review not found or unauthorized', 403)
+    }
+
+    // Delete review
+    const { error: deleteError } = await supabase.from('reviews').delete().eq('id', review_id)
+
+    if (deleteError) {
+      logger.error('Error deleting review:', deleteError)
+      return apiError('DATABASE_ERROR', 'Error deleting review', 500)
+    }
+
+    return apiSuccess({ message: 'Review deleted successfully' })
+  },
+  { requireAuth: true }
+)

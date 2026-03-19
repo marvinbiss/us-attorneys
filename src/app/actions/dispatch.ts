@@ -12,7 +12,7 @@ export interface DispatchOptions {
   urgency?: string
   latitude?: number
   longitude?: number
-  sourceTable?: 'devis_requests' | 'leads' // Table 'devis_requests' = consultation requests (legacy French name)
+  sourceTable?: 'quote_requests' | 'leads'
 }
 
 /**
@@ -30,10 +30,7 @@ export interface DispatchOptions {
  *
  * Returns array of assigned provider IDs (up to max_attorneys_per_lead).
  */
-export async function dispatchLead(
-  leadId: string,
-  opts?: DispatchOptions
-): Promise<string[]> {
+export async function dispatchLead(leadId: string, opts?: DispatchOptions): Promise<string[]> {
   try {
     const supabase = createAdminClient()
 
@@ -45,7 +42,7 @@ export async function dispatchLead(
       p_urgency: opts?.urgency || 'normal',
       p_latitude: opts?.latitude ?? null,
       p_longitude: opts?.longitude ?? null,
-      p_source_table: opts?.sourceTable || 'devis_requests',
+      p_source_table: opts?.sourceTable || 'quote_requests',
     })
 
     if (error) {

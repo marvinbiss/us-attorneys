@@ -1,15 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import {
-  Search,
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  XCircle,
-  User,
-  Briefcase,
-} from 'lucide-react'
+import { Search, Calendar, ChevronLeft, ChevronRight, XCircle, User, Briefcase } from 'lucide-react'
 import { BookingStatusBadge, PaymentStatusBadge } from '@/components/admin/StatusBadge'
 import { ConfirmationModal } from '@/components/admin/ConfirmationModal'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
@@ -19,6 +11,8 @@ interface Booking {
   id: string
   attorney_id: string
   client_id: string
+  client_name: string
+  client_email: string
   service_name: string
   scheduled_at: string
   status: string
@@ -40,7 +34,9 @@ interface BookingsResponse {
 
 export default function AdminReservationsPage() {
   const [search, setSearch] = useState('')
-  const [status, setStatus] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled'>('all')
+  const [status, setStatus] = useState<'all' | 'pending' | 'confirmed' | 'completed' | 'cancelled'>(
+    'all'
+  )
   const [page, setPage] = useState(1)
   const [actionError, setActionError] = useState<string | null>(null)
 
@@ -91,18 +87,18 @@ export default function AdminReservationsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Bookings Management</h1>
-          <p className="text-gray-500 mt-1">{total} total bookings</p>
+          <p className="mt-1 text-gray-500">{total} total bookings</p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <div className="mb-6 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+          <div className="flex flex-col gap-4 lg:flex-row">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search by email, service..."
@@ -112,10 +108,10 @@ export default function AdminReservationsPage() {
                   setSearch(e.target.value)
                   setPage(1)
                 }}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               {(['all', 'pending', 'confirmed', 'completed', 'cancelled'] as const).map((s) => (
                 <button
                   key={s}
@@ -123,16 +119,21 @@ export default function AdminReservationsPage() {
                     setStatus(s)
                     setPage(1)
                   }}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                     status === s
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {s === 'all' ? 'All' :
-                   s === 'pending' ? 'Pending' :
-                   s === 'confirmed' ? 'Confirmed' :
-                   s === 'completed' ? 'Completed' : 'Cancelled'}
+                  {s === 'all'
+                    ? 'All'
+                    : s === 'pending'
+                      ? 'Pending'
+                      : s === 'confirmed'
+                        ? 'Confirmed'
+                        : s === 'completed'
+                          ? 'Completed'
+                          : 'Cancelled'}
                 </button>
               ))}
             </div>
@@ -140,44 +141,71 @@ export default function AdminReservationsPage() {
         </div>
 
         {/* Error Banner */}
-        {displayError && <ErrorBanner message={displayError} onDismiss={() => setActionError(null)} onRetry={() => mutate()} />}
+        {displayError && (
+          <ErrorBanner
+            message={displayError}
+            onDismiss={() => setActionError(null)}
+            onRetry={() => mutate()}
+          />
+        )}
 
         {/* Bookings Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
           {isLoading ? (
             <div className="p-8 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
             </div>
           ) : bookings.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
-              <Calendar className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+              <Calendar className="mx-auto mb-4 h-12 w-12 text-gray-300" />
               <p>No bookings found</p>
             </div>
           ) : (
             <>
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[900px]" aria-label="Bookings list">
-                  <thead className="bg-gray-50 border-b border-gray-100">
+                  <thead className="border-b border-gray-100 bg-gray-50">
                     <tr>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500"
+                      >
                         Date
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500"
+                      >
                         Client
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500"
+                      >
                         Attorney
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500"
+                      >
                         Service
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500"
+                      >
                         Status
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500"
+                      >
                         Payment
                       </th>
-                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-right text-xs font-medium uppercase text-gray-500"
+                      >
                         Actions
                       </th>
                     </tr>
@@ -187,7 +215,7 @@ export default function AdminReservationsPage() {
                       <tr key={booking.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-gray-400" />
+                            <Calendar className="h-4 w-4 text-gray-400" />
                             <p className="font-medium text-gray-900">
                               {formatDate(booking.scheduled_at)}
                             </p>
@@ -195,24 +223,23 @@ export default function AdminReservationsPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            <User className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-900">{booking.client_id}</span>
+                            <User className="h-4 w-4 text-gray-400" />
+                            <div>
+                              <p className="text-gray-900">{booking.client_name || 'No name'}</p>
+                              <p className="text-sm text-gray-500">{booking.client_email}</p>
+                            </div>
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            <Briefcase className="w-4 h-4 text-gray-400" />
+                            <Briefcase className="h-4 w-4 text-gray-400" />
                             <div>
-                              <p className="text-gray-900">
-                                {booking.provider?.name || '-'}
-                              </p>
+                              <p className="text-gray-900">{booking.provider?.name || '-'}</p>
                               <p className="text-sm text-gray-500">{booking.provider?.email}</p>
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 text-gray-900">
-                          {booking.service_name}
-                        </td>
+                        <td className="px-6 py-4 text-gray-900">{booking.service_name}</td>
                         <td className="px-6 py-4">
                           <BookingStatusBadge status={booking.status} />
                         </td>
@@ -220,7 +247,7 @@ export default function AdminReservationsPage() {
                           <div>
                             <PaymentStatusBadge status={booking.payment_status} />
                             {booking.deposit_amount && (
-                              <p className="text-xs text-gray-500 mt-1">
+                              <p className="mt-1 text-xs text-gray-500">
                                 Deposit: {formatAmount(booking.deposit_amount)}
                               </p>
                             )}
@@ -230,11 +257,13 @@ export default function AdminReservationsPage() {
                           <div className="flex items-center justify-end gap-2">
                             {booking.status !== 'cancelled' && booking.status !== 'completed' && (
                               <button
-                                onClick={() => setCancelModal({ open: true, bookingId: booking.id })}
-                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                                onClick={() =>
+                                  setCancelModal({ open: true, bookingId: booking.id })
+                                }
+                                className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-600"
                                 title="Cancel"
                               >
-                                <XCircle className="w-5 h-5" />
+                                <XCircle className="h-5 w-5" />
                               </button>
                             )}
                           </div>
@@ -246,7 +275,7 @@ export default function AdminReservationsPage() {
               </div>
 
               {/* Pagination */}
-              <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-100 px-4 py-4 sm:flex-row sm:px-6">
                 <p className="text-sm text-gray-500">
                   Page {page} of {totalPages}
                 </p>
@@ -254,16 +283,16 @@ export default function AdminReservationsPage() {
                   <button
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    className="rounded-lg border border-gray-300 p-2 hover:bg-gray-50 disabled:opacity-50"
                   >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronLeft className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages}
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 hover:bg-gray-50"
+                    className="rounded-lg border border-gray-300 p-2 hover:bg-gray-50 disabled:opacity-50"
                   >
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="h-5 w-5" />
                   </button>
                 </div>
               </div>

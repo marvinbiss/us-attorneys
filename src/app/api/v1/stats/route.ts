@@ -21,21 +21,22 @@ export async function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: CORS_HEADERS })
 }
 
-const statsQuerySchema = z.object({
-  region: z.string().max(100).optional(),
-  state: z.string().max(10).optional(),
-  departement: z.string().max(10).optional(), // legacy compat
-}).transform((data) => ({
-  region: data.region,
-  stateCode: data.state || data.departement,
-}))
+const statsQuerySchema = z
+  .object({
+    region: z.string().max(100).optional(),
+    state: z.string().max(10).optional(),
+  })
+  .transform((data) => ({
+    region: data.region,
+    stateCode: data.state,
+  }))
 
 export const GET = withErrorHandler(async (request: NextRequest) => {
   const { region, stateCode } = validateQuery(request, statsQuerySchema)
 
   if (!region && !stateCode) {
     throw new ValidationError(
-      'Parameter "region" or "state" is required. Example: ?region=california or ?state=CA',
+      'Parameter "region" or "state" is required. Example: ?region=california or ?state=CA'
     )
   }
 
@@ -43,18 +44,18 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
 
   let query = supabase
     .from('barometre_stats')
-    .select('metier, metier_slug, ville, ville_slug, departement, departement_code, region, region_slug, nb_attorneys, note_moyenne, nb_avis, taux_verification, updated_at')
-    .is('ville', null)
+    .select(
+      'specialty, specialty_slug, city, city_slug, state_name, state_code, region, region_slug, attorney_count, average_rating, review_count, verification_rate, updated_at'
+    )
+    .is('city', null)
 
   if (region) {
-    query = query.eq('region_slug', region).is('departement', null)
+    query = query.eq('region_slug', region).is('state_name', null)
   } else if (stateCode) {
-    query = query.eq('departement_code', stateCode) // DB column name 'departement_code' is legacy
+    query = query.eq('state_code', stateCode)
   }
 
-  const { data, error } = await query
-    .order('nb_attorneys', { ascending: false })
-    .limit(100)
+  const { data, error } = await query.order('attorney_count', { ascending: false }).limit(100)
 
   if (error) {
     throw new ApiError(500, 'INTERNAL_ERROR', 'Internal error retrieving data.')
@@ -62,15 +63,20 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
 
   // Calculate totals
   const rows = data ?? []
-  const totalAttorneys = rows.reduce((s, r) => s + (r.nb_attorneys ?? 0), 0)
-  const totalReviews = rows.reduce((s, r) => s + (r.nb_avis ?? 0), 0)
-  const ratedRows = rows.filter((r) => r.note_moyenne !== null)
-  const avgRating = ratedRows.length > 0
-    ? Math.round(
-        (ratedRows.reduce((s, r) => s + (r.note_moyenne as number) * (r.nb_attorneys ?? 1), 0) /
-          ratedRows.reduce((s, r) => s + (r.nb_attorneys ?? 1), 0)) * 100,
-      ) / 100
-    : null
+  const totalAttorneys = rows.reduce((s, r) => s + (r.attorney_count ?? 0), 0)
+  const totalReviews = rows.reduce((s, r) => s + (r.review_count ?? 0), 0)
+  const ratedRows = rows.filter((r) => r.average_rating !== null)
+  const avgRating =
+    ratedRows.length > 0
+      ? Math.round(
+          (ratedRows.reduce(
+            (s, r) => s + (r.average_rating as number) * (r.attorney_count ?? 1),
+            0
+          ) /
+            ratedRows.reduce((s, r) => s + (r.attorney_count ?? 1), 0)) *
+            100
+        ) / 100
+      : null
 
   return NextResponse.json(
     {
@@ -96,6 +102,6 @@ export const GET = withErrorHandler(async (request: NextRequest) => {
         ...CORS_HEADERS,
         'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
       },
-    },
+    }
   )
 })

@@ -20,7 +20,7 @@ const SITE_NAME = 'US Attorneys'
 // ============================================================
 
 interface LeadEventPayload {
-  id: string            // lead_events.id
+  id: string // lead_events.id
   lead_id: string
   event_type: LeadEventType
   attorney_id: string | null
@@ -48,18 +48,21 @@ interface NotificationSpec {
 // Event → Notification mapping
 // ============================================================
 
-const EVENT_CONFIG: Record<string, {
-  channels: ('email' | 'in_app')[]
-  targetRoles: ('client' | 'attorney')[]
-}> = {
-  created:    { channels: ['email', 'in_app'], targetRoles: ['client'] },
+const EVENT_CONFIG: Record<
+  string,
+  {
+    channels: ('email' | 'in_app')[]
+    targetRoles: ('client' | 'attorney')[]
+  }
+> = {
+  created: { channels: ['email', 'in_app'], targetRoles: ['client'] },
   dispatched: { channels: ['email', 'in_app'], targetRoles: ['attorney'] },
-  viewed:     { channels: ['in_app'],          targetRoles: ['client'] },
-  quoted:     { channels: ['email', 'in_app'], targetRoles: ['client'] },
-  accepted:   { channels: ['email', 'in_app'], targetRoles: ['attorney'] },
-  refused:    { channels: ['in_app'],          targetRoles: ['attorney'] },
-  completed:  { channels: ['email', 'in_app'], targetRoles: ['client', 'attorney'] },
-  expired:    { channels: ['email', 'in_app'], targetRoles: ['client', 'attorney'] },
+  viewed: { channels: ['in_app'], targetRoles: ['client'] },
+  quoted: { channels: ['email', 'in_app'], targetRoles: ['client'] },
+  accepted: { channels: ['email', 'in_app'], targetRoles: ['attorney'] },
+  refused: { channels: ['in_app'], targetRoles: ['attorney'] },
+  completed: { channels: ['email', 'in_app'], targetRoles: ['client', 'attorney'] },
+  expired: { channels: ['email', 'in_app'], targetRoles: ['client', 'attorney'] },
 }
 
 // ============================================================
@@ -72,13 +75,17 @@ export async function processLeadEvent(event: LeadEventPayload): Promise<void> {
 
   const supabase = createAdminClient()
 
-  // Resolve lead details (try devis_requests first, then leads table)
-  // Table 'devis_requests' = consultation requests (legacy DB table name, do not rename without migration)
-  let lead: LeadData & { client_email?: string; client_phone?: string; client_id?: string | null } | null = null
+  // Resolve lead details (try quote_requests first, then leads table)
+  // Quote requests table
+  let lead:
+    | (LeadData & { client_email?: string; client_phone?: string; client_id?: string | null })
+    | null = null
 
   const { data: consultationLead } = await supabase
-    .from('devis_requests')
-    .select('id, service_name, city, postal_code, client_name, client_email, client_phone, client_id')
+    .from('quote_requests')
+    .select(
+      'id, service_name, city, postal_code, client_name, client_email, client_phone, client_id'
+    )
     .eq('id', event.lead_id)
     .single()
 
@@ -145,7 +152,7 @@ async function deliverNotification(
   eventId: string,
   channel: 'email' | 'in_app',
   target: NotificationTarget,
-  spec: NotificationSpec,
+  spec: NotificationSpec
 ): Promise<void> {
   // Idempotency check: skip if already delivered
   const { data: existing } = await supabase
@@ -217,7 +224,7 @@ interface LeadData {
 function buildNotificationSpec(
   event: LeadEventPayload,
   lead: LeadData,
-  target: NotificationTarget,
+  target: NotificationTarget
 ): NotificationSpec | null {
   const location = lead.city
     ? `${lead.city}${lead.postal_code ? ` (${lead.postal_code})` : ''}`
@@ -238,7 +245,8 @@ function buildNotificationSpec(
           body: `Your consultation request for <strong>${lead.service_name}</strong> in ${location} has been registered. We will contact qualified attorneys in your area.`,
           ctaUrl: `${SITE_URL}/client-dashboard/my-cases`,
           ctaLabel: 'Track my request',
-          footer: 'You will receive a notification as soon as an attorney sends you a consultation.',
+          footer:
+            'You will receive a notification as soon as an attorney sends you a consultation.',
         }),
       }
 

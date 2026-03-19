@@ -8,10 +8,7 @@ import { logger } from '@/lib/logger'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
     const { error: guardError, user, supabase } = await requireAttorney()
@@ -26,19 +23,23 @@ export async function GET(
       .single()
 
     if (!provider) {
-      return NextResponse.json({ success: false, error: { message: 'No attorney profile found' } }, { status: 403 })
+      return NextResponse.json(
+        { success: false, error: { message: 'No attorney profile found' } },
+        { status: 403 }
+      )
     }
 
     // Fetch assignment with full lead data
-    // Table 'devis_requests' = consultation requests (legacy French name)
+
     const { data: assignment, error: assignError } = await supabase
       .from('lead_assignments')
-      .select(`
+      .select(
+        `
         id,
         status,
         assigned_at,
         viewed_at,
-        lead:devis_requests (
+        lead:quote_requests (
           id,
           service_name,
           city,
@@ -52,18 +53,25 @@ export async function GET(
           created_at,
           status
         )
-      `)
+      `
+      )
       .eq('id', id)
       .eq('attorney_id', provider.id)
       .single()
 
     if (assignError || !assignment) {
-      return NextResponse.json({ success: false, error: { message: 'Lead not found' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Lead not found' } },
+        { status: 404 }
+      )
     }
 
     return NextResponse.json({ assignment })
   } catch (error: unknown) {
     logger.error('Lead detail GET error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Server error' } },
+      { status: 500 }
+    )
   }
 }

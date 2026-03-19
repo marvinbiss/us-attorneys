@@ -16,14 +16,14 @@ const querySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   source: z.enum(['all', 'chat', 'callback']).default('all'),
   search: z.string().optional(),
-  metier: z.string().optional(), // practiceArea filter — matches DB column 'metier' (legacy French name)
+  specialty: z.string().optional(),
   from: z.string().optional(),
   to: z.string().optional(),
 })
 
 export const GET = createApiHandler(async ({ request }) => {
   const auth = await requirePermission('audit', 'read')
-  if (!auth.success || !auth.admin) return auth.error!
+  if (!auth.success || !auth.admin) return auth.error as NextResponse
 
   const { searchParams } = new URL(request.url)
   const parsed = querySchema.safeParse(Object.fromEntries(searchParams))
@@ -31,17 +31,14 @@ export const GET = createApiHandler(async ({ request }) => {
   if (!parsed.success) {
     return NextResponse.json(
       { error: 'Invalid parameters', details: parsed.error.flatten() },
-      { status: 400 },
+      { status: 400 }
     )
   }
 
-  const { page, limit, source, search, metier, from, to } = parsed.data
+  const { page, limit, source, search, specialty, from, to } = parsed.data
   const offset = (page - 1) * limit
   const supabase = createAdminClient()
 
-  // Build query
-  // Table 'estimation_leads' = fee estimation leads (legacy French name)
-  // Search columns: nom=name, telephone=phone, ville=city, metier=practiceArea (legacy French column names)
   let query = supabase
     .from('estimation_leads')
     .select('*', { count: 'exact' })
@@ -52,11 +49,13 @@ export const GET = createApiHandler(async ({ request }) => {
   }
 
   if (search) {
-    query = query.or(`telephone.ilike.%${search}%,nom.ilike.%${search}%,email.ilike.%${search}%,ville.ilike.%${search}%`)
+    query = query.or(
+      `phone.ilike.%${search}%,name.ilike.%${search}%,email.ilike.%${search}%,city.ilike.%${search}%`
+    )
   }
 
-  if (metier) {
-    query = query.ilike('metier', `%${metier}%`)
+  if (specialty) {
+    query = query.ilike('specialty', `%${specialty}%`)
   }
 
   if (from) {
@@ -70,10 +69,7 @@ export const GET = createApiHandler(async ({ request }) => {
   const { data, error, count } = await query.range(offset, offset + limit - 1)
 
   if (error) {
-    return NextResponse.json(
-      { error: 'Database error', details: error.message },
-      { status: 500 },
-    )
+    return NextResponse.json({ error: 'Database error', details: error.message }, { status: 500 })
   }
 
   // Stats query (total, today, by source)
@@ -82,9 +78,18 @@ export const GET = createApiHandler(async ({ request }) => {
 
   const [totalRes, todayRes, chatRes, callbackRes] = await Promise.all([
     supabase.from('estimation_leads').select('id', { count: 'exact', head: true }),
-    supabase.from('estimation_leads').select('id', { count: 'exact', head: true }).gte('created_at', todayStart),
-    supabase.from('estimation_leads').select('id', { count: 'exact', head: true }).eq('source', 'chat'),
-    supabase.from('estimation_leads').select('id', { count: 'exact', head: true }).eq('source', 'callback'),
+    supabase
+      .from('estimation_leads')
+      .select('id', { count: 'exact', head: true })
+      .gte('created_at', todayStart),
+    supabase
+      .from('estimation_leads')
+      .select('id', { count: 'exact', head: true })
+      .eq('source', 'chat'),
+    supabase
+      .from('estimation_leads')
+      .select('id', { count: 'exact', head: true })
+      .eq('source', 'callback'),
   ])
 
   return NextResponse.json({
@@ -107,7 +112,7 @@ export const GET = createApiHandler(async ({ request }) => {
 
 export const DELETE = createApiHandler(async ({ request }) => {
   const auth = await requirePermission('audit', 'read')
-  if (!auth.success || !auth.admin) return auth.error!
+  if (!auth.success || !auth.admin) return auth.error as NextResponse
 
   const { id } = await request.json()
   if (!id) {
@@ -115,17 +120,10 @@ export const DELETE = createApiHandler(async ({ request }) => {
   }
 
   const supabase = createAdminClient()
-  // legacy table name 'estimation_leads' = AI chat/callback lead captures
-  const { error } = await supabase
-    .from('estimation_leads')
-    .delete()
-    .eq('id', id)
+  const { error } = await supabase.from('estimation_leads').delete().eq('id', id)
 
   if (error) {
-    return NextResponse.json(
-      { error: 'Deletion error', details: error.message },
-      { status: 500 },
-    )
+    return NextResponse.json({ error: 'Deletion error', details: error.message }, { status: 500 })
   }
 
   return NextResponse.json({ success: true })

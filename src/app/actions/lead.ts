@@ -15,10 +15,7 @@ const leadSchema = z.object({
   specialtyName: z.string().min(1),
   name: z.string().min(1, 'Your name is required'),
   email: z.string().email('Invalid email address'),
-  phone: z.string().regex(
-    /^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/,
-    'Invalid phone number'
-  ),
+  phone: z.string().regex(/^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/, 'Invalid phone number'),
   postalCode: z.string().optional(),
   city: z.string().optional(),
   description: z.string().min(20, 'Description too short (min 20 characters)'),
@@ -58,7 +55,9 @@ export async function submitLead(
     const supabase = await createClient()
 
     // Resolve authenticated user (null if anonymous submission)
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     // Map urgency to DB enum
     const urgencyMap: Record<string, string> = {
@@ -67,19 +66,23 @@ export async function submitLead(
       flexible: 'normal',
     }
 
-    // Table 'devis_requests' = consultation requests (legacy DB table name, do not rename without migration)
-    const { data: inserted, error } = await supabase.from('devis_requests').insert({
-      client_id: user?.id ?? null,
-      service_name: data.specialtyName,
-      postal_code: data.postalCode || '',
-      city: data.city || null,
-      description: data.description,
-      urgency: urgencyMap[data.urgency] || 'normal',
-      status: 'pending',
-      client_name: data.name,
-      client_email: data.email,
-      client_phone: data.phone,
-    }).select('id').single()
+    // Quote requests table
+    const { data: inserted, error } = await supabase
+      .from('quote_requests')
+      .insert({
+        client_id: user?.id ?? null,
+        service_name: data.specialtyName,
+        postal_code: data.postalCode || '',
+        city: data.city || null,
+        description: data.description,
+        urgency: urgencyMap[data.urgency] || 'normal',
+        status: 'pending',
+        client_name: data.name,
+        client_email: data.email,
+        client_phone: data.phone,
+      })
+      .select('id')
+      .single()
 
     if (error || !inserted) {
       logger.error('Lead insert error:', error)
@@ -107,24 +110,32 @@ export async function submitLead(
         // Server-side quota enforcement — block if attorney exceeded monthly limit
         const quota = await checkLeadQuota(data.attorneyId)
         if (!quota.allowed) {
-          logger.warn('Lead quota exceeded for direct dispatch', { attorneyId: data.attorneyId, quota })
+          logger.warn('Lead quota exceeded for direct dispatch', {
+            attorneyId: data.attorneyId,
+            quota,
+          })
           // Fall through to algorithmic dispatch (useDirectDispatch stays false)
         } else {
           useDirectDispatch = true
           const { error: assignError } = await adminClient.from('lead_assignments').insert({
             lead_id: inserted.id,
             attorney_id: data.attorneyId,
-            source_table: 'devis_requests',
+            source_table: 'quote_requests',
           })
           if (!assignError) {
             logLeadEvent(inserted.id, 'dispatched', { attorneyId: data.attorneyId }).catch(() => {})
             // Track billing charge with CPA tier pricing
-            getAttorneyTier(data.attorneyId).then((tier) => {
-              const cost = calculateLeadCost(tier, 'standard', data.city)
-              return trackLeadCharge(data.attorneyId!, inserted.id, 'standard', cost.finalCents)
-            }).catch((err) =>
-              logger.error('Failed to track lead charge (non-blocking)', err)
-            )
+            getAttorneyTier(data.attorneyId)
+              .then((tier) => {
+                const cost = calculateLeadCost(tier, 'standard', data.city)
+                return trackLeadCharge(
+                  data.attorneyId ?? '',
+                  inserted.id,
+                  'standard',
+                  cost.finalCents
+                )
+              })
+              .catch((err) => logger.error('Failed to track lead charge (non-blocking)', err))
           }
         }
       }
@@ -136,10 +147,8 @@ export async function submitLead(
         city: data.city,
         postalCode: data.postalCode,
         urgency: data.urgency,
-        sourceTable: 'devis_requests',
-      }).catch((err) =>
-        logger.error('Dispatch failed (non-blocking):', err)
-      )
+        sourceTable: 'quote_requests',
+      }).catch((err) => logger.error('Dispatch failed (non-blocking):', err))
     }
 
     return { success: true }

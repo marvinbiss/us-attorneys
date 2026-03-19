@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
+import Breadcrumb from '@/components/Breadcrumb'
 import { SITE_URL } from '@/lib/seo/config'
 import { allArticlesMeta, allCategories } from '@/lib/data/blog/articles-index'
 import { allArticles } from '@/lib/data/blog/articles'
@@ -25,7 +26,14 @@ export const metadata: Metadata = {
     description: 'Tips, guides, and news about legal services and attorney practice.',
     url: `${SITE_URL}/blog`,
     type: 'website',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'USAttorneys — Legal blog and insights' }],
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'USAttorneys — Legal blog and insights',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
@@ -47,16 +55,17 @@ export default async function BlogPage({ searchParams }: PageProps) {
   if (cmsPage?.content_html) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <section className="bg-white border-b">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
+        <section className="border-b bg-white">
+          <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+            <Breadcrumb items={[{ label: 'Blog' }]} className="mb-4" />
+            <h1 className="font-heading text-3xl font-bold text-gray-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
-          <div className="max-w-6xl mx-auto px-4">
-            <CmsContent html={cmsPage.content_html} />
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div className="rounded-xl bg-white p-8 shadow-sm">
+              <CmsContent html={cmsPage.content_html} />
+            </div>
           </div>
         </section>
       </div>
@@ -75,7 +84,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
       name: 'US Attorneys',
       url: SITE_URL,
     },
-    hasPart: allArticlesMeta.slice(0, 10).map(a => ({
+    hasPart: allArticlesMeta.slice(0, 10).map((a) => ({
       '@type': 'BlogPosting',
       headline: a.title,
       url: `${SITE_URL}/blog/${a.slug}`,
@@ -83,7 +92,12 @@ export default async function BlogPage({ searchParams }: PageProps) {
       author: (() => {
         const authorName = allArticles[a.slug]?.author || 'US Attorneys'
         return authorName === 'US Attorneys'
-          ? { '@type': 'Organization', name: 'USAttorneys Editorial Team', url: `${SITE_URL}/about`, '@id': `${SITE_URL}#organization` }
+          ? {
+              '@type': 'Organization',
+              name: 'USAttorneys Editorial Team',
+              url: `${SITE_URL}/about`,
+              '@id': `${SITE_URL}#organization`,
+            }
           : { '@type': 'Person', name: authorName }
       })(),
     })),
@@ -95,25 +109,24 @@ export default async function BlogPage({ searchParams }: PageProps) {
   ])
 
   // Category article counts for cross-link section
-  const categoryCounts = blogCategories.map(c => ({
+  const categoryCounts = blogCategories.map((c) => ({
     ...c,
-    count: allArticlesMeta.filter(
-      a => categoryToSlug(normalizeCategory(a.category)) === c.slug
-    ).length,
+    count: allArticlesMeta.filter((a) => categoryToSlug(normalizeCategory(a.category)) === c.slug)
+      .length,
   }))
 
   const categoryColors: Record<string, string> = {
-    'Tips': 'bg-amber-100 text-amber-700',
-    'Fees': 'bg-emerald-100 text-emerald-700',
+    Tips: 'bg-amber-100 text-amber-700',
+    Fees: 'bg-emerald-100 text-emerald-700',
     'Practice Areas': 'bg-blue-100 text-blue-700',
-    'Guides': 'bg-purple-100 text-purple-700',
-    'Regulations': 'bg-slate-100 text-slate-700',
+    Guides: 'bg-purple-100 text-purple-700',
+    Regulations: 'bg-slate-100 text-slate-700',
     'Aid & Grants': 'bg-green-100 text-green-700',
-    'Seasonal': 'bg-lime-100 text-lime-700',
-    'Safety': 'bg-red-100 text-red-700',
-    'Energy': 'bg-teal-100 text-teal-700',
-    'DIY': 'bg-orange-100 text-orange-700',
-    'Inspiration': 'bg-pink-100 text-pink-700',
+    Seasonal: 'bg-lime-100 text-lime-700',
+    Safety: 'bg-red-100 text-red-700',
+    Energy: 'bg-teal-100 text-teal-700',
+    DIY: 'bg-orange-100 text-orange-700',
+    Inspiration: 'bg-pink-100 text-pink-700',
   }
 
   return (
@@ -122,27 +135,31 @@ export default async function BlogPage({ searchParams }: PageProps) {
       <BlogPageClient articles={allArticlesMeta} categories={allCategories} initialTag={tag} />
 
       {/* Crawlable category links — server-rendered for SEO */}
-      <section className="py-12 bg-white border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 border-l-4 border-blue-500 pl-4">
+      <section className="border-t bg-white py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-8 border-l-4 border-blue-500 pl-4 text-2xl font-bold text-gray-900">
             Browse by category
           </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {categoryCounts.map(c => {
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {categoryCounts.map((c) => {
               const color = categoryColors[c.label] || 'bg-gray-100 text-gray-700'
               return (
                 <Link
                   key={c.slug}
                   href={`/blog/category/${c.slug}`}
-                  className="flex items-center justify-between p-4 bg-gray-50 hover:bg-white rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all group"
+                  className="group flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50 p-4 transition-all hover:border-gray-200 hover:bg-white hover:shadow-sm"
                 >
                   <div>
-                    <span className={`inline-block ${color} px-2.5 py-0.5 rounded-full text-xs font-semibold mb-1`}>
+                    <span
+                      className={`inline-block ${color} mb-1 rounded-full px-2.5 py-0.5 text-xs font-semibold`}
+                    >
                       {c.label}
                     </span>
-                    <p className="text-sm text-gray-500 mt-1">{c.count} article{c.count > 1 ? 's' : ''}</p>
+                    <p className="mt-1 text-sm text-gray-500">
+                      {c.count} article{c.count > 1 ? 's' : ''}
+                    </p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowRight className="h-4 w-4 text-gray-400 transition-all group-hover:translate-x-0.5 group-hover:text-blue-600" />
                 </Link>
               )
             })}

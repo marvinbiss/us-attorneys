@@ -1,7 +1,7 @@
 /**
  * client_id on leads — regression tests
  *
- * Validates that both INSERT code paths for devis_requests (legacy table name = consultation requests) include client_id,
+ * Validates that both INSERT code paths for quote_requests include client_id,
  * and that the claim-lead backfill endpoint is correctly structured.
  *
  * These are static source-code tests (no runtime DB needed).
@@ -23,7 +23,7 @@ describe('client_id on lead creation — server action', () => {
   })
 
   it('includes client_id in INSERT payload', () => {
-    expect(source).toContain("client_id: user?.id ?? null")
+    expect(source).toContain('client_id: user?.id ?? null')
   })
 
   it('uses server supabase client (has user session)', () => {
@@ -88,7 +88,7 @@ describe('claim-lead backfill endpoint', () => {
   })
 
   it('returns count of claimed leads', () => {
-    expect(source).toContain("claimed: claimed?.length || 0")
+    expect(source).toContain('claimed: claimed?.length || 0')
   })
 
   it('does not expose any toxic fields', () => {

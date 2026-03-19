@@ -17,7 +17,10 @@ export const dynamic = 'force-dynamic'
  * Supabase queries never reject — they resolve with { data, error }.
  * We must check both rejection (unlikely) AND the Supabase error field.
  */
-function logBatchErrors(label: string, results: PromiseSettledResult<{ error?: { message: string; code?: string } | null }>[]) {
+function logBatchErrors(
+  label: string,
+  results: PromiseSettledResult<{ error?: { message: string; code?: string } | null }>[]
+) {
   results.forEach((r, i) => {
     if (r.status === 'rejected') {
       logger.warn(`[admin-stats] ${label}[${i}] rejected`, { reason: String(r.reason) })
@@ -63,7 +66,7 @@ function countByDay(rows: { created_at: string }[]): Record<string, number> {
 export const GET = createApiHandler(async () => {
   const authResult = await requirePermission('settings', 'read')
   if (!authResult.success || !authResult.admin) {
-    return authResult.error!
+    return authResult.error as NextResponse
   }
 
   const supabase = createAdminClient()
@@ -78,91 +81,189 @@ export const GET = createApiHandler(async () => {
   // Wrapped with timeout to prevent hanging if DB is unreachable
   const [
     // Counts (0–3)
-    totalUsersR, totalAttorneysR, totalBookingsR, pendingReportsR,
+    totalUsersR,
+    totalAttorneysR,
+    totalBookingsR,
+    pendingReportsR,
     // Rating sample (4) — 200 rows is statistically sufficient for avg
     reviewsR,
     // Today (5–6)
-    newUsersTodayR, newBookingsTodayR,
+    newUsersTodayR,
+    newBookingsTodayR,
     // This month vs last month (7–10)
-    usersThisMonthR, usersLastMonthR,
-    bookingsThisMonthR, bookingsLastMonthR,
+    usersThisMonthR,
+    usersLastMonthR,
+    bookingsThisMonthR,
+    bookingsLastMonthR,
     // Revenue (11–12)
-    revThisMonthR, revLastMonthR,
+    revThisMonthR,
+    revLastMonthR,
     // Active users (13)
     activeUsers7dR,
     // Activity feed (14–16)
-    recentBookingsR, recentReviewsR, pendingReportsListR,
+    recentBookingsR,
+    recentReviewsR,
+    pendingReportsListR,
     // Chart: last 30 days (17–19) — capped at 5K rows each
-    chartProfilesR, chartBookingsR, chartReviewsR,
+    chartProfilesR,
+    chartBookingsR,
+    chartReviewsR,
     // Estimation leads (20–22)
-    estimationTotalR, estimationTodayR, recentEstimationLeadsR,
-  ] = await withTimeout(Promise.allSettled([
-    supabase.from('profiles').select('id', { count: 'exact', head: true }),
-    supabase.from('attorneys').select('id', { count: 'exact', head: true }).eq('is_active', true),
-    supabase.from('bookings').select('id', { count: 'exact', head: true }),
-    supabase.from('user_reports').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-    supabase.from('reviews').select('rating').eq('status', 'published').limit(200),
-    // Today
-    supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('created_at', todayStart),
-    supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', todayStart),
-    // This month vs last month
-    supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('created_at', thisMonthStart),
-    supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('created_at', lastMonthStart).lt('created_at', thisMonthStart),
-    supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', thisMonthStart),
-    supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', lastMonthStart).lt('created_at', thisMonthStart),
-    // Revenue: total_amount doesn't exist in bookings — we count paid bookings
-    // for trend calculation, but the actual amount returned will be 0.
-    supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', thisMonthStart).eq('payment_status', 'paid'),
-    supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', lastMonthStart).lt('created_at', thisMonthStart).eq('payment_status', 'paid'),
-    // Active users (profile updated in last 7 days)
-    supabase.from('profiles').select('id', { count: 'exact', head: true }).gte('updated_at', sevenDaysAgo),
-    // Activity feed
-    supabase.from('bookings').select('id, status, created_at').order('created_at', { ascending: false }).limit(5),
-    supabase.from('reviews').select('id, rating, client_name, status, created_at').order('created_at', { ascending: false }).limit(5),
-    supabase.from('user_reports').select('id, target_type, reason, description, status, created_at, reporter_id').eq('status', 'pending').order('created_at', { ascending: false }).limit(10),
-    // Chart: last 30 days — reduced from 10K to 5K per table
-    supabase.from('profiles').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
-    supabase.from('bookings').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
-    supabase.from('reviews').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
-    // Table 'estimation_leads' = fee estimation leads (legacy French name)
-    // Columns: nom=name, telephone=phone, metier=practiceArea, ville=city (legacy French column names, must match DB schema)
-    supabase.from('estimation_leads').select('id', { count: 'exact', head: true }),
-    supabase.from('estimation_leads').select('id', { count: 'exact', head: true }).gte('created_at', todayStart),
-    supabase.from('estimation_leads').select('id, nom, telephone, metier, ville, source, created_at').order('created_at', { ascending: false }).limit(5),
-  ]))
+    estimationTotalR,
+    estimationTodayR,
+    recentEstimationLeadsR,
+  ] = await withTimeout(
+    Promise.allSettled([
+      supabase.from('profiles').select('id', { count: 'exact', head: true }),
+      supabase.from('attorneys').select('id', { count: 'exact', head: true }).eq('is_active', true),
+      supabase.from('bookings').select('id', { count: 'exact', head: true }),
+      supabase
+        .from('user_reports')
+        .select('id', { count: 'exact', head: true })
+        .eq('status', 'pending'),
+      supabase.from('reviews').select('rating').eq('status', 'published').limit(200),
+      // Today
+      supabase
+        .from('profiles')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', todayStart),
+      supabase
+        .from('bookings')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', todayStart),
+      // This month vs last month
+      supabase
+        .from('profiles')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', thisMonthStart),
+      supabase
+        .from('profiles')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', lastMonthStart)
+        .lt('created_at', thisMonthStart),
+      supabase
+        .from('bookings')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', thisMonthStart),
+      supabase
+        .from('bookings')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', lastMonthStart)
+        .lt('created_at', thisMonthStart),
+      // Revenue: total_amount doesn't exist in bookings — we count paid bookings
+      // for trend calculation, but the actual amount returned will be 0.
+      supabase
+        .from('bookings')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', thisMonthStart)
+        .eq('payment_status', 'paid'),
+      supabase
+        .from('bookings')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', lastMonthStart)
+        .lt('created_at', thisMonthStart)
+        .eq('payment_status', 'paid'),
+      // Active users (profile updated in last 7 days)
+      supabase
+        .from('profiles')
+        .select('id', { count: 'exact', head: true })
+        .gte('updated_at', sevenDaysAgo),
+      // Activity feed
+      supabase
+        .from('bookings')
+        .select('id, status, created_at')
+        .order('created_at', { ascending: false })
+        .limit(5),
+      supabase
+        .from('reviews')
+        .select('id, rating, client_name, status, created_at')
+        .order('created_at', { ascending: false })
+        .limit(5),
+      supabase
+        .from('user_reports')
+        .select('id, target_type, reason, description, status, created_at, reporter_id')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false })
+        .limit(10),
+      // Chart: last 30 days — reduced from 10K to 5K per table
+      supabase.from('profiles').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
+      supabase.from('bookings').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
+      supabase.from('reviews').select('created_at').gte('created_at', thirtyDaysAgo).limit(5000),
+      supabase.from('estimation_leads').select('id', { count: 'exact', head: true }),
+      supabase
+        .from('estimation_leads')
+        .select('id', { count: 'exact', head: true })
+        .gte('created_at', todayStart),
+      supabase
+        .from('estimation_leads')
+        .select('id, name, phone, specialty, city, source, created_at')
+        .order('created_at', { ascending: false })
+        .limit(5),
+    ])
+  )
 
   logBatchErrors('queries', [
-    totalUsersR, totalAttorneysR, totalBookingsR, pendingReportsR, reviewsR,
-    newUsersTodayR, newBookingsTodayR,
-    usersThisMonthR, usersLastMonthR,
-    bookingsThisMonthR, bookingsLastMonthR,
-    revThisMonthR, revLastMonthR,
+    totalUsersR,
+    totalAttorneysR,
+    totalBookingsR,
+    pendingReportsR,
+    reviewsR,
+    newUsersTodayR,
+    newBookingsTodayR,
+    usersThisMonthR,
+    usersLastMonthR,
+    bookingsThisMonthR,
+    bookingsLastMonthR,
+    revThisMonthR,
+    revLastMonthR,
     activeUsers7dR,
-    recentBookingsR, recentReviewsR, pendingReportsListR,
-    chartProfilesR, chartBookingsR, chartReviewsR,
-    estimationTotalR, estimationTodayR, recentEstimationLeadsR,
+    recentBookingsR,
+    recentReviewsR,
+    pendingReportsListR,
+    chartProfilesR,
+    chartBookingsR,
+    chartReviewsR,
+    estimationTotalR,
+    estimationTodayR,
+    recentEstimationLeadsR,
   ])
 
   // ── Derived metrics ────────────────────────────────────────────────
   // Average rating from published reviews sample
-  const ratings = safeData<{ rating: number }>(reviewsR as PromiseSettledResult<{ data: { rating: number }[] | null }>)
-  const averageRating = ratings.length > 0
-    ? Math.round((ratings.reduce((s, r) => s + r.rating, 0) / ratings.length) * 10) / 10
-    : 0
+  const ratings = safeData<{ rating: number }>(
+    reviewsR as PromiseSettledResult<{ data: { rating: number }[] | null }>
+  )
+  const averageRating =
+    ratings.length > 0
+      ? Math.round((ratings.reduce((s, r) => s + r.rating, 0) / ratings.length) * 10) / 10
+      : 0
 
   // Revenue: total_amount does not exist in bookings.
   // We use the number of paid bookings for the trend; the returned amount is 0.
   const revThisMonth = 0
   // Trend based on number of paid bookings (no amount available)
-  const paidThisMonth = safeCount(revThisMonthR as PromiseSettledResult<{ count: number | null; error?: unknown }>)
-  const paidLastMonth = safeCount(revLastMonthR as PromiseSettledResult<{ count: number | null; error?: unknown }>)
+  const paidThisMonth = safeCount(
+    revThisMonthR as PromiseSettledResult<{ count: number | null; error?: unknown }>
+  )
+  const paidLastMonth = safeCount(
+    revLastMonthR as PromiseSettledResult<{ count: number | null; error?: unknown }>
+  )
 
   // ── Build activity feed from real data ────────────────────────────
-  type ActivityItem = { id: string; type: string; action: string; details: string; timestamp: string; status?: string }
+  type ActivityItem = {
+    id: string
+    type: string
+    action: string
+    details: string
+    timestamp: string
+    status?: string
+  }
   const activity: ActivityItem[] = []
 
   for (const b of safeData<{ id: string; status: string; created_at: string }>(
-    recentBookingsR as PromiseSettledResult<{ data: { id: string; status: string; created_at: string }[] | null }>
+    recentBookingsR as PromiseSettledResult<{
+      data: { id: string; status: string; created_at: string }[] | null
+    }>
   )) {
     activity.push({
       id: `b-${b.id}`,
@@ -174,8 +275,24 @@ export const GET = createApiHandler(async () => {
     })
   }
 
-  for (const r of safeData<{ id: string; rating: number; client_name: string | null; status: string; created_at: string }>(
-    recentReviewsR as PromiseSettledResult<{ data: { id: string; rating: number; client_name: string | null; status: string; created_at: string }[] | null }>
+  for (const r of safeData<{
+    id: string
+    rating: number
+    client_name: string | null
+    status: string
+    created_at: string
+  }>(
+    recentReviewsR as PromiseSettledResult<{
+      data:
+        | {
+            id: string
+            rating: number
+            client_name: string | null
+            status: string
+            created_at: string
+          }[]
+        | null
+    }>
   )) {
     activity.push({
       id: `r-${r.id}`,
@@ -190,14 +307,46 @@ export const GET = createApiHandler(async () => {
   activity.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
 
   // Pending reports (real)
-  const pendingReports = safeData<{ id: string; target_type: string; reason: string; description: string | null; status: string; created_at: string; reporter_id: string | null }>(
-    pendingReportsListR as PromiseSettledResult<{ data: { id: string; target_type: string; reason: string; description: string | null; status: string; created_at: string; reporter_id: string | null }[] | null }>
+  const pendingReports = safeData<{
+    id: string
+    target_type: string
+    reason: string
+    description: string | null
+    status: string
+    created_at: string
+    reporter_id: string | null
+  }>(
+    pendingReportsListR as PromiseSettledResult<{
+      data:
+        | {
+            id: string
+            target_type: string
+            reason: string
+            description: string | null
+            status: string
+            created_at: string
+            reporter_id: string | null
+          }[]
+        | null
+    }>
   )
 
   // ── Build 30-day chart series ─────────────────────────────────────
-  const profilesByDay = countByDay(safeData<{ created_at: string }>(chartProfilesR as PromiseSettledResult<{ data: { created_at: string }[] | null }>))
-  const bookingsByDay = countByDay(safeData<{ created_at: string }>(chartBookingsR as PromiseSettledResult<{ data: { created_at: string }[] | null }>))
-  const reviewsByDay = countByDay(safeData<{ created_at: string }>(chartReviewsR as PromiseSettledResult<{ data: { created_at: string }[] | null }>))
+  const profilesByDay = countByDay(
+    safeData<{ created_at: string }>(
+      chartProfilesR as PromiseSettledResult<{ data: { created_at: string }[] | null }>
+    )
+  )
+  const bookingsByDay = countByDay(
+    safeData<{ created_at: string }>(
+      chartBookingsR as PromiseSettledResult<{ data: { created_at: string }[] | null }>
+    )
+  )
+  const reviewsByDay = countByDay(
+    safeData<{ created_at: string }>(
+      chartReviewsR as PromiseSettledResult<{ data: { created_at: string }[] | null }>
+    )
+  )
 
   const chartData: { date: string; users: number; bookings: number; reviews: number }[] = []
   for (let i = 29; i >= 0; i--) {
@@ -236,15 +385,34 @@ export const GET = createApiHandler(async () => {
     estimationLeads: {
       total: safeCount(estimationTotalR),
       today: safeCount(estimationTodayR),
-      // Map French DB column names to English for the UI: nom->lastName, metier->practice_area, ville->city
-      recent: safeData<{ id: string; nom: string | null; telephone: string; metier: string; ville: string; source: string; created_at: string }>(
-        recentEstimationLeadsR as PromiseSettledResult<{ data: { id: string; nom: string | null; telephone: string; metier: string; ville: string; source: string; created_at: string }[] | null }>
-      ).map(lead => ({
+      recent: safeData<{
+        id: string
+        name: string | null
+        phone: string
+        specialty: string
+        city: string
+        source: string
+        created_at: string
+      }>(
+        recentEstimationLeadsR as PromiseSettledResult<{
+          data:
+            | {
+                id: string
+                name: string | null
+                phone: string
+                specialty: string
+                city: string
+                source: string
+                created_at: string
+              }[]
+            | null
+        }>
+      ).map((lead) => ({
         id: lead.id,
-        lastName: lead.nom,
-        telephone: lead.telephone,
-        practice_area: lead.metier,
-        city: lead.ville,
+        name: lead.name,
+        phone: lead.phone,
+        specialty: lead.specialty,
+        city: lead.city,
         source: lead.source,
         created_at: lead.created_at,
       })),

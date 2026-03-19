@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { logAdminAction } from '@/lib/admin-auth'
+import { logAdminAction, requirePermission } from '@/lib/admin-auth'
 import { createApiHandler } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
@@ -8,7 +8,10 @@ import { z } from 'zod'
 const querySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
   limit: z.coerce.number().int().min(1).max(100).optional().default(20),
-  status: z.enum(['all', 'draft', 'scheduled', 'sending', 'paused', 'completed', 'cancelled']).optional().default('all'),
+  status: z
+    .enum(['all', 'draft', 'scheduled', 'sending', 'paused', 'completed', 'cancelled'])
+    .optional()
+    .default('all'),
   channel: z.enum(['all', 'email', 'sms', 'whatsapp']).optional().default('all'),
 })
 
@@ -36,82 +39,104 @@ const createSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-export const GET = createApiHandler(async (ctx) => {
-  const supabase = createAdminClient()
-  const params = Object.fromEntries(ctx.request.nextUrl.searchParams)
-  const parsed = querySchema.safeParse(params)
+export const GET = createApiHandler(
+  async (ctx) => {
+    const permCheck = await requirePermission('prospection', 'read')
+    if (!permCheck.success) return permCheck.error as NextResponse
 
-  if (!parsed.success) {
-    return NextResponse.json(
-      { success: false, error: { message: 'Invalid parameters' } },
-      { status: 400 }
-    )
-  }
+    const supabase = createAdminClient()
+    const params = Object.fromEntries(ctx.request.nextUrl.searchParams)
+    const parsed = querySchema.safeParse(params)
 
-  const { page, limit, status, channel } = parsed.data
-  const offset = (page - 1) * limit
+    if (!parsed.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Invalid parameters' } },
+        { status: 400 }
+      )
+    }
 
-  let query = supabase
-    .from('prospection_campaigns')
-    .select('*, template:prospection_templates(id,name,channel), list:prospection_lists(id,name,contact_count)', { count: 'exact' })
-    .order('created_at', { ascending: false })
-    .range(offset, offset + limit - 1)
+    const { page, limit, status, channel } = parsed.data
+    const offset = (page - 1) * limit
 
-  if (status !== 'all') query = query.eq('status', status)
-  if (channel !== 'all') query = query.eq('channel', channel)
+    let query = supabase
+      .from('prospection_campaigns')
+      .select(
+        '*, template:prospection_templates(id,name,channel), list:prospection_lists(id,name,contact_count)',
+        { count: 'exact' }
+      )
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1)
 
-  const { data, count, error } = await query
+    if (status !== 'all') query = query.eq('status', status)
+    if (channel !== 'all') query = query.eq('channel', channel)
 
-  if (error) {
-    logger.warn('List campaigns query failed, returning empty list', { code: error.code, message: error.message })
+    const { data, count, error } = await query
+
+    if (error) {
+      logger.warn('List campaigns query failed, returning empty list', {
+        code: error.code,
+        message: error.message,
+      })
+      return NextResponse.json({
+        success: true,
+        data: [],
+        pagination: { page, pageSize: limit, total: 0, totalPages: 0 },
+      })
+    }
+
     return NextResponse.json({
       success: true,
-      data: [],
-      pagination: { page, pageSize: limit, total: 0, totalPages: 0 },
+      data,
+      pagination: {
+        page,
+        pageSize: limit,
+        total: count || 0,
+        totalPages: Math.ceil((count || 0) / limit),
+      },
     })
-  }
+  },
+  { requireAdmin: true }
+)
 
-  return NextResponse.json({
-    success: true,
-    data,
-    pagination: {
-      page,
-      pageSize: limit,
-      total: count || 0,
-      totalPages: Math.ceil((count || 0) / limit),
-    },
-  })
-}, { requireAdmin: true })
+export const POST = createApiHandler(
+  async (ctx) => {
+    const permCheck = await requirePermission('prospection', 'write')
+    if (!permCheck.success) return permCheck.error as NextResponse
 
-export const POST = createApiHandler(async (ctx) => {
-  const supabase = createAdminClient()
-  const body = ctx.body
+    const supabase = createAdminClient()
+    const body = ctx.body
 
-  // Strip HTML tags from text fields before storing
-  const sanitizedData = { ...body }
-  if (sanitizedData.name) sanitizedData.name = sanitizedData.name.replace(/<[^>]*>/g, '').trim()
-  if (sanitizedData.description) sanitizedData.description = sanitizedData.description.replace(/<[^>]*>/g, '').trim()
+    // Strip HTML tags from text fields before storing
+    const sanitizedData = { ...body }
+    if (sanitizedData.name) sanitizedData.name = sanitizedData.name.replace(/<[^>]*>/g, '').trim()
+    if (sanitizedData.description)
+      sanitizedData.description = sanitizedData.description.replace(/<[^>]*>/g, '').trim()
 
-  const { data, error } = await supabase
-    .from('prospection_campaigns')
-    .insert({
-      ...sanitizedData,
-      status: sanitizedData.scheduled_at ? 'scheduled' : 'draft',
-      created_by: ctx.user!.id,
+    const { data, error } = await supabase
+      .from('prospection_campaigns')
+      .insert({
+        ...sanitizedData,
+        status: sanitizedData.scheduled_at ? 'scheduled' : 'draft',
+        created_by: ctx.user?.id ?? '',
+      })
+      .select()
+      .single()
+
+    if (error) {
+      logger.error('Create campaign error', error)
+      return NextResponse.json(
+        { success: false, error: { message: 'Error during creation' } },
+        { status: 500 }
+      )
+    }
+
+    await logAdminAction(ctx.user?.id ?? '', 'campaign.create', 'prospection_campaign', data.id, {
+      name: sanitizedData.name,
+      channel: sanitizedData.channel,
+      audience_type: sanitizedData.audience_type,
     })
-    .select()
-    .single()
 
-  if (error) {
-    logger.error('Create campaign error', error)
-    return NextResponse.json({ success: false, error: { message: 'Error during creation' } }, { status: 500 })
-  }
-
-  await logAdminAction(ctx.user!.id, 'campaign.create', 'prospection_campaign', data.id, {
-    name: sanitizedData.name,
-    channel: sanitizedData.channel,
-    audience_type: sanitizedData.audience_type,
-  })
-
-  return NextResponse.json({ success: true, data }, { status: 201 })
-}, { requireAdmin: true, bodySchema: createSchema })
+    return NextResponse.json({ success: true, data }, { status: 201 })
+  },
+  { requireAdmin: true, bodySchema: createSchema }
+)

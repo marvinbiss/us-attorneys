@@ -63,7 +63,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
         ville: context.ville,
       })
     },
-    [engagement, context.metierSlug, context.ville],
+    [engagement, context.metierSlug, context.ville]
   )
 
   // --- Lock body scroll on mobile when fullscreen + hide mobile nav ---
@@ -109,7 +109,8 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
 
     function handleTab(e: KeyboardEvent) {
       if (e.key !== 'Tab') return
-      const focusable = widget!.querySelectorAll<HTMLElement>(focusableSelector)
+      const focusable = widget?.querySelectorAll<HTMLElement>(focusableSelector)
+      if (!focusable) return
       if (focusable.length === 0) return
       const first = focusable[0]
       const last = focusable[focusable.length - 1]
@@ -136,7 +137,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
       {/* Launcher + Greeting (when closed, hidden when hideLauncher is set) */}
       <AnimatePresence>
         {!isOpen && !hideLauncher && (
-          <div className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end gap-3">
+          <div className="fixed bottom-20 right-4 z-[9999] flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
             <AnimatePresence>
               {engagement.showGreeting && (
                 <GreetingBubble
@@ -169,51 +170,51 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
             initial={reducedMotion ? false : { scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={reducedMotion ? { opacity: 0 } : { scale: 0.9, opacity: 0, y: 20 }}
-            transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 300, damping: 25 }}
+            transition={
+              reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 300, damping: 25 }
+            }
             className={
               'fixed z-[9999] flex flex-col bg-white shadow-2xl ' +
               'inset-0 ' +
-              'sm:inset-auto sm:bottom-6 sm:right-6 sm:w-[380px] sm:max-h-[600px] sm:rounded-[20px]'
+              'sm:inset-auto sm:bottom-6 sm:right-6 sm:max-h-[600px] sm:w-[380px] sm:rounded-[20px]'
             }
           >
             {/* Header */}
-            <div className="flex items-center justify-between gap-3 bg-[#E07040] px-4 py-3 text-white sm:rounded-t-[20px] shrink-0">
-              <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex shrink-0 items-center justify-between gap-3 bg-[#E07040] px-4 py-3 text-white sm:rounded-t-[20px]">
+              <div className="flex min-w-0 items-center gap-2.5">
                 {/* Mini logo SA */}
-                <div className="flex items-center font-heading font-bold text-base shrink-0">
+                <div className="flex shrink-0 items-center font-heading text-base font-bold">
                   <span className="text-black">S</span>
-                  <span className="bg-white text-[#E07040] rounded-sm px-0.5 mx-0.5 text-xs font-extrabold leading-none">
+                  <span className="mx-0.5 rounded-sm bg-white px-0.5 text-xs font-extrabold leading-none text-[#E07040]">
                     A
                   </span>
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold truncate">
-                    {context.artisan
-                      ? `Consultation with ${context.artisan.name}`
+                  <p className="truncate text-sm font-semibold">
+                    {context.attorney
+                      ? `Consultation with ${context.attorney.name}`
                       : `${context.metier} in ${context.ville}`}
                   </p>
-                  <p className="text-[11px] text-white/80">
-                    Free AI estimate
-                  </p>
+                  <p className="text-[11px] text-white/80">Free AI estimate</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
                 aria-label="Close chat"
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full hover:bg-white/20 transition-colors"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-white/20"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-gray-200 shrink-0">
+            <div className="flex shrink-0 border-b border-gray-200">
               <button
                 onClick={() => setActiveTab('chat')}
                 className={
                   'flex-1 py-2.5 text-sm font-medium transition-colors ' +
                   (activeTab === 'chat'
-                    ? 'text-[#E07040] border-b-2 border-[#E07040]'
+                    ? 'border-b-2 border-[#E07040] text-[#E07040]'
                     : 'text-gray-500 hover:text-gray-700')
                 }
               >
@@ -224,7 +225,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
                 className={
                   'flex-1 py-2.5 text-sm font-medium transition-colors ' +
                   (activeTab === 'callback'
-                    ? 'text-[#E07040] border-b-2 border-[#E07040]'
+                    ? 'border-b-2 border-[#E07040] text-[#E07040]'
                     : 'text-gray-500 hover:text-gray-700')
                 }
               >
@@ -234,38 +235,26 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
 
             {/* Tab Content */}
             {activeTab === 'chat' ? (
-              <ChatPanel
-                context={context}
-                chat={chat}
-                lead={lead}
-                prompts={prompts}
-              />
+              <ChatPanel context={context} chat={chat} lead={lead} prompts={prompts} />
             ) : (
-              <CallbackPanel
-                context={context}
-                lead={lead}
-              />
+              <CallbackPanel context={context} lead={lead} />
             )}
 
             {/* Footer with privacy link */}
-            <div className="border-t border-gray-100 px-4 py-2 text-center shrink-0">
+            <div className="shrink-0 border-t border-gray-100 px-4 py-2 text-center">
               <p className="text-[11px] text-gray-400">
                 Powered by{' '}
                 <a
                   href="https://lawtendr.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-gray-500 transition-colors"
+                  className="transition-colors hover:text-gray-500"
                 >
                   US Attorneys
                 </a>
                 {' · '}Non-binding estimate
                 {' · '}
-                <a
-                  href="/privacy"
-                  target="_blank"
-                  className="hover:text-gray-500"
-                >
+                <a href="/privacy" target="_blank" className="hover:text-gray-500">
                   Privacy
                 </a>
               </p>

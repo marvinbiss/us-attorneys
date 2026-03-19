@@ -40,29 +40,83 @@ function buildSpec() {
             'Full-text search across attorneys with filters for practice area, state, city, rating, and more. Supports geo-distance sorting and subscription-boosted ranking.',
           tags: ['Search'],
           parameters: [
-            { name: 'q', in: 'query', description: 'Free-text search query', schema: { type: 'string' } },
-            { name: 'pa', in: 'query', description: 'Practice area slug (e.g. `personal-injury`)', schema: { type: 'string' } },
-            { name: 'state', in: 'query', description: 'State code (e.g. `CA`)', schema: { type: 'string', maxLength: 2 } },
+            {
+              name: 'q',
+              in: 'query',
+              description: 'Free-text search query',
+              schema: { type: 'string' },
+            },
+            {
+              name: 'pa',
+              in: 'query',
+              description: 'Practice area slug (e.g. `personal-injury`)',
+              schema: { type: 'string' },
+            },
+            {
+              name: 'state',
+              in: 'query',
+              description: 'State code (e.g. `CA`)',
+              schema: { type: 'string', maxLength: 2 },
+            },
             { name: 'city', in: 'query', description: 'City name', schema: { type: 'string' } },
-            { name: 'rating', in: 'query', description: 'Minimum rating (1-5)', schema: { type: 'number', minimum: 1, maximum: 5 } },
-            { name: 'sort', in: 'query', description: 'Sort order', schema: { type: 'string', enum: ['relevance', 'rating', 'reviews', 'distance', 'name'] } },
-            { name: 'verified', in: 'query', description: 'Filter verified attorneys only', schema: { type: 'string', enum: ['true'] } },
-            { name: 'free_consultation', in: 'query', description: 'Filter attorneys offering free consultations', schema: { type: 'string', enum: ['true'] } },
-            { name: 'page', in: 'query', description: 'Page number (default 1)', schema: { type: 'integer', minimum: 1 } },
-            { name: 'limit', in: 'query', description: 'Results per page (default 20, max 100)', schema: { type: 'integer', minimum: 1, maximum: 100 } },
+            {
+              name: 'rating',
+              in: 'query',
+              description: 'Minimum rating (1-5)',
+              schema: { type: 'number', minimum: 1, maximum: 5 },
+            },
+            {
+              name: 'sort',
+              in: 'query',
+              description: 'Sort order',
+              schema: {
+                type: 'string',
+                enum: ['relevance', 'rating', 'reviews', 'distance', 'name'],
+              },
+            },
+            {
+              name: 'verified',
+              in: 'query',
+              description: 'Filter verified attorneys only',
+              schema: { type: 'string', enum: ['true'] },
+            },
+            {
+              name: 'free_consultation',
+              in: 'query',
+              description: 'Filter attorneys offering free consultations',
+              schema: { type: 'string', enum: ['true'] },
+            },
+            {
+              name: 'page',
+              in: 'query',
+              description: 'Page number (default 1)',
+              schema: { type: 'integer', minimum: 1 },
+            },
+            {
+              name: 'limit',
+              in: 'query',
+              description: 'Results per page (default 20, max 100)',
+              schema: { type: 'integer', minimum: 1, maximum: 100 },
+            },
           ],
           responses: {
             '200': {
               description: 'Search results with pagination',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/PaginatedResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/PaginatedResponse' } },
+              },
             },
             '400': {
               description: 'Invalid parameters',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '429': {
               description: 'Rate limit exceeded',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
           },
         },
@@ -75,20 +129,34 @@ function buildSpec() {
             'Returns the full public profile of an attorney including specialties, bar admissions, case results, reviews summary, and contact information.',
           tags: ['Attorneys'],
           parameters: [
-            { name: 'id', in: 'path', required: true, description: 'Attorney UUID or slug', schema: { type: 'string' } },
+            {
+              name: 'id',
+              in: 'path',
+              required: true,
+              description: 'Attorney UUID or slug',
+              schema: { type: 'string' },
+            },
           ],
           responses: {
             '200': {
               description: 'Attorney profile retrieved',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/AttorneyProfileResponse' } } },
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/AttorneyProfileResponse' },
+                },
+              },
             },
             '404': {
               description: 'Attorney not found',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '429': {
               description: 'Rate limit exceeded',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
           },
         },
@@ -101,17 +169,31 @@ function buildSpec() {
             'Returns published reviews with stats (average rating, distribution, recommendation rate).',
           tags: ['Reviews'],
           parameters: [
-            { name: 'attorneyId', in: 'query', description: 'Attorney UUID', schema: { type: 'string', format: 'uuid' } },
-            { name: 'bookingId', in: 'query', description: 'Booking UUID (check if review exists)', schema: { type: 'string', format: 'uuid' } },
+            {
+              name: 'attorneyId',
+              in: 'query',
+              description: 'Attorney UUID',
+              schema: { type: 'string', format: 'uuid' },
+            },
+            {
+              name: 'bookingId',
+              in: 'query',
+              description: 'Booking UUID (check if review exists)',
+              schema: { type: 'string', format: 'uuid' },
+            },
           ],
           responses: {
             '200': {
               description: 'Reviews retrieved',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ReviewsResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ReviewsResponse' } },
+              },
             },
             '429': {
               description: 'Rate limit exceeded',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
           },
         },
@@ -133,19 +215,27 @@ function buildSpec() {
           responses: {
             '201': {
               description: 'Review submitted (pending moderation)',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } },
+              },
             },
             '400': {
               description: 'Validation error',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '401': {
               description: 'Authentication required',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '429': {
               description: 'Rate limit exceeded',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
           },
         },
@@ -158,22 +248,44 @@ function buildSpec() {
             'Returns available booking slots for an attorney. Useful for displaying a calendar of openings.',
           tags: ['Availability'],
           parameters: [
-            { name: 'attorneyId', in: 'query', required: true, description: 'Attorney UUID', schema: { type: 'string', format: 'uuid' } },
-            { name: 'date', in: 'query', description: 'Specific date (YYYY-MM-DD)', schema: { type: 'string', format: 'date' } },
-            { name: 'month', in: 'query', description: 'Month (YYYY-MM)', schema: { type: 'string' } },
+            {
+              name: 'attorneyId',
+              in: 'query',
+              required: true,
+              description: 'Attorney UUID',
+              schema: { type: 'string', format: 'uuid' },
+            },
+            {
+              name: 'date',
+              in: 'query',
+              description: 'Specific date (YYYY-MM-DD)',
+              schema: { type: 'string', format: 'date' },
+            },
+            {
+              name: 'month',
+              in: 'query',
+              description: 'Month (YYYY-MM)',
+              schema: { type: 'string' },
+            },
           ],
           responses: {
             '200': {
               description: 'Availability slots retrieved',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } },
+              },
             },
             '400': {
               description: 'Missing required attorneyId parameter',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '429': {
               description: 'Rate limit exceeded',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
           },
         },
@@ -186,19 +298,43 @@ function buildSpec() {
             'Returns community legal questions, optionally filtered by specialty. Supports pagination.',
           tags: ['Q&A'],
           parameters: [
-            { name: 'specialtyId', in: 'query', description: 'Filter by specialty UUID', schema: { type: 'string', format: 'uuid' } },
-            { name: 'status', in: 'query', description: 'Filter by status', schema: { type: 'string', enum: ['open', 'answered', 'closed'] } },
-            { name: 'page', in: 'query', description: 'Page number', schema: { type: 'integer', minimum: 1 } },
-            { name: 'limit', in: 'query', description: 'Results per page', schema: { type: 'integer', minimum: 1, maximum: 50 } },
+            {
+              name: 'specialtyId',
+              in: 'query',
+              description: 'Filter by specialty UUID',
+              schema: { type: 'string', format: 'uuid' },
+            },
+            {
+              name: 'status',
+              in: 'query',
+              description: 'Filter by status',
+              schema: { type: 'string', enum: ['open', 'answered', 'closed'] },
+            },
+            {
+              name: 'page',
+              in: 'query',
+              description: 'Page number',
+              schema: { type: 'integer', minimum: 1 },
+            },
+            {
+              name: 'limit',
+              in: 'query',
+              description: 'Results per page',
+              schema: { type: 'integer', minimum: 1, maximum: 50 },
+            },
           ],
           responses: {
             '200': {
               description: 'Questions retrieved',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/PaginatedResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/PaginatedResponse' } },
+              },
             },
             '429': {
               description: 'Rate limit exceeded',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
           },
         },
@@ -220,19 +356,27 @@ function buildSpec() {
           responses: {
             '201': {
               description: 'Question submitted',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } },
+              },
             },
             '400': {
               description: 'Validation error',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '401': {
               description: 'Authentication required',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '429': {
               description: 'Rate limit exceeded',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
           },
         },
@@ -245,21 +389,38 @@ function buildSpec() {
             'Returns peer endorsements from other attorneys, optionally filtered by specialty.',
           tags: ['Endorsements'],
           parameters: [
-            { name: 'attorneyId', in: 'query', required: true, description: 'Attorney UUID', schema: { type: 'string', format: 'uuid' } },
-            { name: 'specialtyId', in: 'query', description: 'Filter by specialty UUID', schema: { type: 'string', format: 'uuid' } },
+            {
+              name: 'attorneyId',
+              in: 'query',
+              required: true,
+              description: 'Attorney UUID',
+              schema: { type: 'string', format: 'uuid' },
+            },
+            {
+              name: 'specialtyId',
+              in: 'query',
+              description: 'Filter by specialty UUID',
+              schema: { type: 'string', format: 'uuid' },
+            },
           ],
           responses: {
             '200': {
               description: 'Endorsements retrieved',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } },
+              },
             },
             '400': {
               description: 'Missing required attorneyId parameter',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '429': {
               description: 'Rate limit exceeded',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
           },
         },
@@ -274,11 +435,15 @@ function buildSpec() {
           responses: {
             '200': {
               description: 'Specialties list retrieved',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } },
+              },
             },
             '429': {
               description: 'Rate limit exceeded',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
           },
         },
@@ -314,8 +479,7 @@ function buildSpec() {
         get: {
           operationId: 'getStats',
           summary: 'Regional or state statistics',
-          description:
-            'Returns aggregated statistics for all practice areas in a region or state.',
+          description: 'Returns aggregated statistics for all practice areas in a region or state.',
           tags: ['Statistics'],
           parameters: [
             {
@@ -432,22 +596,44 @@ function buildSpec() {
           tags: ['Bookings'],
           security: [{ bearerAuth: [] }],
           parameters: [
-            { name: 'attorneyId', in: 'query', required: true, description: 'Attorney UUID', schema: { type: 'string', format: 'uuid' } },
-            { name: 'date', in: 'query', description: 'Specific date (YYYY-MM-DD)', schema: { type: 'string', format: 'date' } },
-            { name: 'month', in: 'query', description: 'Month for available slots (YYYY-MM)', schema: { type: 'string' } },
+            {
+              name: 'attorneyId',
+              in: 'query',
+              required: true,
+              description: 'Attorney UUID',
+              schema: { type: 'string', format: 'uuid' },
+            },
+            {
+              name: 'date',
+              in: 'query',
+              description: 'Specific date (YYYY-MM-DD)',
+              schema: { type: 'string', format: 'date' },
+            },
+            {
+              name: 'month',
+              in: 'query',
+              description: 'Month for available slots (YYYY-MM)',
+              schema: { type: 'string' },
+            },
           ],
           responses: {
             '200': {
               description: 'Bookings or slots retrieved',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } },
+              },
             },
             '401': {
               description: 'Authentication required',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '429': {
               description: 'Rate limit exceeded',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
           },
         },
@@ -459,7 +645,12 @@ function buildSpec() {
           tags: ['Bookings'],
           security: [{ bearerAuth: [] }],
           parameters: [
-            { name: 'X-Idempotency-Key', in: 'header', description: 'Client-generated idempotency key to prevent duplicate bookings', schema: { type: 'string' } },
+            {
+              name: 'X-Idempotency-Key',
+              in: 'header',
+              description: 'Client-generated idempotency key to prevent duplicate bookings',
+              schema: { type: 'string' },
+            },
           ],
           requestBody: {
             required: true,
@@ -472,23 +663,33 @@ function buildSpec() {
           responses: {
             '201': {
               description: 'Booking confirmed',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/SuccessResponse' } },
+              },
             },
             '400': {
               description: 'Validation error',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '401': {
               description: 'Authentication required',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '409': {
               description: 'Slot unavailable or duplicate booking',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
             '429': {
               description: 'Rate limit exceeded',
-              content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
+              content: {
+                'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } },
+              },
             },
           },
         },
@@ -748,18 +949,22 @@ function buildSpec() {
         BarometerEntry: {
           type: 'object',
           properties: {
-            metier: { type: 'string', description: 'Practice area name' },
-            metier_slug: { type: 'string', description: 'Practice area slug' },
-            ville: { type: 'string', nullable: true, description: 'City name' },
-            ville_slug: { type: 'string', nullable: true },
-            departement: { type: 'string', nullable: true, description: 'State name' },
-            departement_code: { type: 'string', nullable: true, description: 'State code' },
+            specialty: { type: 'string', description: 'Practice area name' },
+            specialty_slug: { type: 'string', description: 'Practice area slug' },
+            city: { type: 'string', nullable: true, description: 'City name' },
+            city_slug: { type: 'string', nullable: true },
+            state_name: { type: 'string', nullable: true, description: 'State name' },
+            state_code: { type: 'string', nullable: true, description: 'State code' },
             region: { type: 'string', nullable: true },
             region_slug: { type: 'string', nullable: true },
-            nb_attorneys: { type: 'integer' },
-            note_moyenne: { type: 'number', nullable: true, description: 'Average rating' },
-            nb_avis: { type: 'integer', description: 'Review count' },
-            taux_verification: { type: 'number', nullable: true, description: 'Verification rate (0-1)' },
+            attorney_count: { type: 'integer', description: 'Number of attorneys' },
+            average_rating: { type: 'number', nullable: true, description: 'Average rating' },
+            review_count: { type: 'integer', description: 'Review count' },
+            verification_rate: {
+              type: 'number',
+              nullable: true,
+              description: 'Verification rate (0-1)',
+            },
             updated_at: { type: 'string', format: 'date-time' },
           },
         },
@@ -821,7 +1026,14 @@ function buildSpec() {
         },
         SignUpRequest: {
           type: 'object',
-          required: ['email', 'password', 'confirmPassword', 'firstName', 'lastName', 'acceptTerms'],
+          required: [
+            'email',
+            'password',
+            'confirmPassword',
+            'firstName',
+            'lastName',
+            'acceptTerms',
+          ],
           properties: {
             email: { type: 'string', format: 'email' },
             password: { type: 'string', minLength: 8 },
@@ -911,7 +1123,11 @@ function buildSpec() {
           required: ['attorneyId', 'rating'],
           properties: {
             attorneyId: { type: 'string', format: 'uuid' },
-            bookingId: { type: 'string', format: 'uuid', description: 'Optional booking reference' },
+            bookingId: {
+              type: 'string',
+              format: 'uuid',
+              description: 'Optional booking reference',
+            },
             rating: { type: 'integer', minimum: 1, maximum: 5 },
             comment: { type: 'string', maxLength: 5000 },
             would_recommend: { type: 'boolean' },

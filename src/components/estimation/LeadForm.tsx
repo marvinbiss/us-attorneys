@@ -14,12 +14,12 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
   return (
     <form
       onSubmit={lead.handleLeadSubmit}
-      className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm space-y-3"
+      className="space-y-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
       aria-busy={lead.leadLoading}
     >
       <p className="text-sm font-semibold text-gray-900">
-        {context.artisan
-          ? `Send my request to ${context.artisan.name}`
+        {context.attorney
+          ? `Send my request to ${context.attorney.name}`
           : 'Receive my personalized estimate'}
       </p>
       <input
@@ -49,9 +49,7 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
           }
           style={{ fontSize: '16px' }}
         />
-        {lead.leadPhoneError && (
-          <p className="text-xs text-red-600 mt-1">{lead.leadPhoneError}</p>
-        )}
+        {lead.leadPhoneError && <p className="mt-1 text-xs text-red-600">{lead.leadPhoneError}</p>}
       </div>
       <input
         type="email"
@@ -70,33 +68,25 @@ export const LeadForm = memo(function LeadForm({ context, lead }: LeadFormProps)
         />
         <span>
           I agree to have my data processed to receive an estimate.{' '}
-          <a
-            href="/privacy"
-            target="_blank"
-            className="underline"
-          >
+          <a href="/privacy" target="_blank" className="underline">
             Privacy Policy
           </a>
         </span>
       </label>
       {lead.leadError && (
-        <p className="text-xs text-red-600 text-center">
-          An error occurred. Please try again.
-        </p>
+        <p className="text-center text-xs text-red-600">An error occurred. Please try again.</p>
       )}
       <button
         type="submit"
         disabled={lead.leadLoading || !lead.leadPhone.trim() || !lead.privacyConsent}
-        className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E07040] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#c9603a] transition-colors disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E07040] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#c9603a] disabled:opacity-50"
       >
         {lead.leadLoading ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
           <>
             <ArrowRight className="h-4 w-4" />
-            {context.artisan
-              ? `Send to ${context.artisan.name}`
-              : 'Get connected'}
+            {context.attorney ? `Send to ${context.attorney.name}` : 'Get connected'}
           </>
         )}
       </button>

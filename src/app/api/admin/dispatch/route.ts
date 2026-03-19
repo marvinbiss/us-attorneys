@@ -28,7 +28,7 @@ export const dynamic = 'force-dynamic'
 export const GET = createApiHandler(async ({ request }) => {
   // Verify admin with services:read permission
   const auth = await requirePermission('services', 'read')
-  if (!auth.success || !auth.admin) return auth.error!
+  if (!auth.success || !auth.admin) return auth.error as NextResponse
 
   const supabase = createAdminClient()
   const url = new URL(request.url)
@@ -39,7 +39,8 @@ export const GET = createApiHandler(async ({ request }) => {
   // Recent assignments with provider info
   const { data: assignments, error: assignError } = await supabase
     .from('lead_assignments')
-    .select(`
+    .select(
+      `
       id,
       lead_id,
       status,
@@ -50,12 +51,16 @@ export const GET = createApiHandler(async ({ request }) => {
       distance_km,
       position,
       attorney:attorneys(id, name, specialty, address_city)
-    `)
+    `
+    )
     .order('assigned_at', { ascending: false })
     .range(offset, offset + limit - 1)
 
   if (assignError) {
-    logger.warn('Dispatch assignments query failed', { code: assignError.code, message: assignError.message })
+    logger.warn('Dispatch assignments query failed', {
+      code: assignError.code,
+      message: assignError.message,
+    })
     return NextResponse.json({
       assignments: [],
       stats: { pending: 0, viewed: 0, quoted: 0, total: 0 },
@@ -71,9 +76,18 @@ export const GET = createApiHandler(async ({ request }) => {
     { count: quotedCount },
     { count: totalCount },
   ] = await Promise.all([
-    supabase.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-    supabase.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'viewed'),
-    supabase.from('lead_assignments').select('id', { count: 'exact', head: true }).eq('status', 'quoted'),
+    supabase
+      .from('lead_assignments')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'pending'),
+    supabase
+      .from('lead_assignments')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'viewed'),
+    supabase
+      .from('lead_assignments')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'quoted'),
     supabase.from('lead_assignments').select('id', { count: 'exact', head: true }),
   ])
 
@@ -93,13 +107,16 @@ export const GET = createApiHandler(async ({ request }) => {
 export const POST = createApiHandler(async ({ request }) => {
   // Verify admin with services:write permission
   const auth = await requirePermission('services', 'write')
-  if (!auth.success || !auth.admin) return auth.error!
+  if (!auth.success || !auth.admin) return auth.error as NextResponse
 
   const body = await request.json()
   const bodyValidation = actionBodySchema.safeParse(body)
   if (!bodyValidation.success) {
     return NextResponse.json(
-      { success: false, error: { message: 'Invalid parameters', details: bodyValidation.error.flatten() } },
+      {
+        success: false,
+        error: { message: 'Invalid parameters', details: bodyValidation.error.flatten() },
+      },
       { status: 400 }
     )
   }
@@ -109,7 +126,10 @@ export const POST = createApiHandler(async ({ request }) => {
 
   if (action === 'reassign') {
     if (!newProviderId) {
-      return NextResponse.json({ success: false, error: { message: 'newProviderId required for reassign' } }, { status: 400 })
+      return NextResponse.json(
+        { success: false, error: { message: 'newProviderId required for reassign' } },
+        { status: 400 }
+      )
     }
 
     // Get current assignment
@@ -120,7 +140,10 @@ export const POST = createApiHandler(async ({ request }) => {
       .single()
 
     if (!current) {
-      return NextResponse.json({ success: false, error: { message: 'Assignment not found' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Assignment not found' } },
+        { status: 404 }
+      )
     }
 
     // Server-side quota enforcement for the new attorney
@@ -153,20 +176,17 @@ export const POST = createApiHandler(async ({ request }) => {
     })
 
     // Track billing charge with CPA tier pricing
-    getAttorneyTier(newProviderId).then((tier) => {
-      const cost = calculateLeadCost(tier, 'standard')
-      return trackLeadCharge(newProviderId!, current.lead_id, 'standard', cost.finalCents)
-    }).catch((err) =>
-      logger.error('Failed to track lead charge on reassign', err)
-    )
+    getAttorneyTier(newProviderId)
+      .then((tier) => {
+        const cost = calculateLeadCost(tier, 'standard')
+        return trackLeadCharge(newProviderId, current.lead_id, 'standard', cost.finalCents)
+      })
+      .catch((err) => logger.error('Failed to track lead charge on reassign', err))
 
-    await logAdminAction(
-      auth.admin.id,
-      'dispatch_reassign',
-      'lead_assignment',
-      assignmentId,
-      { from: current.attorney_id, to: newProviderId }
-    )
+    await logAdminAction(auth.admin.id, 'dispatch_reassign', 'lead_assignment', assignmentId, {
+      from: current.attorney_id,
+      to: newProviderId,
+    })
   } else if (action === 'replay') {
     // Re-dispatch using configurable algorithm
     const { data: currentReplay } = await supabase
@@ -176,22 +196,24 @@ export const POST = createApiHandler(async ({ request }) => {
       .single()
 
     if (!currentReplay) {
-      return NextResponse.json({ success: false, error: { message: 'Assignment not found' } }, { status: 404 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Assignment not found' } },
+        { status: 404 }
+      )
     }
 
     const result = await dispatchLead(currentReplay.lead_id, {
-      sourceTable: (currentReplay.source_table as 'devis_requests' | 'leads') || 'devis_requests', // legacy table name 'devis_requests' = consultation requests
+      sourceTable: (currentReplay.source_table as 'quote_requests' | 'leads') || 'quote_requests',
     })
 
-    await logAdminAction(
-      auth.admin.id,
-      'dispatch_replay',
-      'lead_assignment',
-      assignmentId,
-      { newAssignments: result }
-    )
+    await logAdminAction(auth.admin.id, 'dispatch_replay', 'lead_assignment', assignmentId, {
+      newAssignments: result,
+    })
   } else {
-    return NextResponse.json({ success: false, error: { message: 'Invalid action' } }, { status: 400 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid action' } },
+      { status: 400 }
+    )
   }
 
   return NextResponse.json({ success: true, action })
@@ -200,24 +222,18 @@ export const POST = createApiHandler(async ({ request }) => {
 // DELETE - Delete an assignment
 export const DELETE = createApiHandler(async ({ request }) => {
   const auth = await requirePermission('services', 'delete')
-  if (!auth.success || !auth.admin) return auth.error!
+  if (!auth.success || !auth.admin) return auth.error as NextResponse
 
   const body = await request.json()
   const id = body?.id
 
   if (!id || !isValidUuid(id)) {
-    return NextResponse.json(
-      { success: false, error: { message: 'Invalid ID' } },
-      { status: 400 }
-    )
+    return NextResponse.json({ success: false, error: { message: 'Invalid ID' } }, { status: 400 })
   }
 
   const supabase = createAdminClient()
 
-  const { error } = await supabase
-    .from('lead_assignments')
-    .delete()
-    .eq('id', id)
+  const { error } = await supabase.from('lead_assignments').delete().eq('id', id)
 
   if (error) {
     logger.error('Dispatch assignment delete error', error)

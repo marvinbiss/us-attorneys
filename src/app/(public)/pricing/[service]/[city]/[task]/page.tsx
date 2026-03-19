@@ -9,7 +9,13 @@ import { REVALIDATE } from '@/lib/cache'
 // Return a minimal seed set (NOT empty — empty array in a child of a parent
 // with generateStaticParams causes a 500 on Vercel with Next.js 14.2).
 export function generateStaticParams() {
-  return [{ service: 'personal-injury', city: 'new-york', task: 'debouchage-de-canalisation' }]
+  return [
+    {
+      service: 'personal-injury',
+      city: 'new-york',
+      task: 'personal-injury-with-soft-tissue-injuries',
+    },
+  ]
 }
 
 export const dynamicParams = true
@@ -39,7 +45,13 @@ export async function generateMetadata({
     description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/pricing/${service}/${villeSlug}/${taskSlug}` },
-    openGraph: { title, description, url: `${SITE_URL}/pricing/${service}/${villeSlug}/${taskSlug}`, type: 'website', locale: 'en_US' },
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/pricing/${service}/${villeSlug}/${taskSlug}`,
+      type: 'website',
+      locale: 'en_US',
+    },
   }
 }
 
@@ -50,7 +62,7 @@ export default async function PricingServiceTaskCityPage({
 }) {
   const { service, city: villeSlug, task: taskSlug } = await params
   const trade = tradeContent[service]
-  const villeData = getCityBySlug(villeSlug) || await resolveZipToCity(villeSlug)
+  const villeData = getCityBySlug(villeSlug) || (await resolveZipToCity(villeSlug))
   if (!trade || !villeData) notFound()
 
   const tasks = getTasksForService(service)
@@ -58,8 +70,8 @@ export default async function PricingServiceTaskCityPage({
   if (!task) notFound()
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="text-3xl font-bold text-gray-900 mb-4">
+    <div className="mx-auto max-w-4xl px-4 py-16">
+      <h1 className="mb-4 text-3xl font-bold text-gray-900">
         {task.name} in {villeData.name}
       </h1>
       <p className="text-gray-500">Content coming soon.</p>

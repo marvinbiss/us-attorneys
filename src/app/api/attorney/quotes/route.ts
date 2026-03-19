@@ -41,7 +41,7 @@ export const GET = createApiHandler(
     const { data: attorney } = await supabase
       .from('attorneys')
       .select('id')
-      .eq('user_id', user!.id)
+      .eq('user_id', user?.id ?? '')
       .single()
 
     if (!attorney) {
@@ -50,7 +50,8 @@ export const GET = createApiHandler(
 
     const { data: quotes, error } = await supabase
       .from('quotes')
-      .select(`
+      .select(
+        `
         id,
         request_id,
         provider_id,
@@ -60,7 +61,7 @@ export const GET = createApiHandler(
         status,
         created_at,
         updated_at,
-        request:devis_requests(
+        request:quote_requests(
           id,
           service_name,
           client_name,
@@ -71,7 +72,8 @@ export const GET = createApiHandler(
           urgency,
           status
         )
-      `)
+      `
+      )
       .eq('provider_id', attorney.id)
       .order('created_at', { ascending: false })
 
@@ -95,7 +97,7 @@ export const POST = createApiHandler(
     if (!parsed.success) {
       return apiError(
         'VALIDATION_ERROR',
-        parsed.error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join(', '),
+        parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join(', '),
         400
       )
     }
@@ -104,7 +106,7 @@ export const POST = createApiHandler(
     const { data: attorney } = await supabase
       .from('attorneys')
       .select('id')
-      .eq('user_id', user!.id)
+      .eq('user_id', user?.id ?? '')
       .single()
 
     if (!attorney) {
@@ -115,7 +117,7 @@ export const POST = createApiHandler(
 
     // Verify the request exists
     const { data: devisRequest } = await supabase
-      .from('devis_requests')
+      .from('quote_requests')
       .select('id, status')
       .eq('id', request_id)
       .single()
@@ -164,7 +166,10 @@ export const POST = createApiHandler(
 export async function PUT(request: NextRequest) {
   try {
     const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
       return NextResponse.json(
@@ -178,7 +183,13 @@ export async function PUT(request: NextRequest) {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, error: { code: 'VALIDATION_ERROR', message: parsed.error.issues.map(i => i.message).join(', ') } },
+        {
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: parsed.error.issues.map((i) => i.message).join(', '),
+          },
+        },
         { status: 400 }
       )
     }
@@ -217,7 +228,13 @@ export async function PUT(request: NextRequest) {
     // Only allow updating pending quotes
     if (existingQuote.status !== 'pending') {
       return NextResponse.json(
-        { success: false, error: { code: 'INVALID_STATUS', message: `Cannot update a quote with status: ${existingQuote.status}` } },
+        {
+          success: false,
+          error: {
+            code: 'INVALID_STATUS',
+            message: `Cannot update a quote with status: ${existingQuote.status}`,
+          },
+        },
         { status: 400 }
       )
     }

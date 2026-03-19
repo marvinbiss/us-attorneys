@@ -11,19 +11,18 @@ const quoteUpdateSchema = z.object({
 export const dynamic = 'force-dynamic'
 
 // GET - Get single quote
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1001, message: 'Authentication required' }
+          error: { code: 1001, message: 'Authentication required' },
         },
         { status: 401 }
       )
@@ -31,9 +30,11 @@ export async function GET(
 
     const { data: quote, error } = await supabase
       .from('quotes')
-      .select(`
+      .select(
+        `
         id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at
-      `)
+      `
+      )
       .eq('id', params.id)
       .single()
 
@@ -41,7 +42,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: { code: 2002, message: 'Quote not found' }
+          error: { code: 2002, message: 'Quote not found' },
         },
         { status: 404 }
       )
@@ -57,9 +58,9 @@ export async function GET(
     const isProvider = provider?.id === quote.attorney_id
 
     // Check if user is the client via the consultation request
-    // Table 'devis_requests' = consultation requests (legacy French name)
+
     const { data: devisRequest } = await supabase
-      .from('devis_requests')
+      .from('quote_requests')
       .select('client_id')
       .eq('id', quote.request_id)
       .single()
@@ -70,7 +71,7 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1002, message: 'Access denied' }
+          error: { code: 1002, message: 'Access denied' },
         },
         { status: 403 }
       )
@@ -85,7 +86,7 @@ export async function GET(
     return NextResponse.json(
       {
         success: false,
-        error: { code: 9999, message: 'Server error' }
+        error: { code: 9999, message: 'Server error' },
       },
       { status: 500 }
     )
@@ -93,19 +94,18 @@ export async function GET(
 }
 
 // PATCH - Update quote status
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
 
     if (!user) {
       return NextResponse.json(
         {
           success: false,
-          error: { code: 1001, message: 'Authentication required' }
+          error: { code: 1001, message: 'Authentication required' },
         },
         { status: 401 }
       )
@@ -117,7 +117,7 @@ export async function PATCH(
       return NextResponse.json(
         {
           success: false,
-          error: { code: 2001, message: 'Validation error', details: result.error.flatten() }
+          error: { code: 2001, message: 'Validation error', details: result.error.flatten() },
         },
         { status: 400 }
       )
@@ -126,7 +126,9 @@ export async function PATCH(
 
     const { data: quote } = await supabase
       .from('quotes')
-      .select('id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at')
+      .select(
+        'id, request_id, attorney_id, amount, description, valid_until, status, created_at, updated_at'
+      )
       .eq('id', params.id)
       .single()
 
@@ -134,7 +136,7 @@ export async function PATCH(
       return NextResponse.json(
         {
           success: false,
-          error: { code: 2002, message: 'Quote not found' }
+          error: { code: 2002, message: 'Quote not found' },
         },
         { status: 404 }
       )
@@ -149,9 +151,8 @@ export async function PATCH(
 
     const isProvider = provider?.id === quote.attorney_id
 
-    // Table 'devis_requests' = consultation requests (legacy French name)
     const { data: devisRequest } = await supabase
-      .from('devis_requests')
+      .from('quote_requests')
       .select('client_id')
       .eq('id', quote.request_id)
       .single()
@@ -166,7 +167,7 @@ export async function PATCH(
           return NextResponse.json(
             {
               success: false,
-              error: { code: 1002, message: 'Only the client can accept the consultation' }
+              error: { code: 1002, message: 'Only the client can accept the consultation' },
             },
             { status: 403 }
           )
@@ -179,7 +180,7 @@ export async function PATCH(
           return NextResponse.json(
             {
               success: false,
-              error: { code: 1002, message: 'Only the client can reject the consultation' }
+              error: { code: 1002, message: 'Only the client can reject the consultation' },
             },
             { status: 403 }
           )
@@ -192,7 +193,7 @@ export async function PATCH(
           return NextResponse.json(
             {
               success: false,
-              error: { code: 1002, message: 'Only the attorney can cancel the consultation' }
+              error: { code: 1002, message: 'Only the attorney can cancel the consultation' },
             },
             { status: 403 }
           )
@@ -222,7 +223,7 @@ export async function PATCH(
     return NextResponse.json(
       {
         success: false,
-        error: { code: 9999, message: 'Server error' }
+        error: { code: 9999, message: 'Server error' },
       },
       { status: 500 }
     )

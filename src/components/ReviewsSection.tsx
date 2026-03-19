@@ -10,8 +10,8 @@ interface Review {
   would_recommend: boolean
   client_name: string
   created_at: string
-  artisan_response: string | null
-  artisan_responded_at: string | null
+  attorney_response: string | null
+  attorney_responded_at: string | null
   helpful_count: number
   booking_id?: string | null
   user_id?: string | null
@@ -269,15 +269,15 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
             {review.comment && <p className="mb-4 text-gray-700">{review.comment}</p>}
 
             {/* Attorney response */}
-            {review.artisan_response && (
+            {review.attorney_response && (
               <div className="mb-4 rounded-lg bg-violet-50 p-4">
                 <p className="mb-1 text-xs font-medium text-violet-700">
                   Response from {attorneyName || 'the attorney'}
                 </p>
-                <p className="text-sm text-gray-700">{review.artisan_response}</p>
-                {review.artisan_responded_at && (
+                <p className="text-sm text-gray-700">{review.attorney_response}</p>
+                {review.attorney_responded_at && (
                   <p className="mt-1 text-xs text-gray-500">
-                    {formatDate(review.artisan_responded_at)}
+                    {formatDate(review.attorney_responded_at)}
                   </p>
                 )}
               </div>

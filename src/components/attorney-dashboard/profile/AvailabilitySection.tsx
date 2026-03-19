@@ -9,48 +9,49 @@ interface AvailabilitySectionProps {
   onSaved: (updated: Record<string, unknown>) => void
 }
 
-// DB-bound: French keys from database (opening_hours JSONB column in Supabase)
 interface DaySchedule {
-  ouvert: boolean
-  debut: string
-  fin: string
+  open: boolean
+  start: string
+  end: string
 }
 
-// DB-bound: French keys from database (opening_hours JSONB column in Supabase)
 interface OpeningHours {
-  lundi: DaySchedule
-  mardi: DaySchedule
-  mercredi: DaySchedule
-  jeudi: DaySchedule
-  vendredi: DaySchedule
-  samedi: DaySchedule
-  dimanche: DaySchedule
+  monday: DaySchedule
+  tuesday: DaySchedule
+  wednesday: DaySchedule
+  thursday: DaySchedule
+  friday: DaySchedule
+  saturday: DaySchedule
+  sunday: DaySchedule
 }
 
 const FIELDS = ['opening_hours', 'available_24h', 'accepts_new_clients'] as const
 
 const DAYS: { key: keyof OpeningHours; label: string }[] = [
-  { key: 'lundi', label: 'Monday' },
-  { key: 'mardi', label: 'Tuesday' },
-  { key: 'mercredi', label: 'Wednesday' },
-  { key: 'jeudi', label: 'Thursday' },
-  { key: 'vendredi', label: 'Friday' },
-  { key: 'samedi', label: 'Saturday' },
-  { key: 'dimanche', label: 'Sunday' },
+  { key: 'monday', label: 'Monday' },
+  { key: 'tuesday', label: 'Tuesday' },
+  { key: 'wednesday', label: 'Wednesday' },
+  { key: 'thursday', label: 'Thursday' },
+  { key: 'friday', label: 'Friday' },
+  { key: 'saturday', label: 'Saturday' },
+  { key: 'sunday', label: 'Sunday' },
 ]
 
 const DEFAULT_HOURS: OpeningHours = {
-  lundi: { ouvert: true, debut: '08:00', fin: '18:00' },
-  mardi: { ouvert: true, debut: '08:00', fin: '18:00' },
-  mercredi: { ouvert: true, debut: '08:00', fin: '18:00' },
-  jeudi: { ouvert: true, debut: '08:00', fin: '18:00' },
-  vendredi: { ouvert: true, debut: '08:00', fin: '18:00' },
-  samedi: { ouvert: true, debut: '09:00', fin: '12:00' },
-  dimanche: { ouvert: false, debut: '', fin: '' },
+  monday: { open: true, start: '08:00', end: '18:00' },
+  tuesday: { open: true, start: '08:00', end: '18:00' },
+  wednesday: { open: true, start: '08:00', end: '18:00' },
+  thursday: { open: true, start: '08:00', end: '18:00' },
+  friday: { open: true, start: '08:00', end: '18:00' },
+  saturday: { open: true, start: '09:00', end: '12:00' },
+  sunday: { open: false, start: '', end: '' },
 }
 
 export function AvailabilitySection({ provider, onSaved }: AvailabilitySectionProps) {
-  const { formData, setField, isDirty, saving, error, success, handleSave } = useAttorneyForm(provider, FIELDS)
+  const { formData, setField, isDirty, saving, error, success, handleSave } = useAttorneyForm(
+    provider,
+    FIELDS
+  )
 
   const onSave = async () => {
     const updated = await handleSave()
@@ -62,7 +63,11 @@ export function AvailabilitySection({ provider, onSaved }: AvailabilitySectionPr
   const available24h = Boolean(formData.available_24h)
   const acceptsNewClients = formData.accepts_new_clients !== false
 
-  const updateDay = (day: keyof OpeningHours, field: keyof DaySchedule, value: boolean | string) => {
+  const updateDay = (
+    day: keyof OpeningHours,
+    field: keyof DaySchedule,
+    value: boolean | string
+  ) => {
     const updated = {
       ...openingHours,
       [day]: { ...openingHours[day], [field]: value },
@@ -72,7 +77,7 @@ export function AvailabilitySection({ provider, onSaved }: AvailabilitySectionPr
 
   /** Returns true if closing time is not after opening time for an open day */
   const hasTimeError = (day: DaySchedule): boolean => {
-    return day.ouvert && day.debut !== '' && day.fin !== '' && day.fin <= day.debut
+    return day.open && day.start !== '' && day.end !== '' && day.end <= day.start
   }
 
   return (
@@ -88,56 +93,58 @@ export function AvailabilitySection({ provider, onSaved }: AvailabilitySectionPr
       <div className="space-y-8">
         {/* Opening hours grid */}
         <div>
-          <span className="block text-sm font-medium text-gray-700 mb-3">Office hours</span>
+          <span className="mb-3 block text-sm font-medium text-gray-700">Office hours</span>
           {isUsingDefaults && !isDirty && (
-            <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg mb-3">
+            <p className="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-600">
               Default hours. Edit and save to customize.
             </p>
           )}
           <div className="space-y-3">
             {DAYS.map(({ key, label }) => {
-              const day = openingHours[key] || { ouvert: false, debut: '', fin: '' }
+              const day = openingHours[key] || { open: false, start: '', end: '' }
               const timeError = hasTimeError(day)
               return (
                 <div key={key}>
                   <div className="flex items-center gap-4">
                     <span className="w-24 text-sm text-gray-700">{label}</span>
-                    <label htmlFor={`dispo-${key}-ouvert`} className="flex items-center gap-2">
+                    <label htmlFor={`dispo-${key}-open`} className="flex items-center gap-2">
                       <input
-                        id={`dispo-${key}-ouvert`}
+                        id={`dispo-${key}-open`}
                         type="checkbox"
-                        checked={day.ouvert}
-                        onChange={(e) => updateDay(key, 'ouvert', e.target.checked)}
+                        checked={day.open}
+                        onChange={(e) => updateDay(key, 'open', e.target.checked)}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                       />
                       <span className="text-sm text-gray-600">Open</span>
                     </label>
-                    {day.ouvert && (
+                    {day.open && (
                       <>
-                        <label htmlFor={`dispo-${key}-debut`} className="sr-only">
+                        <label htmlFor={`dispo-${key}-start`} className="sr-only">
                           Opening time {label}
                         </label>
                         <input
-                          id={`dispo-${key}-debut`}
+                          id={`dispo-${key}-start`}
                           type="time"
-                          value={day.debut}
-                          onChange={(e) => updateDay(key, 'debut', e.target.value)}
+                          value={day.start}
+                          onChange={(e) => updateDay(key, 'start', e.target.value)}
                           aria-label={`Opening time ${label}`}
-                          className={`px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
+                          className={`rounded-lg border px-3 py-1.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 ${
                             timeError ? 'border-red-400 bg-red-50' : 'border-gray-300'
                           }`}
                         />
-                        <span className="text-gray-500 text-sm" aria-hidden="true">to</span>
-                        <label htmlFor={`dispo-${key}-fin`} className="sr-only">
+                        <span className="text-sm text-gray-500" aria-hidden="true">
+                          to
+                        </span>
+                        <label htmlFor={`dispo-${key}-end`} className="sr-only">
                           Closing time {label}
                         </label>
                         <input
-                          id={`dispo-${key}-fin`}
+                          id={`dispo-${key}-end`}
                           type="time"
-                          value={day.fin}
-                          onChange={(e) => updateDay(key, 'fin', e.target.value)}
+                          value={day.end}
+                          onChange={(e) => updateDay(key, 'end', e.target.value)}
                           aria-label={`Closing time ${label}`}
-                          className={`px-3 py-1.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
+                          className={`rounded-lg border px-3 py-1.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 ${
                             timeError ? 'border-red-400 bg-red-50' : 'border-gray-300'
                           }`}
                         />
@@ -145,7 +152,7 @@ export function AvailabilitySection({ provider, onSaved }: AvailabilitySectionPr
                     )}
                   </div>
                   {timeError && (
-                    <p className="text-xs text-red-500 mt-1 ml-28">
+                    <p className="ml-28 mt-1 text-xs text-red-500">
                       Closing time must be after opening time
                     </p>
                   )}

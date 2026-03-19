@@ -32,10 +32,7 @@ async function fireConfetti() {
   }
 }
 
-export const CallbackPanel = memo(function CallbackPanel({
-  context,
-  lead,
-}: CallbackPanelProps) {
+export const CallbackPanel = memo(function CallbackPanel({ context, lead }: CallbackPanelProps) {
   const reducedMotion = useReducedMotion()
   const confettiFired = useRef(false)
 
@@ -48,38 +45,32 @@ export const CallbackPanel = memo(function CallbackPanel({
   }, [lead.callbackSubmitted])
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-6 py-8">
+    <div className="flex flex-1 flex-col items-center justify-center px-6 py-8">
       {!lead.callbackSubmitted ? (
         <motion.div
           initial={reducedMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={reducedMotion ? { duration: 0 } : undefined}
-          className="w-full max-w-sm text-center space-y-5"
+          className="w-full max-w-sm space-y-5 text-center"
         >
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#E07040]/10">
             <Phone className="h-7 w-7 text-[#E07040]" />
           </div>
           <div>
             <p className="text-base font-semibold text-gray-900">
-              {context.artisan
-                ? `Get a callback from ${context.artisan.name}`
+              {context.attorney
+                ? `Get a callback from ${context.attorney.name}`
                 : 'Request a callback'}
             </p>
             <p className="mt-1 text-sm text-gray-600">
-              {context.artisan ? (
+              {context.attorney ? (
                 <>
-                  <strong>{context.artisan.name}</strong> will
-                  call you back as soon as possible
+                  <strong>{context.attorney.name}</strong> will call you back as soon as possible
                 </>
               ) : (
                 <>
-                  A verified{' '}
-                  <strong>
-                    {context.metier.toLowerCase()}
-                  </strong>{' '}
-                  in{' '}
-                  <strong>{context.ville}</strong> will
-                  call you back as soon as possible
+                  A verified <strong>{context.metier.toLowerCase()}</strong> in{' '}
+                  <strong>{context.ville}</strong> will call you back as soon as possible
                 </>
               )}
             </p>
@@ -109,13 +100,11 @@ export const CallbackPanel = memo(function CallbackPanel({
                 style={{ fontSize: '16px' }}
               />
               {lead.callbackPhoneError && (
-                <p className="text-xs text-red-600 mt-1 text-center">
-                  {lead.callbackPhoneError}
-                </p>
+                <p className="mt-1 text-center text-xs text-red-600">{lead.callbackPhoneError}</p>
               )}
             </div>
             {/* Privacy consent */}
-            <label className="flex items-start gap-2 text-xs text-gray-500 text-left">
+            <label className="flex items-start gap-2 text-left text-xs text-gray-500">
               <input
                 type="checkbox"
                 checked={lead.privacyCallbackConsent}
@@ -124,17 +113,13 @@ export const CallbackPanel = memo(function CallbackPanel({
               />
               <span>
                 I agree to have my data processed to receive a callback.{' '}
-                <a
-                  href="/privacy"
-                  target="_blank"
-                  className="underline"
-                >
+                <a href="/privacy" target="_blank" className="underline">
                   Privacy Policy
                 </a>
               </span>
             </label>
             {lead.callbackError && (
-              <p className="text-xs text-red-600 text-center">
+              <p className="text-center text-xs text-red-600">
                 An error occurred. Please try again.
               </p>
             )}
@@ -143,7 +128,7 @@ export const CallbackPanel = memo(function CallbackPanel({
               disabled={
                 lead.callbackLoading || !lead.callbackPhone.trim() || !lead.privacyCallbackConsent
               }
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E07040] px-4 py-3 text-sm font-semibold text-white hover:bg-[#c9603a] transition-colors disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E07040] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#c9603a] disabled:opacity-50"
             >
               {lead.callbackLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -161,19 +146,27 @@ export const CallbackPanel = memo(function CallbackPanel({
           initial={reducedMotion ? false : { scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={reducedMotion ? { duration: 0 } : undefined}
-          className="w-full max-w-sm text-center space-y-5"
+          className="w-full max-w-sm space-y-5 text-center"
         >
           {/* Animated checkmark */}
           <motion.div
             initial={reducedMotion ? false : { scale: 0 }}
             animate={{ scale: 1 }}
-            transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }}
+            transition={
+              reducedMotion
+                ? { duration: 0 }
+                : { type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }
+            }
             className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100"
           >
             <motion.div
               initial={reducedMotion ? false : { scale: 0, rotate: -45 }}
               animate={{ scale: 1, rotate: 0 }}
-              transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 400, damping: 12, delay: 0.25 }}
+              transition={
+                reducedMotion
+                  ? { duration: 0 }
+                  : { type: 'spring', stiffness: 400, damping: 12, delay: 0.25 }
+              }
             >
               <Check className="h-8 w-8 text-green-600" />
             </motion.div>
