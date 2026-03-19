@@ -59,14 +59,14 @@ describe('Toast', () => {
 
   it('renders close button with aria-label', () => {
     render(<Toast toast={buildToast()} onDismiss={vi.fn()} />)
-    expect(screen.getByLabelText('Close')).toBeInTheDocument()
+    expect(screen.getByLabelText('Close notification')).toBeInTheDocument()
   })
 
   it('calls onDismiss when close button is clicked', () => {
     vi.useFakeTimers()
     const onDismiss = vi.fn()
     render(<Toast toast={buildToast({ id: 'abc' })} onDismiss={onDismiss} />)
-    fireEvent.click(screen.getByLabelText('Close'))
+    fireEvent.click(screen.getByLabelText('Close notification'))
     // onDismiss is called after a 150ms timeout
     vi.advanceTimersByTime(200)
     expect(onDismiss).toHaveBeenCalledWith('abc')
@@ -98,7 +98,9 @@ describe('Toast', () => {
   })
 
   it('renders correct icon for each type', () => {
-    const { rerender } = render(<Toast toast={buildToast({ type: 'success' })} onDismiss={vi.fn()} />)
+    const { rerender } = render(
+      <Toast toast={buildToast({ type: 'success' })} onDismiss={vi.fn()} />
+    )
     expect(screen.getByTestId('icon-CheckCircle')).toBeInTheDocument()
 
     rerender(<Toast toast={buildToast({ type: 'error' })} onDismiss={vi.fn()} />)
@@ -113,12 +115,7 @@ describe('Toast', () => {
 
   it('renders action button when action is provided', () => {
     const onClick = vi.fn()
-    render(
-      <Toast
-        toast={buildToast({ action: { label: 'Undo', onClick } })}
-        onDismiss={vi.fn()}
-      />
-    )
+    render(<Toast toast={buildToast({ action: { label: 'Undo', onClick } })} onDismiss={vi.fn()} />)
     const actionBtn = screen.getByText('Undo')
     expect(actionBtn).toBeInTheDocument()
     fireEvent.click(actionBtn)

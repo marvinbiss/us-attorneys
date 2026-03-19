@@ -7,7 +7,9 @@
  *   1. Refresh materialized view mv_attorney_stats
  *   2. Data quality checks (stale records, orphans)
  *   3. Trust badge recalculation
- *   4. Sitemap health check
+ *   4. Cleanup stale data
+ *   5. Attorney deduplication (EXACT auto-merge, HIGH flagged)
+ *   6. SOL staleness detection (entries older than 1 year)
  *
  * Each task has its own try/catch so one failure doesn't block the rest.
  * Must complete within Vercel's 60s function timeout.
@@ -137,6 +139,109 @@ async function recalculateTrustBadges(): Promise<TaskResult> {
   }
 }
 
+async function runDedupAttorneys(): Promise<TaskResult> {
+  const start = Date.now()
+  try {
+    // Call the dedup-attorneys endpoint internally
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    const cronSecret = process.env.CRON_SECRET
+
+    const response = await fetch(`${siteUrl}/api/cron/dedup-attorneys`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${cronSecret}`,
+      },
+    })
+
+    if (!response.ok) {
+      const body = await response.text()
+      return {
+        name: 'dedup_attorneys',
+        status: 'error',
+        durationMs: Date.now() - start,
+        details: `HTTP ${response.status}: ${body.substring(0, 200)}`,
+      }
+    }
+
+    const data = await response.json()
+    return {
+      name: 'dedup_attorneys',
+      status: data.success ? 'success' : 'error',
+      durationMs: Date.now() - start,
+      details: `exact_merged=${data.exactMerged ?? 0}, high_flagged=${data.highFlagged ?? 0}, cycles_detected=${data.cyclesDetected ?? 0}, cycles_fixed=${data.cyclesFixed ?? 0}`,
+    }
+  } catch (err: unknown) {
+    return {
+      name: 'dedup_attorneys',
+      status: 'error',
+      durationMs: Date.now() - start,
+      details: err instanceof Error ? err.message : 'Unknown error',
+    }
+  }
+}
+
+async function checkSolStaleness(): Promise<TaskResult> {
+  const start = Date.now()
+  try {
+    const supabase = createAdminClient()
+
+    // Flag SOL entries older than 1 year as potentially stale
+    const oneYearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString()
+
+    const { count: staleCount, error: staleError } = await supabase
+      .from('statute_of_limitations')
+      .select('*', { count: 'exact', head: true })
+      .lt('updated_at', oneYearAgo)
+
+    if (staleError) {
+      // Table may not exist yet — skip gracefully
+      if (staleError.message.includes('does not exist') || staleError.code === '42P01') {
+        return {
+          name: 'sol_staleness',
+          status: 'skipped',
+          durationMs: Date.now() - start,
+          details: 'statute_of_limitations table not found',
+        }
+      }
+      return {
+        name: 'sol_staleness',
+        status: 'error',
+        durationMs: Date.now() - start,
+        details: staleError.message,
+      }
+    }
+
+    const { count: totalRecords } = await supabase
+      .from('statute_of_limitations')
+      .select('*', { count: 'exact', head: true })
+
+    const stale = staleCount ?? 0
+    const total = totalRecords ?? 0
+
+    if (stale > 0) {
+      logger.warn('[DailyTasks] SOL staleness: entries older than 1 year detected', {
+        staleCount: stale,
+        totalRecords: total,
+        threshold: '1 year',
+      })
+    }
+
+    return {
+      name: 'sol_staleness',
+      status: 'success',
+      durationMs: Date.now() - start,
+      details: `stale_1y=${stale}, total=${total}`,
+    }
+  } catch (err: unknown) {
+    return {
+      name: 'sol_staleness',
+      status: 'error',
+      durationMs: Date.now() - start,
+      details: err instanceof Error ? err.message : 'Unknown error',
+    }
+  }
+}
+
 async function cleanupStaleData(): Promise<TaskResult> {
   const start = Date.now()
   try {
@@ -184,6 +289,8 @@ export async function GET(request: Request) {
   results.push(await checkDataQuality())
   results.push(await recalculateTrustBadges())
   results.push(await cleanupStaleData())
+  results.push(await runDedupAttorneys())
+  results.push(await checkSolStaleness())
 
   const totalDuration = Date.now() - startTime
   const errors = results.filter((r) => r.status === 'error')

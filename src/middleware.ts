@@ -1,6 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
-import { checkRateLimit, getRateLimitConfig, getRateLimitKey, getClientIp } from '@/lib/rate-limiter'
+import {
+  checkRateLimit,
+  getRateLimitConfig,
+  getRateLimitKey,
+  getClientIp,
+} from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
 import { SPANISH_PA_SLUGS, ENGLISH_PA_SLUGS } from '@/lib/seo/hreflang'
 import {
@@ -90,7 +95,8 @@ function buildCSP(nonce: string): string {
     `style-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://fonts.googleapis.com`,
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: blob: https: http:",
-    "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.sentry.io https://connect.facebook.net https://t.contentsquare.net https://nominatim.openstreetmap.org https://*.tile.openstreetmap.org" + (IS_DEV ? ' ws://localhost:* http://localhost:*' : ''),
+    "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.sentry.io https://connect.facebook.net https://t.contentsquare.net https://nominatim.openstreetmap.org https://*.tile.openstreetmap.org" +
+      (IS_DEV ? ' ws://localhost:* http://localhost:*' : ''),
     "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.openstreetmap.org",
     "object-src 'none'",
     "base-uri 'self'",
@@ -117,7 +123,7 @@ function buildCSPReportOnly(): string {
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "report-uri /api/csp-report",
+    'report-uri /api/csp-report',
   ].join('; ')
 }
 
@@ -128,20 +134,31 @@ function buildCSPReportOnly(): string {
 // that might bypass the static headers layer.
 // ---------------------------------------------------------------------------
 
-function addSecurityHeaders(response: NextResponse, request: NextRequest, nonce: string): NextResponse {
+function addSecurityHeaders(
+  response: NextResponse,
+  request: NextRequest,
+  nonce: string
+): NextResponse {
   const userAgent = request.headers.get('user-agent') || ''
-  const isCapacitor = userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
+  const isCapacitor =
+    userAgent.includes('Capacitor') || userAgent.includes('Android') || userAgent.includes('iPhone')
 
   // Always set non-CSP security headers (lightweight, no reason to skip)
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('X-Frame-Options', 'DENY')
   response.headers.set('X-XSS-Protection', '1; mode=block')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self), payment=(self)')
+  response.headers.set(
+    'Permissions-Policy',
+    'camera=(), microphone=(), geolocation=(self), payment=(self)'
+  )
 
   // HSTS — only in production (avoid locking localhost into HTTPS)
   if (!IS_DEV) {
-    response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload')
+    response.headers.set(
+      'Strict-Transport-Security',
+      'max-age=63072000; includeSubDomains; preload'
+    )
   }
 
   // CSP — skip for Capacitor (WebView has its own CSP constraints)
@@ -189,11 +206,19 @@ function getCanonicalRedirect(request: NextRequest): string | null {
   }
 
   // 3. Strip UTM and tracking parameters to avoid duplicate content
-  const trackingParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid']
-  const hasTracking = trackingParams.some(p => url.searchParams.has(p))
+  const trackingParams = [
+    'utm_source',
+    'utm_medium',
+    'utm_campaign',
+    'utm_term',
+    'utm_content',
+    'fbclid',
+    'gclid',
+  ]
+  const hasTracking = trackingParams.some((p) => url.searchParams.has(p))
   let search = url.search
   if (hasTracking) {
-    trackingParams.forEach(p => url.searchParams.delete(p))
+    trackingParams.forEach((p) => url.searchParams.delete(p))
     const cleanSearch = url.searchParams.toString()
     search = cleanSearch ? `?${cleanSearch}` : ''
     needsRedirect = true
@@ -221,20 +246,40 @@ export async function middleware(request: NextRequest) {
 
   // Redirect legacy pricing URLs → /pricing (301 permanent, cached at CDN edge)
   if (pathname.startsWith('/pricing-artisans') || pathname.startsWith('/pricing-attorneys')) {
-    const newPath = pathname.replace('/pricing-artisans', '/pricing').replace('/pricing-attorneys', '/pricing')
+    const newPath = pathname
+      .replace('/pricing-artisans', '/pricing')
+      .replace('/pricing-attorneys', '/pricing')
     const host = request.headers.get('host') || 'lawtendr.com'
-    const redirectResponse = NextResponse.redirect(`https://${host}${newPath}${request.nextUrl.search}`, 301)
-    redirectResponse.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
-    redirectResponse.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
+    const redirectResponse = NextResponse.redirect(
+      `https://${host}${newPath}${request.nextUrl.search}`,
+      301
+    )
+    redirectResponse.headers.set(
+      'Cache-Control',
+      'public, s-maxage=31536000, stale-while-revalidate=31536000'
+    )
+    redirectResponse.headers.set(
+      'CDN-Cache-Control',
+      'public, s-maxage=31536000, stale-while-revalidate=31536000'
+    )
     return redirectResponse
   }
 
   // Redirect legacy/mistyped URLs → correct paths (301 permanent, cached at CDN edge)
   if (LEGACY_REDIRECTS[pathname]) {
     const host = request.headers.get('host') || 'lawtendr.com'
-    const legacyRedirect = NextResponse.redirect(`https://${host}${LEGACY_REDIRECTS[pathname]}${request.nextUrl.search}`, 301)
-    legacyRedirect.headers.set('Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
-    legacyRedirect.headers.set('CDN-Cache-Control', 'public, s-maxage=31536000, stale-while-revalidate=31536000')
+    const legacyRedirect = NextResponse.redirect(
+      `https://${host}${LEGACY_REDIRECTS[pathname]}${request.nextUrl.search}`,
+      301
+    )
+    legacyRedirect.headers.set(
+      'Cache-Control',
+      'public, s-maxage=31536000, stale-while-revalidate=31536000'
+    )
+    legacyRedirect.headers.set(
+      'CDN-Cache-Control',
+      'public, s-maxage=31536000, stale-while-revalidate=31536000'
+    )
     return legacyRedirect
   }
 
@@ -248,13 +293,17 @@ export async function middleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
 
   // Auth guard for private spaces
-  if (pathname.startsWith('/client-dashboard') || pathname.startsWith('/attorney-dashboard') || (pathname.startsWith('/admin') && pathname !== '/admin/login')) {
+  if (
+    pathname.startsWith('/client-dashboard') ||
+    pathname.startsWith('/attorney-dashboard') ||
+    (pathname.startsWith('/admin') && pathname !== '/admin/login')
+  ) {
     try {
       const { createServerClient } = await import('@supabase/ssr')
 
       const supabase = createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
         {
           cookies: {
             get(name: string) {
@@ -266,7 +315,10 @@ export async function middleware(request: NextRequest) {
         }
       )
 
-      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser()
 
       if (authError || !user) {
         const redirectUrl = encodeURIComponent(pathname)
@@ -282,16 +334,21 @@ export async function middleware(request: NextRequest) {
       // Admin routes: verify user has admin role (authentication alone is not enough)
       if (pathname.startsWith('/admin') && pathname !== '/admin/login') {
         if (!profile?.is_admin) {
-          logger.warn('Non-admin user attempted to access admin route', { userId: user.id, pathname })
+          logger.warn('Non-admin user attempted to access admin route', {
+            userId: user.id,
+            pathname,
+          })
           return NextResponse.redirect(new URL('/', request.url))
         }
       }
 
       if (profile) {
-        if (pathname.startsWith('/attorney-dashboard') && profile.role !== 'artisan') { // DB role value 'artisan' = attorney (legacy, do not change without migration)
+        if (pathname.startsWith('/attorney-dashboard') && profile.role !== 'artisan') {
+          // DB role value 'artisan' = attorney (legacy, do not change without migration)
           return NextResponse.redirect(new URL('/client-dashboard', request.url))
         }
-        if (pathname.startsWith('/client-dashboard') && profile.role === 'artisan') { // DB role value 'artisan' = attorney (legacy, do not change without migration)
+        if (pathname.startsWith('/client-dashboard') && profile.role === 'artisan') {
+          // DB role value 'artisan' = attorney (legacy, do not change without migration)
           return NextResponse.redirect(new URL('/attorney-dashboard', request.url))
         }
       }
@@ -305,7 +362,12 @@ export async function middleware(request: NextRequest) {
 
   // Rate limiting for API routes and heavy page routes
   // Skip health check (must always respond fast) and csp-report (has its own rate limiting)
-  if ((pathname.startsWith('/api/') && pathname !== '/api/health' && pathname !== '/api/csp-report') || pathname.startsWith('/find/')) {
+  if (
+    (pathname.startsWith('/api/') &&
+      pathname !== '/api/health' &&
+      pathname !== '/api/csp-report') ||
+    pathname.startsWith('/find/')
+  ) {
     const clientIp = getClientIp(request.headers)
     const rateLimitConfig = getRateLimitConfig(pathname, request.method)
     const rateLimitKey = getRateLimitKey(clientIp, pathname)
@@ -336,6 +398,78 @@ export async function middleware(request: NextRequest) {
   }
 
   // ---------------------------------------------------------------------------
+  // CSRF Origin Check — block cross-origin state-changing requests.
+  // Runs BEFORE the double-submit cookie check for defense-in-depth.
+  // Exempt: GET/HEAD/OPTIONS, Bearer-authenticated requests (cron jobs),
+  // and webhook endpoints (Stripe, Resend, Vapi) which use signature auth.
+  // ---------------------------------------------------------------------------
+  const CSRF_ORIGIN_EXEMPT_PREFIXES = [
+    '/api/stripe/webhook',
+    '/api/admin/prospection/webhooks/',
+    '/api/vapi/webhook',
+  ]
+  const stateChangingMethods = new Set(['POST', 'PUT', 'DELETE', 'PATCH'])
+
+  if (stateChangingMethods.has(request.method)) {
+    const authHeader = request.headers.get('authorization') || ''
+    const hasBearerToken = authHeader.startsWith('Bearer ')
+    const isWebhookRoute = CSRF_ORIGIN_EXEMPT_PREFIXES.some((prefix) => pathname.startsWith(prefix))
+
+    if (!hasBearerToken && !isWebhookRoute) {
+      const origin = request.headers.get('origin')
+      const referer = request.headers.get('referer')
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
+
+      let originAllowed = false
+
+      if (origin) {
+        // Origin header present — validate it matches our domain
+        try {
+          const originHost = new URL(origin).origin
+          const siteHost = siteUrl ? new URL(siteUrl).origin : null
+          const requestHost = request.headers.get('host') || ''
+          originAllowed =
+            (siteHost && originHost === siteHost) ||
+            originHost === `https://${requestHost}` ||
+            originHost === `http://${requestHost}`
+        } catch {
+          originAllowed = false
+        }
+      } else if (referer) {
+        // No Origin header — use Referer as fallback (same-origin check)
+        try {
+          const refererHost = new URL(referer).origin
+          const siteHost = siteUrl ? new URL(siteUrl).origin : null
+          const requestHost = request.headers.get('host') || ''
+          originAllowed =
+            (siteHost && refererHost === siteHost) ||
+            refererHost === `https://${requestHost}` ||
+            refererHost === `http://${requestHost}`
+        } catch {
+          originAllowed = false
+        }
+      } else {
+        // Neither Origin nor Referer — reject (cross-origin requests always send Origin)
+        originAllowed = false
+      }
+
+      if (!originAllowed) {
+        logger.warn('CSRF origin check failed', {
+          action: 'csrf_origin_block',
+          pathname,
+          method: request.method,
+          origin: request.headers.get('origin'),
+          referer: request.headers.get('referer'),
+        })
+        return new NextResponse(JSON.stringify({ error: 'Forbidden: origin not allowed' }), {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
   // CSRF double-submit cookie validation
   // Mutating requests (POST/PUT/DELETE/PATCH) to API routes must include an
   // X-CSRF-Token header matching the __csrf cookie. Webhooks and cron jobs
@@ -343,13 +477,10 @@ export async function middleware(request: NextRequest) {
   // ---------------------------------------------------------------------------
   if (requiresCsrfValidation(request)) {
     if (!validateCsrfToken(request)) {
-      return new NextResponse(
-        JSON.stringify({ error: 'Invalid or missing CSRF token' }),
-        {
-          status: 403,
-          headers: { 'Content-Type': 'application/json' },
-        }
-      )
+      return new NextResponse(JSON.stringify({ error: 'Invalid or missing CSRF token' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json' },
+      })
     }
   }
 
@@ -460,15 +591,25 @@ export async function middleware(request: NextRequest) {
     '/pricing',
     '/search',
   ])
-  if (publicCacheExact.has(pathname) || publicCachePrefixes.some(p => pathname.startsWith(p))) {
+  if (publicCacheExact.has(pathname) || publicCachePrefixes.some((p) => pathname.startsWith(p))) {
     response.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
-    response.headers.set('CDN-Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800')
+    response.headers.set(
+      'CDN-Cache-Control',
+      'public, s-maxage=86400, stale-while-revalidate=604800'
+    )
   }
 
   // hreflang header injection for bilingual pages
   // Maps English route prefixes to their Spanish counterparts
   const spanishPrefixes = ['/abogados/', '/contratar/', '/costo/', '/opiniones/', '/emergencia/']
-  const englishPrefixes = ['/attorneys/', '/practice-areas/', '/hire/', '/cost/', '/reviews/', '/emergency/']
+  const englishPrefixes = [
+    '/attorneys/',
+    '/practice-areas/',
+    '/hire/',
+    '/cost/',
+    '/reviews/',
+    '/emergency/',
+  ]
   const spanishToEnglish: Record<string, string> = {
     '/abogados/': '/attorneys/',
     '/contratar/': '/hire/',
@@ -491,11 +632,14 @@ export async function middleware(request: NextRequest) {
 
   /** Translate path segments between English and Spanish PA slugs */
   function translatePathSegments(restOfPath: string, paMap: Record<string, string>): string {
-    return restOfPath.split('/').map(seg => paMap[seg] || seg).join('/')
+    return restOfPath
+      .split('/')
+      .map((seg) => paMap[seg] || seg)
+      .join('/')
   }
 
-  const matchedSpanish = spanishPrefixes.find(p => pathname.startsWith(p))
-  const matchedEnglish = englishPrefixes.find(p => pathname.startsWith(p))
+  const matchedSpanish = spanishPrefixes.find((p) => pathname.startsWith(p))
+  const matchedEnglish = englishPrefixes.find((p) => pathname.startsWith(p))
 
   const host = request.headers.get('host') || 'lawtendr.com'
 
@@ -529,7 +673,7 @@ export async function middleware(request: NextRequest) {
   // as an X-CSRF-Token header (double-submit cookie pattern).
   if (!request.cookies.get(CSRF_COOKIE_NAME)) {
     response.cookies.set(CSRF_COOKIE_NAME, generateCsrfToken(), {
-      httpOnly: false,  // Must be readable by JavaScript
+      httpOnly: false, // Must be readable by JavaScript
       secure: !IS_DEV,
       sameSite: 'lax',
       path: '/',
@@ -546,7 +690,8 @@ export async function middleware(request: NextRequest) {
   // Edge isolate (in-memory timestamp). Public GET pages only (skip API routes,
   // auth routes, etc. which have their own error handling).
   // ---------------------------------------------------------------------------
-  const isPublicPage = !pathname.startsWith('/api/') &&
+  const isPublicPage =
+    !pathname.startsWith('/api/') &&
     !pathname.startsWith('/admin') &&
     !pathname.startsWith('/client-dashboard') &&
     !pathname.startsWith('/attorney-dashboard') &&

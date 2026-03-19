@@ -13,9 +13,9 @@ interface FavoriteButtonProps {
 }
 
 const sizeMap = {
-  sm: { button: 'w-7 h-7', icon: 'w-3.5 h-3.5' },
-  md: { button: 'w-8 h-8', icon: 'w-4 h-4' },
-  lg: { button: 'w-10 h-10', icon: 'w-5 h-5' },
+  sm: { button: 'w-9 h-9 min-w-[44px] min-h-[44px]', icon: 'w-4 h-4' },
+  md: { button: 'w-10 h-10 min-w-[44px] min-h-[44px]', icon: 'w-4.5 h-4.5' },
+  lg: { button: 'w-11 h-11 min-w-[44px] min-h-[44px]', icon: 'w-5 h-5' },
 }
 
 export function FavoriteButton({
@@ -54,10 +54,10 @@ export function FavoriteButton({
       setToast(
         willBeFavorite
           ? `${attorneyName} added to favorites`
-          : `${attorneyName} removed from favorites`,
+          : `${attorneyName} removed from favorites`
       )
     },
-    [favorited, toggleFavorite, attorneyId, attorneyName],
+    [favorited, toggleFavorite, attorneyId, attorneyName]
   )
 
   return (
@@ -66,31 +66,27 @@ export function FavoriteButton({
         type="button"
         onClick={handleClick}
         aria-label={
-          favorited
-            ? `Remove ${attorneyName} from favorites`
-            : `Add ${attorneyName} to favorites`
+          favorited ? `Remove ${attorneyName} from favorites` : `Add ${attorneyName} to favorites`
         }
         className={cn(
           btnSize,
-          'bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-transform duration-200 hover:scale-110',
-          animating && 'animate-[favoriteScale_0.3s_ease-in-out]',
+          'flex items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur-sm transition-transform duration-200 hover:scale-110',
+          animating && 'animate-[favoriteScale_0.3s_ease-in-out]'
         )}
       >
         <Heart
           className={cn(
             iconSize,
             'transition-colors duration-200',
-            favorited
-              ? 'text-red-500 fill-red-500'
-              : 'text-slate-600 hover:text-red-400',
+            favorited ? 'fill-red-500 text-red-500' : 'text-slate-600 hover:text-red-400'
           )}
         />
       </button>
 
       {/* Toast notification */}
       {toast && (
-        <div className="absolute top-full right-0 mt-2 z-50 pointer-events-none">
-          <div className="whitespace-nowrap bg-slate-900 text-white text-xs font-medium px-3 py-1.5 rounded-lg shadow-lg animate-[toastFadeIn_0.2s_ease-out]">
+        <div className="pointer-events-none absolute right-0 top-full z-50 mt-2">
+          <div className="animate-[toastFadeIn_0.2s_ease-out] whitespace-nowrap rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white shadow-lg">
             {toast}
           </div>
         </div>

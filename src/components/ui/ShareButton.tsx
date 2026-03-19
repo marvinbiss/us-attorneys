@@ -1,12 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import {
-  Share2,
-  Link2,
-  Mail,
-  X,
-} from 'lucide-react'
+import { Share2, Link2, Mail, X } from 'lucide-react'
 import { clsx } from 'clsx'
 
 interface ShareButtonProps {
@@ -71,10 +66,7 @@ export function ShareButton({
   useEffect(() => {
     if (!isOpen) return
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setIsOpen(false)
       }
     }
@@ -138,12 +130,12 @@ export function ShareButton({
   const shareOptions: ShareOption[] = [
     {
       label: 'WhatsApp',
-      icon: <WhatsAppIcon className="w-4 h-4" />,
+      icon: <WhatsAppIcon className="h-4 w-4" />,
       onClick: () => {
         window.open(
           `https://wa.me/?text=${encodedDesc}%20${encodedUrl}`,
           '_blank',
-          'noopener,noreferrer',
+          'noopener,noreferrer'
         )
         setIsOpen(false)
       },
@@ -151,12 +143,12 @@ export function ShareButton({
     },
     {
       label: 'Facebook',
-      icon: <FacebookIcon className="w-4 h-4" />,
+      icon: <FacebookIcon className="h-4 w-4" />,
       onClick: () => {
         window.open(
           `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
           '_blank',
-          'noopener,noreferrer',
+          'noopener,noreferrer'
         )
         setIsOpen(false)
       },
@@ -164,12 +156,12 @@ export function ShareButton({
     },
     {
       label: 'X (Twitter)',
-      icon: <XIcon className="w-4 h-4" />,
+      icon: <XIcon className="h-4 w-4" />,
       onClick: () => {
         window.open(
           `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`,
           '_blank',
-          'noopener,noreferrer',
+          'noopener,noreferrer'
         )
         setIsOpen(false)
       },
@@ -177,7 +169,7 @@ export function ShareButton({
     },
     {
       label: 'Email',
-      icon: <Mail className="w-4 h-4" />,
+      icon: <Mail className="h-4 w-4" />,
       onClick: () => {
         window.location.href = `mailto:?subject=${encodedTitle}&body=${encodedDesc}%0A%0A${encodedUrl}`
         setIsOpen(false)
@@ -186,13 +178,11 @@ export function ShareButton({
     },
     {
       label: copied ? 'Link copied!' : 'Copy link',
-      icon: <Link2 className="w-4 h-4" />,
+      icon: <Link2 className="h-4 w-4" />,
       onClick: () => {
         handleCopyLink()
       },
-      color: copied
-        ? 'text-green-600 bg-green-50'
-        : 'text-gray-600 hover:bg-gray-100',
+      color: copied ? 'text-green-600 bg-green-50' : 'text-gray-600 hover:bg-gray-100',
     },
   ]
 
@@ -203,9 +193,9 @@ export function ShareButton({
           type="button"
           onClick={handleClick}
           className={clsx(
-            'p-2.5 rounded-full bg-gray-50 hover:bg-gray-100 border border-gray-100 transition-all duration-200',
+            'rounded-full border border-gray-100 bg-gray-50 p-2.5 transition-all duration-200 hover:bg-gray-100',
             'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-            className,
+            className
           )}
           aria-label="Share"
           aria-expanded={isOpen}
@@ -218,17 +208,17 @@ export function ShareButton({
           type="button"
           onClick={handleClick}
           className={clsx(
-            'inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200',
-            'text-sm font-medium text-gray-700 bg-white',
-            'hover:bg-gray-50 hover:border-gray-300 transition-all duration-200',
+            'inline-flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2',
+            'bg-white text-sm font-medium text-gray-700',
+            'transition-all duration-200 hover:border-gray-300 hover:bg-gray-50',
             'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-            className,
+            className
           )}
           aria-label="Share"
           aria-expanded={isOpen}
           aria-haspopup="true"
         >
-          <Share2 className="w-4 h-4" />
+          <Share2 className="h-4 w-4" />
           <span>Share</span>
         </button>
       )}
@@ -237,16 +227,14 @@ export function ShareButton({
       {isOpen && (
         <div
           className={clsx(
-            'absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 z-50',
-            'py-1',
+            'absolute right-0 z-50 mt-2 w-56 rounded-xl border border-gray-200 bg-white shadow-lg',
+            'py-1'
           )}
           role="menu"
           aria-label="Share options"
         >
-          <div className="px-3 py-2 border-b border-gray-100">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-              Share via
-            </p>
+          <div className="border-b border-gray-100 px-3 py-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Share via</p>
           </div>
           {shareOptions.map((option) => (
             <button
@@ -254,8 +242,8 @@ export function ShareButton({
               type="button"
               onClick={option.onClick}
               className={clsx(
-                'w-full flex items-center gap-3 px-3 py-2.5 text-sm transition-colors',
-                option.color,
+                'flex w-full items-center gap-3 px-3 py-2.5 text-sm transition-colors',
+                option.color
               )}
               role="menuitem"
             >
@@ -263,13 +251,13 @@ export function ShareButton({
               <span className="font-medium">{option.label}</span>
             </button>
           ))}
-          <div className="border-t border-gray-100 mt-1 pt-1 px-3 pb-2">
+          <div className="mt-1 border-t border-gray-100 px-3 pb-2 pt-1">
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="w-full flex items-center justify-center gap-1.5 py-1.5 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              className="flex min-h-[44px] w-full touch-manipulation items-center justify-center gap-1.5 py-2.5 text-xs text-gray-400 transition-colors hover:text-gray-600"
             >
-              <X className="w-3 h-3" />
+              <X className="h-3.5 w-3.5" />
               Close
             </button>
           </div>

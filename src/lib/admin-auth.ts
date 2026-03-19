@@ -18,9 +18,9 @@ const ROLES_REQUIRING_2FA: AdminRole[] = ['super_admin', 'admin', 'moderator']
 export type { AdminRole, AdminPermissions } from '@/types/admin'
 export { DEFAULT_PERMISSIONS } from '@/types/admin'
 
-// Admin email whitelist from environment variable (fallback when profiles table doesn't exist)
-// Set ADMIN_EMAILS in .env.local as comma-separated list: admin1@example.com,admin2@example.com
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').split(',').filter(email => email.trim().length > 0)
+// ADMIN_EMAILS env var is intentionally NOT used for runtime auth checks.
+// Admin status must come exclusively from profiles.is_admin in the database.
+// Use ADMIN_EMAILS only in seed/bootstrap scripts to set initial is_admin flags.
 
 /** Lightweight admin user for auth results (subset of full AdminUser from types/admin) */
 export interface AdminUser {
@@ -55,10 +55,9 @@ export function validateOrigin(request: NextRequest): boolean {
     return true
   }
 
-  const allowedUrls = [
-    process.env.NEXT_PUBLIC_SITE_URL,
-    process.env.NEXTAUTH_URL,
-  ].filter(Boolean) as string[]
+  const allowedUrls = [process.env.NEXT_PUBLIC_SITE_URL, process.env.NEXTAUTH_URL].filter(
+    Boolean
+  ) as string[]
 
   // If no allowed URLs are configured, allow all (development mode)
   if (allowedUrls.length === 0) {
@@ -68,7 +67,7 @@ export function validateOrigin(request: NextRequest): boolean {
   // Compare origin against allowed URLs
   try {
     const originHost = new URL(origin).origin
-    return allowedUrls.some(url => {
+    return allowedUrls.some((url) => {
       try {
         return new URL(url).origin === originHost
       } catch {
@@ -95,7 +94,10 @@ async function validateCsrf(): Promise<NextResponse | null> {
     if (secFetchSite === 'cross-site') {
       logger.warn('CSRF blocked: cross-site request detected via Sec-Fetch-Site')
       return NextResponse.json(
-        { success: false, error: { code: 'CSRF_REJECTED', message: 'Request origin not authorized' } },
+        {
+          success: false,
+          error: { code: 'CSRF_REJECTED', message: 'Request origin not authorized' },
+        },
         { status: 403 }
       )
     }
@@ -105,10 +107,9 @@ async function validateCsrf(): Promise<NextResponse | null> {
       return null
     }
 
-    const allowedUrls = [
-      process.env.NEXT_PUBLIC_SITE_URL,
-      process.env.NEXTAUTH_URL,
-    ].filter(Boolean) as string[]
+    const allowedUrls = [process.env.NEXT_PUBLIC_SITE_URL, process.env.NEXTAUTH_URL].filter(
+      Boolean
+    ) as string[]
 
     // If no allowed URLs are configured, allow all (development mode)
     if (allowedUrls.length === 0) {
@@ -122,12 +123,15 @@ async function validateCsrf(): Promise<NextResponse | null> {
     } catch {
       logger.warn('CSRF blocked: malformed origin header', { origin })
       return NextResponse.json(
-        { success: false, error: { code: 'CSRF_REJECTED', message: 'Request origin not authorized' } },
+        {
+          success: false,
+          error: { code: 'CSRF_REJECTED', message: 'Request origin not authorized' },
+        },
         { status: 403 }
       )
     }
 
-    const isAllowed = allowedUrls.some(url => {
+    const isAllowed = allowedUrls.some((url) => {
       try {
         return new URL(url).origin === originHost
       } catch {
@@ -138,7 +142,10 @@ async function validateCsrf(): Promise<NextResponse | null> {
     if (!isAllowed) {
       logger.warn('CSRF blocked: origin mismatch', { origin: originHost, allowed: allowedUrls })
       return NextResponse.json(
-        { success: false, error: { code: 'CSRF_REJECTED', message: 'Request origin not authorized' } },
+        {
+          success: false,
+          error: { code: 'CSRF_REJECTED', message: 'Request origin not authorized' },
+        },
         { status: 403 }
       )
     }
@@ -157,7 +164,10 @@ async function validateCsrf(): Promise<NextResponse | null> {
 export async function verifyAdmin(): Promise<AdminAuthResult> {
   try {
     const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
 
     if (authError || !user) {
       return {
@@ -212,17 +222,17 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
       return {
         success: false,
         error: NextResponse.json(
-          { success: false, error: { code: 'PROFILE_ACCESS_ERROR', message: 'Unable to verify permissions' } },
+          {
+            success: false,
+            error: { code: 'PROFILE_ACCESS_ERROR', message: 'Unable to verify permissions' },
+          },
           { status: 503 }
         ),
       }
     }
 
-    // Whitelist check ONLY with valid profile
-    if (!isAdmin && !role && user.email && ADMIN_EMAILS.includes(user.email) && profile) {
-      isAdmin = true
-      role = 'viewer' // Use least privilege for whitelist-only admins
-    }
+    // Admin status is determined exclusively by profiles.is_admin in the database.
+    // No env-based fallback — prevents privilege escalation via ADMIN_EMAILS.
 
     // Verify admin access
     const validRoles: AdminRole[] = ['super_admin', 'admin', 'moderator', 'viewer']
@@ -241,7 +251,8 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
     }
 
     // If user has is_admin=true but no role column, grant super_admin
-    const adminRole: AdminRole = role && validRoles.includes(role) ? role : (isAdmin ? 'super_admin' : 'viewer')
+    const adminRole: AdminRole =
+      role && validRoles.includes(role) ? role : isAdmin ? 'super_admin' : 'viewer'
 
     // 2FA enforcement for privileged admin roles (super_admin, admin, moderator)
     if (ROLES_REQUIRING_2FA.includes(adminRole)) {
@@ -265,7 +276,8 @@ export async function verifyAdmin(): Promise<AdminAuthResult> {
               success: false,
               error: {
                 code: '2FA_REQUIRED',
-                message: 'Two-factor authentication is mandatory for admin accounts. Please enable 2FA in your security settings before accessing the admin panel.',
+                message:
+                  'Two-factor authentication is mandatory for admin accounts. Please enable 2FA in your security settings before accessing the admin panel.',
               },
             },
             { status: 403 }
@@ -340,7 +352,10 @@ export async function requirePermission(
     return {
       success: false,
       error: NextResponse.json(
-        { success: false, error: { code: 'INSUFFICIENT_PERMISSIONS', message: 'Insufficient permissions' } },
+        {
+          success: false,
+          error: { code: 'INSUFFICIENT_PERMISSIONS', message: 'Insufficient permissions' },
+        },
         { status: 403 }
       ),
     }

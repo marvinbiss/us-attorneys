@@ -4,27 +4,20 @@ import { createClient } from '@/lib/supabase/server'
 import { AdminSidebar } from '@/components/admin/sidebar'
 import { PageSkeleton } from '@/components/ui/Skeleton'
 
-// Admin email whitelist from environment variable
-// Set ADMIN_EMAILS in .env.local as comma-separated list
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '').split(',').filter(email => email.trim().length > 0)
-
-export default async function AdminDashboardLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function AdminDashboardLayout({ children }: { children: React.ReactNode }) {
   // Verify user is authenticated
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   if (!user) {
     redirect('/admin/login')
   }
 
-  // Check admin access: first try profiles table, then fall back to email whitelist
+  // Check admin access exclusively from the database — no env-based fallback
   let isAdmin = false
 
-  // Try profiles table
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('role, is_admin')
@@ -32,15 +25,11 @@ export default async function AdminDashboardLayout({
     .single()
 
   if (!profileError && profile) {
-    isAdmin = profile.role === 'super_admin' ||
-              profile.role === 'admin' ||
-              profile.role === 'moderator' ||
-              profile.is_admin === true
-  }
-
-  // Fallback: check email whitelist
-  if (!isAdmin && user.email && ADMIN_EMAILS.includes(user.email)) {
-    isAdmin = true
+    isAdmin =
+      profile.role === 'super_admin' ||
+      profile.role === 'admin' ||
+      profile.role === 'moderator' ||
+      profile.is_admin === true
   }
 
   if (!isAdmin) {
@@ -49,14 +38,20 @@ export default async function AdminDashboardLayout({
 
   return (
     <div className="flex min-h-screen">
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-blue-600 focus:px-4 focus:py-2 focus:text-white"
+      >
         Skip to main content
       </a>
       <AdminSidebar />
-      <main id="main-content" className="flex-1 bg-gray-50 min-w-0" role="main" aria-label="Admin main content">
-        <Suspense fallback={<PageSkeleton />}>
-          {children}
-        </Suspense>
+      <main
+        id="main-content"
+        className="min-w-0 flex-1 bg-gray-50"
+        role="main"
+        aria-label="Admin main content"
+      >
+        <Suspense fallback={<PageSkeleton />}>{children}</Suspense>
       </main>
     </div>
   )

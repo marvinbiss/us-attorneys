@@ -27,6 +27,10 @@ export const passwordSchema = z
   .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
   .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
   .regex(/[0-9]/, 'Password must contain at least one digit')
+  .regex(
+    /[!@#$%^&*()_+\-=[\]{}|;':",./<>?]/,
+    'Password must contain at least one special character'
+  )
 
 export const nameSchema = z
   .string()
@@ -36,7 +40,9 @@ export const nameSchema = z
 
 export const uuidSchema = z.string().uuid('Invalid ID')
 
-export const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)')
+export const dateSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)')
 
 export const timeSchema = z.string().regex(/^\d{2}:\d{2}$/, 'Invalid time format (HH:MM)')
 
@@ -76,25 +82,36 @@ export const getBookingsSchema = z.object({
 // REVIEW SCHEMAS
 // ============================================
 
-export const createReviewSchema = z.object({
-  bookingId: uuidSchema,
-  rating: z.number().int().min(1).max(5).optional(),
-  ratingCommunication: z.number().int().min(1, 'Communication rating required').max(5).optional(),
-  ratingResult: z.number().int().min(1, 'Results rating required').max(5).optional(),
-  ratingResponsiveness: z.number().int().min(1, 'Responsiveness rating required').max(5).optional(),
-  comment: z.string().min(20, 'Comment must be at least 20 characters').max(2000, 'Comment too long'),
-  wouldRecommend: z.boolean().optional(),
-  isAnonymous: z.boolean().optional(),
-  reviewToken: z.string().optional(),
-}).refine(
-  (data) => {
-    // Either all 3 sub-ratings provided, or a single overall rating
-    const hasSubRatings = data.ratingCommunication && data.ratingResult && data.ratingResponsiveness
-    const hasOverall = data.rating
-    return hasSubRatings || hasOverall
-  },
-  { message: 'Please provide either 3 sub-ratings or an overall rating' }
-)
+export const createReviewSchema = z
+  .object({
+    bookingId: uuidSchema,
+    rating: z.number().int().min(1).max(5).optional(),
+    ratingCommunication: z.number().int().min(1, 'Communication rating required').max(5).optional(),
+    ratingResult: z.number().int().min(1, 'Results rating required').max(5).optional(),
+    ratingResponsiveness: z
+      .number()
+      .int()
+      .min(1, 'Responsiveness rating required')
+      .max(5)
+      .optional(),
+    comment: z
+      .string()
+      .min(20, 'Comment must be at least 20 characters')
+      .max(2000, 'Comment too long'),
+    wouldRecommend: z.boolean().optional(),
+    isAnonymous: z.boolean().optional(),
+    reviewToken: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      // Either all 3 sub-ratings provided, or a single overall rating
+      const hasSubRatings =
+        data.ratingCommunication && data.ratingResult && data.ratingResponsiveness
+      const hasOverall = data.rating
+      return hasSubRatings || hasOverall
+    },
+    { message: 'Please provide either 3 sub-ratings or an overall rating' }
+  )
 
 export const getReviewsSchema = z.object({
   attorneyId: uuidSchema.optional(),
@@ -108,20 +125,22 @@ export const getReviewsSchema = z.object({
 // USER SCHEMAS
 // ============================================
 
-export const signUpSchema = z.object({
-  email: emailSchema,
-  password: passwordSchema,
-  confirmPassword: z.string(),
-  firstName: nameSchema,
-  lastName: nameSchema,
-  phone: phoneSchema.optional(),
-  acceptTerms: z.boolean().refine(val => val === true, {
-    message: 'You must accept the terms and conditions',
-  }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-})
+export const signUpSchema = z
+  .object({
+    email: emailSchema,
+    password: passwordSchema,
+    confirmPassword: z.string(),
+    firstName: nameSchema,
+    lastName: nameSchema,
+    phone: phoneSchema.optional(),
+    acceptTerms: z.boolean().refine((val) => val === true, {
+      message: 'You must accept the terms and conditions',
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
 
 export const signInSchema = z.object({
   email: emailSchema,
@@ -135,7 +154,10 @@ export const updateProfileSchema = z.object({
   phone: phoneSchema.optional(),
   address: z.string().max(500).optional(),
   city: z.string().max(100).optional(),
-  postalCode: z.string().regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code').optional(),
+  postalCode: z
+    .string()
+    .regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code')
+    .optional(),
   bio: z.string().max(1000).optional(),
 })
 
@@ -143,25 +165,27 @@ export const updateProfileSchema = z.object({
 // ATTORNEY SCHEMAS
 // ============================================
 
-export const attorneyRegistrationSchema = z.object({
-  email: emailSchema,
-  password: passwordSchema,
-  confirmPassword: z.string(),
-  businessName: z.string().min(2).max(200),
-  firstName: nameSchema,
-  lastName: nameSchema,
-  phone: phoneSchema,
-  specialty: z.string().min(2).max(100),
-  barNumber: z.string().regex(/^[A-Za-z0-9]{4,20}$/, 'Invalid bar number'),
-  address: z.string().min(5).max(500),
-  city: z.string().min(2).max(100),
-  postalCode: z.string().regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code'),
-  description: z.string().max(2000).optional(),
-  acceptTerms: z.literal(true),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords do not match',
-  path: ['confirmPassword'],
-})
+export const attorneyRegistrationSchema = z
+  .object({
+    email: emailSchema,
+    password: passwordSchema,
+    confirmPassword: z.string(),
+    businessName: z.string().min(2).max(200),
+    firstName: nameSchema,
+    lastName: nameSchema,
+    phone: phoneSchema,
+    specialty: z.string().min(2).max(100),
+    barNumber: z.string().regex(/^[A-Za-z0-9]{4,20}$/, 'Invalid bar number'),
+    address: z.string().min(5).max(500),
+    city: z.string().min(2).max(100),
+    postalCode: z.string().regex(/^\d{5}(-\d{4})?$/, 'Invalid ZIP code'),
+    description: z.string().max(2000).optional(),
+    acceptTerms: z.literal(true),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  })
 
 // ============================================
 // PAYMENT SCHEMAS
@@ -198,11 +222,13 @@ export const searchSchema = z.object({
 export const createAvailabilitySchema = z.object({
   attorneyId: uuidSchema,
   date: dateSchema,
-  slots: z.array(z.object({
-    startTime: timeSchema,
-    endTime: timeSchema,
-    isAvailable: z.boolean().default(true),
-  })),
+  slots: z.array(
+    z.object({
+      startTime: timeSchema,
+      endTime: timeSchema,
+      isAvailable: z.boolean().default(true),
+    })
+  ),
 })
 
 export const getAvailabilitySchema = z.object({

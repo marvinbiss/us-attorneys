@@ -51,19 +51,17 @@ export function Toast({ toast, onDismiss }: ToastProps) {
   return (
     <div
       className={clsx(
-        'flex items-start gap-3 w-full max-w-sm p-4 rounded-lg border shadow-lg',
+        'flex w-full max-w-sm items-start gap-3 rounded-lg border p-4 shadow-lg',
         'transition-all duration-150 ease-out',
         styles[toast.type],
         isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
       )}
       role="alert"
     >
-      <Icon className={clsx('w-5 h-5 flex-shrink-0 mt-0.5', iconStyles[toast.type])} />
-      <div className="flex-1 min-w-0">
+      <Icon className={clsx('mt-0.5 h-5 w-5 flex-shrink-0', iconStyles[toast.type])} />
+      <div className="min-w-0 flex-1">
         <p className="font-medium">{toast.title}</p>
-        {toast.message && (
-          <p className="mt-1 text-sm opacity-90">{toast.message}</p>
-        )}
+        {toast.message && <p className="mt-1 text-sm opacity-90">{toast.message}</p>}
         {toast.action && (
           <button
             onClick={toast.action.onClick}
@@ -75,10 +73,10 @@ export function Toast({ toast, onDismiss }: ToastProps) {
       </div>
       <button
         onClick={handleDismiss}
-        className="flex-shrink-0 p-1 rounded hover:bg-black/10 transition-colors"
-        aria-label="Close"
+        className="flex min-h-[44px] min-w-[44px] flex-shrink-0 touch-manipulation items-center justify-center rounded-lg p-2.5 transition-colors hover:bg-black/10"
+        aria-label="Close notification"
       >
-        <X className="w-4 h-4" />
+        <X className="h-4 w-4" />
       </button>
     </div>
   )

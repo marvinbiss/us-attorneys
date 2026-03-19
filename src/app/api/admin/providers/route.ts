@@ -62,7 +62,10 @@ export const GET = createApiHandler(async ({ request }) => {
   // Verify admin with providers:read permission
   const authResult = await requirePermission('providers', 'read')
   if (!authResult.success || !authResult.admin) {
-    return authResult.error!
+    return (
+      authResult.error ??
+      NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 403 })
+    )
   }
 
   const supabase = createAdminClient()
@@ -90,8 +93,11 @@ export const GET = createApiHandler(async ({ request }) => {
   const effectiveLimit = cursorParams.limit
 
   // Build base query with filters
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const applyFilters = (q: any) => {
+  // Infer query type from actual supabase.from('attorneys').select() signature.
+  // _typeProbe creates a query builder (no network call without await) used only for type inference.
+  const _typeProbe = supabase.from('attorneys').select(SELECT_COLUMNS)
+  type AttorneySelectQuery = typeof _typeProbe
+  const applyFilters = (q: AttorneySelectQuery): AttorneySelectQuery => {
     let filtered = q
     if (filter === 'verified') {
       filtered = filtered.in('is_verified', [true]).in('is_active', [true])
@@ -103,7 +109,9 @@ export const GET = createApiHandler(async ({ request }) => {
     if (search) {
       const sanitized = sanitizeSearchQuery(search)
       if (sanitized) {
-        filtered = filtered.or(`name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,address_city.ilike.%${sanitized}%,bar_number.ilike.%${sanitized}%`)
+        filtered = filtered.or(
+          `name.ilike.%${sanitized}%,email.ilike.%${sanitized}%,address_city.ilike.%${sanitized}%,bar_number.ilike.%${sanitized}%`
+        )
       }
     }
     return filtered
@@ -114,9 +122,7 @@ export const GET = createApiHandler(async ({ request }) => {
   if (useCursorMode) {
     // ── Cursor-based pagination (O(1)) ──
     // Fetch limit + 1 to detect hasMore
-    let query = applyFilters(
-      supabase.from('attorneys').select(SELECT_COLUMNS)
-    )
+    let query = applyFilters(supabase.from('attorneys').select(SELECT_COLUMNS))
 
     // Apply cursor: filter rows with created_at < cursor value (descending order)
     if (cursorParams.cursor) {
@@ -139,7 +145,7 @@ export const GET = createApiHandler(async ({ request }) => {
     const cursorResult = buildCursorResponse(
       (providers || []) as Record<string, unknown>[],
       effectiveLimit,
-      'created_at',
+      'created_at'
     )
 
     const transformedProviders = cursorResult.data.map(transformProvider)
@@ -154,13 +160,15 @@ export const GET = createApiHandler(async ({ request }) => {
     // ── Legacy offset-based pagination (backwards compatible) ──
     const offset = (page - 1) * limit
 
-    let query = applyFilters(
+    const query = applyFilters(
       supabase.from('attorneys').select(SELECT_COLUMNS, { count: 'exact' })
     )
 
-    const { data: providers, count, error } = await query
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
+    const {
+      data: providers,
+      count,
+      error,
+    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1)
 
     if (error) {
       logger.warn('Providers query failed', { code: error.code, message: error.message })

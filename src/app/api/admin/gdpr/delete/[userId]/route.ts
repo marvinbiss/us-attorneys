@@ -13,20 +13,20 @@ const gdprDeleteSchema = z.object({
 
 export const dynamic = 'force-dynamic'
 
-// POST - Delete/Anonymize user data (GDPR)
+// POST - Delete/Anonymize user data (GDPR) via atomic transaction
 export const POST = createApiHandler(async ({ request, params }) => {
   // Verify admin with users:delete permission (GDPR deletion is critical)
   const authResult = await requirePermission('users', 'delete')
   if (!authResult.success || !authResult.admin) {
-    return authResult.error!
+    return (
+      authResult.error ??
+      NextResponse.json({ success: false, error: { message: 'Unauthorized' } }, { status: 403 })
+    )
   }
 
   const userId = params?.userId
   if (!userId || !isValidUuid(userId)) {
-    return NextResponse.json(
-      { success: false, error: { message: 'Invalid ID' } },
-      { status: 400 }
-    )
+    return NextResponse.json({ success: false, error: { message: 'Invalid ID' } }, { status: 400 })
   }
 
   const supabase = createAdminClient()
@@ -34,97 +34,85 @@ export const POST = createApiHandler(async ({ request, params }) => {
   const result = gdprDeleteSchema.safeParse(body)
   if (!result.success) {
     return NextResponse.json(
-      { success: false, error: { message: 'Confirmation required (DELETE)', details: result.error.flatten() } },
+      {
+        success: false,
+        error: { message: 'Confirmation required (SUPPRIMER)', details: result.error.flatten() },
+      },
       { status: 400 }
     )
   }
 
-  const completedSteps: string[] = []
-
   try {
-    // Step 1 — Retrieve profile email to anonymize client reviews
-    completedSteps.push('fetch_profile')
-    const { data: profileData } = await supabase
-      .from('profiles')
-      .select('email')
-      .eq('id', userId)
-      .maybeSingle()
+    // Call the atomic RPC function that wraps everything in a single transaction
+    const { data: rpcResult, error: rpcError } = await supabase.rpc('gdpr_delete_user', {
+      target_user_id: userId,
+    })
 
-    // Step 2 — Check if user is an attorney
-    completedSteps.push('check_attorney')
-    const { data: attorneyRecord } = await supabase
-      .from('attorneys')
-      .select('id')
-      .eq('user_id', userId)
-      .maybeSingle()
-
-    // Step 3 — Anonymize profile (only columns that exist on profiles)
-    completedSteps.push('anonymize_profile')
-    await supabase
-      .from('profiles')
-      .update({
-        email: `deleted_${userId.slice(0, 8)}@anonymized.local`,
-        full_name: 'Deleted user',
-        phone_e164: null,
-      })
-      .eq('id', userId)
-
-    // Step 4 — Anonymize client reviews (filtered by client_email)
-    completedSteps.push('anonymize_client_reviews')
-    if (profileData?.email) {
-      await supabase
-        .from('reviews')
-        .update({
-          client_name: 'Deleted user',
-          client_email: 'deleted@anonymized.local',
-        })
-        .eq('client_email', profileData.email)
+    if (rpcError) {
+      logger.error('GDPR atomic deletion RPC failed', { userId, error: rpcError })
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            message: 'GDPR deletion failed — transaction rolled back, no data was modified',
+            details: rpcError.message,
+          },
+        },
+        { status: 500 }
+      )
     }
 
-    // Step 5 — Anonymize review responses only if user is an attorney
-    completedSteps.push('anonymize_attorney_reviews')
-    if (attorneyRecord) {
-      await supabase
-        .from('reviews')
-        .update({
-          artisan_response: null,
-          artisan_responded_at: null,
-        })
-        .eq('attorney_id', userId)
+    // The RPC returns a JSONB object with the audit trail
+    if (!rpcResult?.success) {
+      logger.error('GDPR deletion returned failure', { userId, result: rpcResult })
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            message: rpcResult?.error || 'GDPR deletion failed',
+          },
+        },
+        { status: 404 }
+      )
     }
 
-    // Step 6 — Deactivate provider if user is an attorney
-    completedSteps.push('deactivate_provider')
-    if (attorneyRecord) {
-      await supabase
-        .from('attorneys')
-        .update({
-          is_active: false,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('user_id', userId)
-    }
+    // Log the deletion for compliance audit trail
+    await logAdminAction(authResult.admin.id, 'gdpr.delete', 'user', userId, {
+      anonymized: true,
+      atomic_transaction: true,
+      audit_trail: rpcResult,
+    })
 
-    // Step 7 — Audit log
-    completedSteps.push('audit_log')
-    await logAdminAction(authResult.admin.id, 'gdpr.delete', 'user', userId, { anonymized: true })
-  } catch (stepError) {
-    const failedStep = completedSteps[completedSteps.length - 1] ?? 'unknown'
-    logger.error('GDPR delete failed at step', { completedSteps, userId, error: stepError })
+    logger.info('GDPR atomic deletion completed', {
+      userId,
+      adminId: authResult.admin.id,
+      audit_trail: rpcResult,
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: 'User data anonymized in compliance with GDPR (atomic transaction)',
+      audit_trail: {
+        user_id: rpcResult.user_id,
+        profile_anonymized: rpcResult.profile_anonymized,
+        reviews_anonymized: rpcResult.reviews_anonymized,
+        bookings_anonymized: rpcResult.bookings_anonymized,
+        leads_anonymized: rpcResult.leads_anonymized,
+        claims_deleted: rpcResult.claims_deleted,
+        messages_anonymized: rpcResult.messages_anonymized,
+        notifications_deleted: rpcResult.notifications_deleted,
+        attorney_deactivated: rpcResult.attorney_deactivated,
+        completed_at: rpcResult.completed_at,
+      },
+    })
+  } catch (error: unknown) {
+    logger.error('GDPR deletion unexpected error', { userId, error })
     return NextResponse.json(
       {
         success: false,
-        error: {
-          message: `Partial deletion — failed step: ${failedStep}`,
-          completedSteps,
-        },
+        error: { message: 'Unexpected error during GDPR deletion' },
       },
       { status: 500 }
     )
   }
-
-  return NextResponse.json({
-    success: true,
-    message: 'User data anonymized in compliance with GDPR',
-  })
 })

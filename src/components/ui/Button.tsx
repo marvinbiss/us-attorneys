@@ -33,7 +33,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       'inline-flex items-center justify-center gap-2',
       'font-medium rounded-xl',
       'transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]',
-      'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+      'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900',
       'disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none',
       'active:scale-[0.98]',
       'touch-manipulation',
@@ -108,11 +108,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {...props}
       >
-        {isLoading ? (
-          <Loader2 className="w-5 h-5 animate-spin" />
-        ) : (
-          leftIcon
-        )}
+        {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : leftIcon}
         {children}
         {!isLoading && rightIcon}
       </button>

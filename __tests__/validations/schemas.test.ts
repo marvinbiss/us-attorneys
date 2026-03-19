@@ -66,28 +66,32 @@ describe('phoneSchema', () => {
 
 describe('passwordSchema', () => {
   it('should accept valid passwords', () => {
-    expect(passwordSchema.safeParse('Password1').success).toBe(true)
+    expect(passwordSchema.safeParse('Password1!').success).toBe(true)
     expect(passwordSchema.safeParse('MyStr0ngPass!').success).toBe(true)
   })
 
   it('should reject passwords without uppercase', () => {
-    expect(passwordSchema.safeParse('password1').success).toBe(false)
+    expect(passwordSchema.safeParse('password1!').success).toBe(false)
   })
 
   it('should reject passwords without lowercase', () => {
-    expect(passwordSchema.safeParse('PASSWORD1').success).toBe(false)
+    expect(passwordSchema.safeParse('PASSWORD1!').success).toBe(false)
   })
 
   it('should reject passwords without digit', () => {
-    expect(passwordSchema.safeParse('PasswordOnly').success).toBe(false)
+    expect(passwordSchema.safeParse('PasswordOnly!').success).toBe(false)
+  })
+
+  it('should reject passwords without special character', () => {
+    expect(passwordSchema.safeParse('Password1').success).toBe(false)
   })
 
   it('should reject short passwords', () => {
-    expect(passwordSchema.safeParse('Aa1').success).toBe(false)
+    expect(passwordSchema.safeParse('Aa1!').success).toBe(false)
   })
 
   it('should reject passwords exceeding max length', () => {
-    const longPass = 'Aa1' + 'x'.repeat(130)
+    const longPass = 'Aa1!' + 'x'.repeat(130)
     expect(passwordSchema.safeParse(longPass).success).toBe(false)
   })
 })
@@ -194,8 +198,12 @@ describe('createBookingSchema', () => {
   })
 
   it('should reject deposit amount out of range', () => {
-    expect(createBookingSchema.safeParse({ ...validBooking, depositAmount: -1 }).success).toBe(false)
-    expect(createBookingSchema.safeParse({ ...validBooking, depositAmount: 10001 }).success).toBe(false)
+    expect(createBookingSchema.safeParse({ ...validBooking, depositAmount: -1 }).success).toBe(
+      false
+    )
+    expect(createBookingSchema.safeParse({ ...validBooking, depositAmount: 10001 }).success).toBe(
+      false
+    )
   })
 })
 
@@ -271,52 +279,70 @@ describe('createReviewSchema', () => {
 
   it('should accept overall ratings 1-5', () => {
     for (let i = 1; i <= 5; i++) {
-      expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: i }).success).toBe(true)
+      expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: i }).success).toBe(
+        true
+      )
     }
   })
 
   it('should accept sub-ratings 1-5', () => {
     for (let i = 1; i <= 5; i++) {
-      expect(createReviewSchema.safeParse({
-        ...validReviewWithSubRatings,
-        ratingCommunication: i,
-        ratingResult: i,
-        ratingResponsiveness: i,
-      }).success).toBe(true)
+      expect(
+        createReviewSchema.safeParse({
+          ...validReviewWithSubRatings,
+          ratingCommunication: i,
+          ratingResult: i,
+          ratingResponsiveness: i,
+        }).success
+      ).toBe(true)
     }
   })
 
   it('should reject rating out of range', () => {
-    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 0 }).success).toBe(false)
-    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 6 }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 0 }).success).toBe(
+      false
+    )
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 6 }).success).toBe(
+      false
+    )
   })
 
   it('should reject non-integer ratings', () => {
-    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 3.5 }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 3.5 }).success).toBe(
+      false
+    )
   })
 
   it('should reject review with no overall rating and incomplete sub-ratings', () => {
-    expect(createReviewSchema.safeParse({
-      bookingId: validUUID,
-      ratingCommunication: 5,
-      comment: 'Excellent work, highly recommended by everyone!',
-    }).success).toBe(false)
+    expect(
+      createReviewSchema.safeParse({
+        bookingId: validUUID,
+        ratingCommunication: 5,
+        comment: 'Excellent work, highly recommended by everyone!',
+      }).success
+    ).toBe(false)
   })
 
   it('should reject short comments', () => {
-    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, comment: 'Good' }).success).toBe(false)
+    expect(
+      createReviewSchema.safeParse({ ...validReviewWithOverall, comment: 'Good' }).success
+    ).toBe(false)
   })
 
   it('should reject long comments', () => {
-    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, comment: 'a'.repeat(2001) }).success).toBe(false)
+    expect(
+      createReviewSchema.safeParse({ ...validReviewWithOverall, comment: 'a'.repeat(2001) }).success
+    ).toBe(false)
   })
 
   it('should accept optional wouldRecommend and isAnonymous', () => {
-    expect(createReviewSchema.safeParse({
-      ...validReviewWithSubRatings,
-      wouldRecommend: true,
-      isAnonymous: true,
-    }).success).toBe(true)
+    expect(
+      createReviewSchema.safeParse({
+        ...validReviewWithSubRatings,
+        wouldRecommend: true,
+        isAnonymous: true,
+      }).success
+    ).toBe(true)
   })
 })
 
@@ -327,8 +353,8 @@ describe('createReviewSchema', () => {
 describe('signUpSchema', () => {
   const validSignUp = {
     email: 'test@example.com',
-    password: 'Password1',
-    confirmPassword: 'Password1',
+    password: 'Password1!',
+    confirmPassword: 'Password1!',
     firstName: 'John',
     lastName: 'Smith',
     acceptTerms: true,
@@ -345,7 +371,7 @@ describe('signUpSchema', () => {
   it('should reject mismatched passwords', () => {
     const result = signUpSchema.safeParse({
       ...validSignUp,
-      confirmPassword: 'DifferentPass1',
+      confirmPassword: 'DifferentPass1!',
     })
     expect(result.success).toBe(false)
   })
@@ -361,7 +387,9 @@ describe('signUpSchema', () => {
 
 describe('signInSchema', () => {
   it('should accept valid signin', () => {
-    expect(signInSchema.safeParse({ email: 'test@example.com', password: 'pass' }).success).toBe(true)
+    expect(signInSchema.safeParse({ email: 'test@example.com', password: 'pass' }).success).toBe(
+      true
+    )
   })
 
   it('should reject empty password', () => {
@@ -401,11 +429,15 @@ describe('createPaymentIntentSchema', () => {
   })
 
   it('should reject amount above maximum', () => {
-    expect(createPaymentIntentSchema.safeParse({ ...validPayment, amount: 1000001 }).success).toBe(false)
+    expect(createPaymentIntentSchema.safeParse({ ...validPayment, amount: 1000001 }).success).toBe(
+      false
+    )
   })
 
   it('should reject invalid currency', () => {
-    expect(createPaymentIntentSchema.safeParse({ ...validPayment, currency: 'eur' }).success).toBe(false)
+    expect(createPaymentIntentSchema.safeParse({ ...validPayment, currency: 'eur' }).success).toBe(
+      false
+    )
   })
 
   it('should accept deposit payment with percentage', () => {
@@ -418,8 +450,12 @@ describe('createPaymentIntentSchema', () => {
   })
 
   it('should reject deposit percentage out of range', () => {
-    expect(createPaymentIntentSchema.safeParse({ ...validPayment, depositPercentage: 5 }).success).toBe(false)
-    expect(createPaymentIntentSchema.safeParse({ ...validPayment, depositPercentage: 60 }).success).toBe(false)
+    expect(
+      createPaymentIntentSchema.safeParse({ ...validPayment, depositPercentage: 5 }).success
+    ).toBe(false)
+    expect(
+      createPaymentIntentSchema.safeParse({ ...validPayment, depositPercentage: 60 }).success
+    ).toBe(false)
   })
 })
 

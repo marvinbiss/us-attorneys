@@ -186,15 +186,14 @@ describe('AttorneyList', () => {
 
   it('shows empty state when no providers', () => {
     render(<AttorneyList providers={[]} />)
-    expect(screen.getByText('No attorney found')).toBeInTheDocument()
-    expect(screen.getByText('Try adjusting your filters')).toBeInTheDocument()
+    expect(screen.getByText('No attorneys found matching your search')).toBeInTheDocument()
+    expect(screen.getByText(/Try broadening your search/)).toBeInTheDocument()
   })
 
   it('shows empty state with aria-live="polite"', () => {
     render(<AttorneyList providers={[]} />)
     const statusElements = screen.getAllByRole('status')
-    // The empty state div is the one with "No attorney found"
-    const emptyStatus = statusElements.find((el) => el.textContent?.includes('No attorney found'))
+    const emptyStatus = statusElements.find((el) => el.textContent?.includes('No attorneys found'))
     expect(emptyStatus).toHaveAttribute('aria-live', 'polite')
   })
 
@@ -220,7 +219,7 @@ describe('AttorneyList', () => {
 
   it('shows empty state when search query matches nothing', () => {
     render(<AttorneyList providers={mockProviders()} searchQuery="zzz-no-match" />)
-    expect(screen.getByText('No attorney found')).toBeInTheDocument()
+    expect(screen.getByText('No attorneys found matching your search')).toBeInTheDocument()
   })
 
   it('search is case-insensitive', () => {

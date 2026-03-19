@@ -207,16 +207,14 @@ vi.mock('@/lib/errors', () => ({
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type MockResponse = {
-  body: any
+  body: unknown
   status: number
-  headers?: any
+  headers?: Record<string, string>
   cookies?: { set: ReturnType<typeof vi.fn> }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function makeRequest(body: unknown, url = 'http://localhost/api/auth/test'): any {
+function makeRequest(body: unknown, url = 'http://localhost/api/auth/test'): Request {
   return new Request(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -272,7 +270,7 @@ describe('POST /api/auth/signin', () => {
       data: { role: 'user', full_name: 'John Doe' },
     })
 
-    const res = await callSignin({ email: 'test@example.com', password: 'Password1' })
+    const res = await callSignin({ email: 'test@example.com', password: 'Password1!' })
 
     expect(res.status).toBe(200)
     expect(res.body.success).toBe(true)
@@ -287,7 +285,7 @@ describe('POST /api/auth/signin', () => {
       error: { message: 'Invalid login credentials' },
     })
 
-    const res = await callSignin({ email: 'bad@example.com', password: 'WrongPass1' })
+    const res = await callSignin({ email: 'bad@example.com', password: 'WrongPass1!' })
 
     expect(res.status).toBe(401)
     expect(res.body.error).toBeDefined()
@@ -304,7 +302,7 @@ describe('POST /api/auth/signin', () => {
   it('returns 429 when rate limited', async () => {
     mockRateLimit.mockResolvedValueOnce({ success: false, reset: Date.now() + 60000 })
 
-    const res = await callSignin({ email: 'test@example.com', password: 'Password1' })
+    const res = await callSignin({ email: 'test@example.com', password: 'Password1!' })
 
     expect(res.status).toBe(429)
     expect(res.body.error.message).toContain('Too many requests')
@@ -316,7 +314,7 @@ describe('POST /api/auth/signin', () => {
       error: { message: 'Email not confirmed' },
     })
 
-    const res = await callSignin({ email: 'unverified@example.com', password: 'Password1' })
+    const res = await callSignin({ email: 'unverified@example.com', password: 'Password1!' })
 
     expect(res.status).toBe(401)
     expect(res.body.error).toBeDefined()
@@ -343,7 +341,7 @@ describe('POST /api/auth/signin', () => {
       data: { role: 'attorney', full_name: 'Jane Smith' },
     })
 
-    const res = await callSignin({ email: 'attorney@example.com', password: 'Password1' })
+    const res = await callSignin({ email: 'attorney@example.com', password: 'Password1!' })
 
     expect(res.status).toBe(200)
     expect(res.body.data.user.role).toBe('attorney')
@@ -357,7 +355,7 @@ describe('POST /api/auth/signin', () => {
       error: { message: 'Some unexpected Supabase error' },
     })
 
-    const res = await callSignin({ email: 'test@example.com', password: 'Password1' })
+    const res = await callSignin({ email: 'test@example.com', password: 'Password1!' })
 
     expect(res.status).toBe(401)
     expect(res.body.error).toBeDefined()
@@ -375,7 +373,7 @@ describe('POST /api/auth/signin', () => {
     })
     mockSelectSingle.mockResolvedValue({ data: { role: 'user', full_name: 'Test' } })
 
-    await callSignin({ email: 'TEST@EXAMPLE.COM', password: 'Password1' })
+    await callSignin({ email: 'TEST@EXAMPLE.COM', password: 'Password1!' })
 
     expect(mockSignInWithPassword).toHaveBeenCalledWith(
       expect.objectContaining({ email: 'test@example.com' })
@@ -395,8 +393,8 @@ describe('POST /api/auth/signup', () => {
 
   const validBody = {
     email: 'new@example.com',
-    password: 'StrongPass1',
-    confirmPassword: 'StrongPass1',
+    password: 'StrongPass1!',
+    confirmPassword: 'StrongPass1!',
     firstName: 'Jane',
     lastName: 'Doe',
     acceptTerms: true,

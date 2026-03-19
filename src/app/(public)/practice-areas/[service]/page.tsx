@@ -2,12 +2,34 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, ArrowRight, Star, Shield, ChevronDown, BadgeCheck, Clock, Wrench, FileText } from 'lucide-react'
-import { getSpecialtyBySlug, getLocationsByService, getAttorneysByService, getAttorneyCountByService } from '@/lib/supabase'
+import {
+  MapPin,
+  ArrowRight,
+  Star,
+  Shield,
+  ChevronDown,
+  BadgeCheck,
+  Clock,
+  Wrench,
+  FileText,
+} from 'lucide-react'
+import {
+  getSpecialtyBySlug,
+  getLocationsByService,
+  getAttorneysByService,
+  getAttorneyCountByService,
+} from '@/lib/supabase'
 import JsonLd from '@/components/JsonLd'
-import { getServiceSchema, getFAQSchema, getSpeakableSchema, getServicePricingSchema, getPracticeAreaFAQItems } from '@/lib/seo/jsonld'
+import {
+  getServiceSchema,
+  getFAQSchema,
+  getSpeakableSchema,
+  getServicePricingSchema,
+  getPracticeAreaFAQItems,
+} from '@/lib/seo/jsonld'
 import { hashCode } from '@/lib/seo/location-content'
 import { SITE_URL } from '@/lib/seo/config'
+import { getAlternateLanguages } from '@/lib/seo/hreflang'
 import { logger } from '@/lib/logger'
 import PriceTable from '@/components/seo/PriceTable'
 import Breadcrumbs from '@/components/seo/Breadcrumbs'
@@ -29,30 +51,19 @@ import TrustGuarantee from '@/components/TrustGuarantee'
 import dynamic from 'next/dynamic'
 import { REVALIDATE } from '@/lib/cache'
 
-const EstimationWidget = dynamic(
-  () => import('@/components/estimation/EstimationWidget'),
-  { ssr: false }
-)
+const EstimationWidget = dynamic(() => import('@/components/estimation/EstimationWidget'), {
+  ssr: false,
+})
 
-const ExitIntentPopup = dynamic(
-  () => import('@/components/ExitIntentPopup'),
-  { ssr: false }
-)
+const ExitIntentPopup = dynamic(() => import('@/components/ExitIntentPopup'), { ssr: false })
 
-const MicroConversions = dynamic(
-  () => import('@/components/MicroConversions'),
-  { ssr: false }
-)
+const MicroConversions = dynamic(() => import('@/components/MicroConversions'), { ssr: false })
 
-const FAQTracker = dynamic(
-  () => import('@/components/FAQTracker'),
-  { ssr: false }
-)
+const FAQTracker = dynamic(() => import('@/components/FAQTracker'), { ssr: false })
 
-const ProactiveChatPrompt = dynamic(
-  () => import('@/components/ProactiveChatPrompt'),
-  { ssr: false }
-)
+const ProactiveChatPrompt = dynamic(() => import('@/components/ProactiveChatPrompt'), {
+  ssr: false,
+})
 
 /** Shape returned by getLocationsByService / getStaticCities */
 interface CityInfo {
@@ -82,7 +93,7 @@ export const dynamicParams = false
 
 // Pre-render all 15 service pages at build time
 export function generateStaticParams() {
-  return staticPracticeAreas.map(s => ({ service: s.slug }))
+  return staticPracticeAreas.map((s) => ({ service: s.slug }))
 }
 
 interface PageProps {
@@ -107,7 +118,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   if (!specialtyName) {
-    const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+    const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
     if (!staticSvc) notFound()
     specialtyName = staticSvc.name
   }
@@ -156,6 +167,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     alternates: {
       canonical: `${SITE_URL}/practice-areas/${specialtySlug}`,
+      languages: getAlternateLanguages(`/practice-areas/${specialtySlug}`),
     },
   }
 }
@@ -182,15 +194,14 @@ const MAJOR_CITIES = [
   { name: 'Seattle', slug: 'seattle', state_code: 'WA', region_name: 'West' },
   { name: 'Denver', slug: 'denver', state_code: 'CO', region_name: 'West' },
   { name: 'Washington DC', slug: 'washington-dc', state_code: 'DC', region_name: 'Northeast' },
-].map(c => ({ ...c, id: c.slug }))
+].map((c) => ({ ...c, id: c.slug }))
 
 /** Merge major cities (always first) with DB cities (deduplicated) */
 function mergeCitiesWithMajor(dbCities: CityInfo[]): CityInfo[] {
-  const majorSlugs = new Set(MAJOR_CITIES.map(c => c.slug))
-  const extraCities = dbCities.filter(c => !majorSlugs.has(c.slug))
+  const majorSlugs = new Set(MAJOR_CITIES.map((c) => c.slug))
+  const extraCities = dbCities.filter((c) => !majorSlugs.has(c.slug))
   return [...MAJOR_CITIES, ...extraCities]
 }
-
 
 export default async function ServicePage({ params }: PageProps) {
   const { service: specialtySlug } = await params
@@ -200,15 +211,13 @@ export default async function ServicePage({ params }: PageProps) {
   if (cmsPage?.content_html) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <section className="bg-white border-b">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h1 className="font-heading text-3xl font-bold text-gray-900">
-              {cmsPage.title}
-            </h1>
+        <section className="border-b bg-white">
+          <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
+            <h1 className="font-heading text-3xl font-bold text-gray-900">{cmsPage.title}</h1>
           </div>
         </section>
         <section className="py-12">
-          <div className="max-w-6xl mx-auto px-4">
+          <div className="mx-auto max-w-6xl px-4">
             <CmsContent html={cmsPage.content_html} />
           </div>
         </section>
@@ -248,7 +257,7 @@ export default async function ServicePage({ params }: PageProps) {
 
   // Fallback to static data if DB failed
   if (!service) {
-    const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+    const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
     if (!staticSvc) notFound()
     service = { name: staticSvc.name, slug: staticSvc.slug }
   }
@@ -257,19 +266,24 @@ export default async function ServicePage({ params }: PageProps) {
   topCities = mergeCitiesWithMajor(topCities || [])
 
   // Group cities by region
-  const citiesByRegion = topCities?.reduce((acc: Record<string, CityInfo[]>, city: CityInfo) => {
-    const region = city.region_name || 'Other'
-    if (!acc[region]) acc[region] = []
-    acc[region].push(city)
-    return acc
-  }, {} as Record<string, CityInfo[]>) || {}
+  const citiesByRegion =
+    topCities?.reduce(
+      (acc: Record<string, CityInfo[]>, city: CityInfo) => {
+        const region = city.region_name || 'Other'
+        if (!acc[region]) acc[region] = []
+        acc[region].push(city)
+        return acc
+      },
+      {} as Record<string, CityInfo[]>
+    ) || {}
 
   // Trade-specific rich content (prices, FAQ, tips, certifications)
   const tradeBase = getTradeContent(specialtySlug)
   const cmsTradeOverride = await getTradeContentOverride(specialtySlug)
-  const trade = tradeBase && cmsTradeOverride
-    ? { ...tradeBase, ...cmsTradeOverride } as typeof tradeBase
-    : tradeBase
+  const trade =
+    tradeBase && cmsTradeOverride
+      ? ({ ...tradeBase, ...cmsTradeOverride } as typeof tradeBase)
+      : tradeBase
 
   // H1 variation for SEO
   const h1Hash = Math.abs(hashCode(`hub-h1-${specialtySlug}`))
@@ -297,7 +311,7 @@ export default async function ServicePage({ params }: PageProps) {
     cityCount: topCities?.length || undefined,
   })
   const allFaqs = [
-    ...(trade ? trade.faq.map(f => ({ question: f.q, answer: f.a })) : []),
+    ...(trade ? trade.faq.map((f) => ({ question: f.q, answer: f.a })) : []),
     ...programmaticFaqs,
   ]
   const faqSchema = getFAQSchema(allFaqs)
@@ -307,26 +321,36 @@ export default async function ServicePage({ params }: PageProps) {
     title: h1Text,
   })
 
-  const pricingSchema = trade ? getServicePricingSchema({
-    specialtyName: service.name,
-    specialtySlug: specialtySlug,
-    description: service.description || `${service.name.toLowerCase()} legal services nationwide`,
-    lowPrice: trade.priceRange.min,
-    highPrice: trade.priceRange.max,
-    priceCurrency: 'USD',
-    priceUnit: trade.priceRange.unit,
-    offerCount: totalAttorneyCount || trade.commonTasks.length,
-    url: `${SITE_URL}/practice-areas/${specialtySlug}`,
-  }) : null
+  const pricingSchema = trade
+    ? getServicePricingSchema({
+        specialtyName: service.name,
+        specialtySlug: specialtySlug,
+        description:
+          service.description || `${service.name.toLowerCase()} legal services nationwide`,
+        lowPrice: trade.priceRange.min,
+        highPrice: trade.priceRange.max,
+        priceCurrency: 'USD',
+        priceUnit: trade.priceRange.unit,
+        offerCount: totalAttorneyCount || trade.commonTasks.length,
+        url: `${SITE_URL}/practice-areas/${specialtySlug}`,
+      })
+    : null
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* JSON-LD */}
-      <JsonLd data={[serviceSchema, speakableSchema, ...(faqSchema ? [faqSchema] : []), ...(pricingSchema ? [pricingSchema] : [])]} />
+      <JsonLd
+        data={[
+          serviceSchema,
+          speakableSchema,
+          ...(faqSchema ? [faqSchema] : []),
+          ...(pricingSchema ? [pricingSchema] : []),
+        ]}
+      />
 
       {/* Breadcrumbs (visual + JSON-LD) */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <div className="border-b bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
               { label: 'Practice Areas', href: '/practice-areas', semanticType: 'CollectionPage' },
@@ -337,7 +361,7 @@ export default async function ServicePage({ params }: PageProps) {
       </div>
 
       {/* Hero — Premium gradient */}
-      <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
         {/* Service photo background */}
         <Image
           src={getServiceImage(specialtySlug).src}
@@ -351,68 +375,78 @@ export default async function ServicePage({ params }: PageProps) {
         />
         <div className="absolute inset-0 bg-gray-900/75" />
         {/* Ambient glow */}
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(245,158,11,0.10) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%)',
-        }} />
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(245,158,11,0.10) 0%, transparent 60%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(59,130,246,0.06) 0%, transparent 50%)',
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
+        />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
-          <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-tight">
+        <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 md:py-20 lg:px-8">
+          <h1 className="mb-4 font-heading text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">
             {h1Text}
           </h1>
-          <p className="text-lg md:text-xl text-slate-400 max-w-3xl leading-relaxed">
+          <p className="max-w-3xl text-lg leading-relaxed text-slate-400 md:text-xl">
             {service.description ||
               `Find the best ${service.name.toLowerCase()}s near you. Compare reviews, fees and get free consultations.`}
           </p>
-          <LastUpdated label="Attorney data updated on" className="text-slate-500 mt-3" />
+          <LastUpdated label="Attorney data updated on" className="mt-3 text-slate-500" />
 
           {/* Stats — Large gradient numbers */}
-          <div className="flex flex-wrap gap-6 md:gap-10 mt-10">
+          <div className="mt-10 flex flex-wrap gap-6 md:gap-10">
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
+              <span className="bg-gradient-to-r from-amber-300 to-amber-500 bg-clip-text font-heading text-3xl font-extrabold text-transparent md:text-4xl">
                 {totalAttorneyCount > 0 ? totalAttorneyCount.toLocaleString('en-US') : '\u2014'}
               </span>
-              <span className="text-sm text-slate-400 mt-1">verified attorneys</span>
+              <span className="mt-1 text-sm text-slate-400">verified attorneys</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-500">
+              <span className="bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text font-heading text-3xl font-extrabold text-transparent md:text-4xl">
                 {topCities?.length || 0}+
               </span>
-              <span className="text-sm text-slate-400 mt-1">cities covered</span>
+              <span className="mt-1 text-sm text-slate-400">cities covered</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-emerald-500">
+              <span className="bg-gradient-to-r from-emerald-300 to-emerald-500 bg-clip-text font-heading text-3xl font-extrabold text-transparent md:text-4xl">
                 100%
               </span>
-              <span className="text-sm text-slate-400 mt-1">bar-verified data</span>
+              <span className="mt-1 text-sm text-slate-400">bar-verified data</span>
             </div>
             {trade && (
               <div className="flex flex-col">
-                <span className="font-heading text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-purple-500">
+                <span className="bg-gradient-to-r from-purple-300 to-purple-500 bg-clip-text font-heading text-3xl font-extrabold text-transparent md:text-4xl">
                   {trade.priceRange.min}\u2013{trade.priceRange.max}
                 </span>
-                <span className="text-sm text-slate-400 mt-1">{trade.priceRange.unit}</span>
+                <span className="mt-1 text-sm text-slate-400">{trade.priceRange.unit}</span>
               </div>
             )}
           </div>
 
           {/* Badges row */}
-          <div className="flex flex-wrap gap-3 mt-8">
-            <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
-              <Shield className="w-4 h-4 text-emerald-400" />
-              <span className="text-sm text-slate-300 font-medium">Verified Attorneys</span>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.08] px-4 py-2 backdrop-blur-sm">
+              <Shield className="h-4 w-4 text-emerald-400" />
+              <span className="text-sm font-medium text-slate-300">Verified Attorneys</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
-              <Star className="w-4 h-4 text-amber-400" />
-              <span className="text-sm text-slate-300 font-medium">Quality Controlled</span>
+            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.08] px-4 py-2 backdrop-blur-sm">
+              <Star className="h-4 w-4 text-amber-400" />
+              <span className="text-sm font-medium text-slate-300">Quality Controlled</span>
             </div>
             {trade && (
-              <div className="flex items-center gap-2 bg-white/[0.08] backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full">
-                <Clock className="w-4 h-4 text-purple-400" />
-                <span className="text-sm text-slate-300 font-medium">{trade.averageResponseTime.split(',')[0]}</span>
+              <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.08] px-4 py-2 backdrop-blur-sm">
+                <Clock className="h-4 w-4 text-purple-400" />
+                <span className="text-sm font-medium text-slate-300">
+                  {trade.averageResponseTime.split(',')[0]}
+                </span>
               </div>
             )}
           </div>
@@ -421,20 +455,24 @@ export default async function ServicePage({ params }: PageProps) {
           <div className="mt-10">
             <Link
               href={`/quotes/${specialtySlug}`}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] hover:scale-[1.02] hover:-translate-y-1 active:scale-[0.98] transition-all duration-200"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 px-8 py-4 font-bold text-white shadow-lg shadow-amber-500/25 transition-all duration-200 hover:-translate-y-1 hover:scale-[1.02] hover:from-amber-600 hover:to-amber-700 hover:shadow-[0_8px_30px_-4px_rgba(245,158,11,0.5)] active:scale-[0.98]"
             >
               Compare attorneys near me
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="h-5 w-5" />
             </Link>
           </div>
         </div>
       </section>
 
-      <CrossIntentLinks service={specialtySlug} specialtyName={service.name} currentIntent="services" />
+      <CrossIntentLinks
+        service={specialtySlug}
+        specialtyName={service.name}
+        currentIntent="services"
+      />
 
       {/* Speakable Answer Box */}
       {trade && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <div className="mx-auto mt-8 max-w-7xl px-4 sm:px-6 lg:px-8">
           <SpeakableAnswerBox
             answer={`${trade.name} nationwide: ${trade.priceRange.min}\u2013${trade.priceRange.max} ${trade.priceRange.unit}. ${totalAttorneyCount.toLocaleString('en-US')} verified attorneys in ${topCities?.length || 0}+ cities. Free consultation, official data.`}
           />
@@ -443,31 +481,29 @@ export default async function ServicePage({ params }: PageProps) {
 
       {/* Trust Guarantee */}
       <section className="my-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <TrustGuarantee variant="banner" />
         </div>
       </section>
 
       {/* CTA Principal + Social Proof */}
       <section className="my-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-4">
             <DemandIndicator specialtySlug={specialtySlug} />
           </div>
           <SocialProofBanner metier={service.name} variant="card" />
 
-          <div className="mt-6 bg-gradient-to-r from-clay-500 to-clay-600 rounded-2xl p-8 text-center">
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
+          <div className="mt-6 rounded-2xl bg-gradient-to-r from-clay-500 to-clay-600 p-8 text-center">
+            <h2 className="mb-2 text-xl font-bold text-white sm:text-2xl">
               Need a {service.name.toLowerCase()}?
             </h2>
-            <p className="text-clay-100 mb-6">
-              Get up to 3 free consultations in 2 minutes
-            </p>
+            <p className="mb-6 text-clay-100">Get up to 3 free consultations in 2 minutes</p>
             <Link
               href={`/quotes/${specialtySlug}`}
-              className="inline-flex items-center gap-2 bg-white text-clay-600 hover:bg-clay-50 px-8 py-3.5 rounded-xl font-semibold transition-colors shadow-lg"
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 font-semibold text-clay-600 shadow-lg transition-colors hover:bg-clay-50"
             >
-              <FileText className="w-5 h-5" />
+              <FileText className="h-5 w-5" />
               Compare attorneys near me
             </Link>
           </div>
@@ -476,29 +512,27 @@ export default async function ServicePage({ params }: PageProps) {
 
       {/* Search by city */}
       <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-6 font-heading text-2xl font-bold tracking-tight text-gray-900">
             Find a {service.name.toLowerCase()} by city
           </h2>
 
           {/* Popular cities grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 mb-8">
+          <div className="mb-8 grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6">
             {topCities?.slice(0, 12).map((city) => (
               <Link
                 key={city.id}
                 href={`/practice-areas/${specialtySlug}/${city.slug}`}
-                className="bg-white rounded-lg border border-gray-200 p-4 hover:border-blue-300 hover:shadow-md transition-all group"
+                className="group rounded-lg border border-gray-200 bg-white p-4 transition-all hover:border-blue-300 hover:shadow-md"
               >
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-gray-400 group-hover:text-blue-600" />
-                  <span className="font-medium text-gray-900 group-hover:text-blue-600 truncate">
+                  <MapPin className="h-4 w-4 text-gray-400 group-hover:text-blue-600" />
+                  <span className="truncate font-medium text-gray-900 group-hover:text-blue-600">
                     {city.name}
                   </span>
                 </div>
                 {city.state_code && (
-                  <span className="text-xs text-gray-500 mt-1 block">
-                    ({city.state_code})
-                  </span>
+                  <span className="mt-1 block text-xs text-gray-500">({city.state_code})</span>
                 )}
               </Link>
             ))}
@@ -507,49 +541,51 @@ export default async function ServicePage({ params }: PageProps) {
           {/* Cities by region */}
           {Object.keys(citiesByRegion).length > 0 && (
             <div className="space-y-8">
-              {Object.entries(citiesByRegion)
-                .map(([region, cities]) => (
-                  <div key={region}>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      {service.name} in {region}
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {cities.slice(0, 10).map((city) => (
-                        <Link
-                          key={city.id}
-                          href={`/practice-areas/${specialtySlug}/${city.slug}`}
-                          className="text-sm bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 px-4 py-2.5 rounded-full transition-colors"
-                        >
-                          {city.name}
-                        </Link>
-                      ))}
-                      {cities.length > 10 && (
-                        <span className="text-sm text-gray-500 px-3 py-1.5">
-                          +{cities.length - 10} cities
-                        </span>
-                      )}
-                    </div>
+              {Object.entries(citiesByRegion).map(([region, cities]) => (
+                <div key={region}>
+                  <h3 className="mb-4 text-lg font-semibold text-gray-900">
+                    {service.name} in {region}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {cities.slice(0, 10).map((city) => (
+                      <Link
+                        key={city.id}
+                        href={`/practice-areas/${specialtySlug}/${city.slug}`}
+                        className="rounded-full bg-gray-100 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-blue-100 hover:text-blue-700"
+                      >
+                        {city.name}
+                      </Link>
+                    ))}
+                    {cities.length > 10 && (
+                      <span className="px-3 py-1.5 text-sm text-gray-500">
+                        +{cities.length - 10} cities
+                      </span>
+                    )}
                   </div>
-                ))}
+                </div>
+              ))}
             </div>
           )}
         </div>
       </section>
 
       {/* By state — SEO internal links to service+city pages */}
-      <section className="py-12 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-8 tracking-tight">
+      <section className="border-t py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-8 font-heading text-2xl font-bold tracking-tight text-gray-900">
             {service.name} by State
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {states.map((dept) => {
               const stateCities = getCitiesByState(dept.code)
               if (stateCities.length === 0) return null
               return (
-                <div key={dept.code} className="bg-gray-50 rounded-xl p-5">
-                  <h3 className="font-semibold text-gray-900 mb-3 text-sm">
-                    <Link href={`/states/${dept.slug}`} className="hover:text-blue-600 transition-colors">
+                <div key={dept.code} className="rounded-xl bg-gray-50 p-5">
+                  <h3 className="mb-3 text-sm font-semibold text-gray-900">
+                    <Link
+                      href={`/states/${dept.slug}`}
+                      className="transition-colors hover:text-blue-600"
+                    >
                       {dept.name} ({dept.code})
                     </Link>
                   </h3>
@@ -558,7 +594,7 @@ export default async function ServicePage({ params }: PageProps) {
                       <Link
                         key={city.slug}
                         href={`/practice-areas/${specialtySlug}/${city.slug}`}
-                        className="text-xs text-gray-600 hover:text-blue-600 px-2.5 py-1 bg-white rounded-full border border-gray-200 hover:border-blue-200 transition-colors"
+                        className="rounded-full border border-gray-200 bg-white px-2.5 py-1 text-xs text-gray-600 transition-colors hover:border-blue-200 hover:text-blue-600"
                       >
                         {city.name}
                       </Link>
@@ -566,7 +602,7 @@ export default async function ServicePage({ params }: PageProps) {
                     {stateCities.length > 5 && (
                       <Link
                         href={`/states/${dept.slug}`}
-                        className="text-xs text-blue-600 px-2.5 py-1"
+                        className="px-2.5 py-1 text-xs text-blue-600"
                       >
                         +{stateCities.length - 5} cities
                       </Link>
@@ -577,35 +613,41 @@ export default async function ServicePage({ params }: PageProps) {
             })}
           </div>
           <div className="mt-6 flex flex-wrap gap-4 text-sm">
-            <Link href="/states" className="text-blue-600 hover:underline">All states &rarr;</Link>
-            <Link href="/regions" className="text-blue-600 hover:underline">All regions &rarr;</Link>
-            <Link href="/cities" className="text-blue-600 hover:underline">All cities &rarr;</Link>
+            <Link href="/states" className="text-blue-600 hover:underline">
+              All states &rarr;
+            </Link>
+            <Link href="/regions" className="text-blue-600 hover:underline">
+              All regions &rarr;
+            </Link>
+            <Link href="/cities" className="text-blue-600 hover:underline">
+              All cities &rarr;
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Recent providers */}
       {recentProviders && recentProviders.length > 0 && (
-        <section className="py-12 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">
+        <section className="bg-white py-12">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="mb-6 font-heading text-2xl font-bold tracking-tight text-gray-900">
               Recently Added {service.name}s
             </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {recentProviders.slice(0, 6).map((provider) => {
                 const location = provider.provider_locations?.[0]?.location
                 return (
                   <Link
                     key={provider.id}
                     href={`/practice-areas/${specialtySlug}/${location?.slug || 'nationwide'}/${provider.stable_id || provider.slug}`}
-                    className="bg-gray-50 rounded-lg p-4 hover:bg-blue-50 transition-colors group"
+                    className="group rounded-lg bg-gray-50 p-4 transition-colors hover:bg-blue-50"
                   >
                     <h3 className="font-semibold text-gray-900 group-hover:text-blue-600">
                       {provider.name}
                     </h3>
                     {provider.address_city && (
-                      <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
+                      <p className="mt-1 flex items-center gap-1 text-sm text-gray-500">
+                        <MapPin className="h-3 w-3" />
                         {provider.address_zip} {provider.address_city}
                       </p>
                     )}
@@ -620,9 +662,13 @@ export default async function ServicePage({ params }: PageProps) {
       {/* Price Guide — unique per trade */}
       {trade && (
         <section className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-xl p-8 shadow-sm">
-              <PriceTable tasks={trade.commonTasks} tradeName={service.name} priceRange={trade.priceRange} />
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="rounded-xl bg-white p-8 shadow-sm">
+              <PriceTable
+                tasks={trade.commonTasks}
+                tradeName={service.name}
+                priceRange={trade.priceRange}
+              />
             </div>
           </div>
         </section>
@@ -630,14 +676,14 @@ export default async function ServicePage({ params }: PageProps) {
 
       {/* Tips + Certifications */}
       {trade && (
-        <section className="py-12 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-3 gap-8">
+        <section className="bg-white py-12">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="grid gap-8 lg:grid-cols-3">
               {/* Practical tips */}
               <div className="lg:col-span-2">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Shield className="w-6 h-6 text-blue-600" />
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="rounded-lg bg-blue-100 p-2">
+                    <Shield className="h-6 w-6 text-blue-600" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">
                     Tips for Choosing Your {service.name.toLowerCase()}
@@ -645,9 +691,9 @@ export default async function ServicePage({ params }: PageProps) {
                 </div>
                 <div className="space-y-4">
                   {trade.tips.map((tip, i) => (
-                    <div key={i} className="flex gap-3 p-4 bg-blue-50 rounded-lg">
-                      <BadgeCheck className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                      <p className="text-gray-700 text-sm leading-relaxed">{tip}</p>
+                    <div key={i} className="flex gap-3 rounded-lg bg-blue-50 p-4">
+                      <BadgeCheck className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600" />
+                      <p className="text-sm leading-relaxed text-gray-700">{tip}</p>
                     </div>
                   ))}
                 </div>
@@ -655,15 +701,15 @@ export default async function ServicePage({ params }: PageProps) {
 
               {/* Certifications + Emergency */}
               <div className="space-y-6">
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <BadgeCheck className="w-5 h-5 text-green-600" />
+                <div className="rounded-xl bg-gray-50 p-6">
+                  <div className="mb-4 flex items-center gap-2">
+                    <BadgeCheck className="h-5 w-5 text-green-600" />
                     <h3 className="font-semibold text-gray-900">Certifications to Verify</h3>
                   </div>
                   <ul className="space-y-2">
                     {trade.certifications.map((cert, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
-                        <span className="text-green-500 mt-1">{'\u2713'}</span>
+                        <span className="mt-1 text-green-500">{'\u2713'}</span>
                         {cert}
                       </li>
                     ))}
@@ -671,18 +717,20 @@ export default async function ServicePage({ params }: PageProps) {
                 </div>
 
                 {trade.emergencyInfo && (
-                  <div className="bg-red-50 border border-red-100 rounded-xl p-6">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Clock className="w-5 h-5 text-red-600" />
-                      <h3 className="font-semibold text-red-900">Emergency {service.name.toLowerCase()}</h3>
+                  <div className="rounded-xl border border-red-100 bg-red-50 p-6">
+                    <div className="mb-3 flex items-center gap-2">
+                      <Clock className="h-5 w-5 text-red-600" />
+                      <h3 className="font-semibold text-red-900">
+                        Emergency {service.name.toLowerCase()}
+                      </h3>
                     </div>
-                    <p className="text-sm text-red-800 leading-relaxed">{trade.emergencyInfo}</p>
+                    <p className="text-sm leading-relaxed text-red-800">{trade.emergencyInfo}</p>
                   </div>
                 )}
 
-                <div className="bg-blue-50 rounded-xl p-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Wrench className="w-5 h-5 text-blue-600" />
+                <div className="rounded-xl bg-blue-50 p-6">
+                  <div className="mb-3 flex items-center gap-2">
+                    <Wrench className="h-5 w-5 text-blue-600" />
                     <h3 className="font-semibold text-gray-900">Response Time</h3>
                   </div>
                   <p className="text-sm text-gray-700">{trade.averageResponseTime}</p>
@@ -696,21 +744,24 @@ export default async function ServicePage({ params }: PageProps) {
       {/* FAQ — rich content for SEO (editorial + programmatic) */}
       {allFaqs.length > 0 && (
         <section className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-3 mb-8">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-8 flex items-center gap-3">
               <h2 className="text-2xl font-bold text-gray-900">
                 Frequently Asked Questions {'\u2014'} {service.name}
               </h2>
             </div>
             <div className="space-y-4">
               {allFaqs.map((item, i) => (
-                <details key={i} className="group bg-white rounded-xl shadow-sm border border-gray-100">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                    <h3 className="font-semibold text-gray-900 pr-4">{item.question}</h3>
-                    <ChevronDown className="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0" />
+                <details
+                  key={i}
+                  className="group rounded-xl border border-gray-100 bg-white shadow-sm"
+                >
+                  <summary className="flex cursor-pointer list-none items-center justify-between p-6">
+                    <h3 className="pr-4 font-semibold text-gray-900">{item.question}</h3>
+                    <ChevronDown className="h-5 w-5 flex-shrink-0 text-gray-400 transition-transform group-open:rotate-180" />
                   </summary>
                   <div className="px-6 pb-6 pt-0">
-                    <p className="text-gray-600 leading-relaxed">{item.answer}</p>
+                    <p className="leading-relaxed text-gray-600">{item.answer}</p>
                   </div>
                 </details>
               ))}
@@ -720,46 +771,51 @@ export default async function ServicePage({ params }: PageProps) {
       )}
 
       {/* See also - Other services */}
-      <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-2xl font-bold text-gray-900 mb-6 tracking-tight">See Also</h2>
-          <div className="grid md:grid-cols-2 gap-8">
+      <section className="bg-white py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-6 font-heading text-2xl font-bold tracking-tight text-gray-900">
+            See Also
+          </h2>
+          <div className="grid gap-8 md:grid-cols-2">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">Related Services</h3>
+              <h3 className="mb-4 font-semibold text-gray-900">Related Services</h3>
               <div className="flex flex-wrap gap-2">
-                {(relatedServices[specialtySlug] || popularServices.filter(s => s.slug !== specialtySlug).map(s => s.slug))
+                {(
+                  relatedServices[specialtySlug] ||
+                  popularServices.filter((s) => s.slug !== specialtySlug).map((s) => s.slug)
+                )
                   .slice(0, 6)
                   .map((slug) => {
-                    const svc = staticPracticeAreas.find(s => s.slug === slug)
+                    const svc = staticPracticeAreas.find((s) => s.slug === slug)
                     if (!svc) return null
                     return (
                       <Link
                         key={slug}
                         href={`/practice-areas/${slug}`}
-                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                        className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-blue-100 hover:text-blue-700"
                       >
                         {svc.name}
                       </Link>
                     )
                   })}
               </div>
-              <h3 className="font-semibold text-gray-900 mb-4 mt-6">Practical Tools & Guides</h3>
+              <h3 className="mb-4 mt-6 font-semibold text-gray-900">Practical Tools & Guides</h3>
               <div className="flex flex-wrap gap-2">
                 <Link
                   href={`/guides/${specialtySlug}`}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 hover:text-blue-800 rounded-full text-sm transition-colors font-medium"
+                  className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-100 hover:text-blue-800"
                 >
                   {service.name} Legal Guide
                 </Link>
                 <Link
                   href="/tools/calculator"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                  className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-blue-100 hover:text-blue-700"
                 >
                   Fee Calculator
                 </Link>
                 <Link
                   href="/tools/diagnostic"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-full text-sm transition-colors"
+                  className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-blue-100 hover:text-blue-700"
                 >
                   Attorney Diagnostic
                 </Link>
@@ -771,27 +827,38 @@ export default async function ServicePage({ params }: PageProps) {
             {/* Blog articles related to this practice area */}
             {(() => {
               const svcLower = service.name.toLowerCase()
-              const relatedArticles = allArticlesMeta.filter((a) =>
-                a.tags.some((tag) => tag.toLowerCase().includes(svcLower) || svcLower.includes(tag.toLowerCase()))
-                || a.category === 'Practice Areas' && (a.title.toLowerCase().includes(svcLower) || a.slug.includes(specialtySlug))
-              ).slice(0, 4)
+              const relatedArticles = allArticlesMeta
+                .filter(
+                  (a) =>
+                    a.tags.some(
+                      (tag) =>
+                        tag.toLowerCase().includes(svcLower) || svcLower.includes(tag.toLowerCase())
+                    ) ||
+                    (a.category === 'Practice Areas' &&
+                      (a.title.toLowerCase().includes(svcLower) || a.slug.includes(specialtySlug)))
+                )
+                .slice(0, 4)
               if (relatedArticles.length === 0) return null
               return (
                 <div className="mt-8">
-                  <h3 className="font-semibold text-gray-900 mb-4">Articles on this practice area</h3>
-                  <div className="grid md:grid-cols-2 gap-3">
+                  <h3 className="mb-4 font-semibold text-gray-900">
+                    Articles on this practice area
+                  </h3>
+                  <div className="grid gap-3 md:grid-cols-2">
                     {relatedArticles.map((article) => (
                       <Link
                         key={article.slug}
                         href={`/blog/${article.slug}`}
-                        className="flex items-start gap-3 p-4 bg-gray-50 hover:bg-blue-50 rounded-xl border border-gray-100 hover:border-blue-200 transition-colors group"
+                        className="group flex items-start gap-3 rounded-xl border border-gray-100 bg-gray-50 p-4 transition-colors hover:border-blue-200 hover:bg-blue-50"
                       >
-                        <span className="text-2xl flex-shrink-0">{article.image}</span>
+                        <span className="flex-shrink-0 text-2xl">{article.image}</span>
                         <div>
-                          <div className="font-medium text-gray-900 group-hover:text-blue-600 text-sm leading-snug">
+                          <div className="text-sm font-medium leading-snug text-gray-900 group-hover:text-blue-600">
                             {article.title}
                           </div>
-                          <div className="text-xs text-gray-500 mt-1">{article.readTime} · {article.category}</div>
+                          <div className="mt-1 text-xs text-gray-500">
+                            {article.readTime} · {article.category}
+                          </div>
                         </div>
                       </Link>
                     ))}
@@ -801,15 +868,17 @@ export default async function ServicePage({ params }: PageProps) {
             })()}
           </div>
           {/* Intent variants -- quotes, reviews, pricing by city */}
-          <div className="mt-8 grid md:grid-cols-3 gap-8">
+          <div className="mt-8 grid gap-8 md:grid-cols-3">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">{service.name.toLowerCase()} Consultation by City</h3>
+              <h3 className="mb-4 font-semibold text-gray-900">
+                {service.name.toLowerCase()} Consultation by City
+              </h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
                     key={`quote-${city.slug}`}
                     href={`/quotes/${specialtySlug}/${city.slug}`}
-                    className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
+                    className="rounded-full border border-gray-100 bg-gray-50 px-3 py-1.5 text-sm text-gray-600 transition-colors hover:border-blue-200 hover:text-blue-600"
                   >
                     {city.name}
                   </Link>
@@ -817,13 +886,15 @@ export default async function ServicePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">{service.name.toLowerCase()} Reviews by City</h3>
+              <h3 className="mb-4 font-semibold text-gray-900">
+                {service.name.toLowerCase()} Reviews by City
+              </h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
                     key={`review-${city.slug}`}
                     href={`/reviews/${specialtySlug}/${city.slug}`}
-                    className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
+                    className="rounded-full border border-gray-100 bg-gray-50 px-3 py-1.5 text-sm text-gray-600 transition-colors hover:border-blue-200 hover:text-blue-600"
                   >
                     {city.name}
                   </Link>
@@ -831,13 +902,15 @@ export default async function ServicePage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">{service.name.toLowerCase()} Fees by City</h3>
+              <h3 className="mb-4 font-semibold text-gray-900">
+                {service.name.toLowerCase()} Fees by City
+              </h3>
               <div className="flex flex-wrap gap-2">
                 {topCities?.slice(0, 12).map((city) => (
                   <Link
                     key={`pricing-${city.slug}`}
                     href={`/pricing/${specialtySlug}/${city.slug}`}
-                    className="text-sm text-gray-600 hover:text-blue-600 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-100 hover:border-blue-200 transition-colors"
+                    className="rounded-full border border-gray-100 bg-gray-50 px-3 py-1.5 text-sm text-gray-600 transition-colors hover:border-blue-200 hover:text-blue-600"
                   >
                     {city.name}
                   </Link>
@@ -852,13 +925,15 @@ export default async function ServicePage({ params }: PageProps) {
 
       <StickyMobileCTA specialtySlug={specialtySlug} />
 
-      <EstimationWidget context={{
-        metier: service.name,
-        metierSlug: specialtySlug,
-        ville: 'Nationwide',
-        departement: '',
-        pageUrl: `/practice-areas/${specialtySlug}`,
-      }} />
+      <EstimationWidget
+        context={{
+          metier: service.name,
+          metierSlug: specialtySlug,
+          ville: 'Nationwide',
+          departement: '',
+          pageUrl: `/practice-areas/${specialtySlug}`,
+        }}
+      />
 
       <ExitIntentPopup
         sessionKey="sa:exit-services"

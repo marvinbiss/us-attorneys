@@ -50,9 +50,8 @@ export default function AttorneyList({
   }, [highlightedProviderId])
 
   // Merge external sortOrder prop into filters
-  const effectiveSortBy = sortOrder === 'name' ? 'name'
-    : sortOrder === 'rating' ? 'rating'
-    : filters.sortBy
+  const effectiveSortBy =
+    sortOrder === 'name' ? 'name' : sortOrder === 'rating' ? 'rating' : filters.sortBy
 
   const displayedProviders = useMemo(() => {
     // Apply filters
@@ -91,7 +90,7 @@ export default function AttorneyList({
   }, [providers, filters, searchQuery, effectiveSortBy])
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Filters */}
       <SearchFilters
         onFilterChange={setFilters}
@@ -101,7 +100,7 @@ export default function AttorneyList({
       {/* Provider list */}
       <div
         ref={listRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4"
+        className="flex-1 space-y-4 overflow-y-auto p-4"
         role="region"
         aria-label="Attorney listing"
         aria-busy={isLoading}
@@ -139,14 +138,28 @@ export default function AttorneyList({
             ))}
           </ul>
         ) : (
-          <div
-            className="text-center py-12"
-            role="status"
-            aria-live="polite"
-          >
-            <p className="text-gray-500 text-lg">No attorney found</p>
-            <p className="text-gray-400 text-sm mt-2">
-              Try adjusting your filters
+          <div className="px-4 py-12 text-center" role="status" aria-live="polite">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+              <svg
+                className="h-8 w-8 text-gray-400 dark:text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                />
+              </svg>
+            </div>
+            <h3 className="mb-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
+              No attorneys found matching your search
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Try broadening your search or adjusting your filters.
             </p>
           </div>
         )}

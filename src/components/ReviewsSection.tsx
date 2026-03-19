@@ -69,9 +69,7 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
 
       setVotedReviews((prev) => new Set(prev).add(reviewId))
       setReviews((prev) =>
-        prev.map((r) =>
-          r.id === reviewId ? { ...r, helpful_count: r.helpful_count + 1 } : r
-        )
+        prev.map((r) => (r.id === reviewId ? { ...r, helpful_count: r.helpful_count + 1 } : r))
       )
     } catch (error: unknown) {
       console.error('Error voting:', error)
@@ -132,11 +130,11 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
   if (loading) {
     return (
       <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-        <div className="h-24 bg-gray-200 rounded"></div>
+        <div className="h-8 w-1/3 rounded bg-gray-200"></div>
+        <div className="h-24 rounded bg-gray-200"></div>
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-32 bg-gray-200 rounded"></div>
+            <div key={i} className="h-32 rounded bg-gray-200"></div>
           ))}
         </div>
       </div>
@@ -145,14 +143,10 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
 
   if (!stats || stats.total === 0) {
     return (
-      <div className="bg-gray-50 rounded-xl p-8 text-center">
-        <MessageCircle className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-700 mb-2">
-          No reviews yet
-        </h3>
-        <p className="text-gray-500">
-          Be the first to leave a review after your consultation!
-        </p>
+      <div className="rounded-xl bg-gray-50 p-8 text-center">
+        <MessageCircle className="mx-auto mb-4 h-12 w-12 text-gray-300" />
+        <h3 className="mb-2 text-lg font-semibold text-gray-700">No reviews yet</h3>
+        <p className="text-gray-500">Be the first to leave a review after your consultation!</p>
       </div>
     )
   }
@@ -160,17 +154,15 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
   return (
     <div className="space-y-6">
       {/* Stats summary */}
-      <div className="bg-gradient-to-r from-violet-50 to-indigo-50 rounded-xl p-6">
-        <div className="flex flex-col md:flex-row md:items-center gap-6">
+      <div className="rounded-xl bg-gradient-to-r from-violet-50 to-indigo-50 p-6">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center">
           {/* Average rating */}
           <div className="text-center md:text-left">
             <div className="text-5xl font-bold text-gray-900">{stats.average}</div>
-            <div className="flex justify-center md:justify-start mt-1">
+            <div className="mt-1 flex justify-center md:justify-start">
               {renderStars(Math.round(stats.average), 'lg')}
             </div>
-            <p className="text-sm text-gray-600 mt-1">
-              {stats.total} reviews
-            </p>
+            <p className="mt-1 text-sm text-gray-600">{stats.total} reviews</p>
           </div>
 
           {/* Rating distribution */}
@@ -183,19 +175,19 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
                 <button
                   key={rating}
                   onClick={() => setFilterRating(filterRating === rating ? null : rating)}
-                  className={`flex items-center gap-2 w-full group ${
+                  className={`group flex w-full items-center gap-2 ${
                     filterRating === rating ? 'opacity-100' : 'opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <span className="text-sm text-gray-600 w-3">{rating}</span>
-                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                  <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <span className="w-3 text-sm text-gray-600">{rating}</span>
+                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-200">
                     <div
                       className="h-full bg-yellow-400 transition-all"
                       style={{ width: `${percentage}%` }}
                     />
                   </div>
-                  <span className="text-xs text-gray-500 w-8">{count}</span>
+                  <span className="w-8 text-xs text-gray-500">{count}</span>
                 </button>
               )
             })}
@@ -203,15 +195,9 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
 
           {/* Recommendation rate */}
           <div className="text-center md:border-l md:pl-6">
-            <div className="text-3xl font-bold text-green-600">
-              {stats.recommendRate}%
-            </div>
-            <p className="text-sm text-gray-600">
-              recommend
-            </p>
-            <p className="text-xs text-gray-500">
-              {attorneyName || 'this attorney'}
-            </p>
+            <div className="text-3xl font-bold text-green-600">{stats.recommendRate}%</div>
+            <p className="text-sm text-gray-600">recommend</p>
+            <p className="text-xs text-gray-500">{attorneyName || 'this attorney'}</p>
           </div>
         </div>
       </div>
@@ -219,16 +205,14 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
       {/* Filters and sort */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-gray-400" />
+          <Filter className="h-4 w-4 text-gray-400" />
           <span className="text-sm text-gray-600">
-            {filterRating
-              ? `${filterRating} star${filterRating > 1 ? 's' : ''}`
-              : 'All reviews'}
+            {filterRating ? `${filterRating} star${filterRating > 1 ? 's' : ''}` : 'All reviews'}
           </span>
           {filterRating && (
             <button
               onClick={() => setFilterRating(null)}
-              className="text-xs text-violet-600 hover:text-violet-700"
+              className="flex min-h-[44px] min-w-[44px] touch-manipulation items-center justify-center px-2 text-xs text-violet-600 hover:text-violet-700"
             >
               Clear
             </button>
@@ -238,7 +222,7 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-          className="text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+          className="min-h-[44px] touch-manipulation rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-transparent focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-400"
         >
           <option value="recent">Most recent</option>
           <option value="helpful">Most helpful</option>
@@ -250,34 +234,31 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
       {/* Reviews list */}
       <div className="space-y-4">
         {displayedReviews.map((review) => (
-          <div
-            key={review.id}
-            className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm"
-          >
+          <div key={review.id} className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
             {/* Header */}
-            <div className="flex items-start justify-between mb-3">
+            <div className="mb-3 flex items-start justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-violet-100 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 text-violet-600" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100">
+                  <User className="h-5 w-5 text-violet-600" />
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">{review.client_name}</p>
                   <p className="text-xs text-gray-500">{formatDate(review.created_at)}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex flex-wrap items-center gap-2">
                 {renderStars(review.rating)}
                 {(review.booking_id || review.user_id || review.is_verified) && (
                   <span
-                    className="inline-flex items-center gap-1 text-[10px] font-medium text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full"
+                    className="inline-flex items-center gap-1 rounded-full border border-green-200 bg-green-50 px-2 py-0.5 text-[10px] font-medium text-green-700"
                     title="This review is from a verified client who used the platform"
                   >
-                    <CheckCircle className="w-3 h-3" />
+                    <CheckCircle className="h-3 w-3" />
                     Verified review
                   </span>
                 )}
                 {review.would_recommend && (
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                  <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700">
                     Recommends
                   </span>
                 )}
@@ -285,19 +266,17 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
             </div>
 
             {/* Comment */}
-            {review.comment && (
-              <p className="text-gray-700 mb-4">{review.comment}</p>
-            )}
+            {review.comment && <p className="mb-4 text-gray-700">{review.comment}</p>}
 
             {/* Attorney response */}
             {review.artisan_response && (
-              <div className="bg-violet-50 rounded-lg p-4 mb-4">
-                <p className="text-xs font-medium text-violet-700 mb-1">
+              <div className="mb-4 rounded-lg bg-violet-50 p-4">
+                <p className="mb-1 text-xs font-medium text-violet-700">
                   Response from {attorneyName || 'the attorney'}
                 </p>
                 <p className="text-sm text-gray-700">{review.artisan_response}</p>
                 {review.artisan_responded_at && (
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="mt-1 text-xs text-gray-500">
                     {formatDate(review.artisan_responded_at)}
                   </p>
                 )}
@@ -309,16 +288,14 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
               <button
                 onClick={() => handleVoteHelpful(review.id)}
                 disabled={votedReviews.has(review.id)}
-                className={`flex items-center gap-1.5 text-sm transition ${
+                className={`flex min-h-[44px] min-w-[44px] touch-manipulation items-center gap-1.5 rounded-lg px-3 py-2 text-sm transition ${
                   votedReviews.has(review.id)
                     ? 'text-violet-600'
-                    : 'text-gray-500 hover:text-violet-600'
+                    : 'text-gray-500 hover:bg-violet-50 hover:text-violet-600'
                 }`}
               >
-                <ThumbsUp className="w-4 h-4" />
-                <span>
-                  Helpful ({review.helpful_count})
-                </span>
+                <ThumbsUp className="h-4 w-4" />
+                <span>Helpful ({review.helpful_count})</span>
               </button>
             </div>
           </div>
@@ -329,10 +306,10 @@ export default function ReviewsSection({ attorneyId, attorneyName }: ReviewsSect
       {filteredReviews.length > 5 && !showAll && (
         <button
           onClick={() => setShowAll(true)}
-          className="w-full flex items-center justify-center gap-2 py-3 text-violet-600 hover:text-violet-700 font-medium"
+          className="flex min-h-[44px] w-full touch-manipulation items-center justify-center gap-2 py-3 font-medium text-violet-600 hover:text-violet-700"
         >
           <span>View all reviews ({filteredReviews.length})</span>
-          <ChevronDown className="w-4 h-4" />
+          <ChevronDown className="h-4 w-4" />
         </button>
       )}
     </div>

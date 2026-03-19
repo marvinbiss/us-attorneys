@@ -41,10 +41,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {label && (
           <label
             htmlFor={textareaId}
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+            className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             {label}
-            {required && <span className="text-red-500 ml-1">*</span>}
+            {required && <span className="ml-1 text-red-500">*</span>}
           </label>
         )}
         <div className="relative">
@@ -54,21 +54,19 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             disabled={disabled}
             required={required}
             aria-invalid={!!error}
-            aria-describedby={
-              error ? errorId : hint ? hintId : undefined
-            }
+            aria-describedby={error ? errorId : hint ? hintId : undefined}
             maxLength={maxLength}
             value={value}
             className={clsx(
               'w-full rounded-lg border transition-all duration-200',
-              'px-4 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500',
+              'px-4 py-2.5 text-gray-900 placeholder-gray-400 dark:text-gray-100 dark:placeholder-gray-500',
               'bg-white dark:bg-gray-800',
               'focus:outline-none focus:ring-2 focus:ring-offset-0 dark:focus:ring-offset-gray-900',
-              'resize-none min-h-[120px]',
+              'min-h-[120px] resize-none',
               error
-                ? 'border-red-500 focus:ring-red-500 focus:border-red-500'
-                : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500 focus:border-blue-500',
-              disabled && 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed opacity-60',
+                ? 'border-red-500 focus:border-red-500 focus:ring-red-500'
+                : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:focus:ring-blue-400',
+              disabled && 'cursor-not-allowed bg-gray-100 opacity-60 dark:bg-gray-700',
               className
             )}
             {...props}
@@ -80,10 +78,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           )}
         </div>
         {error && (
-          <p id={errorId} className="mt-1 text-sm text-red-600 dark:text-red-400">{error}</p>
+          <p id={errorId} className="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">
+            {error}
+          </p>
         )}
         {hint && !error && (
-          <p id={hintId} className="mt-1 text-sm text-gray-500 dark:text-gray-400">{hint}</p>
+          <p id={hintId} className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            {hint}
+          </p>
         )}
       </div>
     )

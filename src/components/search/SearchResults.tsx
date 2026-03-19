@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { useTransition, useState, useCallback, Suspense } from 'react'
 import {
@@ -84,16 +85,9 @@ function Pagination({
   const pages: (number | 'ellipsis')[] = []
   const range = 2 // pages around current
   for (let i = 1; i <= totalPages; i++) {
-    if (
-      i === 1 ||
-      i === totalPages ||
-      (i >= page - range && i <= page + range)
-    ) {
+    if (i === 1 || i === totalPages || (i >= page - range && i <= page + range)) {
       pages.push(i)
-    } else if (
-      pages.length > 0 &&
-      pages[pages.length - 1] !== 'ellipsis'
-    ) {
+    } else if (pages.length > 0 && pages[pages.length - 1] !== 'ellipsis') {
       pages.push('ellipsis')
     }
   }
@@ -102,17 +96,17 @@ function Pagination({
     <nav
       aria-label="Search results pagination"
       className={cn(
-        'flex items-center justify-center gap-1.5 mt-10',
-        isPending && 'opacity-60 pointer-events-none'
+        'mt-10 flex items-center justify-center gap-1.5',
+        isPending && 'pointer-events-none opacity-60'
       )}
     >
       <button
         onClick={() => goToPage(page - 1)}
         disabled={page <= 1}
-        className="flex items-center gap-1 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        className="flex items-center gap-1 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-30 dark:text-gray-400 dark:hover:bg-gray-700"
         aria-label="Previous page"
       >
-        <ChevronLeft className="w-4 h-4" />
+        <ChevronLeft className="h-4 w-4" />
         <span className="hidden sm:inline">Previous</span>
       </button>
 
@@ -120,7 +114,7 @@ function Pagination({
         p === 'ellipsis' ? (
           <span
             key={`ellipsis-${i}`}
-            className="px-2 py-2 text-gray-400 dark:text-gray-500 text-sm"
+            className="px-2 py-2 text-sm text-gray-400 dark:text-gray-500"
           >
             ...
           </span>
@@ -129,10 +123,10 @@ function Pagination({
             key={p}
             onClick={() => goToPage(p)}
             className={cn(
-              'min-w-[40px] h-10 rounded-xl text-sm font-medium transition-all',
+              'h-10 min-w-[40px] rounded-xl text-sm font-medium transition-all',
               p === page
                 ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
             )}
             aria-label={`Page ${p}`}
             aria-current={p === page ? 'page' : undefined}
@@ -145,11 +139,11 @@ function Pagination({
       <button
         onClick={() => goToPage(page + 1)}
         disabled={!hasMore}
-        className="flex items-center gap-1 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        className="flex items-center gap-1 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-30 dark:text-gray-400 dark:hover:bg-gray-700"
         aria-label="Next page"
       >
         <span className="hidden sm:inline">Next</span>
-        <ChevronRight className="w-4 h-4" />
+        <ChevronRight className="h-4 w-4" />
       </button>
     </nav>
   )
@@ -157,33 +151,31 @@ function Pagination({
 
 function EmptyState({ query }: { query: string }) {
   return (
-    <div className="text-center py-16 px-4">
-      <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-        <SearchX className="w-10 h-10 text-gray-400 dark:text-gray-500" />
+    <div className="px-4 py-16 text-center">
+      <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+        <SearchX className="h-10 w-10 text-gray-400 dark:text-gray-500" />
       </div>
-      <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-        No attorneys found
-      </h2>
-      <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-8">
+      <h2 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">No attorneys found</h2>
+      <p className="mx-auto mb-8 max-w-md text-gray-500 dark:text-gray-400">
         {query
           ? `We couldn't find any attorneys matching "${query}". Try broadening your search or adjusting filters.`
           : 'Try searching by name, practice area, or city to find attorneys near you.'}
       </p>
       <div className="flex flex-wrap justify-center gap-3">
-        <a
+        <Link
           href="/practice-areas"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700 transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
         >
-          <Scale className="w-4 h-4" />
+          <Scale className="h-4 w-4" />
           Browse practice areas
-        </a>
-        <a
+        </Link>
+        <Link
           href="/search"
-          className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium text-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+          className="inline-flex items-center gap-2 rounded-xl bg-gray-100 px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
         >
           Clear search
-          <ArrowRight className="w-4 h-4" />
-        </a>
+          <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
     </div>
   )
@@ -214,12 +206,12 @@ function SortBar({ currentSort }: { currentSort: string }) {
   return (
     <div
       className={cn(
-        'flex items-center gap-2 mb-4 pb-4 border-b border-gray-100 dark:border-gray-700 overflow-x-auto scrollbar-hide',
-        isPending && 'opacity-60 pointer-events-none'
+        'scrollbar-hide mb-4 flex items-center gap-2 overflow-x-auto border-b border-gray-100 pb-4 dark:border-gray-700',
+        isPending && 'pointer-events-none opacity-60'
       )}
     >
-      <ArrowUpDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
-      <span className="text-xs font-medium text-gray-500 dark:text-gray-400 flex-shrink-0 hidden sm:inline">
+      <ArrowUpDown className="h-4 w-4 flex-shrink-0 text-gray-400" />
+      <span className="hidden flex-shrink-0 text-xs font-medium text-gray-500 dark:text-gray-400 sm:inline">
         Sort:
       </span>
       {INLINE_SORT_OPTIONS.map((opt) => (
@@ -227,10 +219,10 @@ function SortBar({ currentSort }: { currentSort: string }) {
           key={opt.value}
           onClick={() => handleSort(opt.value)}
           className={cn(
-            'flex-shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap',
+            'min-h-[44px] flex-shrink-0 touch-manipulation whitespace-nowrap rounded-lg px-3 py-2.5 text-xs font-medium transition-all',
             currentSort === opt.value
               ? 'bg-blue-600 text-white shadow-sm'
-              : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
           )}
         >
           {opt.label}
@@ -265,10 +257,10 @@ export function SearchResults({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         {/* Results header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
+        <div className="mb-6 flex items-center justify-between">
+          <div aria-live="polite" aria-atomic="true">
             <p className="text-sm text-gray-500 dark:text-gray-400">
               {total > 0 ? (
                 <>
@@ -278,7 +270,8 @@ export function SearchResults({
                   attorney{total !== 1 ? 's' : ''} found
                   {query && (
                     <>
-                      {' '}for{' '}
+                      {' '}
+                      for{' '}
                       <span className="font-medium text-gray-700 dark:text-gray-300">
                         &ldquo;{query}&rdquo;
                       </span>
@@ -294,12 +287,12 @@ export function SearchResults({
           {/* Mobile filter toggle */}
           <button
             onClick={() => setMobileFiltersOpen(true)}
-            className="lg:hidden flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 lg:hidden"
           >
-            <Filter className="w-4 h-4" />
+            <Filter className="h-4 w-4" />
             Filters
             {activeFilterCount > 0 && (
-              <span className="px-1.5 py-0.5 text-xs font-bold bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full">
+              <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-xs font-bold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
                 {activeFilterCount}
               </span>
             )}
@@ -308,7 +301,7 @@ export function SearchResults({
 
         <div className="flex gap-8">
           {/* Desktop sidebar filters */}
-          <aside className="hidden lg:block w-80 flex-shrink-0">
+          <aside className="hidden w-80 flex-shrink-0 lg:block">
             <div className="sticky top-24">
               <Suspense>
                 <SearchFilters />
@@ -317,7 +310,7 @@ export function SearchResults({
           </aside>
 
           {/* Results list */}
-          <main className="flex-1 min-w-0">
+          <main className="min-w-0 flex-1">
             {attorneys.length > 0 ? (
               <>
                 {/* Inline sort bar */}
@@ -331,12 +324,7 @@ export function SearchResults({
                     />
                   ))}
                 </div>
-                <Pagination
-                  page={page}
-                  total={total}
-                  limit={limit}
-                  hasMore={hasMore}
-                />
+                <Pagination page={page} total={total} limit={limit} hasMore={hasMore} />
               </>
             ) : (
               <EmptyState query={query} />
@@ -354,18 +342,16 @@ export function SearchResults({
             onClick={() => setMobileFiltersOpen(false)}
           />
           {/* Drawer */}
-          <div className="absolute right-0 top-0 h-full w-full max-w-sm bg-gray-50 dark:bg-gray-900 overflow-y-auto shadow-2xl animate-slide-in-right">
+          <div className="absolute right-0 top-0 h-full w-full max-w-sm animate-slide-in-right overflow-y-auto bg-gray-50 shadow-2xl dark:bg-gray-900">
             {/* Drawer header */}
-            <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-5 py-4 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                Filters
-              </h2>
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-5 py-4 dark:border-gray-700 dark:bg-gray-800">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-white">Filters</h2>
               <button
                 onClick={() => setMobileFiltersOpen(false)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                className="rounded-xl p-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
                 aria-label="Close filters"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="h-5 w-5 text-gray-500" />
               </button>
             </div>
             <div className="p-4">
@@ -374,10 +360,10 @@ export function SearchResults({
               </Suspense>
             </div>
             {/* Apply button (closes drawer) */}
-            <div className="sticky bottom-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 pb-safe">
+            <div className="pb-safe sticky bottom-0 border-t border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
               <button
                 onClick={() => setMobileFiltersOpen(false)}
-                className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors shadow-sm shadow-blue-600/30"
+                className="w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white shadow-sm shadow-blue-600/30 transition-colors hover:bg-blue-700"
               >
                 Show results
               </button>

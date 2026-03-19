@@ -54,24 +54,28 @@ describe('phoneSchema', () => {
 
 describe('passwordSchema', () => {
   it('accepts strong passwords', () => {
-    expect(passwordSchema.safeParse('SecurePass1').success).toBe(true)
+    expect(passwordSchema.safeParse('SecurePass1!').success).toBe(true)
     expect(passwordSchema.safeParse('MyP@ssw0rd!').success).toBe(true)
   })
 
   it('rejects passwords missing uppercase', () => {
-    expect(passwordSchema.safeParse('lowercase1').success).toBe(false)
+    expect(passwordSchema.safeParse('lowercase1!').success).toBe(false)
   })
 
   it('rejects passwords missing lowercase', () => {
-    expect(passwordSchema.safeParse('UPPERCASE1').success).toBe(false)
+    expect(passwordSchema.safeParse('UPPERCASE1!').success).toBe(false)
   })
 
   it('rejects passwords missing digit', () => {
-    expect(passwordSchema.safeParse('NoDigitHere').success).toBe(false)
+    expect(passwordSchema.safeParse('NoDigitHere!').success).toBe(false)
+  })
+
+  it('rejects passwords missing special character', () => {
+    expect(passwordSchema.safeParse('SecurePass1').success).toBe(false)
   })
 
   it('rejects too short passwords', () => {
-    expect(passwordSchema.safeParse('Ab1').success).toBe(false)
+    expect(passwordSchema.safeParse('Ab1!').success).toBe(false)
   })
 })
 
@@ -147,11 +151,17 @@ describe('createBookingSchema', () => {
   })
 
   it('rejects invalid attorney UUID', () => {
-    expect(createBookingSchema.safeParse({ ...validBooking, attorneyId: 'bad-id' }).success).toBe(false)
+    expect(createBookingSchema.safeParse({ ...validBooking, attorneyId: 'bad-id' }).success).toBe(
+      false
+    )
   })
 
   it('accepts optional fields', () => {
-    const withOptional = { ...validBooking, serviceDescription: 'Leaking kitchen faucet', address: '123 Main Street' }
+    const withOptional = {
+      ...validBooking,
+      serviceDescription: 'Leaking kitchen faucet',
+      address: '123 Main Street',
+    }
     expect(createBookingSchema.safeParse(withOptional).success).toBe(true)
   })
 })
@@ -180,40 +190,52 @@ describe('createReviewSchema', () => {
   })
 
   it('rejects rating out of range', () => {
-    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 0 }).success).toBe(false)
-    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 6 }).success).toBe(false)
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 0 }).success).toBe(
+      false
+    )
+    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, rating: 6 }).success).toBe(
+      false
+    )
   })
 
   it('rejects comment too short', () => {
-    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, comment: 'Short' }).success).toBe(false)
+    expect(
+      createReviewSchema.safeParse({ ...validReviewWithOverall, comment: 'Short' }).success
+    ).toBe(false)
   })
 
   it('accepts optional reviewToken', () => {
-    expect(createReviewSchema.safeParse({ ...validReviewWithOverall, reviewToken: 'abc123' }).success).toBe(true)
+    expect(
+      createReviewSchema.safeParse({ ...validReviewWithOverall, reviewToken: 'abc123' }).success
+    ).toBe(true)
   })
 
   it('rejects review with no rating and incomplete sub-ratings', () => {
-    expect(createReviewSchema.safeParse({
-      bookingId: '550e8400-e29b-41d4-a716-446655440000',
-      ratingCommunication: 5,
-      comment: 'Excellent attorney work, very professional and responsive.',
-    }).success).toBe(false)
+    expect(
+      createReviewSchema.safeParse({
+        bookingId: '550e8400-e29b-41d4-a716-446655440000',
+        ratingCommunication: 5,
+        comment: 'Excellent attorney work, very professional and responsive.',
+      }).success
+    ).toBe(false)
   })
 
   it('accepts optional wouldRecommend and isAnonymous', () => {
-    expect(createReviewSchema.safeParse({
-      ...validReviewWithSubRatings,
-      wouldRecommend: true,
-      isAnonymous: false,
-    }).success).toBe(true)
+    expect(
+      createReviewSchema.safeParse({
+        ...validReviewWithSubRatings,
+        wouldRecommend: true,
+        isAnonymous: false,
+      }).success
+    ).toBe(true)
   })
 })
 
 describe('signUpSchema', () => {
   const validSignUp = {
     email: 'user@example.com',
-    password: 'SecurePass1',
-    confirmPassword: 'SecurePass1',
+    password: 'SecurePass1!',
+    confirmPassword: 'SecurePass1!',
     firstName: 'Jean',
     lastName: 'Dupont',
     acceptTerms: true,
@@ -227,7 +249,7 @@ describe('signUpSchema', () => {
     const result = signUpSchema.safeParse({ ...validSignUp, confirmPassword: 'Different1' })
     expect(result.success).toBe(false)
     if (!result.success) {
-      const paths = result.error.issues.map(i => i.path.join('.'))
+      const paths = result.error.issues.map((i) => i.path.join('.'))
       expect(paths).toContain('confirmPassword')
     }
   })
@@ -239,7 +261,9 @@ describe('signUpSchema', () => {
 
 describe('signInSchema', () => {
   it('accepts valid credentials', () => {
-    expect(signInSchema.safeParse({ email: 'user@example.com', password: 'anypassword' }).success).toBe(true)
+    expect(
+      signInSchema.safeParse({ email: 'user@example.com', password: 'anypassword' }).success
+    ).toBe(true)
   })
 
   it('rejects empty password', () => {
@@ -247,7 +271,10 @@ describe('signInSchema', () => {
   })
 
   it('accepts optional rememberMe', () => {
-    expect(signInSchema.safeParse({ email: 'user@example.com', password: 'pw', rememberMe: true }).success).toBe(true)
+    expect(
+      signInSchema.safeParse({ email: 'user@example.com', password: 'pw', rememberMe: true })
+        .success
+    ).toBe(true)
   })
 })
 
@@ -292,7 +319,14 @@ describe('validateRequest', () => {
 
 describe('formatZodErrors', () => {
   it('maps ZodError issues to field:message record', () => {
-    const result = signUpSchema.safeParse({ email: 'bad', password: 'weak', confirmPassword: 'x', firstName: 'A', lastName: 'B', acceptTerms: false })
+    const result = signUpSchema.safeParse({
+      email: 'bad',
+      password: 'weak',
+      confirmPassword: 'x',
+      firstName: 'A',
+      lastName: 'B',
+      acceptTerms: false,
+    })
     expect(result.success).toBe(false)
     if (!result.success) {
       const errors = formatZodErrors(result.error)
