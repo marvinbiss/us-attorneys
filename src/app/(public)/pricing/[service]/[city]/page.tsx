@@ -7,8 +7,9 @@ import { resolveZipToCity } from '@/lib/location-resolver'
 import { REVALIDATE } from '@/lib/cache'
 
 export function generateStaticParams() {
-  // All pricing/city pages generated on-demand via ISR 24h
-  return []
+  // Seed at least 1 param to avoid empty child segment issue (Next.js 14.2 + Vercel 500)
+  // All other pricing/city pages generated on-demand via ISR 24h
+  return [{ service: 'personal-injury', city: 'new-york' }]
 }
 
 export const dynamicParams = true
@@ -31,7 +32,13 @@ export async function generateMetadata({
     description,
     robots: { index: false },
     alternates: { canonical: `${SITE_URL}/pricing/${service}/${villeSlug}` },
-    openGraph: { title, description, url: `${SITE_URL}/pricing/${service}/${villeSlug}`, type: 'website', locale: 'en_US' },
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/pricing/${service}/${villeSlug}`,
+      type: 'website',
+      locale: 'en_US',
+    },
   }
 }
 
@@ -42,12 +49,12 @@ export default async function PricingServiceVillePage({
 }) {
   const { service, city: villeSlug } = await params
   const trade = tradeContent[service]
-  const villeData = getCityBySlug(villeSlug) || await resolveZipToCity(villeSlug)
+  const villeData = getCityBySlug(villeSlug) || (await resolveZipToCity(villeSlug))
   if (!trade || !villeData) notFound()
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="text-3xl font-bold text-gray-900 mb-4">
+    <div className="mx-auto max-w-4xl px-4 py-16">
+      <h1 className="mb-4 text-3xl font-bold text-gray-900">
         {trade.name} Pricing in {villeData.name}
       </h1>
       <p className="text-gray-500">Content coming soon.</p>
