@@ -2945,13 +2945,16 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 AS $$
 DECLARE
-  deleted_count INTEGER;
+  deleted_count INTEGER := 0;
+  tmp_count INTEGER;
 BEGIN
   DELETE FROM notifications WHERE expires_at IS NOT NULL AND expires_at < now();
-  GET DIAGNOSTICS deleted_count = ROW_COUNT;
+  GET DIAGNOSTICS tmp_count = ROW_COUNT;
+  deleted_count := deleted_count + tmp_count;
 
   DELETE FROM notifications WHERE created_at < now() - INTERVAL '90 days';
-  GET DIAGNOSTICS deleted_count = deleted_count + ROW_COUNT;
+  GET DIAGNOSTICS tmp_count = ROW_COUNT;
+  deleted_count := deleted_count + tmp_count;
 
   RETURN deleted_count;
 END;
