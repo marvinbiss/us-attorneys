@@ -79,10 +79,10 @@ export default function EditAttorneyPage() {
         return !value.trim() ? 'Name is required' : null
       case 'phone':
         return value && !/^(?:\+1)?[2-9]\d{2}[2-9]\d{6}$/.test(value.replace(/[\s.-]/g, ''))
-          ? 'Invalid phone number' : null
+          ? 'Invalid phone number'
+          : null
       case 'address_zip':
-        return value && !/^\d{5}$/.test(value)
-          ? 'ZIP code must be 5 digits' : null
+        return value && !/^\d{5}$/.test(value) ? 'ZIP code must be 5 digits' : null
       default:
         return null
     }
@@ -90,7 +90,7 @@ export default function EditAttorneyPage() {
 
   function handleBlur(name: string, value: string) {
     const error = validateField(name, value)
-    setFieldErrors(prev => {
+    setFieldErrors((prev) => {
       if (error) return { ...prev, [name]: error }
       const { [name]: _, ...rest } = prev
       return rest
@@ -99,7 +99,7 @@ export default function EditAttorneyPage() {
 
   function clearFieldError(name: string) {
     if (fieldErrors[name]) {
-      setFieldErrors(prev => {
+      setFieldErrors((prev) => {
         const { [name]: _, ...rest } = prev
         return rest
       })
@@ -156,7 +156,7 @@ export default function EditAttorneyPage() {
 
   // Track form changes
   const updateFormData = (updates: Partial<typeof formData>) => {
-    setFormData(prev => ({ ...prev, ...updates }))
+    setFormData((prev) => ({ ...prev, ...updates }))
     setHasChanges(true)
   }
 
@@ -220,10 +220,10 @@ export default function EditAttorneyPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-blue-600 mx-auto animate-spin" />
-          <p className="text-gray-500 mt-4">Loading attorney...</p>
+          <Loader2 className="mx-auto h-8 w-8 animate-spin text-blue-600" />
+          <p className="mt-4 text-gray-500">Loading attorney...</p>
         </div>
       </div>
     )
@@ -231,11 +231,13 @@ export default function EditAttorneyPage() {
 
   if (!attorney) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="text-center">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Attorney not found</h2>
-          <p className="text-gray-500 mb-4">The requested attorney does not exist or has been deleted.</p>
+          <AlertCircle className="mx-auto mb-4 h-12 w-12 text-red-500" />
+          <h2 className="mb-2 text-xl font-semibold text-gray-900">Attorney not found</h2>
+          <p className="mb-4 text-gray-500">
+            The requested attorney does not exist or has been deleted.
+          </p>
           <button
             onClick={() => router.push('/admin/attorneys')}
             className="text-blue-600 hover:underline"
@@ -250,38 +252,35 @@ export default function EditAttorneyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Toast notification */}
-      <Toast
-        toast={toast}
-        onClose={() => setToast(null)}
-      />
+      <Toast toast={toast} onClose={() => setToast(null)} />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="mb-8 flex items-center justify-between">
           <div>
             <button
               onClick={() => router.push('/admin/attorneys')}
-              className="text-gray-500 hover:text-gray-700 mb-2 flex items-center gap-1 text-sm"
+              className="mb-2 flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="h-4 w-4" />
               Back to list
             </button>
             <h1 className="text-2xl font-bold text-gray-900">Edit Attorney</h1>
-            <p className="text-gray-500 mt-1">{attorney.full_name}</p>
+            <p className="mt-1 text-gray-500">{attorney.full_name}</p>
           </div>
           <button
             onClick={handleSave}
             disabled={saving || !hasChanges}
-            className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {saving ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 className="h-5 w-5 animate-spin" />
                 Saving...
               </>
             ) : (
               <>
-                <Save className="w-5 h-5" />
+                <Save className="h-5 w-5" />
                 Save
               </>
             )}
@@ -291,33 +290,42 @@ export default function EditAttorneyPage() {
         {/* Form */}
         <div className="space-y-6">
           {/* Personal Info */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <User className="w-5 h-5 text-gray-400" />
+          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900">
+              <User className="h-5 w-5 text-gray-400" />
               General Information
             </h2>
             <div className="grid gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="full_name"
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
                     Full Name
                   </label>
                   <input
                     id="full_name"
                     type="text"
                     value={formData.full_name}
-                    onChange={(e) => { updateFormData({ full_name: e.target.value }); clearFieldError('full_name') }}
+                    onChange={(e) => {
+                      updateFormData({ full_name: e.target.value })
+                      clearFieldError('full_name')
+                    }}
                     onBlur={(e) => handleBlur('full_name', e.target.value)}
                     placeholder="John Smith"
                     maxLength={200}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.full_name ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
+                    className={`w-full rounded-lg border px-3 py-2 focus:ring-2 ${fieldErrors.full_name ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`}
                   />
                   {fieldErrors.full_name && (
                     <p className="mt-1 text-xs text-red-600">{fieldErrors.full_name}</p>
                   )}
                 </div>
                 <div>
-                  <label htmlFor="specialty" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="specialty"
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
                     Specialty
                   </label>
                   <input
@@ -327,14 +335,14 @@ export default function EditAttorneyPage() {
                     onChange={(e) => updateFormData({ specialty: e.target.value })}
                     placeholder="Personal Injury, Criminal Defense..."
                     maxLength={200}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    <Mail className="w-4 h-4 inline mr-1" />
+                  <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
+                    <Mail className="mr-1 inline h-4 w-4" />
                     Email
                   </label>
                   <input
@@ -343,23 +351,26 @@ export default function EditAttorneyPage() {
                     value={formData.email}
                     onChange={(e) => updateFormData({ email: e.target.value })}
                     placeholder="contact@lawfirm.com"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                    <Phone className="w-4 h-4 inline mr-1" />
+                  <label htmlFor="phone" className="mb-1 block text-sm font-medium text-gray-700">
+                    <Phone className="mr-1 inline h-4 w-4" />
                     Phone
                   </label>
                   <input
                     id="phone"
                     type="tel"
                     value={formData.phone}
-                    onChange={(e) => { updateFormData({ phone: e.target.value }); clearFieldError('phone') }}
+                    onChange={(e) => {
+                      updateFormData({ phone: e.target.value })
+                      clearFieldError('phone')
+                    }}
                     onBlur={(e) => handleBlur('phone', e.target.value)}
                     placeholder="(212) 555-1234"
                     maxLength={20}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.phone ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
+                    className={`w-full rounded-lg border px-3 py-2 focus:ring-2 ${fieldErrors.phone ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`}
                   />
                   {fieldErrors.phone && (
                     <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
@@ -367,7 +378,10 @@ export default function EditAttorneyPage() {
                 </div>
               </div>
               <div>
-                <label htmlFor="bar_number" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="bar_number"
+                  className="mb-1 block text-sm font-medium text-gray-700"
+                >
                   Bar Number
                 </label>
                 <input
@@ -377,11 +391,14 @@ export default function EditAttorneyPage() {
                   onChange={(e) => updateFormData({ bar_number: e.target.value })}
                   placeholder="123456"
                   maxLength={20}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 font-mono focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="description"
+                  className="mb-1 block text-sm font-medium text-gray-700"
+                >
                   Description
                 </label>
                 <textarea
@@ -391,11 +408,11 @@ export default function EditAttorneyPage() {
                   rows={4}
                   placeholder="Describe the attorney's practice, services, expertise..."
                   maxLength={5000}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="bio" className="mb-1 block text-sm font-medium text-gray-700">
                   Bio
                 </label>
                 <textarea
@@ -405,21 +422,24 @@ export default function EditAttorneyPage() {
                   rows={3}
                   placeholder="Short bio of the attorney..."
                   maxLength={2000}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
           </div>
 
           {/* Address */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-gray-400" />
+          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900">
+              <MapPin className="h-5 w-5 text-gray-400" />
               Address
             </h2>
             <div className="grid gap-4">
               <div>
-                <label htmlFor="address_line1" className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  htmlFor="address_line1"
+                  className="mb-1 block text-sm font-medium text-gray-700"
+                >
                   Street Address
                 </label>
                 <input
@@ -429,30 +449,39 @@ export default function EditAttorneyPage() {
                   onChange={(e) => updateFormData({ address_line1: e.target.value })}
                   placeholder="123 Main Street"
                   maxLength={500}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 <div>
-                  <label htmlFor="address_zip" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="address_zip"
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
                     ZIP Code
                   </label>
                   <input
                     id="address_zip"
                     type="text"
                     value={formData.address_zip}
-                    onChange={(e) => { updateFormData({ address_zip: e.target.value }); clearFieldError('address_zip') }}
+                    onChange={(e) => {
+                      updateFormData({ address_zip: e.target.value })
+                      clearFieldError('address_zip')
+                    }}
                     onBlur={(e) => handleBlur('address_zip', e.target.value)}
                     placeholder="10001"
                     maxLength={10}
-                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 ${fieldErrors.address_zip ? 'border-red-300 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
+                    className={`w-full rounded-lg border px-3 py-2 focus:ring-2 ${fieldErrors.address_zip ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`}
                   />
                   {fieldErrors.address_zip && (
                     <p className="mt-1 text-xs text-red-600">{fieldErrors.address_zip}</p>
                   )}
                 </div>
                 <div>
-                  <label htmlFor="address_city" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="address_city"
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
                     City
                   </label>
                   <input
@@ -462,11 +491,14 @@ export default function EditAttorneyPage() {
                     onChange={(e) => updateFormData({ address_city: e.target.value })}
                     placeholder="New York"
                     maxLength={200}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label htmlFor="address_state" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="address_state"
+                    className="mb-1 block text-sm font-medium text-gray-700"
+                  >
                     State
                   </label>
                   <input
@@ -476,7 +508,7 @@ export default function EditAttorneyPage() {
                     onChange={(e) => updateFormData({ address_state: e.target.value })}
                     placeholder="New York"
                     maxLength={200}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -484,50 +516,46 @@ export default function EditAttorneyPage() {
           </div>
 
           {/* Status */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-gray-400" />
+          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+            <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900">
+              <Briefcase className="h-5 w-5 text-gray-400" />
               Status
             </h2>
             <div className="grid gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Verified
-                  </label>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">Verified</label>
                   <button
                     type="button"
                     onClick={() => updateFormData({ is_verified: !formData.is_verified })}
                     role="switch"
                     aria-checked={formData.is_verified}
                     aria-label="Verified"
-                    className={`relative w-14 h-7 rounded-full transition-colors ${
+                    className={`relative h-7 w-14 rounded-full transition-colors ${
                       formData.is_verified ? 'bg-green-600' : 'bg-gray-300'
                     }`}
                   >
                     <span
-                      className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white transition-transform shadow ${
+                      className={`absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${
                         formData.is_verified ? 'translate-x-7' : ''
                       }`}
                     />
                   </button>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Active
-                  </label>
+                  <label className="mb-2 block text-sm font-medium text-gray-700">Active</label>
                   <button
                     type="button"
                     onClick={() => updateFormData({ is_active: !formData.is_active })}
                     role="switch"
                     aria-checked={formData.is_active}
-                    aria-label="Actif"
-                    className={`relative w-14 h-7 rounded-full transition-colors ${
+                    aria-label="Active"
+                    className={`relative h-7 w-14 rounded-full transition-colors ${
                       formData.is_active ? 'bg-blue-600' : 'bg-gray-300'
                     }`}
                   >
                     <span
-                      className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white transition-transform shadow ${
+                      className={`absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform ${
                         formData.is_active ? 'translate-x-7' : ''
                       }`}
                     />
@@ -535,16 +563,14 @@ export default function EditAttorneyPage() {
                 </div>
               </div>
               {attorney && (
-                <div className="flex items-center gap-6 pt-4 border-t border-gray-100">
+                <div className="flex items-center gap-6 border-t border-gray-100 pt-4">
                   <div className="flex items-center gap-2">
-                    <Star className="w-4 h-4 text-amber-500" />
+                    <Star className="h-4 w-4 text-amber-500" />
                     <span className="text-sm text-gray-600">
                       Rating: {attorney.rating_average?.toFixed(1) || 'N/A'}
                     </span>
                   </div>
-                  <div className="text-sm text-gray-500">
-                    {attorney.review_count} reviews
-                  </div>
+                  <div className="text-sm text-gray-500">{attorney.review_count} reviews</div>
                   {attorney.updated_at && (
                     <div className="text-sm text-gray-400">
                       Last updated: {new Date(attorney.updated_at).toLocaleDateString('en-US')}
@@ -557,20 +583,20 @@ export default function EditAttorneyPage() {
         </div>
 
         {/* Sticky save button for mobile */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 md:hidden">
+        <div className="fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white p-4 md:hidden">
           <button
             onClick={handleSave}
             disabled={saving || !hasChanges}
-            className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {saving ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 className="h-5 w-5 animate-spin" />
                 Saving...
               </>
             ) : (
               <>
-                <Save className="w-5 h-5" />
+                <Save className="h-5 w-5" />
                 Save Changes
               </>
             )}
