@@ -714,6 +714,13 @@ CREATE TABLE IF NOT EXISTS bookings (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Ensure bookings columns exist (table may have been created by earlier migration 446 without all columns)
+ALTER TABLE bookings ADD COLUMN IF NOT EXISTS reminder_sent BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE bookings ADD COLUMN IF NOT EXISTS reminder_24h_sent BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE bookings ADD COLUMN IF NOT EXISTS booking_fee NUMERIC(10,2) DEFAULT 19.00;
+ALTER TABLE bookings ADD COLUMN IF NOT EXISTS daily_room_url TEXT;
+ALTER TABLE bookings ADD COLUMN IF NOT EXISTS daily_room_name TEXT;
+
 CREATE INDEX IF NOT EXISTS idx_bookings_attorney ON bookings(attorney_id);
 CREATE INDEX IF NOT EXISTS idx_bookings_client ON bookings(client_id) WHERE client_id IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings(status) WHERE status IN ('pending', 'confirmed');
