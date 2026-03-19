@@ -81,6 +81,30 @@ export interface ZipMetadata {
   censusData: CensusData | null
 }
 
+// Supabase row shapes for nested selects (avoids `as any` casts)
+interface ZipCodeRow {
+  code: string
+  latitude: number | null
+  longitude: number | null
+  population: number | null
+  location: { name: string; slug: string; census_data: CensusData | null } | null
+  state: { name: string; abbreviation: string; slug: string } | null
+  county: { name: string; slug: string } | null
+}
+
+interface NearbyZipRow {
+  code: string
+  latitude: number | null
+  longitude: number | null
+  population: number | null
+  location: { name: string; slug: string } | null
+  state: { abbreviation: string } | null
+}
+
+interface ZipCodeOnly {
+  code: string
+}
+
 export interface CensusData {
   median_household_income?: number | null
   unemployment_rate?: number | null
@@ -127,20 +151,21 @@ export async function getZipMetadata(zipCode: string): Promise<ZipMetadata | nul
 
         const { data, error } = await supabase
           .from('zip_codes')
-          .select(`
+          .select(
+            `
             code, latitude, longitude, population,
             location:location_id(name, slug, census_data),
             state:state_id(name, abbreviation, slug),
             county:county_id(name, slug)
-          `)
+          `
+          )
           .eq('code', zipCode)
           .limit(1)
           .single()
 
         if (error || !data) return null
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const row = data as any
+        const row = data as unknown as ZipCodeRow
 
         return {
           code: row.code,
@@ -157,11 +182,14 @@ export async function getZipMetadata(zipCode: string): Promise<ZipMetadata | nul
           censusData: row.location?.census_data || null,
         } satisfies ZipMetadata
       } catch (err: unknown) {
-        dbLogger.warn('[getZipMetadata] Failed', { zipCode, error: err instanceof Error ? err.message : err })
+        dbLogger.warn('[getZipMetadata] Failed', {
+          zipCode,
+          error: err instanceof Error ? err.message : err,
+        })
         return null
       }
     },
-    CACHE_TTL.locations, // 7 days
+    CACHE_TTL.locations // 7 days
   )
 }
 
@@ -175,7 +203,7 @@ export async function getZipMetadata(zipCode: string): Promise<ZipMetadata | nul
 export async function getNearbyZips(
   zipCode: string,
   radiusMiles: number = 10,
-  limit: number = 12,
+  limit: number = 12
 ): Promise<NearbyZip[]> {
   if (IS_BUILD) return []
 
@@ -203,7 +231,9 @@ export async function getNearbyZips(
 
         const { data } = await supabase
           .from('zip_codes')
-          .select('code, latitude, longitude, population, location:location_id(name, slug), state:state_id(abbreviation)')
+          .select(
+            'code, latitude, longitude, population, location:location_id(name, slug), state:state_id(abbreviation)'
+          )
           .neq('code', zipCode)
           .gte('latitude', ref.latitude - latDelta)
           .lte('latitude', ref.latitude + latDelta)
@@ -213,14 +243,15 @@ export async function getNearbyZips(
 
         if (!data) return []
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const rows = data as any[]
+        const rows = data as unknown as NearbyZipRow[]
 
         // Calculate approximate distance and sort
         const withDistance = rows
-          .map(row => {
-            const dLat = (row.latitude - ref.latitude) * 69
-            const dLon = (row.longitude - ref.longitude) * 69 * Math.cos((ref.latitude * Math.PI) / 180)
+          .filter((row) => row.latitude != null && row.longitude != null)
+          .map((row) => {
+            const dLat = ((row.latitude ?? 0) - ref.latitude) * 69
+            const dLon =
+              ((row.longitude ?? 0) - ref.longitude) * 69 * Math.cos((ref.latitude * Math.PI) / 180)
             const distMiles = Math.sqrt(dLat * dLat + dLon * dLon)
             return {
               code: row.code as string,
@@ -231,17 +262,20 @@ export async function getNearbyZips(
               population: row.population as number | null,
             } satisfies NearbyZip
           })
-          .filter(z => z.distanceMiles <= radiusMiles)
+          .filter((z) => z.distanceMiles <= radiusMiles)
           .sort((a, b) => (a.distanceMiles ?? 999) - (b.distanceMiles ?? 999))
           .slice(0, limit)
 
         return withDistance
       } catch (err: unknown) {
-        dbLogger.warn('[getNearbyZips] Failed', { zipCode, error: err instanceof Error ? err.message : err })
+        dbLogger.warn('[getNearbyZips] Failed', {
+          zipCode,
+          error: err instanceof Error ? err.message : err,
+        })
         return []
       }
     },
-    CACHE_TTL.locations,
+    CACHE_TTL.locations
   )
 }
 
@@ -255,7 +289,7 @@ export async function getNearbyZips(
  */
 export async function getZipPageData(
   serviceSlug: string,
-  zipCode: string,
+  zipCode: string
 ): Promise<ZipPageData | null> {
   if (IS_BUILD) return null
 
@@ -309,7 +343,7 @@ async function getZipAttorneyCount(serviceSlug: string, zipCode: string): Promis
         return 0
       }
     },
-    CACHE_TTL.attorneys,
+    CACHE_TTL.attorneys
   )
 }
 
@@ -322,7 +356,7 @@ async function getZipAttorneyCount(serviceSlug: string, zipCode: string): Promis
 export async function getZipAttorneyCountByRadius(
   serviceSlug: string,
   zipCode: string,
-  radiusMiles: number = 25,
+  radiusMiles: number = 25
 ): Promise<number> {
   if (IS_BUILD) return 1
 
@@ -361,8 +395,7 @@ export async function getZipAttorneyCountByRadius(
 
         if (!nearbyZipCodes || nearbyZipCodes.length === 0) return 0
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const zips = (nearbyZipCodes as any[]).map(z => z.code as string)
+        const zips = (nearbyZipCodes as unknown as ZipCodeOnly[]).map((z) => z.code)
 
         const { count, error } = await supabase
           .from('attorneys')
@@ -378,14 +411,14 @@ export async function getZipAttorneyCountByRadius(
         return 0
       }
     },
-    CACHE_TTL.attorneys,
+    CACHE_TTL.attorneys
   )
 }
 
 // ─── Helper: build nearby ZIP links as City-compatible objects ────────────────
 
 export function nearbyZipsToCities(nearbyZips: NearbyZip[]): City[] {
-  return nearbyZips.map(z => ({
+  return nearbyZips.map((z) => ({
     slug: buildZipSlug(z.code, z.cityName, z.stateCode),
     name: `${z.cityName} ${z.code}`,
     stateCode: z.stateCode,
@@ -402,8 +435,10 @@ export function nearbyZipsToCities(nearbyZips: NearbyZip[]): City[] {
 }
 
 /** Build nearby ZIP links with the new city-zip slug format */
-export function nearbyZipsToPageLinks(nearbyZips: NearbyZip[]): { slug: string; name: string; stateCode: string; distance: number | null }[] {
-  return nearbyZips.map(z => ({
+export function nearbyZipsToPageLinks(
+  nearbyZips: NearbyZip[]
+): { slug: string; name: string; stateCode: string; distance: number | null }[] {
+  return nearbyZips.map((z) => ({
     slug: zipToSlug(z.code, z.citySlug),
     name: `${z.cityName} ${z.code}`,
     stateCode: z.stateCode,
@@ -416,91 +451,543 @@ export function nearbyZipsToPageLinks(nearbyZips: NearbyZip[]): { slug: string; 
 /** Top ~500 ZIPs across 15 largest metros for generateStaticParams */
 export const TOP_ZIP_CODES: { zip: string; citySlug: string }[] = [
   // New York City
-  ...['10001','10002','10003','10004','10005','10006','10007','10009','10010','10011',
-     '10012','10013','10014','10016','10017','10018','10019','10020','10021','10022',
-     '10023','10024','10025','10026','10027','10028','10029','10036','10038','10040',
-     '11201','11205','11211','11215','11217','11220','11225','11230','11235','11238',
-  ].map(zip => ({ zip, citySlug: 'new-york' })),
+  ...[
+    '10001',
+    '10002',
+    '10003',
+    '10004',
+    '10005',
+    '10006',
+    '10007',
+    '10009',
+    '10010',
+    '10011',
+    '10012',
+    '10013',
+    '10014',
+    '10016',
+    '10017',
+    '10018',
+    '10019',
+    '10020',
+    '10021',
+    '10022',
+    '10023',
+    '10024',
+    '10025',
+    '10026',
+    '10027',
+    '10028',
+    '10029',
+    '10036',
+    '10038',
+    '10040',
+    '11201',
+    '11205',
+    '11211',
+    '11215',
+    '11217',
+    '11220',
+    '11225',
+    '11230',
+    '11235',
+    '11238',
+  ].map((zip) => ({ zip, citySlug: 'new-york' })),
   // Los Angeles
-  ...['90001','90002','90003','90004','90005','90006','90007','90010','90012','90013',
-     '90014','90015','90016','90017','90019','90020','90024','90025','90026','90027',
-     '90028','90034','90035','90036','90038','90039','90041','90042','90045','90046',
-     '90048','90049','90064','90065','90066','90067','90068','90069','90071','90077',
-  ].map(zip => ({ zip, citySlug: 'los-angeles' })),
+  ...[
+    '90001',
+    '90002',
+    '90003',
+    '90004',
+    '90005',
+    '90006',
+    '90007',
+    '90010',
+    '90012',
+    '90013',
+    '90014',
+    '90015',
+    '90016',
+    '90017',
+    '90019',
+    '90020',
+    '90024',
+    '90025',
+    '90026',
+    '90027',
+    '90028',
+    '90034',
+    '90035',
+    '90036',
+    '90038',
+    '90039',
+    '90041',
+    '90042',
+    '90045',
+    '90046',
+    '90048',
+    '90049',
+    '90064',
+    '90065',
+    '90066',
+    '90067',
+    '90068',
+    '90069',
+    '90071',
+    '90077',
+  ].map((zip) => ({ zip, citySlug: 'los-angeles' })),
   // Chicago
-  ...['60601','60602','60603','60605','60606','60607','60608','60610','60611','60612',
-     '60613','60614','60615','60616','60618','60622','60623','60625','60626','60628',
-     '60629','60632','60634','60637','60639','60640','60641','60647','60651','60657',
-  ].map(zip => ({ zip, citySlug: 'chicago' })),
+  ...[
+    '60601',
+    '60602',
+    '60603',
+    '60605',
+    '60606',
+    '60607',
+    '60608',
+    '60610',
+    '60611',
+    '60612',
+    '60613',
+    '60614',
+    '60615',
+    '60616',
+    '60618',
+    '60622',
+    '60623',
+    '60625',
+    '60626',
+    '60628',
+    '60629',
+    '60632',
+    '60634',
+    '60637',
+    '60639',
+    '60640',
+    '60641',
+    '60647',
+    '60651',
+    '60657',
+  ].map((zip) => ({ zip, citySlug: 'chicago' })),
   // Houston
-  ...['77001','77002','77003','77004','77005','77006','77007','77008','77009','77010',
-     '77011','77012','77019','77020','77021','77023','77024','77025','77027','77030',
-     '77035','77036','77040','77042','77055','77056','77057','77063','77077','77079',
-  ].map(zip => ({ zip, citySlug: 'houston' })),
+  ...[
+    '77001',
+    '77002',
+    '77003',
+    '77004',
+    '77005',
+    '77006',
+    '77007',
+    '77008',
+    '77009',
+    '77010',
+    '77011',
+    '77012',
+    '77019',
+    '77020',
+    '77021',
+    '77023',
+    '77024',
+    '77025',
+    '77027',
+    '77030',
+    '77035',
+    '77036',
+    '77040',
+    '77042',
+    '77055',
+    '77056',
+    '77057',
+    '77063',
+    '77077',
+    '77079',
+  ].map((zip) => ({ zip, citySlug: 'houston' })),
   // Phoenix
-  ...['85003','85004','85006','85007','85008','85009','85012','85013','85014','85015',
-     '85016','85017','85018','85019','85020','85021','85022','85023','85028','85032',
-     '85034','85040','85041','85042','85044','85048','85050','85051','85053','85054',
-  ].map(zip => ({ zip, citySlug: 'phoenix' })),
+  ...[
+    '85003',
+    '85004',
+    '85006',
+    '85007',
+    '85008',
+    '85009',
+    '85012',
+    '85013',
+    '85014',
+    '85015',
+    '85016',
+    '85017',
+    '85018',
+    '85019',
+    '85020',
+    '85021',
+    '85022',
+    '85023',
+    '85028',
+    '85032',
+    '85034',
+    '85040',
+    '85041',
+    '85042',
+    '85044',
+    '85048',
+    '85050',
+    '85051',
+    '85053',
+    '85054',
+  ].map((zip) => ({ zip, citySlug: 'phoenix' })),
   // Philadelphia
-  ...['19102','19103','19104','19106','19107','19109','19111','19120','19121','19122',
-     '19123','19124','19125','19126','19128','19130','19131','19132','19134','19135',
-     '19136','19139','19140','19141','19143','19145','19146','19147','19148','19149',
-  ].map(zip => ({ zip, citySlug: 'philadelphia' })),
+  ...[
+    '19102',
+    '19103',
+    '19104',
+    '19106',
+    '19107',
+    '19109',
+    '19111',
+    '19120',
+    '19121',
+    '19122',
+    '19123',
+    '19124',
+    '19125',
+    '19126',
+    '19128',
+    '19130',
+    '19131',
+    '19132',
+    '19134',
+    '19135',
+    '19136',
+    '19139',
+    '19140',
+    '19141',
+    '19143',
+    '19145',
+    '19146',
+    '19147',
+    '19148',
+    '19149',
+  ].map((zip) => ({ zip, citySlug: 'philadelphia' })),
   // San Antonio
-  ...['78201','78202','78204','78205','78207','78209','78210','78212','78213','78215',
-     '78216','78217','78218','78220','78221','78223','78224','78227','78228','78229',
-  ].map(zip => ({ zip, citySlug: 'san-antonio' })),
+  ...[
+    '78201',
+    '78202',
+    '78204',
+    '78205',
+    '78207',
+    '78209',
+    '78210',
+    '78212',
+    '78213',
+    '78215',
+    '78216',
+    '78217',
+    '78218',
+    '78220',
+    '78221',
+    '78223',
+    '78224',
+    '78227',
+    '78228',
+    '78229',
+  ].map((zip) => ({ zip, citySlug: 'san-antonio' })),
   // San Diego
-  ...['92101','92102','92103','92104','92105','92106','92107','92108','92109','92110',
-     '92111','92113','92114','92115','92116','92117','92120','92121','92122','92123',
-  ].map(zip => ({ zip, citySlug: 'san-diego' })),
+  ...[
+    '92101',
+    '92102',
+    '92103',
+    '92104',
+    '92105',
+    '92106',
+    '92107',
+    '92108',
+    '92109',
+    '92110',
+    '92111',
+    '92113',
+    '92114',
+    '92115',
+    '92116',
+    '92117',
+    '92120',
+    '92121',
+    '92122',
+    '92123',
+  ].map((zip) => ({ zip, citySlug: 'san-diego' })),
   // Dallas
-  ...['75201','75202','75203','75204','75205','75206','75207','75208','75209','75210',
-     '75211','75214','75215','75216','75217','75219','75220','75225','75228','75230',
-  ].map(zip => ({ zip, citySlug: 'dallas' })),
+  ...[
+    '75201',
+    '75202',
+    '75203',
+    '75204',
+    '75205',
+    '75206',
+    '75207',
+    '75208',
+    '75209',
+    '75210',
+    '75211',
+    '75214',
+    '75215',
+    '75216',
+    '75217',
+    '75219',
+    '75220',
+    '75225',
+    '75228',
+    '75230',
+  ].map((zip) => ({ zip, citySlug: 'dallas' })),
   // San Francisco
-  ...['94102','94103','94104','94105','94107','94108','94109','94110','94111','94112',
-     '94114','94115','94116','94117','94118','94121','94122','94123','94124','94133',
-  ].map(zip => ({ zip, citySlug: 'san-francisco' })),
+  ...[
+    '94102',
+    '94103',
+    '94104',
+    '94105',
+    '94107',
+    '94108',
+    '94109',
+    '94110',
+    '94111',
+    '94112',
+    '94114',
+    '94115',
+    '94116',
+    '94117',
+    '94118',
+    '94121',
+    '94122',
+    '94123',
+    '94124',
+    '94133',
+  ].map((zip) => ({ zip, citySlug: 'san-francisco' })),
   // Austin
-  ...['78701','78702','78703','78704','78705','78721','78722','78723','78727','78731',
-     '78741','78745','78748','78749','78751','78752','78753','78757','78758','78759',
-  ].map(zip => ({ zip, citySlug: 'austin' })),
+  ...[
+    '78701',
+    '78702',
+    '78703',
+    '78704',
+    '78705',
+    '78721',
+    '78722',
+    '78723',
+    '78727',
+    '78731',
+    '78741',
+    '78745',
+    '78748',
+    '78749',
+    '78751',
+    '78752',
+    '78753',
+    '78757',
+    '78758',
+    '78759',
+  ].map((zip) => ({ zip, citySlug: 'austin' })),
   // Denver
-  ...['80202','80203','80204','80205','80206','80209','80210','80211','80212','80218',
-     '80219','80220','80222','80223','80224','80230','80237','80239','80246','80249',
-  ].map(zip => ({ zip, citySlug: 'denver' })),
+  ...[
+    '80202',
+    '80203',
+    '80204',
+    '80205',
+    '80206',
+    '80209',
+    '80210',
+    '80211',
+    '80212',
+    '80218',
+    '80219',
+    '80220',
+    '80222',
+    '80223',
+    '80224',
+    '80230',
+    '80237',
+    '80239',
+    '80246',
+    '80249',
+  ].map((zip) => ({ zip, citySlug: 'denver' })),
   // Miami
-  ...['33101','33125','33126','33127','33128','33129','33130','33131','33132','33133',
-     '33134','33135','33136','33137','33138','33139','33140','33142','33145','33155',
-  ].map(zip => ({ zip, citySlug: 'miami' })),
+  ...[
+    '33101',
+    '33125',
+    '33126',
+    '33127',
+    '33128',
+    '33129',
+    '33130',
+    '33131',
+    '33132',
+    '33133',
+    '33134',
+    '33135',
+    '33136',
+    '33137',
+    '33138',
+    '33139',
+    '33140',
+    '33142',
+    '33145',
+    '33155',
+  ].map((zip) => ({ zip, citySlug: 'miami' })),
   // Seattle
-  ...['98101','98102','98103','98104','98105','98106','98107','98109','98112','98115',
-     '98116','98117','98118','98119','98121','98122','98125','98126','98144','98199',
-  ].map(zip => ({ zip, citySlug: 'seattle' })),
+  ...[
+    '98101',
+    '98102',
+    '98103',
+    '98104',
+    '98105',
+    '98106',
+    '98107',
+    '98109',
+    '98112',
+    '98115',
+    '98116',
+    '98117',
+    '98118',
+    '98119',
+    '98121',
+    '98122',
+    '98125',
+    '98126',
+    '98144',
+    '98199',
+  ].map((zip) => ({ zip, citySlug: 'seattle' })),
   // Boston
-  ...['02101','02108','02109','02110','02111','02113','02114','02115','02116','02118',
-     '02119','02120','02121','02124','02125','02127','02128','02129','02130','02132',
-  ].map(zip => ({ zip, citySlug: 'boston' })),
+  ...[
+    '02101',
+    '02108',
+    '02109',
+    '02110',
+    '02111',
+    '02113',
+    '02114',
+    '02115',
+    '02116',
+    '02118',
+    '02119',
+    '02120',
+    '02121',
+    '02124',
+    '02125',
+    '02127',
+    '02128',
+    '02129',
+    '02130',
+    '02132',
+  ].map((zip) => ({ zip, citySlug: 'boston' })),
   // Washington DC
-  ...['20001','20002','20003','20004','20005','20006','20007','20008','20009','20010',
-     '20011','20012','20015','20016','20017','20018','20019','20020','20024','20036',
-  ].map(zip => ({ zip, citySlug: 'washington' })),
+  ...[
+    '20001',
+    '20002',
+    '20003',
+    '20004',
+    '20005',
+    '20006',
+    '20007',
+    '20008',
+    '20009',
+    '20010',
+    '20011',
+    '20012',
+    '20015',
+    '20016',
+    '20017',
+    '20018',
+    '20019',
+    '20020',
+    '20024',
+    '20036',
+  ].map((zip) => ({ zip, citySlug: 'washington' })),
   // Atlanta
-  ...['30301','30303','30305','30306','30307','30308','30309','30310','30311','30312',
-     '30313','30314','30316','30318','30319','30324','30326','30327','30331','30342',
-  ].map(zip => ({ zip, citySlug: 'atlanta' })),
+  ...[
+    '30301',
+    '30303',
+    '30305',
+    '30306',
+    '30307',
+    '30308',
+    '30309',
+    '30310',
+    '30311',
+    '30312',
+    '30313',
+    '30314',
+    '30316',
+    '30318',
+    '30319',
+    '30324',
+    '30326',
+    '30327',
+    '30331',
+    '30342',
+  ].map((zip) => ({ zip, citySlug: 'atlanta' })),
   // Detroit
-  ...['48201','48202','48204','48205','48207','48208','48209','48210','48213','48214',
-     '48215','48216','48226','48227','48228','48234','48235','48238','48219','48221',
-  ].map(zip => ({ zip, citySlug: 'detroit' })),
+  ...[
+    '48201',
+    '48202',
+    '48204',
+    '48205',
+    '48207',
+    '48208',
+    '48209',
+    '48210',
+    '48213',
+    '48214',
+    '48215',
+    '48216',
+    '48226',
+    '48227',
+    '48228',
+    '48234',
+    '48235',
+    '48238',
+    '48219',
+    '48221',
+  ].map((zip) => ({ zip, citySlug: 'detroit' })),
   // Minneapolis
-  ...['55401','55402','55403','55404','55405','55406','55407','55408','55409','55410',
-     '55411','55412','55413','55414','55415','55416','55417','55418','55419','55455',
-  ].map(zip => ({ zip, citySlug: 'minneapolis' })),
+  ...[
+    '55401',
+    '55402',
+    '55403',
+    '55404',
+    '55405',
+    '55406',
+    '55407',
+    '55408',
+    '55409',
+    '55410',
+    '55411',
+    '55412',
+    '55413',
+    '55414',
+    '55415',
+    '55416',
+    '55417',
+    '55418',
+    '55419',
+    '55455',
+  ].map((zip) => ({ zip, citySlug: 'minneapolis' })),
   // Portland
-  ...['97201','97202','97203','97204','97205','97206','97209','97210','97211','97212',
-     '97213','97214','97215','97217','97218','97219','97220','97227','97232','97239',
-  ].map(zip => ({ zip, citySlug: 'portland' })),
+  ...[
+    '97201',
+    '97202',
+    '97203',
+    '97204',
+    '97205',
+    '97206',
+    '97209',
+    '97210',
+    '97211',
+    '97212',
+    '97213',
+    '97214',
+    '97215',
+    '97217',
+    '97218',
+    '97219',
+    '97220',
+    '97227',
+    '97232',
+    '97239',
+  ].map((zip) => ({ zip, citySlug: 'portland' })),
 ]

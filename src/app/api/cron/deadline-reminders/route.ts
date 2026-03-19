@@ -42,7 +42,9 @@ export async function GET(request: NextRequest) {
     // Fetch all non-expired reminders that still have pending notifications
     const { data: reminders, error } = await supabase
       .from('deadline_reminders')
-      .select('id, user_id, specialty_slug, state_code, deadline_date, reminded_30d, reminded_7d, reminded_1d')
+      .select(
+        'id, user_id, specialty_slug, state_code, deadline_date, reminded_30d, reminded_7d, reminded_1d'
+      )
       .gte('deadline_date', now.toISOString().split('T')[0])
       .or('reminded_30d.eq.false,reminded_7d.eq.false,reminded_1d.eq.false')
       .limit(500)
@@ -109,8 +111,11 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function sendDeadlineNotification(supabase: any, reminder: ReminderRow, timeframe: string) {
+async function sendDeadlineNotification(
+  supabase: ReturnType<typeof createAdminClient>,
+  reminder: ReminderRow,
+  timeframe: string
+) {
   const title = `Legal Deadline in ${timeframe}`
   const body = `Your ${formatSlug(reminder.specialty_slug)} deadline in ${reminder.state_code} is in ${timeframe}. Don't wait — consult an attorney today.`
   const url = `/tools/deadline-tracker?specialty=${reminder.specialty_slug}&state=${reminder.state_code}`
@@ -160,5 +165,5 @@ async function sendDeadlineNotification(supabase: any, reminder: ReminderRow, ti
 }
 
 function formatSlug(slug: string): string {
-  return slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+  return slug.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }

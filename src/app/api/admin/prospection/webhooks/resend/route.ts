@@ -31,8 +31,7 @@ export const POST = createApiHandler(async (ctx) => {
     return new NextResponse('OK', { status: 200 })
   }
   const eventType = event.type as string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const data = event.data as any
+  const data = event.data as Record<string, unknown> | undefined
 
   if (!eventType || !data) {
     return new NextResponse('OK', { status: 200 })
@@ -70,11 +69,14 @@ export const POST = createApiHandler(async (ctx) => {
     case 'delivered':
       updateData.delivered_at = new Date().toISOString()
       break
-    case 'failed':
+    case 'failed': {
       updateData.failed_at = new Date().toISOString()
       updateData.error_code = eventType === 'email.bounced' ? 'bounced' : 'complained'
-      updateData.error_message = data.bounce?.message || data.complaint?.message || eventType
+      const bounce = data.bounce as Record<string, unknown> | undefined
+      const complaint = data.complaint as Record<string, unknown> | undefined
+      updateData.error_message = bounce?.message || complaint?.message || eventType
       break
+    }
   }
 
   const { error } = await supabase
