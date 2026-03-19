@@ -393,7 +393,7 @@ function generateJsonLd(
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Home', url: '/', semanticType: 'Organization' },
-    { name: 'Practice Areas', url: '/services', semanticType: 'CollectionPage' },
+    { name: 'Practice Areas', url: '/practice-areas', semanticType: 'CollectionPage' },
     { name: service.name, url: `/practice-areas/${specialtySlug}`, semanticType: 'LegalService' },
     {
       name: location.name,
@@ -708,7 +708,7 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
             items={
               isZipPage && zipPageParsed
                 ? [
-                    { label: 'Services', href: '/services' },
+                    { label: 'Practice Areas', href: '/practice-areas' },
                     { label: service.name, href: `/practice-areas/${specialtySlug}` },
                     {
                       label: location.name.replace(` ${zipPageParsed.zipCode}`, ''),
@@ -717,7 +717,7 @@ export default async function ServiceLocationPage({ params, searchParams }: Page
                     { label: zipPageParsed.zipCode },
                   ]
                 : [
-                    { label: 'Services', href: '/services' },
+                    { label: 'Practice Areas', href: '/practice-areas' },
                     { label: service.name, href: `/practice-areas/${specialtySlug}` },
                     { label: location.name },
                   ]

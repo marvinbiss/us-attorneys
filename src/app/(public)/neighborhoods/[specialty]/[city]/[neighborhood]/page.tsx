@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     if (service) specialtyName = service.name
     attorneyCount = count
   } catch {
-    const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+    const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
     if (staticSvc) specialtyName = staticSvc.name
   }
 
@@ -100,7 +100,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     robots: noindex
       ? { index: false, follow: true }
-      : { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const, 'max-video-preview': -1 as const },
+      : {
+          index: true,
+          follow: true,
+          'max-snippet': -1 as const,
+          'max-image-preview': 'large' as const,
+          'max-video-preview': -1 as const,
+        },
     alternates: {
       canonical: `${SITE_URL}/neighborhoods/${specialtySlug}/${citySlug}/${neighborhoodSlug}`,
     },
@@ -131,16 +137,28 @@ export default async function NeighborhoodSpecialtyPage({ params }: PageProps) {
   try {
     const dbService = await getSpecialtyBySlug(specialtySlug)
     if (!dbService) {
-      const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+      const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
       if (!staticSvc) notFound()
-      service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+      service = {
+        id: '',
+        name: staticSvc.name,
+        slug: staticSvc.slug,
+        is_active: true,
+        created_at: '',
+      }
     } else {
       service = dbService
     }
   } catch {
-    const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+    const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
     if (!staticSvc) notFound()
-    service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+    service = {
+      id: '',
+      name: staticSvc.name,
+      slug: staticSvc.slug,
+      is_active: true,
+      created_at: '',
+    }
   }
 
   // 3. Build a Location object from city data
@@ -177,16 +195,21 @@ export default async function NeighborhoodSpecialtyPage({ params }: PageProps) {
   const h1Text = h1Templates[h1Hash % h1Templates.length]
 
   // 6. Cross-links data
-  const otherNeighborhoods = getNeighborhoodsByCity(citySlug).filter(q => q.slug !== neighborhoodSlug)
-  const otherSpecialties = staticPracticeAreas.filter(s => s.slug !== specialtySlug).slice(0, 10)
+  const otherNeighborhoods = getNeighborhoodsByCity(citySlug).filter(
+    (q) => q.slug !== neighborhoodSlug
+  )
+  const otherSpecialties = staticPracticeAreas.filter((s) => s.slug !== specialtySlug).slice(0, 10)
 
   // 7. JSON-LD
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Home', url: '/' },
-    { name: 'Practice Areas', url: '/services' },
+    { name: 'Practice Areas', url: '/practice-areas' },
     { name: service.name, url: `/practice-areas/${specialtySlug}` },
     { name: `${city.name}`, url: `/practice-areas/${specialtySlug}/${citySlug}` },
-    { name: neighborhoodName, url: `/neighborhoods/${specialtySlug}/${citySlug}/${neighborhoodSlug}` },
+    {
+      name: neighborhoodName,
+      url: `/neighborhoods/${specialtySlug}/${citySlug}/${neighborhoodSlug}`,
+    },
   ])
 
   const collectionSchema = {
@@ -216,22 +239,22 @@ export default async function NeighborhoodSpecialtyPage({ params }: PageProps) {
       <JsonLd data={[breadcrumbSchema, collectionSchema]} />
 
       {/* Breadcrumb */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <Breadcrumb items={[
-            { label: 'Practice Areas', href: '/services' },
-            { label: service.name, href: `/practice-areas/${specialtySlug}` },
-            { label: city.name, href: `/practice-areas/${specialtySlug}/${citySlug}` },
-            { label: neighborhoodName },
-          ]} />
+      <div className="border-b bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-3">
+          <Breadcrumb
+            items={[
+              { label: 'Practice Areas', href: '/practice-areas' },
+              { label: service.name, href: `/practice-areas/${specialtySlug}` },
+              { label: city.name, href: `/practice-areas/${specialtySlug}/${citySlug}` },
+              { label: neighborhoodName },
+            ]}
+          />
         </div>
       </div>
 
       {/* Neighborhood context */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <p className="text-gray-600 text-sm leading-relaxed max-w-3xl">
-          {contextText}
-        </p>
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <p className="max-w-3xl text-sm leading-relaxed text-gray-600">{contextText}</p>
       </div>
 
       {/* Attorney listings */}
@@ -246,17 +269,16 @@ export default async function NeighborhoodSpecialtyPage({ params }: PageProps) {
       />
 
       {/* Cross-links */}
-      <section className="py-16 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
+      <section className="border-t border-gray-100 bg-white py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-8 font-heading text-xl font-bold tracking-tight text-slate-900">
             See Also
           </h2>
-          <div className="grid md:grid-cols-3 gap-10">
-
+          <div className="grid gap-10 md:grid-cols-3">
             {/* Other neighborhoods in the same city for this specialty */}
             {otherNeighborhoods.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">
+                <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
                   {service.name} in Other {city.name} Neighborhoods
                 </h3>
                 <div className="space-y-2">
@@ -264,9 +286,9 @@ export default async function NeighborhoodSpecialtyPage({ params }: PageProps) {
                     <Link
                       key={slug}
                       href={`/neighborhoods/${specialtySlug}/${citySlug}/${slug}`}
-                      className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-1.5 transition-colors"
+                      className="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition-colors hover:text-emerald-600"
                     >
-                      <ChevronRight className="w-3 h-3" />
+                      <ChevronRight className="h-3 w-3" />
                       {service.name} in {name}
                     </Link>
                   ))}
@@ -276,7 +298,7 @@ export default async function NeighborhoodSpecialtyPage({ params }: PageProps) {
 
             {/* Other specialties in same neighborhood */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
                 Other Practice Areas in {neighborhoodName}
               </h3>
               <div className="space-y-2">
@@ -284,9 +306,9 @@ export default async function NeighborhoodSpecialtyPage({ params }: PageProps) {
                   <Link
                     key={s.slug}
                     href={`/neighborhoods/${s.slug}/${citySlug}/${neighborhoodSlug}`}
-                    className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-1.5 transition-colors"
+                    className="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition-colors hover:text-emerald-600"
                   >
-                    <ChevronRight className="w-3 h-3" />
+                    <ChevronRight className="h-3 w-3" />
                     {s.name} in {neighborhoodName}
                   </Link>
                 ))}
@@ -295,48 +317,47 @@ export default async function NeighborhoodSpecialtyPage({ params }: PageProps) {
 
             {/* Navigation links */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
                 Navigation
               </h3>
               <div className="space-y-2">
                 <Link
                   href={`/practice-areas/${specialtySlug}/${citySlug}`}
-                  className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-1.5 transition-colors"
+                  className="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition-colors hover:text-emerald-600"
                 >
-                  <ChevronRight className="w-3 h-3" />
+                  <ChevronRight className="h-3 w-3" />
                   {service.name} in {city.name}
                 </Link>
                 <Link
                   href={`/cities/${citySlug}/${neighborhoodSlug}`}
-                  className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-1.5 transition-colors"
+                  className="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition-colors hover:text-emerald-600"
                 >
-                  <ChevronRight className="w-3 h-3" />
+                  <ChevronRight className="h-3 w-3" />
                   All Attorneys in {neighborhoodName}
                 </Link>
                 <Link
                   href={`/cities/${citySlug}`}
-                  className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-1.5 transition-colors"
+                  className="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition-colors hover:text-emerald-600"
                 >
-                  <ChevronRight className="w-3 h-3" />
+                  <ChevronRight className="h-3 w-3" />
                   Attorneys in {city.name}
                 </Link>
                 <Link
                   href={`/practice-areas/${specialtySlug}`}
-                  className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-1.5 transition-colors"
+                  className="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition-colors hover:text-emerald-600"
                 >
-                  <ChevronRight className="w-3 h-3" />
+                  <ChevronRight className="h-3 w-3" />
                   {service.name} — All Locations
                 </Link>
                 <Link
-                  href="/services"
-                  className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-1.5 transition-colors"
+                  href="/practice-areas"
+                  className="flex items-center gap-2 py-1.5 text-sm text-slate-600 transition-colors hover:text-emerald-600"
                 >
-                  <ChevronRight className="w-3 h-3" />
+                  <ChevronRight className="h-3 w-3" />
                   All Practice Areas
                 </Link>
               </div>
             </div>
-
           </div>
         </div>
       </section>

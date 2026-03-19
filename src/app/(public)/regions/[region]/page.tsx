@@ -1,12 +1,28 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, ArrowRight, Shield, Clock, Building2, ChevronRight, Wrench, HelpCircle, Globe } from 'lucide-react'
+import {
+  MapPin,
+  Users,
+  ArrowRight,
+  Shield,
+  Clock,
+  Building2,
+  ChevronRight,
+  Wrench,
+  HelpCircle,
+  Globe,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { usRegions, getRegionBySlug, practiceAreas as allServices, getCitiesByState } from '@/lib/data/usa'
+import {
+  usRegions,
+  getRegionBySlug,
+  practiceAreas as allServices,
+  getCitiesByState,
+} from '@/lib/data/usa'
 import { getAttorneyCountByRegion, formatAttorneyCount } from '@/lib/data/stats'
 import { getRegionImage } from '@/lib/data/images'
 import { generateRegionContent, hashCode } from '@/lib/seo/location-content'
@@ -75,7 +91,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       type: 'website',
       url: `${SITE_URL}/regions/${regionSlug}`,
-      images: [{ url: regionImage.src, width: 1200, height: 630, alt: `Attorneys in ${region.name}` }],
+      images: [
+        { url: regionImage.src, width: 1200, height: 630, alt: `Attorneys in ${region.name}` },
+      ],
     },
     twitter: {
       card: 'summary_large_image' as const,
@@ -93,9 +111,9 @@ export default async function RegionPage({ params }: PageProps) {
 
   const stateCount = region.states.length
   const stateCitiesMap = Object.fromEntries(
-    region.states.map(st => [st.code, getCitiesByState(st.code)])
+    region.states.map((st) => [st.code, getCitiesByState(st.code)])
   )
-  const allCities = region.states.flatMap(st => stateCitiesMap[st.code])
+  const allCities = region.states.flatMap((st) => stateCitiesMap[st.code])
   const cityCount = allCities.length
   const content = generateRegionContent(region, cityCount)
   const regionAttorneyCount = await getAttorneyCountByRegion(region.name)
@@ -109,7 +127,7 @@ export default async function RegionPage({ params }: PageProps) {
   })
 
   // Other regions
-  const otherRegions = usRegions.filter(r => r.slug !== regionSlug)
+  const otherRegions = usRegions.filter((r) => r.slug !== regionSlug)
 
   // JSON-LD structured data
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -131,44 +149,53 @@ export default async function RegionPage({ params }: PageProps) {
       <JsonLd data={[breadcrumbSchema, collectionSchema, faqSchema]} />
 
       {/* ─── PREMIUM DARK HERO ──────────────────────────────── */}
-      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+      <section className="relative overflow-hidden bg-[#0a0f1e] text-white">
         {/* Background effects */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(51,65,85,0.30) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(71,85,105,0.15) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(100,116,139,0.08) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(51,65,85,0.30) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(71,85,105,0.15) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(100,116,139,0.08) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 pt-10 pb-28 md:pt-14 md:pb-36">
+        <div className="relative mx-auto max-w-6xl px-4 pb-28 pt-10 md:pb-36 md:pt-14">
           {/* Breadcrumb */}
           <div className="mb-10">
             <Breadcrumb
-              items={[
-                { label: 'Regions', href: '/regions' },
-                { label: region.name },
-              ]}
-              className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+              items={[{ label: 'Regions', href: '/regions' }, { label: region.name }]}
+              className="text-slate-400 [&_a:hover]:text-white [&_a]:text-slate-400 [&_svg]:text-slate-600"
             />
           </div>
 
           <div className="max-w-3xl">
-            <div className="flex flex-wrap gap-3 mb-5">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-500/15 backdrop-blur-sm rounded-full border border-slate-400/25">
-                <Globe className="w-4 h-4 text-slate-300" />
+            <div className="mb-5 flex flex-wrap gap-3">
+              <div className="inline-flex items-center gap-2 rounded-full border border-slate-400/25 bg-slate-500/15 px-4 py-2 backdrop-blur-sm">
+                <Globe className="h-4 w-4 text-slate-300" />
                 <span className="text-sm font-medium text-slate-200">Region</span>
               </div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500/15 backdrop-blur-sm rounded-full border border-cyan-400/25">
-                <Thermometer className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm font-medium text-cyan-200">{content.profile.climateLabel}</span>
+              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/25 bg-cyan-500/15 px-4 py-2 backdrop-blur-sm">
+                <Thermometer className="h-4 w-4 text-cyan-400" />
+                <span className="text-sm font-medium text-cyan-200">
+                  {content.profile.climateLabel}
+                </span>
               </div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
-                <Mountain className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm font-medium text-emerald-200">{content.profile.geoLabel}</span>
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-500/15 px-4 py-2 backdrop-blur-sm">
+                <Mountain className="h-4 w-4 text-emerald-400" />
+                <span className="text-sm font-medium text-emerald-200">
+                  {content.profile.geoLabel}
+                </span>
               </div>
             </div>
 
@@ -182,44 +209,55 @@ export default async function RegionPage({ params }: PageProps) {
                 `All attorneys in ${region.name}`,
               ]
               return (
-                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+                <h1 className="mb-5 font-heading text-3xl font-extrabold leading-[1.1] tracking-[-0.025em] md:text-4xl lg:text-5xl">
                   {h1Templates[h1Hash % h1Templates.length]}
                 </h1>
               )
             })()}
-            <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-              {content.profile.climateLabel}, {content.profile.geoLabel.toLowerCase()}, {content.profile.economyLabel.toLowerCase()}. {allServices.length} practice areas available.
+            <p className="mb-8 max-w-2xl text-lg leading-relaxed text-slate-400">
+              {content.profile.climateLabel}, {content.profile.geoLabel.toLowerCase()},{' '}
+              {content.profile.economyLabel.toLowerCase()}. {allServices.length} practice areas
+              available.
             </p>
 
             {/* Stats badges */}
-            <div className="flex flex-wrap gap-4 mb-8 text-sm">
+            <div className="mb-8 flex flex-wrap gap-4 text-sm">
               {regionAttorneyCount > 0 && (
                 <div className="flex items-center gap-2 text-slate-300">
-                  <Users className="w-4 h-4 text-amber-400" />
-                  <span>{formatAttorneyCount(regionAttorneyCount)} attorney{regionAttorneyCount > 1 ? 's' : ''}</span>
+                  <Users className="h-4 w-4 text-amber-400" />
+                  <span>
+                    {formatAttorneyCount(regionAttorneyCount)} attorney
+                    {regionAttorneyCount > 1 ? 's' : ''}
+                  </span>
                 </div>
               )}
               <div className="flex items-center gap-2 text-slate-300">
-                <Building2 className="w-4 h-4 text-slate-400" />
-                <span>{stateCount} state{stateCount > 1 ? 's' : ''}</span>
+                <Building2 className="h-4 w-4 text-slate-400" />
+                <span>
+                  {stateCount} state{stateCount > 1 ? 's' : ''}
+                </span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <MapPin className="w-4 h-4 text-slate-400" />
-                <span>{cityCount} cit{cityCount > 1 ? 'ies' : 'y'} covered</span>
+                <MapPin className="h-4 w-4 text-slate-400" />
+                <span>
+                  {cityCount} cit{cityCount > 1 ? 'ies' : 'y'} covered
+                </span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <Users className="w-4 h-4 text-slate-400" />
+                <Users className="h-4 w-4 text-slate-400" />
                 <span>{allServices.length} practice areas</span>
               </div>
             </div>
 
             {/* Trust badges */}
             <div className="flex flex-wrap gap-3">
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Bar-verified attorneys</span>
+              <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 backdrop-blur">
+                <Shield className="h-4 w-4 text-amber-400" />
+                <span className="text-sm font-medium">Bar-verified attorneys</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Free consultations</span>
+              <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 backdrop-blur">
+                <Clock className="h-4 w-4 text-amber-400" />
+                <span className="text-sm font-medium">Free consultations</span>
               </div>
             </div>
           </div>
@@ -227,15 +265,15 @@ export default async function RegionPage({ params }: PageProps) {
       </section>
 
       {/* ─── QUICK SERVICES BAR ─────────────────────────────── */}
-      <section className="py-6 bg-white border-b border-gray-100 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="border-b border-gray-100 bg-white py-6 shadow-sm">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="text-sm text-slate-500 font-medium">Top practice areas:</span>
+            <span className="text-sm font-medium text-slate-500">Top practice areas:</span>
             {orderedServices.map((service) => (
               <Link
                 key={service.slug}
                 href={`/regions/${regionSlug}/${service.slug}`}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${topServiceSlugsSet.has(service.slug) ? 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100' : 'bg-gray-50 text-slate-700 border-gray-200 hover:bg-slate-100'}`}
+                className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${topServiceSlugsSet.has(service.slug) ? 'border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100' : 'border-gray-200 bg-gray-50 text-slate-700 hover:bg-slate-100'}`}
               >
                 {service.name} en {region.name}
               </Link>
@@ -244,122 +282,155 @@ export default async function RegionPage({ params }: PageProps) {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         {/* ─── REGIONAL PROFILE ──────────────────────────────── */}
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
-              <Thermometer className="w-5 h-5 text-cyan-600" />
+          <div className="mb-8 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-100">
+              <Thermometer className="h-5 w-5 text-cyan-600" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
                 {region.name} region profile
               </h2>
-              <p className="text-sm text-slate-500">{content.profile.climateLabel} · {content.profile.geoLabel}</p>
+              <p className="text-sm text-slate-500">
+                {content.profile.climateLabel} · {content.profile.geoLabel}
+              </p>
             </div>
           </div>
-          <div className="bg-white rounded-2xl border border-gray-200 p-8">
-            <p className="text-slate-700 leading-relaxed mb-6">{content.intro}</p>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-              <div className="bg-cyan-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-cyan-700 uppercase tracking-wider mb-1">Climate</div>
-                <div className="text-sm text-slate-800 font-medium">{content.profile.climateLabel}</div>
+          <div className="rounded-2xl border border-gray-200 bg-white p-8">
+            <p className="mb-6 leading-relaxed text-slate-700">{content.intro}</p>
+            <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded-xl bg-cyan-50 p-4">
+                <div className="mb-1 text-xs font-semibold uppercase tracking-wider text-cyan-700">
+                  Climate
+                </div>
+                <div className="text-sm font-medium text-slate-800">
+                  {content.profile.climateLabel}
+                </div>
               </div>
-              <div className="bg-emerald-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-emerald-700 uppercase tracking-wider mb-1">Geography</div>
-                <div className="text-sm text-slate-800 font-medium">{content.profile.geoLabel}</div>
+              <div className="rounded-xl bg-emerald-50 p-4">
+                <div className="mb-1 text-xs font-semibold uppercase tracking-wider text-emerald-700">
+                  Geography
+                </div>
+                <div className="text-sm font-medium text-slate-800">{content.profile.geoLabel}</div>
               </div>
-              <div className="bg-violet-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-violet-700 uppercase tracking-wider mb-1">Economy</div>
-                <div className="text-sm text-slate-800 font-medium">{content.profile.economyLabel}</div>
+              <div className="rounded-xl bg-violet-50 p-4">
+                <div className="mb-1 text-xs font-semibold uppercase tracking-wider text-violet-700">
+                  Economy
+                </div>
+                <div className="text-sm font-medium text-slate-800">
+                  {content.profile.economyLabel}
+                </div>
               </div>
-              <div className="bg-amber-50 rounded-xl p-4">
-                <div className="text-xs font-semibold text-amber-700 uppercase tracking-wider mb-1">Coverage</div>
-                <div className="text-sm text-slate-800 font-medium">
-                  {regionAttorneyCount > 0 ? `${formatAttorneyCount(regionAttorneyCount)} attorneys · ` : ''}{stateCount} states · {cityCount} cities
+              <div className="rounded-xl bg-amber-50 p-4">
+                <div className="mb-1 text-xs font-semibold uppercase tracking-wider text-amber-700">
+                  Coverage
+                </div>
+                <div className="text-sm font-medium text-slate-800">
+                  {regionAttorneyCount > 0
+                    ? `${formatAttorneyCount(regionAttorneyCount)} attorneys · `
+                    : ''}
+                  {stateCount} states · {cityCount} cities
                 </div>
               </div>
             </div>
             <div className="mb-6">
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-3 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-500" />
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-slate-900">
+                <AlertTriangle className="h-4 w-4 text-amber-500" />
                 Key characteristics
               </h3>
-              <div className="grid sm:grid-cols-2 gap-2">
+              <div className="grid gap-2 sm:grid-cols-2">
                 {content.profile.keyFacts.map((fact, i) => (
                   <div key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                    <span className="text-amber-500 mt-0.5">•</span>
+                    <span className="mt-0.5 text-amber-500">•</span>
                     {fact}
                   </div>
                 ))}
               </div>
             </div>
-            <p className="text-slate-700 leading-relaxed">{content.regionalContext}</p>
+            <p className="leading-relaxed text-slate-700">{content.regionalContext}</p>
           </div>
         </section>
 
         {/* ─── SEO CONTENT ────────────────────────────────────── */}
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-blue-600" />
+          <div className="mb-8 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100">
+              <TrendingUp className="h-5 w-5 text-blue-600" />
             </div>
-            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+            <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
               Legal services in {region.name}
             </h2>
           </div>
           <div className="space-y-6">
-            <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Top practice areas</h3>
-              <p className="text-slate-700 leading-relaxed">{content.priorityServices}</p>
+            <div className="rounded-2xl border border-gray-200 bg-white p-8">
+              <h3 className="mb-4 font-heading text-lg font-bold text-slate-900">
+                Top practice areas
+              </h3>
+              <p className="leading-relaxed text-slate-700">{content.priorityServices}</p>
             </div>
-            <div className="bg-white rounded-2xl border border-gray-200 p-8">
-              <h3 className="font-heading text-lg font-bold text-slate-900 mb-4">Tips for finding the right attorney</h3>
-              <p className="text-slate-700 leading-relaxed">{content.regionAdvice}</p>
+            <div className="rounded-2xl border border-gray-200 bg-white p-8">
+              <h3 className="mb-4 font-heading text-lg font-bold text-slate-900">
+                Tips for finding the right attorney
+              </h3>
+              <p className="leading-relaxed text-slate-700">{content.regionAdvice}</p>
             </div>
           </div>
         </section>
 
         {/* ─── DEPARTMENTS ──────────────────────────────────── */}
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
-              <Building2 className="w-5 h-5 text-slate-600" />
+          <div className="mb-8 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100">
+              <Building2 className="h-5 w-5 text-slate-600" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
                 States in the {region.name} region
               </h2>
-              <p className="text-sm text-slate-500">{stateCount} state{stateCount > 1 ? 's' : ''}</p>
+              <p className="text-sm text-slate-500">
+                {stateCount} state{stateCount > 1 ? 's' : ''}
+              </p>
             </div>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {region.states.map((st) => (
               <Link
                 key={st.code}
                 href={`/states/${st.slug}`}
-                className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg hover:border-slate-400 hover:-translate-y-0.5 transition-all duration-300 group"
+                className="group rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:shadow-lg"
               >
-                <div className="flex items-center justify-between mb-4">
+                <div className="mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-11 h-11 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl flex items-center justify-center group-hover:from-slate-100 group-hover:to-slate-200 transition-colors">
-                      <span className="text-slate-700 font-bold text-sm">{st.code}</span>
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 transition-colors group-hover:from-slate-100 group-hover:to-slate-200">
+                      <span className="text-sm font-bold text-slate-700">{st.code}</span>
                     </div>
                     <div>
-                      <h3 className="font-heading text-base font-bold text-slate-900 group-hover:text-slate-700 transition-colors">{st.name}</h3>
-                      <span className="text-xs text-slate-400">{stateCitiesMap[st.code].length} cit{stateCitiesMap[st.code].length > 1 ? 'ies' : 'y'}</span>
+                      <h3 className="font-heading text-base font-bold text-slate-900 transition-colors group-hover:text-slate-700">
+                        {st.name}
+                      </h3>
+                      <span className="text-xs text-slate-400">
+                        {stateCitiesMap[st.code].length} cit
+                        {stateCitiesMap[st.code].length > 1 ? 'ies' : 'y'}
+                      </span>
                     </div>
                   </div>
-                  <ArrowRight className="w-5 h-5 text-slate-300 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" />
+                  <ArrowRight className="h-5 w-5 text-slate-300 transition-all group-hover:translate-x-0.5 group-hover:text-slate-600" />
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {stateCitiesMap[st.code].slice(0, 4).map((city) => (
-                    <span key={city.slug} className="text-xs bg-gray-50 text-slate-500 px-2.5 py-1 rounded-full group-hover:bg-slate-100 group-hover:text-slate-700 transition-colors">
+                    <span
+                      key={city.slug}
+                      className="rounded-full bg-gray-50 px-2.5 py-1 text-xs text-slate-500 transition-colors group-hover:bg-slate-100 group-hover:text-slate-700"
+                    >
                       {city.name}
                     </span>
                   ))}
                   {stateCitiesMap[st.code].length > 4 && (
-                    <span className="text-xs text-slate-400 px-2 py-1">+{stateCitiesMap[st.code].length - 4}</span>
+                    <span className="px-2 py-1 text-xs text-slate-400">
+                      +{stateCitiesMap[st.code].length - 4}
+                    </span>
                   )}
                 </div>
               </Link>
@@ -369,34 +440,39 @@ export default async function RegionPage({ params }: PageProps) {
 
         {/* ─── SERVICES BY CITY ─────────────────────────────── */}
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-              <Wrench className="w-5 h-5 text-emerald-600" />
+          <div className="mb-8 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
+              <Wrench className="h-5 w-5 text-emerald-600" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
                 Practice areas by city in {region.name}
               </h2>
               <p className="text-sm text-slate-500">Quick access to attorneys by city</p>
             </div>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {allCities.slice(0, 12).map((city) => (
-              <div key={city.slug} className="bg-white rounded-2xl border border-gray-200 p-6">
-                <h3 className="font-heading font-semibold text-slate-900 mb-4">Attorneys in {city.name}</h3>
+              <div key={city.slug} className="rounded-2xl border border-gray-200 bg-white p-6">
+                <h3 className="mb-4 font-heading font-semibold text-slate-900">
+                  Attorneys in {city.name}
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {allServices.map((service) => (
                     <Link
                       key={`${service.slug}-${city.slug}`}
                       href={`/practice-areas/${service.slug}/${city.slug}`}
-                      className="text-sm text-slate-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-transparent hover:border-blue-100"
+                      className="rounded-lg border border-transparent px-3 py-1.5 text-sm text-slate-600 transition-colors hover:border-blue-100 hover:bg-blue-50 hover:text-blue-600"
                     >
                       {service.name}
                     </Link>
                   ))}
                 </div>
-                <Link href={`/cities/${city.slug}`} className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-4">
-                  All attorneys <ArrowRight className="w-3 h-3" />
+                <Link
+                  href={`/cities/${city.slug}`}
+                  className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700"
+                >
+                  All attorneys <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
             ))}
@@ -405,17 +481,21 @@ export default async function RegionPage({ params }: PageProps) {
 
         {/* ─── OTHER REGIONS ────────────────────────────────── */}
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
-              <Globe className="w-5 h-5 text-violet-600" />
+          <div className="mb-6 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100">
+              <Globe className="h-5 w-5 text-violet-600" />
             </div>
-            <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
+            <h2 className="font-heading text-xl font-bold tracking-tight text-slate-900">
               Other regions
             </h2>
           </div>
           <div className="flex flex-wrap gap-3">
             {otherRegions.slice(0, 12).map((r) => (
-              <Link key={r.slug} href={`/regions/${r.slug}`} className="bg-white border border-gray-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700 hover:text-slate-900 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors">
+              <Link
+                key={r.slug}
+                href={`/regions/${r.slug}`}
+                className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+              >
                 {r.name}
               </Link>
             ))}
@@ -424,19 +504,19 @@ export default async function RegionPage({ params }: PageProps) {
 
         {/* ─── FAQ ───────────────────────────────────────────── */}
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-              <HelpCircle className="w-5 h-5 text-amber-600" />
+          <div className="mb-8 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
+              <HelpCircle className="h-5 w-5 text-amber-600" />
             </div>
-            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+            <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
               Frequently asked questions
             </h2>
           </div>
           <div className="space-y-4">
             {content.faqItems.map((faq, i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-200 p-6">
-                <h3 className="font-semibold text-slate-900 mb-2">{faq.question}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
+              <div key={i} className="rounded-xl border border-gray-200 bg-white p-6">
+                <h3 className="mb-2 font-semibold text-slate-900">{faq.question}</h3>
+                <p className="text-sm leading-relaxed text-slate-600">{faq.answer}</p>
               </div>
             ))}
           </div>
@@ -444,93 +524,136 @@ export default async function RegionPage({ params }: PageProps) {
       </div>
 
       {/* ─── CTA ────────────────────────────────────────────── */}
-      <section className="relative bg-[#0a0f1e] overflow-hidden">
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(51,65,85,0.15) 0%, transparent 60%)',
-        }} />
-        <div className="relative max-w-4xl mx-auto px-4 py-16 md:py-20 text-center">
-          <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
+      <section className="relative overflow-hidden bg-[#0a0f1e]">
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 50% at 50% 50%, rgba(51,65,85,0.15) 0%, transparent 60%)',
+          }}
+        />
+        <div className="relative mx-auto max-w-4xl px-4 py-16 text-center md:py-20">
+          <h2 className="mb-4 font-heading text-2xl font-bold tracking-tight text-white md:text-3xl">
             Need an attorney in {region.name}?
           </h2>
-          <p className="text-slate-400 mb-8 max-w-lg mx-auto">
+          <p className="mx-auto mb-8 max-w-lg text-slate-400">
             Get up to 3 free consultations from qualified attorneys.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/quotes" className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-white font-semibold px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 hover:shadow-xl hover:shadow-amber-500/35 hover:-translate-y-0.5 transition-all duration-300">
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link
+              href="/quotes"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 px-8 py-3.5 font-semibold text-white shadow-lg shadow-amber-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-amber-500/35"
+            >
               Get a free consultation
             </Link>
-            <Link href="/services" className="inline-flex items-center gap-2 text-slate-300 hover:text-white font-medium transition-colors">
-              Browse practice areas <ArrowRight className="w-4 h-4" />
+            <Link
+              href="/practice-areas"
+              className="inline-flex items-center gap-2 font-medium text-slate-300 transition-colors hover:text-white"
+            >
+              Browse practice areas <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
       </section>
 
       {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
-      <section className="py-16 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
+      <section className="border-t border-gray-100 bg-white py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-8 font-heading text-xl font-bold tracking-tight text-slate-900">
             See also
           </h2>
-          <div className="grid md:grid-cols-3 gap-10">
+          <div className="grid gap-10 md:grid-cols-3">
             {/* Services */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Services en {region.name}</h3>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
+                Services en {region.name}
+              </h3>
               <div className="space-y-2">
                 {allServices.slice(0, 8).map((s) => (
-                  <Link key={s.slug} href={`/regions/${regionSlug}/${s.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
+                  <Link
+                    key={s.slug}
+                    href={`/regions/${regionSlug}/${s.slug}`}
+                    className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-blue-600"
+                  >
+                    <ChevronRight className="h-3 w-3" />
                     {s.name} en {region.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/services" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                All practice areas <ArrowRight className="w-4 h-4" />
+              <Link
+                href="/practice-areas"
+                className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700"
+              >
+                All practice areas <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
             {/* Other regions */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Other regions</h3>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
+                Other regions
+              </h3>
               <div className="space-y-2">
                 {otherRegions.slice(0, 6).map((r) => (
-                  <Link key={r.slug} href={`/regions/${r.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
+                  <Link
+                    key={r.slug}
+                    href={`/regions/${r.slug}`}
+                    className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-blue-600"
+                  >
+                    <ChevronRight className="h-3 w-3" />
                     Attorneys in {r.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/regions" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                All regions <ArrowRight className="w-4 h-4" />
+              <Link
+                href="/regions"
+                className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700"
+              >
+                All regions <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
             {/* Cities in this region */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Villes en {region.name}</h3>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
+                Villes en {region.name}
+              </h3>
               <div className="space-y-2">
                 {allCities.slice(0, 6).map((city) => (
-                  <Link key={city.slug} href={`/cities/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-2 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
+                  <Link
+                    key={city.slug}
+                    href={`/cities/${city.slug}`}
+                    className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-blue-600"
+                  >
+                    <ChevronRight className="h-3 w-3" />
                     Attorneys in {city.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/cities" className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 text-sm font-medium mt-3">
-                All cities <ArrowRight className="w-4 h-4" />
+              <Link
+                href="/cities"
+                className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700"
+              >
+                All cities <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
 
           {/* Intent variant links -- quotes, reviews, pricing */}
-          <div className="mt-10 grid md:grid-cols-3 gap-8">
+          <div className="mt-10 grid gap-8 md:grid-cols-3">
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Consultations in {region.name}</h3>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
+                Consultations in {region.name}
+              </h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 6).flatMap((city) =>
                   allServices.slice(0, 5).map((s) => (
-                    <Link key={`quotes-${s.slug}-${city.slug}`} href={`/quotes/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
-                      <ChevronRight className="w-3 h-3" />
+                    <Link
+                      key={`quotes-${s.slug}-${city.slug}`}
+                      href={`/quotes/${s.slug}/${city.slug}`}
+                      className="flex items-center gap-2 py-1 text-sm text-slate-600 transition-colors hover:text-blue-600"
+                    >
+                      <ChevronRight className="h-3 w-3" />
                       {s.name} consultation in {city.name}
                     </Link>
                   ))
@@ -538,12 +661,18 @@ export default async function RegionPage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Reviews in {region.name}</h3>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
+                Reviews in {region.name}
+              </h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 6).flatMap((city) =>
                   allServices.slice(0, 5).map((s) => (
-                    <Link key={`reviews-${s.slug}-${city.slug}`} href={`/reviews/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
-                      <ChevronRight className="w-3 h-3" />
+                    <Link
+                      key={`reviews-${s.slug}-${city.slug}`}
+                      href={`/reviews/${s.slug}/${city.slug}`}
+                      className="flex items-center gap-2 py-1 text-sm text-slate-600 transition-colors hover:text-blue-600"
+                    >
+                      <ChevronRight className="h-3 w-3" />
                       {s.name} reviews in {city.name}
                     </Link>
                   ))
@@ -551,12 +680,18 @@ export default async function RegionPage({ params }: PageProps) {
               </div>
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Pricing in {region.name}</h3>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
+                Pricing in {region.name}
+              </h3>
               <div className="space-y-1.5">
                 {allCities.slice(0, 6).flatMap((city) =>
                   allServices.slice(0, 5).map((s) => (
-                    <Link key={`pricing-${s.slug}-${city.slug}`} href={`/pricing/${s.slug}/${city.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-blue-600 py-1 transition-colors">
-                      <ChevronRight className="w-3 h-3" />
+                    <Link
+                      key={`pricing-${s.slug}-${city.slug}`}
+                      href={`/pricing/${s.slug}/${city.slug}`}
+                      className="flex items-center gap-2 py-1 text-sm text-slate-600 transition-colors hover:text-blue-600"
+                    >
+                      <ChevronRight className="h-3 w-3" />
                       {s.name} pricing in {city.name}
                     </Link>
                   ))
@@ -565,11 +700,17 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
           </div>
           <div className="mt-8">
-            <h3 className="text-sm font-semibold text-red-700 uppercase tracking-wider mb-4">Emergency services in {region.name}</h3>
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-red-700">
+              Emergency services in {region.name}
+            </h3>
             <div className="flex flex-wrap gap-2">
               {allCities.slice(0, 6).flatMap((city) =>
                 allServices.slice(0, 5).map((s) => (
-                  <Link key={`emergency-${s.slug}-${city.slug}`} href={`/emergency/${s.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-red-50 text-red-700 hover:bg-red-100 hover:text-red-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-red-100 hover:border-red-200">
+                  <Link
+                    key={`emergency-${s.slug}-${city.slug}`}
+                    href={`/emergency/${s.slug}/${city.slug}`}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-red-100 bg-red-50 px-3 py-1.5 text-sm text-red-700 transition-colors hover:border-red-200 hover:bg-red-100 hover:text-red-800"
+                  >
                     Emergency {s.name.toLowerCase()} in {city.name}
                   </Link>
                 ))
@@ -577,11 +718,17 @@ export default async function RegionPage({ params }: PageProps) {
             </div>
           </div>
           <div className="mt-8">
-            <h3 className="text-sm font-semibold text-orange-700 uppercase tracking-wider mb-4">Common issues in {region.name}</h3>
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-orange-700">
+              Common issues in {region.name}
+            </h3>
             <div className="flex flex-wrap gap-2">
               {allCities.slice(0, 4).flatMap((city) =>
                 problems.slice(0, 6).map((p) => (
-                  <Link key={`issue-${p.slug}-${city.slug}`} href={`/issues/${p.slug}/${city.slug}`} className="inline-flex items-center gap-1.5 bg-orange-50 text-orange-700 hover:bg-orange-100 hover:text-orange-800 px-3 py-1.5 rounded-lg text-sm transition-colors border border-orange-100 hover:border-orange-200">
+                  <Link
+                    key={`issue-${p.slug}-${city.slug}`}
+                    href={`/issues/${p.slug}/${city.slug}`}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-orange-100 bg-orange-50 px-3 py-1.5 text-sm text-orange-700 transition-colors hover:border-orange-200 hover:bg-orange-100 hover:text-orange-800"
+                  >
                     {p.name} in {city.name}
                   </Link>
                 ))
@@ -591,33 +738,47 @@ export default async function RegionPage({ params }: PageProps) {
         </div>
       </section>
 
-        {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
-        <section className="mb-8">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6">
-              <h3 className="text-sm font-semibold text-slate-700 mb-2">Editorial methodology</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Geographic and economic profiles are regional estimates. Data comes from public sources. US Attorneys is an independent directory — we do not provide legal services or guarantee outcomes.
-              </p>
-            </div>
+      {/* ─── EDITORIAL CREDIBILITY ──────────────────────────── */}
+      <section className="mb-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <h3 className="mb-2 text-sm font-semibold text-slate-700">Editorial methodology</h3>
+            <p className="text-xs leading-relaxed text-slate-500">
+              Geographic and economic profiles are regional estimates. Data comes from public
+              sources. US Attorneys is an independent directory — we do not provide legal services
+              or guarantee outcomes.
+            </p>
           </div>
-        </section>
+        </div>
+      </section>
 
       {/* Trust & Safety */}
-      <section className="py-8 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Trust & Safety</h2>
+      <section className="border-t py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-4 text-lg font-bold text-gray-900">Trust & Safety</h2>
           <div className="flex flex-wrap gap-4">
-            <Link href="/verification-process" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+            <Link
+              href="/verification-process"
+              className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800"
+            >
               Verification process
             </Link>
-            <Link href="/review-policy" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+            <Link
+              href="/review-policy"
+              className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800"
+            >
               Review policy
             </Link>
-            <Link href="/mediation" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+            <Link
+              href="/mediation"
+              className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800"
+            >
               Mediation
             </Link>
-            <Link href="/terms" className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1.5">
+            <Link
+              href="/terms"
+              className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800"
+            >
               Terms of service
             </Link>
           </div>

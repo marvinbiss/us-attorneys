@@ -112,7 +112,8 @@ export default function AdminProvidersPage() {
         body: updates,
       })
 
-      const actionText = action === 'verify' ? 'verified' : action === 'suspend' ? 'suspended' : 'reactivated'
+      const actionText =
+        action === 'verify' ? 'verified' : action === 'suspend' ? 'suspended' : 'reactivated'
       setToast({ message: `Attorney ${actionText} successfully!`, type: 'success' })
 
       mutate()
@@ -130,55 +131,66 @@ export default function AdminProvidersPage() {
 
   const getStatusBadge = (provider: Provider) => {
     if (!provider.is_active) {
-      return <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">Suspended</span>
+      return (
+        <span className="rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700">
+          Suspended
+        </span>
+      )
     }
     if (!provider.is_verified) {
-      return <span className="px-2 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-medium">Pending</span>
+      return (
+        <span className="rounded-full bg-amber-100 px-2 py-1 text-xs font-medium text-amber-700">
+          Pending
+        </span>
+      )
     }
-    return <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">Verified</span>
+    return (
+      <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+        Verified
+      </span>
+    )
   }
 
   return (
     <div className="min-h-screen bg-gray-50" aria-label="Attorney Management">
       {/* Toast notification */}
-      <Toast
-        toast={toast}
-        onClose={() => setToast(null)}
-      />
+      <Toast toast={toast} onClose={() => setToast(null)} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Attorney Management</h1>
-            <p className="text-gray-500 mt-1">
-              {total > 0 ? `${total} attorney${total > 1 ? 's' : ''} total` : 'Manage attorney profiles and verifications'}
+            <p className="mt-1 text-gray-500">
+              {total > 0
+                ? `${total} attorney${total > 1 ? 's' : ''} total`
+                : 'Manage attorney profiles and verifications'}
             </p>
           </div>
           <button
             onClick={handleRefresh}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50"
+            className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 hover:bg-gray-50 disabled:opacity-50"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <div className="mb-6 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+          <div className="flex flex-col gap-4 md:flex-row">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search by name, email, city, bar number..."
                 aria-label="Search for an attorney"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full rounded-lg border border-gray-300 py-2 pl-10 pr-4 focus:border-transparent focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               {(['all', 'verified', 'pending', 'suspended'] as const).map((f) => (
                 <button
                   key={f}
@@ -189,15 +201,19 @@ export default function AdminProvidersPage() {
                     }
                   }}
                   disabled={loading}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                     filter === f
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  } ${loading ? 'cursor-not-allowed opacity-50' : ''}`}
                 >
-                  {f === 'all' ? 'All' :
-                   f === 'verified' ? 'Verified' :
-                   f === 'pending' ? 'Pending' : 'Suspended'}
+                  {f === 'all'
+                    ? 'All'
+                    : f === 'verified'
+                      ? 'Verified'
+                      : f === 'pending'
+                        ? 'Pending'
+                        : 'Suspended'}
                 </button>
               ))}
             </div>
@@ -205,27 +221,27 @@ export default function AdminProvidersPage() {
         </div>
 
         {/* Providers Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
           {loading && providers.length === 0 ? (
             <div className="p-12 text-center">
-              <Loader2 className="w-8 h-8 text-blue-600 mx-auto animate-spin" />
-              <p className="text-gray-500 mt-4">Loading attorneys...</p>
+              <Loader2 className="mx-auto h-8 w-8 animate-spin text-blue-600" />
+              <p className="mt-4 text-gray-500">Loading attorneys...</p>
             </div>
           ) : providers.length === 0 ? (
             <div className="p-12 text-center">
-              <Briefcase className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No attorneys found</h3>
-              <p className="text-gray-500 mb-4">
+              <Briefcase className="mx-auto mb-4 h-12 w-12 text-gray-300" />
+              <h3 className="mb-2 text-lg font-medium text-gray-900">No attorneys found</h3>
+              <p className="mb-4 text-gray-500">
                 {filter !== 'all' || search
                   ? 'No results for this search. Try adjusting your filters.'
                   : 'Start by importing attorneys'}
               </p>
               {filter === 'all' && !search && (
                 <Link
-                  href="/admin/import"
-                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  href="/admin/attorneys"
+                  className="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
                 >
-                  Import Attorneys
+                  Manage Attorneys
                 </Link>
               )}
             </div>
@@ -233,31 +249,49 @@ export default function AdminProvidersPage() {
             <>
               {/* Loading overlay */}
               {loading && (
-                <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
-                  <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50">
+                  <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
                 </div>
               )}
 
-              <div className="overflow-x-auto relative">
+              <div className="relative overflow-x-auto">
                 <table className="w-full min-w-[500px] sm:min-w-[900px]" aria-label="Attorney list">
-                  <thead className="bg-gray-50 border-b border-gray-100">
+                  <thead className="border-b border-gray-100 bg-gray-50">
                     <tr>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Attorney
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Specialty
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Location
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Status
                       </th>
-                      <th scope="col" className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Reviews
                       </th>
-                      <th scope="col" className="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500"
+                      >
                         Actions
                       </th>
                     </tr>
@@ -266,7 +300,7 @@ export default function AdminProvidersPage() {
                     {providers.map((provider) => (
                       <tr
                         key={provider.id}
-                        className={`hover:bg-gray-50 transition-colors ${actionLoading === provider.id ? 'opacity-50' : ''}`}
+                        className={`transition-colors hover:bg-gray-50 ${actionLoading === provider.id ? 'opacity-50' : ''}`}
                       >
                         <td className="px-6 py-4">
                           <div>
@@ -274,12 +308,12 @@ export default function AdminProvidersPage() {
                               <p className="font-medium text-gray-900">{provider.name}</p>
                             </div>
                             {provider.email ? (
-                              <div className="flex items-center gap-2 mt-1 text-sm text-gray-500">
-                                <Mail className="w-3 h-3" />
+                              <div className="mt-1 flex items-center gap-2 text-sm text-gray-500">
+                                <Mail className="h-3 w-3" />
                                 {provider.email}
                               </div>
                             ) : provider.bar_number ? (
-                              <div className="mt-1 text-sm text-gray-400 font-mono">
+                              <div className="mt-1 font-mono text-sm text-gray-400">
                                 Bar #: {provider.bar_number}
                               </div>
                             ) : null}
@@ -287,14 +321,16 @@ export default function AdminProvidersPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            <Briefcase className="w-4 h-4 text-gray-400" />
+                            <Briefcase className="h-4 w-4 text-gray-400" />
                             <span className="text-gray-900">{provider.specialty}</span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-gray-400" />
-                            <span className="text-gray-900">{provider.address_city || 'Not specified'}</span>
+                            <MapPin className="h-4 w-4 text-gray-400" />
+                            <span className="text-gray-900">
+                              {provider.address_city || 'Not specified'}
+                            </span>
                           </div>
                           {provider.address_state && (
                             <p className="text-sm text-gray-500">{provider.address_state}</p>
@@ -304,12 +340,14 @@ export default function AdminProvidersPage() {
                         <td className="px-6 py-4">
                           {provider.review_count > 0 ? (
                             <div className="flex items-center gap-1">
-                              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                              <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                               <span className="font-medium">{provider.rating_average}</span>
-                              <span className="text-gray-500 text-sm">({provider.review_count})</span>
+                              <span className="text-sm text-gray-500">
+                                ({provider.review_count})
+                              </span>
                             </div>
                           ) : (
-                            <span className="text-gray-400 text-sm">No reviews</span>
+                            <span className="text-sm text-gray-400">No reviews</span>
                           )}
                         </td>
                         <td className="px-6 py-4">
@@ -317,21 +355,21 @@ export default function AdminProvidersPage() {
                             {/* View button */}
                             <button
                               onClick={() => router.push(`/admin/attorneys/${provider.id}`)}
-                              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-600"
                               title="View profile"
                               aria-label="View profile"
                             >
-                              <Eye className="w-5 h-5" />
+                              <Eye className="h-5 w-5" />
                             </button>
 
                             {/* Edit button */}
                             <button
                               onClick={() => router.push(`/admin/attorneys/${provider.id}/edit`)}
-                              className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                              className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-green-50 hover:text-green-600"
                               title="Edit"
                               aria-label="Edit"
                             >
-                              <Edit2 className="w-5 h-5" />
+                              <Edit2 className="h-5 w-5" />
                             </button>
 
                             {/* Verify button - only show if not verified */}
@@ -339,14 +377,14 @@ export default function AdminProvidersPage() {
                               <button
                                 onClick={() => handleAction(provider.id, 'verify')}
                                 disabled={actionLoading === provider.id}
-                                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
+                                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-green-50 hover:text-green-600 disabled:opacity-50"
                                 title="Verify this attorney"
                                 aria-label="Verify this attorney"
                               >
                                 {actionLoading === provider.id ? (
-                                  <Loader2 className="w-5 h-5 animate-spin" />
+                                  <Loader2 className="h-5 w-5 animate-spin" />
                                 ) : (
-                                  <CheckCircle className="w-5 h-5" />
+                                  <CheckCircle className="h-5 w-5" />
                                 )}
                               </button>
                             )}
@@ -356,28 +394,28 @@ export default function AdminProvidersPage() {
                               <button
                                 onClick={() => handleAction(provider.id, 'suspend')}
                                 disabled={actionLoading === provider.id}
-                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
                                 title="Suspend"
                                 aria-label="Suspend"
                               >
                                 {actionLoading === provider.id ? (
-                                  <Loader2 className="w-5 h-5 animate-spin" />
+                                  <Loader2 className="h-5 w-5 animate-spin" />
                                 ) : (
-                                  <Ban className="w-5 h-5" />
+                                  <Ban className="h-5 w-5" />
                                 )}
                               </button>
                             ) : (
                               <button
                                 onClick={() => handleAction(provider.id, 'activate')}
                                 disabled={actionLoading === provider.id}
-                                className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors disabled:opacity-50"
+                                className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-green-50 hover:text-green-600 disabled:opacity-50"
                                 title="Reactivate"
                                 aria-label="Reactivate"
                               >
                                 {actionLoading === provider.id ? (
-                                  <Loader2 className="w-5 h-5 animate-spin" />
+                                  <Loader2 className="h-5 w-5 animate-spin" />
                                 ) : (
-                                  <CheckCircle className="w-5 h-5" />
+                                  <CheckCircle className="h-5 w-5" />
                                 )}
                               </button>
                             )}
@@ -390,7 +428,7 @@ export default function AdminProvidersPage() {
               </div>
 
               {/* Pagination */}
-              <div className="px-4 sm:px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div className="flex flex-col items-center justify-between gap-3 border-t border-gray-100 px-4 py-4 sm:flex-row sm:px-6">
                 <p className="text-sm text-gray-500">
                   Page {page} of {totalPages} ({total} result{total > 1 ? 's' : ''})
                 </p>
@@ -399,17 +437,17 @@ export default function AdminProvidersPage() {
                     onClick={() => setPage(Math.max(1, page - 1))}
                     disabled={page === 1 || loading}
                     aria-label="Previous page"
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="rounded-lg border border-gray-300 p-2 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronLeft className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => setPage(Math.min(totalPages, page + 1))}
                     disabled={page === totalPages || loading}
                     aria-label="Next page"
-                    className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                    className="rounded-lg border border-gray-300 p-2 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="h-5 w-5" />
                   </button>
                 </div>
               </div>

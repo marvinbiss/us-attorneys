@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Practice Area Pages', () => {
   test('should display practice areas list page', async ({ page }) => {
-    await page.goto('/services')
+    await page.goto('/practice-areas')
 
     // Check page loads with heading
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
@@ -23,7 +23,7 @@ test.describe('Practice Area Pages', () => {
   })
 
   test('should have working navigation in practice areas', async ({ page }) => {
-    await page.goto('/services')
+    await page.goto('/practice-areas')
 
     // Page should have practice area links
     const serviceLinks = page.getByRole('link')

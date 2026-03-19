@@ -8,7 +8,9 @@ test.describe('Home Page', () => {
     await expect(page).toHaveTitle(/US Attorneys/)
 
     // Check header has logo link
-    await expect(page.getByRole('banner').getByRole('link', { name: /US Attorneys/i })).toBeVisible()
+    await expect(
+      page.getByRole('banner').getByRole('link', { name: /US Attorneys/i })
+    ).toBeVisible()
 
     // Check main content
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
@@ -18,7 +20,7 @@ test.describe('Home Page', () => {
     await page.goto('/')
 
     // Navigate to services - click on main CTA or services link
-    await page.goto('/services')
+    await page.goto('/practice-areas')
 
     // Verify we're on services page
     await expect(page).toHaveURL(/\/services/)

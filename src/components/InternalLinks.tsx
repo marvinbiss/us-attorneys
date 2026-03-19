@@ -1,17 +1,58 @@
 import Link from 'next/link'
 import {
-  MapPin, Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat,
-  ArrowRight, Star, Users, Building2, TreeDeciduous,
-  Shovel, Axe, Droplets, Shield, Building, Paintbrush, Construction,
-  Link as LinkIcon, Grid3X3, Maximize, PanelTop, Bath, Ruler, Palette,
-  Cpu, Thermometer, Sun, Snowflake, Leaf, PlugZap, Factory, Trees,
-  Waves, ShieldAlert, Radio, ArrowUpDown, ClipboardCheck, Bug, Truck,
-  Home, Wind, ChefHat, Layers, Sparkles, Square
+  MapPin,
+  Wrench,
+  Zap,
+  Key,
+  Flame,
+  PaintBucket,
+  Hammer,
+  HardHat,
+  ArrowRight,
+  Star,
+  Users,
+  Building2,
+  TreeDeciduous,
+  Shovel,
+  Axe,
+  Droplets,
+  Shield,
+  Building,
+  Paintbrush,
+  Construction,
+  Link as LinkIcon,
+  Grid3X3,
+  Maximize,
+  PanelTop,
+  Bath,
+  Ruler,
+  Palette,
+  Cpu,
+  Thermometer,
+  Sun,
+  Snowflake,
+  Leaf,
+  PlugZap,
+  Factory,
+  Trees,
+  Waves,
+  ShieldAlert,
+  Radio,
+  ArrowUpDown,
+  ClipboardCheck,
+  Bug,
+  Truck,
+  Home,
+  Wind,
+  ChefHat,
+  Layers,
+  Sparkles,
+  Square,
 } from 'lucide-react'
 import {
   popularServices as popularServicesData,
   popularCities,
-  popularRegions
+  popularRegions,
 } from '@/lib/constants/navigation'
 import { cities, services, usRegions } from '@/lib/data/usa'
 
@@ -20,24 +61,62 @@ export { popularCities, popularRegions }
 
 // Add icons to services for client components
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  Wrench, Zap, Key, Flame, PaintBucket, Hammer, HardHat, TreeDeciduous,
-  Shovel, Axe, Droplets, Shield, Building, Paintbrush, Construction,
-  Link: LinkIcon, Grid3X3, Maximize, PanelTop, Bath, Ruler, Palette,
-  Cpu, Thermometer, Sun, Snowflake, Leaf, PlugZap, Factory, Trees,
-  Waves, ShieldAlert, Radio, ArrowUpDown, ClipboardCheck, Bug, Truck,
-  Home, Wind, ChefHat, Layers, Sparkles, Square, Blocks: Grid3X3,
+  Wrench,
+  Zap,
+  Key,
+  Flame,
+  PaintBucket,
+  Hammer,
+  HardHat,
+  TreeDeciduous,
+  Shovel,
+  Axe,
+  Droplets,
+  Shield,
+  Building,
+  Paintbrush,
+  Construction,
+  Link: LinkIcon,
+  Grid3X3,
+  Maximize,
+  PanelTop,
+  Bath,
+  Ruler,
+  Palette,
+  Cpu,
+  Thermometer,
+  Sun,
+  Snowflake,
+  Leaf,
+  PlugZap,
+  Factory,
+  Trees,
+  Waves,
+  ShieldAlert,
+  Radio,
+  ArrowUpDown,
+  ClipboardCheck,
+  Bug,
+  Truck,
+  Home,
+  Wind,
+  ChefHat,
+  Layers,
+  Sparkles,
+  Square,
+  Blocks: Grid3X3,
 }
 
-export const popularServices = popularServicesData.map(s => ({
+export const popularServices = popularServicesData.map((s) => ({
   ...s,
-  icon: iconMap[s.icon] || Wrench
+  icon: iconMap[s.icon] || Wrench,
 }))
 
 // Component: Popular services
 export function PopularServicesLinks({
   limit = 8,
   showTitle = true,
-  className = ''
+  className = '',
 }: {
   limit?: number
   showTitle?: boolean
@@ -46,8 +125,8 @@ export function PopularServicesLinks({
   return (
     <div className={className}>
       {showTitle && (
-        <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <Star className="w-4 h-4 text-amber-500" />
+        <h3 className="mb-3 flex items-center gap-2 font-semibold text-gray-900">
+          <Star className="h-4 w-4 text-amber-500" />
           Popular services
         </h3>
       )}
@@ -58,19 +137,19 @@ export function PopularServicesLinks({
             <Link
               key={service.slug}
               href={`/practice-areas/${service.slug}`}
-              className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-full text-sm transition-colors"
+              className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-[#FDF1EC] hover:text-clay-400"
             >
-              <Icon className="w-3.5 h-3.5" />
+              <Icon className="h-3.5 w-3.5" />
               {service.name}
             </Link>
           )
         })}
       </div>
       <Link
-        href="/services"
-        className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
+        href="/practice-areas"
+        className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-clay-400 hover:text-clay-600"
       >
-        All {services.length} practice areas <ArrowRight className="w-4 h-4" />
+        All {services.length} practice areas <ArrowRight className="h-4 w-4" />
       </Link>
     </div>
   )
@@ -80,7 +159,7 @@ export function PopularServicesLinks({
 export function PopularCitiesLinks({
   limit = 10,
   showTitle = true,
-  className = ''
+  className = '',
 }: {
   limit?: number
   showTitle?: boolean
@@ -89,8 +168,8 @@ export function PopularCitiesLinks({
   return (
     <div className={className}>
       {showTitle && (
-        <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-clay-400" />
+        <h3 className="mb-3 flex items-center gap-2 font-semibold text-gray-900">
+          <MapPin className="h-4 w-4 text-clay-400" />
           Popular cities
         </h3>
       )}
@@ -99,7 +178,7 @@ export function PopularCitiesLinks({
           <Link
             key={city.slug}
             href={`/cities/${city.slug}`}
-            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-full text-sm transition-colors"
+            className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-[#FDF1EC] hover:text-clay-400"
           >
             {city.name}
           </Link>
@@ -107,9 +186,9 @@ export function PopularCitiesLinks({
       </div>
       <Link
         href="/cities"
-        className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
+        className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-clay-400 hover:text-clay-600"
       >
-        Attorneys in {cities.length} cities <ArrowRight className="w-4 h-4" />
+        Attorneys in {cities.length} cities <ArrowRight className="h-4 w-4" />
       </Link>
     </div>
   )
@@ -118,13 +197,16 @@ export function PopularCitiesLinks({
 // Component: Geographic navigation
 export function GeographicNavigation({ className = '' }: { className?: string }) {
   return (
-    <nav aria-label="Browse attorneys by geography" className={`grid grid-cols-1 md:grid-cols-3 gap-4 ${className}`}>
+    <nav
+      aria-label="Browse attorneys by geography"
+      className={`grid grid-cols-1 gap-4 md:grid-cols-3 ${className}`}
+    >
       <Link
         href="/regions"
-        className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-clay-300 hover:shadow-md transition-all group"
+        className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-clay-300 hover:shadow-md"
       >
-        <div className="w-10 h-10 bg-[#FDF1EC] rounded-lg flex items-center justify-center group-hover:bg-clay-100 transition-colors">
-          <Building2 className="w-5 h-5 text-clay-400" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#FDF1EC] transition-colors group-hover:bg-clay-100">
+          <Building2 className="h-5 w-5 text-clay-400" />
         </div>
         <div>
           <div className="font-semibold text-gray-900 group-hover:text-clay-400">By region</div>
@@ -133,10 +215,10 @@ export function GeographicNavigation({ className = '' }: { className?: string })
       </Link>
       <Link
         href="/states"
-        className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-clay-300 hover:shadow-md transition-all group"
+        className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-clay-300 hover:shadow-md"
       >
-        <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
-          <MapPin className="w-5 h-5 text-green-600" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 transition-colors group-hover:bg-green-200">
+          <MapPin className="h-5 w-5 text-green-600" />
         </div>
         <div>
           <div className="font-semibold text-gray-900 group-hover:text-green-600">By state</div>
@@ -145,10 +227,10 @@ export function GeographicNavigation({ className = '' }: { className?: string })
       </Link>
       <Link
         href="/cities"
-        className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-clay-300 hover:shadow-md transition-all group"
+        className="group flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-clay-300 hover:shadow-md"
       >
-        <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200 transition-colors">
-          <Users className="w-5 h-5 text-amber-600" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100 transition-colors group-hover:bg-amber-200">
+          <Users className="h-5 w-5 text-amber-600" />
         </div>
         <div>
           <div className="font-semibold text-gray-900 group-hover:text-amber-600">By city</div>
@@ -163,14 +245,14 @@ export function GeographicNavigation({ className = '' }: { className?: string })
 export function PopularServiceCityLinks({
   limit = 12,
   showTitle = true,
-  className = ''
+  className = '',
 }: {
   limit?: number
   showTitle?: boolean
   className?: string
 }) {
-  const topCombos = popularServices.slice(0, 4).flatMap(service =>
-    popularCities.slice(0, 3).map(city => ({
+  const topCombos = popularServices.slice(0, 4).flatMap((service) =>
+    popularCities.slice(0, 3).map((city) => ({
       label: `${service.name} ${city.name}`,
       href: `/practice-areas/${service.slug}/${city.slug}`,
     }))
@@ -179,8 +261,8 @@ export function PopularServiceCityLinks({
   return (
     <div className={className}>
       {showTitle && (
-        <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-          <Wrench className="w-4 h-4 text-clay-400" />
+        <h3 className="mb-3 flex items-center gap-2 font-semibold text-gray-900">
+          <Wrench className="h-4 w-4 text-clay-400" />
           Popular searches
         </h3>
       )}
@@ -189,7 +271,7 @@ export function PopularServiceCityLinks({
           <Link
             key={combo.href}
             href={combo.href}
-            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-full text-sm transition-colors"
+            className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-[#FDF1EC] hover:text-clay-400"
           >
             {combo.label}
           </Link>
@@ -203,26 +285,24 @@ export function PopularServiceCityLinks({
 export function ServiceCityMatrix({
   service,
   cities = popularCities.slice(0, 6),
-  className = ''
+  className = '',
 }: {
   service: string
   cities?: typeof popularCities
   className?: string
 }) {
-  const specialtyData = popularServices.find(s => s.slug === service)
+  const specialtyData = popularServices.find((s) => s.slug === service)
   if (!specialtyData) return null
 
   return (
     <div className={className}>
-      <h3 className="font-semibold text-gray-900 mb-3">
-        {specialtyData.name} by city
-      </h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+      <h3 className="mb-3 font-semibold text-gray-900">{specialtyData.name} by city</h3>
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
         {cities.map((city) => (
           <Link
             key={city.slug}
             href={`/practice-areas/${service}/${city.slug}`}
-            className="px-3 py-2 bg-gray-50 hover:bg-[#FDF1EC] text-gray-700 hover:text-clay-400 rounded-lg text-sm transition-colors"
+            className="rounded-lg bg-gray-50 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-[#FDF1EC] hover:text-clay-400"
           >
             {specialtyData.name} {city.name}
           </Link>
@@ -235,31 +315,31 @@ export function ServiceCityMatrix({
 // Component: Quick links for dashboards
 export function QuickSiteLinks({ className = '' }: { className?: string }) {
   return (
-    <div className={`bg-gray-50 rounded-xl p-4 ${className}`}>
-      <h4 className="font-medium text-gray-900 mb-3">Browse the site</h4>
+    <div className={`rounded-xl bg-gray-50 p-4 ${className}`}>
+      <h4 className="mb-3 font-medium text-gray-900">Browse the site</h4>
       <div className="grid grid-cols-2 gap-2 text-sm">
-        <Link href="/" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/" className="py-1 text-gray-600 hover:text-clay-400">
           Home
         </Link>
-        <Link href="/services" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/practice-areas" className="py-1 text-gray-600 hover:text-clay-400">
           {services.length} practice areas
         </Link>
-        <Link href="/cities" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/cities" className="py-1 text-gray-600 hover:text-clay-400">
           {cities.length} cities
         </Link>
-        <Link href="/regions" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/regions" className="py-1 text-gray-600 hover:text-clay-400">
           By region
         </Link>
-        <Link href="/search" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/search" className="py-1 text-gray-600 hover:text-clay-400">
           Search
         </Link>
-        <Link href="/quotes" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/quotes" className="py-1 text-gray-600 hover:text-clay-400">
           Request a consultation
         </Link>
-        <Link href="/how-it-works" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/how-it-works" className="py-1 text-gray-600 hover:text-clay-400">
           How it works
         </Link>
-        <Link href="/contact" className="text-gray-600 hover:text-clay-400 py-1">
+        <Link href="/contact" className="py-1 text-gray-600 hover:text-clay-400">
           Contact
         </Link>
       </div>
@@ -271,13 +351,13 @@ export function QuickSiteLinks({ className = '' }: { className?: string }) {
 export function InternalLinksFooter({ className = '' }: { className?: string }) {
   return (
     <section className={`bg-gray-50 py-12 ${className}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-3 gap-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-8 md:grid-cols-3">
           <PopularServicesLinks />
           <PopularCitiesLinks />
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <Building2 className="w-4 h-4 text-green-500" />
+            <h3 className="mb-3 flex items-center gap-2 font-semibold text-gray-900">
+              <Building2 className="h-4 w-4 text-green-500" />
               By region
             </h3>
             <div className="space-y-1">
@@ -285,7 +365,7 @@ export function InternalLinksFooter({ className = '' }: { className?: string }) 
                 <Link
                   key={region.slug}
                   href={`/regions/${region.slug}`}
-                  className="block text-gray-600 hover:text-clay-400 text-sm py-1 transition-colors"
+                  className="block py-1 text-sm text-gray-600 transition-colors hover:text-clay-400"
                 >
                   {region.name}
                 </Link>
@@ -293,9 +373,9 @@ export function InternalLinksFooter({ className = '' }: { className?: string }) 
             </div>
             <Link
               href="/regions"
-              className="inline-flex items-center gap-1 text-clay-400 hover:text-clay-600 text-sm font-medium mt-3"
+              className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-clay-400 hover:text-clay-600"
             >
-              Attorneys by region <ArrowRight className="w-4 h-4" />
+              Attorneys by region <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>

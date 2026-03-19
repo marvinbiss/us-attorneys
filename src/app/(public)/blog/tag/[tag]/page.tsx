@@ -37,7 +37,7 @@ const allTags = getAllTags()
 
 // Pre-render all tag pages at build time
 export function generateStaticParams() {
-  return allTags.map(t => ({ tag: t.slug }))
+  return allTags.map((t) => ({ tag: t.slug }))
 }
 
 export const dynamicParams = false
@@ -48,7 +48,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { tag: tagSlug } = await params
-  const tagInfo = allTags.find(t => t.slug === tagSlug)
+  const tagInfo = allTags.find((t) => t.slug === tagSlug)
   if (!tagInfo) return { title: 'Tag not found' }
 
   const title = `${tagInfo.label} — Articles & Guides | US Attorneys`
@@ -58,7 +58,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: { canonical: `${SITE_URL}/blog/tag/${tagSlug}` },
-    robots: { index: true, follow: true, 'max-snippet': -1 as const, 'max-image-preview': 'large' as const },
+    robots: {
+      index: true,
+      follow: true,
+      'max-snippet': -1 as const,
+      'max-image-preview': 'large' as const,
+    },
     openGraph: {
       title,
       description,
@@ -76,12 +81,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogTagPage({ params }: PageProps) {
   const { tag: tagSlug } = await params
-  const tagInfo = allTags.find(t => t.slug === tagSlug)
+  const tagInfo = allTags.find((t) => t.slug === tagSlug)
   if (!tagInfo) notFound()
 
-  const articles = allArticlesMeta.filter(a =>
-    a.tags.some(t => slugifyTag(t) === tagSlug)
-  )
+  const articles = allArticlesMeta.filter((a) => a.tags.some((t) => slugifyTag(t) === tagSlug))
 
   // Related tags: tags that co-occur in the same articles
   const relatedTagSlugs = new Set<string>()
@@ -91,9 +94,7 @@ export default async function BlogTagPage({ params }: PageProps) {
       if (s !== tagSlug) relatedTagSlugs.add(s)
     }
   }
-  const relatedTags = allTags
-    .filter(t => relatedTagSlugs.has(t.slug))
-    .slice(0, 12)
+  const relatedTags = allTags.filter((t) => relatedTagSlugs.has(t.slug)).slice(0, 12)
 
   // JSON-LD
   const collectionSchema = {
@@ -108,7 +109,7 @@ export default async function BlogTagPage({ params }: PageProps) {
       name: 'USAttorneys Blog',
       url: `${SITE_URL}/blog`,
     },
-    hasPart: articles.slice(0, 10).map(a => ({
+    hasPart: articles.slice(0, 10).map((a) => ({
       '@type': 'BlogPosting',
       headline: a.title,
       url: `${SITE_URL}/blog/${a.slug}`,
@@ -116,7 +117,12 @@ export default async function BlogTagPage({ params }: PageProps) {
       author: (() => {
         const authorName = allArticles[a.slug]?.author || 'US Attorneys'
         return authorName === 'US Attorneys'
-          ? { '@type': 'Organization', name: 'USAttorneys Editorial Team', url: `${SITE_URL}/about`, '@id': `${SITE_URL}#organization` }
+          ? {
+              '@type': 'Organization',
+              name: 'USAttorneys Editorial Team',
+              url: `${SITE_URL}/about`,
+              '@id': `${SITE_URL}#organization`,
+            }
           : { '@type': 'Person', name: authorName }
       })(),
     })),
@@ -128,7 +134,12 @@ export default async function BlogTagPage({ params }: PageProps) {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
       { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
-      { '@type': 'ListItem', position: 3, name: tagInfo.label, item: `${SITE_URL}/blog/tag/${tagSlug}` },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: tagInfo.label,
+        item: `${SITE_URL}/blog/tag/${tagSlug}`,
+      },
     ],
   }
 
@@ -139,31 +150,33 @@ export default async function BlogTagPage({ params }: PageProps) {
 
       <div className="min-h-screen bg-gray-50">
         {/* Hero */}
-        <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+        <section className="relative overflow-hidden bg-[#0a0f1e] text-white">
           <div className="absolute inset-0">
-            <div className="absolute inset-0" style={{
-              background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%)',
-            }} />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.18) 0%, transparent 60%)',
+              }}
+            />
             <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
           </div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-28 md:pt-14 md:pb-36">
+          <div className="relative mx-auto max-w-7xl px-4 pb-28 pt-10 sm:px-6 md:pb-36 md:pt-14 lg:px-8">
             <Breadcrumb
-              items={[
-                { label: 'Blog', href: '/blog' },
-                { label: tagInfo.label },
-              ]}
-              className="mb-6 text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+              items={[{ label: 'Blog', href: '/blog' }, { label: tagInfo.label }]}
+              className="mb-6 text-slate-400 [&_a:hover]:text-white [&_a]:text-slate-400 [&_svg]:text-slate-600"
             />
             <div className="text-center">
-              <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
-                <Tag className="w-4 h-4" />
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium">
+                <Tag className="h-4 w-4" />
                 Tag
               </div>
-              <h1 className="font-heading text-4xl md:text-5xl font-extrabold mb-4 tracking-[-0.025em]">
+              <h1 className="mb-4 font-heading text-4xl font-extrabold tracking-[-0.025em] md:text-5xl">
                 {tagInfo.label}
               </h1>
-              <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-                {articles.length} article{articles.length > 1 ? 's' : ''} sur {tagInfo.label.toLowerCase()}
+              <p className="mx-auto max-w-2xl text-xl text-slate-400">
+                {articles.length} article{articles.length > 1 ? 's' : ''} about{' '}
+                {tagInfo.label.toLowerCase()}
               </p>
             </div>
           </div>
@@ -171,58 +184,63 @@ export default async function BlogTagPage({ params }: PageProps) {
 
         {/* Articles */}
         <section className="py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             {articles.length === 0 ? (
-              <div className="text-center py-16">
-                <p className="text-gray-500 text-lg">No articles with this tag yet.</p>
-                <Link href="/blog" className="inline-flex items-center gap-2 mt-4 text-blue-600 font-medium hover:text-blue-800">
-                  <ArrowLeft className="w-4 h-4" />
+              <div className="py-16 text-center">
+                <p className="text-lg text-gray-500">No articles with this tag yet.</p>
+                <Link
+                  href="/blog"
+                  className="mt-4 inline-flex items-center gap-2 font-medium text-blue-600 hover:text-blue-800"
+                >
+                  <ArrowLeft className="h-4 w-4" />
                   Back to blog
                 </Link>
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {articles.map((article) => (
                   <Link
                     key={article.slug}
                     href={`/blog/${article.slug}`}
-                    className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group"
+                    className="group overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
                   >
-                    <div className="relative overflow-hidden h-48">
+                    <div className="relative h-48 overflow-hidden">
                       <Image
                         src={getBlogImage(article.slug, article.category).src}
                         alt={getBlogImage(article.slug, article.category).alt}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         placeholder="blur"
                         blurDataURL={BLUR_PLACEHOLDER}
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                      <span className="absolute top-4 left-4 z-10 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
+                      <span className="absolute left-4 top-4 z-10 rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
                         {article.category}
                       </span>
                     </div>
                     <div className="p-6">
-                      <h2 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-200">
+                      <h2 className="mb-2 text-lg font-bold text-gray-900 transition-colors duration-200 group-hover:text-blue-600">
                         {article.title}
                       </h2>
-                      <p className="text-sm text-gray-600 mb-4">{article.excerpt}</p>
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <p className="mb-4 text-sm text-gray-600">{article.excerpt}</p>
+                      <div className="flex items-center justify-between border-t border-gray-100 pt-4">
                         <div className="flex items-center gap-4 text-sm text-gray-500">
                           <span className="flex items-center gap-1.5">
-                            <Calendar className="w-3.5 h-3.5" />
+                            <Calendar className="h-3.5 w-3.5" />
                             {new Date(article.date).toLocaleDateString('en-US', {
-                              day: 'numeric', month: 'short', year: 'numeric',
+                              day: 'numeric',
+                              month: 'short',
+                              year: 'numeric',
                             })}
                           </span>
                           <span className="flex items-center gap-1.5">
-                            <Clock className="w-3.5 h-3.5" />
+                            <Clock className="h-3.5 w-3.5" />
                             {article.readTime}
                           </span>
                         </div>
-                        <span className="text-blue-600 font-semibold text-sm flex items-center gap-1 group-hover:gap-2 transition-all duration-200">
-                          Read <ArrowRight className="w-4 h-4" />
+                        <span className="flex items-center gap-1 text-sm font-semibold text-blue-600 transition-all duration-200 group-hover:gap-2">
+                          Read <ArrowRight className="h-4 w-4" />
                         </span>
                       </div>
                     </div>
@@ -235,19 +253,19 @@ export default async function BlogTagPage({ params }: PageProps) {
 
         {/* Related tags */}
         {relatedTags.length > 0 && (
-          <section className="py-12 bg-white border-t">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 border-l-4 border-blue-500 pl-4">
+          <section className="border-t bg-white py-12">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <h2 className="mb-6 border-l-4 border-blue-500 pl-4 text-2xl font-bold text-gray-900">
                 Related tags
               </h2>
               <div className="flex flex-wrap gap-3">
-                {relatedTags.map(t => (
+                {relatedTags.map((t) => (
                   <Link
                     key={t.slug}
                     href={`/blog/tag/${t.slug}`}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-gray-100 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-full text-sm font-medium border border-gray-200 hover:border-blue-200 transition-all"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
                   >
-                    <Tag className="w-3.5 h-3.5" />
+                    <Tag className="h-3.5 w-3.5" />
                     {t.label}
                   </Link>
                 ))}
@@ -257,13 +275,13 @@ export default async function BlogTagPage({ params }: PageProps) {
         )}
 
         {/* Back to blog */}
-        <section className="py-8 bg-gray-50 border-t">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <section className="border-t bg-gray-50 py-8">
+          <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 text-blue-600 font-medium hover:text-blue-800 transition-colors"
+              className="inline-flex items-center gap-2 font-medium text-blue-600 transition-colors hover:text-blue-800"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="h-4 w-4" />
               All articles
             </Link>
           </div>

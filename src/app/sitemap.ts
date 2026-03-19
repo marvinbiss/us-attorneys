@@ -86,10 +86,26 @@ const GUIDE_TYPES = [
 
 // ─── Industries (Type Q) ───────────────────────────────────────────────────
 const INDUSTRIES = [
-  'healthcare', 'technology', 'construction', 'finance', 'real-estate',
-  'manufacturing', 'retail', 'transportation', 'energy', 'agriculture',
-  'hospitality', 'education', 'government', 'nonprofit', 'entertainment',
-  'cannabis', 'cryptocurrency', 'ecommerce', 'startups', 'franchise',
+  'healthcare',
+  'technology',
+  'construction',
+  'finance',
+  'real-estate',
+  'manufacturing',
+  'retail',
+  'transportation',
+  'energy',
+  'agriculture',
+  'hospitality',
+  'education',
+  'government',
+  'nonprofit',
+  'entertainment',
+  'cannabis',
+  'cryptocurrency',
+  'ecommerce',
+  'startups',
+  'franchise',
 ] as const
 
 // ─── Situation slugs (Type G: ~300 legal situations) ───────────────────────
@@ -99,10 +115,9 @@ const SITUATION_SLUGS_COUNT = 300
 // ─── Helper: merge phase 1 cities with GSC priority cities ─────────────────
 function getPhase1Cities() {
   const phase1Cities = cities.slice(0, TOP_CITIES_PHASE1)
-  const phase1Slugs = new Set(phase1Cities.map(v => v.slug))
-  const gscExtras = GSC_PRIORITY_CITIES
-    .filter(slug => !phase1Slugs.has(slug))
-    .map(slug => cities.find(v => v.slug === slug))
+  const phase1Slugs = new Set(phase1Cities.map((v) => v.slug))
+  const gscExtras = GSC_PRIORITY_CITIES.filter((slug) => !phase1Slugs.has(slug))
+    .map((slug) => cities.find((v) => v.slug === slug))
     .filter((v): v is NonNullable<typeof v> => v != null)
   return [...phase1Cities, ...gscExtras]
 }
@@ -117,14 +132,13 @@ function batchIds(prefix: string, total: number, batch: number): { id: string }[
   return Array.from({ length: batchCount(total, batch) }, (_, i) => ({ id: `${prefix}-${i}` }))
 }
 
-
 /**
  * Generate sitemap index entries.
  * Next.js 14 calls this to produce /sitemap/[id].xml and a sitemap index.
  */
 export async function generateSitemaps() {
-  const pa = practiceAreas.length       // ~75 practice areas
-  const phase1 = TOP_CITIES_PHASE1      // 300 cities
+  const pa = practiceAreas.length // ~75 practice areas
+  const phase1 = TOP_CITIES_PHASE1 // 300 cities
   const hispanicCities = TOP_HISPANIC_CITIES // 200
 
   const emergencySlugs = Object.keys(tradeContent)
@@ -152,14 +166,12 @@ export async function generateSitemaps() {
 
     // ── NEW English intent sitemaps ─────────────────────────────────────
     // Intent service hubs (one sitemap per intent, ~75 PA each = small)
-    ...EN_INTENTS.map(intent => ({ id: `${intent}-service-hubs` })),
+    ...EN_INTENTS.map((intent) => ({ id: `${intent}-service-hubs` })),
     // Intent × city sitemaps (batched)
-    ...EN_INTENTS.flatMap(intent =>
-      batchIds(`${intent}-cities`, pa * phase1, BATCH_SIZE)
-    ),
+    ...EN_INTENTS.flatMap((intent) => batchIds(`${intent}-cities`, pa * phase1, BATCH_SIZE)),
 
     // ── NEW Spanish intent sitemaps ─────────────────────────────────────
-    ...ES_INTENTS.flatMap(intent =>
+    ...ES_INTENTS.flatMap((intent) =>
       batchIds(`es-${intent}-cities`, pa * hispanicCities, BATCH_SIZE)
     ),
 
@@ -219,12 +231,9 @@ export async function generateSitemaps() {
 }
 
 export default async function sitemap({ id }: { id: string }): Promise<MetadataRoute.Sitemap> {
-
   // ── Static pages + services ─────────────────────────────────────────────
   if (id === 'static') {
-    const homepage: MetadataRoute.Sitemap = [
-      { url: SITE_URL, lastModified: BUILD_DATE },
-    ]
+    const homepage: MetadataRoute.Sitemap = [{ url: SITE_URL, lastModified: BUILD_DATE }]
 
     const staticPages: MetadataRoute.Sitemap = [
       { url: `${SITE_URL}/about`, lastModified: BUILD_DATE },
@@ -269,31 +278,26 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
 
     // Guide pages (editorial)
-    const guideSlugs = [
-      'certified-attorney',
-      'avoid-scams',
-      'legal-quotes',
-      'find-attorney',
-    ]
-    const guidePages: MetadataRoute.Sitemap = guideSlugs.map(slug => ({
+    const guideSlugs = ['certified-attorney', 'avoid-scams', 'legal-quotes', 'find-attorney']
+    const guidePages: MetadataRoute.Sitemap = guideSlugs.map((slug) => ({
       url: `${SITE_URL}/guides/${slug}`,
       lastModified: BUILD_DATE,
     }))
 
     // Guide specialty hub pages (75 practice areas)
-    const guideHubPages: MetadataRoute.Sitemap = practiceAreas.map(pa => ({
+    const guideHubPages: MetadataRoute.Sitemap = practiceAreas.map((pa) => ({
       url: `${SITE_URL}/guides/${pa.slug}`,
       lastModified: BUILD_DATE,
     }))
 
     // Question pages
-    const questionPages: MetadataRoute.Sitemap = getQuestionSlugs().map(slug => ({
+    const questionPages: MetadataRoute.Sitemap = getQuestionSlugs().map((slug) => ({
       url: `${SITE_URL}/faq/${slug}`,
       lastModified: BUILD_DATE,
     }))
 
     const servicesIndex: MetadataRoute.Sitemap = [
-      { url: `${SITE_URL}/services`, lastModified: BUILD_DATE },
+      { url: `${SITE_URL}/practice-areas`, lastModified: BUILD_DATE },
     ]
 
     const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
@@ -313,10 +317,16 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     }))
 
     return [
-      ...homepage, ...staticPages, ...spanishStatePages,
-      ...guidePages, ...guideHubPages, ...questionPages,
-      ...servicesIndex, ...servicePages,
-      ...emergencyPages, ...pricingPages,
+      ...homepage,
+      ...staticPages,
+      ...spanishStatePages,
+      ...guidePages,
+      ...guideHubPages,
+      ...questionPages,
+      ...servicesIndex,
+      ...servicePages,
+      ...emergencyPages,
+      ...pricingPages,
     ]
   }
 
@@ -333,12 +343,17 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
     // Blog category pages — lastModified = date of the latest article in the category
     const blogCategoryPages: MetadataRoute.Sitemap = blogCategories
-      .filter(c => allArticlesMeta.some(a => categoryToSlug(normalizeCategory(a.category)) === c.slug))
-      .map(c => {
-        const categoryArticles = allArticlesMeta.filter(a => categoryToSlug(normalizeCategory(a.category)) === c.slug)
-        const latestDate = categoryArticles.length > 0
-          ? new Date(Math.max(...categoryArticles.map(a => new Date(a.date).getTime())))
-          : undefined
+      .filter((c) =>
+        allArticlesMeta.some((a) => categoryToSlug(normalizeCategory(a.category)) === c.slug)
+      )
+      .map((c) => {
+        const categoryArticles = allArticlesMeta.filter(
+          (a) => categoryToSlug(normalizeCategory(a.category)) === c.slug
+        )
+        const latestDate =
+          categoryArticles.length > 0
+            ? new Date(Math.max(...categoryArticles.map((a) => new Date(a.date).getTime())))
+            : undefined
         return {
           url: `${SITE_URL}/blog/category/${c.slug}`,
           lastModified: latestDate || BUILD_DATE,
@@ -349,17 +364,31 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const tagSet = new Map<string, string>()
     for (const a of allArticlesMeta) {
       for (const t of a.tags) {
-        const slug = t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        const slug = t
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)/g, '')
         if (!tagSet.has(slug)) tagSet.set(slug, t)
       }
     }
-    const blogTagPages: MetadataRoute.Sitemap = Array.from(tagSet.keys()).map(tagSlug => {
-      const tagArticles = allArticlesMeta.filter(a =>
-        a.tags.some(t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === tagSlug)
+    const blogTagPages: MetadataRoute.Sitemap = Array.from(tagSet.keys()).map((tagSlug) => {
+      const tagArticles = allArticlesMeta.filter((a) =>
+        a.tags.some(
+          (t) =>
+            t
+              .toLowerCase()
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/(^-|-$)/g, '') === tagSlug
+        )
       )
-      const latestDate = tagArticles.length > 0
-        ? new Date(Math.max(...tagArticles.map(a => new Date(a.date).getTime())))
-        : undefined
+      const latestDate =
+        tagArticles.length > 0
+          ? new Date(Math.max(...tagArticles.map((a) => new Date(a.date).getTime())))
+          : undefined
       return {
         url: `${SITE_URL}/blog/tag/${tagSlug}`,
         lastModified: latestDate || BUILD_DATE,
@@ -486,7 +515,11 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
         const { slug: taskSlug } = parseTask(task)
         for (const v of phase1Cities) {
           if (count >= end) break outer
-          if (count >= start) result.push({ url: `${SITE_URL}/pricing/${specialtySlug}/${v.slug}/${taskSlug}`, lastModified: BUILD_DATE })
+          if (count >= start)
+            result.push({
+              url: `${SITE_URL}/pricing/${specialtySlug}/${v.slug}/${taskSlug}`,
+              lastModified: BUILD_DATE,
+            })
           count++
         }
       }
@@ -499,7 +532,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     const tradeSlugs = Object.keys(tradeContent)
     return [
       { url: `${SITE_URL}/reviews`, lastModified: BUILD_DATE },
-      ...tradeSlugs.map(slug => ({ url: `${SITE_URL}/reviews/${slug}`, lastModified: BUILD_DATE })),
+      ...tradeSlugs.map((slug) => ({
+        url: `${SITE_URL}/reviews/${slug}`,
+        lastModified: BUILD_DATE,
+      })),
     ]
   }
 
@@ -525,14 +561,12 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Issues hub (LEGACY) — individual /issues/[slug] pages removed (noindex)
   if (id === 'issues') {
-    return [
-      { url: `${SITE_URL}/issues`, lastModified: BUILD_DATE },
-    ]
+    return [{ url: `${SITE_URL}/issues`, lastModified: BUILD_DATE }]
   }
 
   // ── Issues × city pages (LEGACY) ──────────────────────────────────────
   if (id.startsWith('issues-cities-')) {
-    const batchIndex = parseInt(id.split('-').pop()!)
+    const batchIndex = parseInt(id.split('-').pop() ?? '0')
     const start = batchIndex * BATCH_SIZE
     const end = start + BATCH_SIZE
     const problemSlugs = getProblemSlugs()
@@ -552,7 +586,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── State × service pages (LEGACY) ────────────────────────────────────
   if (id.startsWith('dept-services-')) {
-    const batchIndex = parseInt(id.split('-').pop()!)
+    const batchIndex = parseInt(id.split('-').pop() ?? '0')
     const tradeSlugs = getPracticeAreaSlugs()
     const allUrls: MetadataRoute.Sitemap = []
     for (const state of states) {
@@ -566,8 +600,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   // ── Region × service pages (LEGACY) ───────────────────────────────────
   if (id === 'region-services') {
     const tradeSlugs = getPracticeAreaSlugs()
-    return usRegions.flatMap(region =>
-      tradeSlugs.map(service => ({
+    return usRegions.flatMap((region) =>
+      tradeSlugs.map((service) => ({
         url: `${SITE_URL}/regions/${region.slug}/${service}`,
       }))
     )
@@ -581,7 +615,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   for (const intent of EN_INTENTS) {
     if (id === `${intent}-service-hubs`) {
       const prefix = EN_INTENT_HUB_PREFIX[intent]
-      return practiceAreas.map(pa => ({
+      return practiceAreas.map((pa) => ({
         url: `${SITE_URL}${prefix}/${pa.slug}`,
         lastModified: BUILD_DATE,
       }))
@@ -803,7 +837,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
 
   // ── Type N: Comparisons ──────────────────────────────────────────────
   if (id === 'comparisons') {
-    return comparisons.map(c => ({
+    return comparisons.map((c) => ({
       url: `${SITE_URL}/compare/${c.slug}`,
       lastModified: BUILD_DATE,
     }))
@@ -848,8 +882,10 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
     // Use TOP_ZIP_CODES from zip-pages module (curated major metro ZIPs)
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { TOP_ZIP_CODES } = require('@/lib/zip-pages')
-    const zipCodes = (TOP_ZIP_CODES as { zip: string; citySlug: string }[])
-      .slice(0, ZIP_PHASE1_COUNT)
+    const zipCodes = (TOP_ZIP_CODES as { zip: string; citySlug: string }[]).slice(
+      0,
+      ZIP_PHASE1_COUNT
+    )
 
     const allUrls: MetadataRoute.Sitemap = []
     for (const pa of topPAs) {

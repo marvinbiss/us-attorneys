@@ -2,12 +2,30 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { MapPin, Users, Building2, ArrowRight, Shield, Clock, ChevronRight, Wrench, HelpCircle } from 'lucide-react'
+import {
+  MapPin,
+  Users,
+  Building2,
+  ArrowRight,
+  Shield,
+  Clock,
+  ChevronRight,
+  Wrench,
+  HelpCircle,
+} from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema, getCollectionPageSchema, getFAQSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
-import { cities, practiceAreas, getNeighborhoodBySlug, getNeighborhoodsByCity, getNearbyCities, getRegionSlugByName, getStateByCode } from '@/lib/data/usa'
+import {
+  cities,
+  practiceAreas,
+  getNeighborhoodBySlug,
+  getNeighborhoodsByCity,
+  getNearbyCities,
+  getRegionSlugByName,
+  getStateByCode,
+} from '@/lib/data/usa'
 import { getCityImage, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import { generateNeighborhoodContent, hashCode } from '@/lib/seo/location-content'
 import { REVALIDATE } from '@/lib/cache'
@@ -15,9 +33,11 @@ import { REVALIDATE } from '@/lib/cache'
 // 1 seed page — ISR 24h handles the rest (dynamicParams = true)
 const TOP_CITIES = 1
 export function generateStaticParams() {
-  return cities.slice(0, TOP_CITIES).flatMap(v =>
-    getNeighborhoodsByCity(v.slug).map(q => ({ city: v.slug, neighborhood: q.slug }))
-  )
+  return cities
+    .slice(0, TOP_CITIES)
+    .flatMap((v) =>
+      getNeighborhoodsByCity(v.slug).map((q) => ({ city: v.slug, neighborhood: q.slug }))
+    )
 }
 
 export const dynamicParams = true
@@ -70,9 +90,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       type: 'website',
-      images: [cityImage
-        ? { url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }
-        : { url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `Attorneys in ${neighborhoodName}, ${city.name}` }
+      images: [
+        cityImage
+          ? { url: cityImage.src, width: 1200, height: 630, alt: cityImage.alt }
+          : {
+              url: `${SITE_URL}/opengraph-image`,
+              width: 1200,
+              height: 630,
+              alt: `Attorneys in ${neighborhoodName}, ${city.name}`,
+            },
       ],
     },
     twitter: {
@@ -91,7 +117,7 @@ export default async function QuartierPage({ params }: PageProps) {
   if (!result) notFound()
 
   const { city, neighborhoodName } = result
-  const quartiers = getNeighborhoodsByCity(villeSlug).filter(q => q.slug !== quartierSlug)
+  const quartiers = getNeighborhoodsByCity(villeSlug).filter((q) => q.slug !== quartierSlug)
   const nearbyVilles = getNearbyCities(villeSlug, 8)
   const stateData = getStateByCode(city.stateCode)
   const regionSlug = stateData?.region ? getRegionSlugByName(stateData.region) : undefined
@@ -123,14 +149,16 @@ export default async function QuartierPage({ params }: PageProps) {
   const faqSchema = getFAQSchema(content.faqItems)
 
   // Region cities for SEO links
-  const regionVilles = cities.filter(v => v.stateCode === city.stateCode && v.slug !== villeSlug).slice(0, 10)
+  const regionVilles = cities
+    .filter((v) => v.stateCode === city.stateCode && v.slug !== villeSlug)
+    .slice(0, 10)
 
   return (
     <div className="min-h-screen bg-gray-50">
       <JsonLd data={[breadcrumbSchema, collectionSchema, faqSchema]} />
 
       {/* ─── PREMIUM DARK HERO ──────────────────────────────── */}
-      <section className="relative bg-[#0a0f1e] text-white overflow-hidden">
+      <section className="relative overflow-hidden bg-[#0a0f1e] text-white">
         <div className="absolute inset-0">
           {cityImage && (
             <Image
@@ -145,17 +173,25 @@ export default async function QuartierPage({ params }: PageProps) {
             />
           )}
           <div className="absolute inset-0 bg-[#0a0f1e]/80" />
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(16,185,129,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(16,185,129,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(52,211,153,0.06) 0%, transparent 50%)',
-          }} />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(16,185,129,0.18) 0%, transparent 60%), radial-gradient(ellipse 60% 60% at 80% 110%, rgba(16,185,129,0.1) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 10% 90%, rgba(52,211,153,0.06) 0%, transparent 50%)',
+            }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
+              backgroundSize: '64px 64px',
+            }}
+          />
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gray-50 to-transparent" />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-4 pt-10 pb-28 md:pt-14 md:pb-36">
+        <div className="relative mx-auto max-w-6xl px-4 pb-28 pt-10 md:pb-36 md:pt-14">
           <div className="mb-10">
             <Breadcrumb
               items={[
@@ -163,21 +199,23 @@ export default async function QuartierPage({ params }: PageProps) {
                 { label: city.name, href: `/cities/${villeSlug}` },
                 { label: neighborhoodName },
               ]}
-              className="text-slate-400 [&_a]:text-slate-400 [&_a:hover]:text-white [&_svg]:text-slate-600"
+              className="text-slate-400 [&_a:hover]:text-white [&_a]:text-slate-400 [&_svg]:text-slate-600"
             />
           </div>
 
           <div className="max-w-3xl">
-            <div className="flex flex-wrap gap-3 mb-5">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/15 backdrop-blur-sm rounded-full border border-emerald-400/25">
-                <MapPin className="w-4 h-4 text-emerald-400" />
+            <div className="mb-5 flex flex-wrap gap-3">
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-500/15 px-4 py-2 backdrop-blur-sm">
+                <MapPin className="h-4 w-4 text-emerald-400" />
                 <span className="text-sm font-medium text-emerald-200">Neighborhood</span>
-                <span className="w-1 h-1 rounded-full bg-emerald-400/50" />
+                <span className="h-1 w-1 rounded-full bg-emerald-400/50" />
                 <span className="text-sm font-medium text-white/90">{city.name}</span>
               </div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/15">
-                <Building2 className="w-4 h-4 text-amber-400" />
-                <span className="text-sm font-medium text-white/80">{content.profile.eraLabel}</span>
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 backdrop-blur-sm">
+                <Building2 className="h-4 w-4 text-amber-400" />
+                <span className="text-sm font-medium text-white/80">
+                  {content.profile.eraLabel}
+                </span>
               </div>
             </div>
 
@@ -191,36 +229,44 @@ export default async function QuartierPage({ params }: PageProps) {
                 `${city.name} ${neighborhoodName} — Trusted Attorneys`,
               ]
               return (
-                <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold mb-5 tracking-[-0.025em] leading-[1.1]">
+                <h1 className="mb-5 font-heading text-3xl font-extrabold leading-[1.1] tracking-[-0.025em] md:text-4xl lg:text-5xl">
                   {h1Templates[h1Hash % h1Templates.length]}
                 </h1>
               )
             })()}
-            <p className="text-lg text-slate-400 max-w-2xl leading-relaxed mb-8">
-              {practiceAreas.length} practice areas available in the {neighborhoodName} neighborhood. {content.profile.eraLabel} in {content.profile.densityLabel.toLowerCase()}. Free consultations.
+            <p className="mb-8 max-w-2xl text-lg leading-relaxed text-slate-400">
+              {practiceAreas.length} practice areas available in the {neighborhoodName}{' '}
+              neighborhood. {content.profile.eraLabel} in{' '}
+              {content.profile.densityLabel.toLowerCase()}. Free consultations.
             </p>
 
-            <div className="flex flex-wrap gap-4 mb-8 text-sm">
+            <div className="mb-8 flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2 text-slate-300">
-                <MapPin className="w-4 h-4 text-emerald-400" />
-                <span>{city.name} ({city.zipCode})</span>
+                <MapPin className="h-4 w-4 text-emerald-400" />
+                <span>
+                  {city.name} ({city.zipCode})
+                </span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <Building2 className="w-4 h-4 text-emerald-400" />
-                <span>{city.stateName} ({city.stateCode})</span>
+                <Building2 className="h-4 w-4 text-emerald-400" />
+                <span>
+                  {city.stateName} ({city.stateCode})
+                </span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
-                <Users className="w-4 h-4 text-emerald-400" />
+                <Users className="h-4 w-4 text-emerald-400" />
                 <span>{city.population} residents</span>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Shield className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Bar-verified profiles</span>
+              <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 backdrop-blur">
+                <Shield className="h-4 w-4 text-amber-400" />
+                <span className="text-sm font-medium">Bar-verified profiles</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full border border-white/10">
-                <Clock className="w-4 h-4 text-amber-400" /><span className="text-sm font-medium">Free consultations</span>
+              <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-4 py-2 backdrop-blur">
+                <Clock className="h-4 w-4 text-amber-400" />
+                <span className="text-sm font-medium">Free consultations</span>
               </div>
             </div>
           </div>
@@ -228,24 +274,26 @@ export default async function QuartierPage({ params }: PageProps) {
       </section>
 
       {/* ─── QUARTIER PROFILE ──────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-              <Building2 className="w-5 h-5 text-emerald-600" />
+          <div className="mb-6 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
+              <Building2 className="h-5 w-5 text-emerald-600" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
                 Characteristics of the {neighborhoodName} Neighborhood
               </h2>
-              <p className="text-sm text-slate-500">{content.profile.eraLabel} · {content.profile.densityLabel}</p>
+              <p className="text-sm text-slate-500">
+                {content.profile.eraLabel} · {content.profile.densityLabel}
+              </p>
             </div>
           </div>
-          <div className="bg-white rounded-2xl border border-gray-200 p-6">
-            <div className="grid md:grid-cols-3 gap-6 mb-6">
+          <div className="rounded-2xl border border-gray-200 bg-white p-6">
+            <div className="mb-6 grid gap-6 md:grid-cols-3">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Building2 className="w-4 h-4 text-amber-600" />
+                <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-amber-100">
+                  <Building2 className="h-4 w-4 text-amber-600" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-900">Building Type</p>
@@ -253,8 +301,8 @@ export default async function QuartierPage({ params }: PageProps) {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <MapPin className="w-4 h-4 text-blue-600" />
+                <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-blue-100">
+                  <MapPin className="h-4 w-4 text-blue-600" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-900">Urban Density</p>
@@ -262,8 +310,8 @@ export default async function QuartierPage({ params }: PageProps) {
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <Users className="w-4 h-4 text-violet-600" />
+                <div className="mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-violet-100">
+                  <Users className="h-4 w-4 text-violet-600" />
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-900">Population</p>
@@ -271,55 +319,67 @@ export default async function QuartierPage({ params }: PageProps) {
                 </div>
               </div>
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed mb-4">{content.profile.architecturalNote}</p>
+            <p className="mb-4 text-sm leading-relaxed text-slate-600">
+              {content.profile.architecturalNote}
+            </p>
             <div>
-              <p className="text-sm font-semibold text-slate-900 mb-2">Common Issues in {neighborhoodName}:</p>
-              <ul className="grid sm:grid-cols-2 gap-2">
+              <p className="mb-2 text-sm font-semibold text-slate-900">
+                Common Issues in {neighborhoodName}:
+              </p>
+              <ul className="grid gap-2 sm:grid-cols-2">
                 {(() => {
                   const issueHash = Math.abs(hashCode(`issues-${villeSlug}-${quartierSlug}`))
                   const allIssues = content.profile.commonIssues
-                  const selected = Array.from({ length: Math.min(3, allIssues.length) }, (_, i) =>
-                    allIssues[(issueHash + i) % allIssues.length]
+                  const selected = Array.from(
+                    { length: Math.min(3, allIssues.length) },
+                    (_, i) => allIssues[(issueHash + i) % allIssues.length]
                   )
                   return selected.map((issue, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                      <Wrench className="w-3.5 h-3.5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                      <Wrench className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-emerald-500" />
                       {issue}
                     </li>
                   ))
                 })()}
               </ul>
             </div>
-            <p className="text-xs text-gray-400 mt-3 italic">
-              * Profile estimated from the city&apos;s urban characteristics. Actual data may vary by neighborhood construction.
+            <p className="mt-3 text-xs italic text-gray-400">
+              * Profile estimated from the city&apos;s urban characteristics. Actual data may vary
+              by neighborhood construction.
             </p>
           </div>
         </section>
 
         {/* ─── SERVICES GRID (ordered by profile) ─────────────── */}
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-              <Wrench className="w-5 h-5 text-emerald-600" />
+          <div className="mb-8 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
+              <Wrench className="h-5 w-5 text-emerald-600" />
             </div>
             <div>
-              <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+              <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
                 Recommended Services in {neighborhoodName}
               </h2>
-              <p className="text-sm text-slate-500">{practiceAreas.length} practice areas · ranked by relevance for this area</p>
+              <p className="text-sm text-slate-500">
+                {practiceAreas.length} practice areas · ranked by relevance for this area
+              </p>
             </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {orderedServices.map((service) => (
               <Link
                 key={service.slug}
                 href={`/practice-areas/${service.slug}/${villeSlug}/${quartierSlug}`}
-                className={`rounded-xl shadow-sm p-5 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group ${topServiceSlugs.has(service.slug) ? 'bg-emerald-50 border-2 border-emerald-200' : 'bg-white border border-gray-100'}`}
+                className={`group rounded-xl p-5 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${topServiceSlugs.has(service.slug) ? 'border-2 border-emerald-200 bg-emerald-50' : 'border border-gray-100 bg-white'}`}
               >
-                <h3 className="font-semibold text-slate-800 group-hover:text-emerald-600 transition-colors text-sm">{service.name}</h3>
-                <p className="text-xs text-slate-400 mt-1.5">in {neighborhoodName}</p>
+                <h3 className="text-sm font-semibold text-slate-800 transition-colors group-hover:text-emerald-600">
+                  {service.name}
+                </h3>
+                <p className="mt-1.5 text-xs text-slate-400">in {neighborhoodName}</p>
                 {topServiceSlugs.has(service.slug) && (
-                  <span className="inline-block mt-2 text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">Top Priority</span>
+                  <span className="mt-2 inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+                    Top Priority
+                  </span>
                 )}
               </Link>
             ))}
@@ -329,24 +389,24 @@ export default async function QuartierPage({ params }: PageProps) {
         {/* ─── OTHER QUARTIERS ─────────────────────────────── */}
         {quartiers.length > 0 && (
           <section className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-emerald-600" />
+            <div className="mb-6 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
+                <MapPin className="h-5 w-5 text-emerald-600" />
               </div>
               <div>
-                <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+                <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
                   Other Neighborhoods in {city.name}
                 </h2>
                 <p className="text-sm text-slate-500">{quartiers.length} other neighborhoods</p>
               </div>
             </div>
-            <div className="bg-white rounded-2xl border border-gray-200 p-6">
+            <div className="rounded-2xl border border-gray-200 bg-white p-6">
               <div className="flex flex-wrap gap-2.5">
                 {quartiers.map(({ name, slug }) => (
                   <Link
                     key={slug}
                     href={`/cities/${villeSlug}/${slug}`}
-                    className="bg-gray-50 text-slate-700 px-4 py-2 rounded-full text-sm border border-gray-100 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-200 transition-colors"
+                    className="rounded-full border border-gray-100 bg-gray-50 px-4 py-2 text-sm text-slate-700 transition-colors hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
                   >
                     {name}
                   </Link>
@@ -359,20 +419,26 @@ export default async function QuartierPage({ params }: PageProps) {
         {/* ─── NEARBY VILLES ──────────────────────────────── */}
         {nearbyVilles.length > 0 && (
           <section className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-violet-600" />
+            <div className="mb-6 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100">
+                <Building2 className="h-5 w-5 text-violet-600" />
               </div>
-              <h2 className="font-heading text-xl font-bold text-slate-900 tracking-tight">
+              <h2 className="font-heading text-xl font-bold tracking-tight text-slate-900">
                 Cities Near {city.name}
               </h2>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
               {nearbyVilles.map((v) => (
-                <Link key={v.slug} href={`/cities/${v.slug}`} className="flex items-center gap-2.5 bg-white rounded-xl border border-gray-200 p-3.5 hover:border-emerald-300 hover:shadow-md transition-all group">
-                  <MapPin className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 flex-shrink-0 transition-colors" />
+                <Link
+                  key={v.slug}
+                  href={`/cities/${v.slug}`}
+                  className="group flex items-center gap-2.5 rounded-xl border border-gray-200 bg-white p-3.5 transition-all hover:border-emerald-300 hover:shadow-md"
+                >
+                  <MapPin className="h-4 w-4 flex-shrink-0 text-slate-400 transition-colors group-hover:text-emerald-600" />
                   <div className="min-w-0">
-                    <span className="block text-sm font-medium text-slate-800 group-hover:text-emerald-600 truncate transition-colors">{v.name}</span>
+                    <span className="block truncate text-sm font-medium text-slate-800 transition-colors group-hover:text-emerald-600">
+                      {v.name}
+                    </span>
                     <span className="text-xs text-slate-400">{v.population} pop.</span>
                   </div>
                 </Link>
@@ -383,19 +449,19 @@ export default async function QuartierPage({ params }: PageProps) {
 
         {/* ─── FAQ SECTION ──────────────────────────────────── */}
         <section className="mb-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-              <HelpCircle className="w-5 h-5 text-amber-600" />
+          <div className="mb-8 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100">
+              <HelpCircle className="h-5 w-5 text-amber-600" />
             </div>
-            <h2 className="font-heading text-2xl font-bold text-slate-900 tracking-tight">
+            <h2 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
               Frequently Asked Questions
             </h2>
           </div>
           <div className="space-y-4">
             {content.faqItems.map((item) => (
-              <div key={item.question} className="bg-white rounded-xl border border-gray-200 p-6">
-                <h3 className="font-semibold text-slate-900 mb-2">{item.question}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{item.answer}</p>
+              <div key={item.question} className="rounded-xl border border-gray-200 bg-white p-6">
+                <h3 className="mb-2 font-semibold text-slate-900">{item.question}</h3>
+                <p className="text-sm leading-relaxed text-slate-600">{item.answer}</p>
               </div>
             ))}
           </div>
@@ -403,24 +469,34 @@ export default async function QuartierPage({ params }: PageProps) {
       </div>
 
       {/* ─── SEO INTERNAL LINKS ─────────────────────────────── */}
-      <section className="py-16 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="font-heading text-xl font-bold text-slate-900 mb-8 tracking-tight">
+      <section className="border-t border-gray-100 bg-white py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="mb-8 font-heading text-xl font-bold tracking-tight text-slate-900">
             See Also
           </h2>
-          <div className="grid md:grid-cols-3 gap-10">
+          <div className="grid gap-10 md:grid-cols-3">
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Practice Areas in {neighborhoodName}</h3>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
+                Practice Areas in {neighborhoodName}
+              </h3>
               <div className="space-y-2">
                 {practiceAreas.slice(0, 6).map((s) => (
-                  <Link key={s.slug} href={`/practice-areas/${s.slug}/${villeSlug}/${quartierSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
+                  <Link
+                    key={s.slug}
+                    href={`/practice-areas/${s.slug}/${villeSlug}/${quartierSlug}`}
+                    className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                  >
+                    <ChevronRight className="h-3 w-3" />
                     {s.name} in {neighborhoodName}
                   </Link>
                 ))}
                 {practiceAreas.slice(6, 10).map((s) => (
-                  <Link key={s.slug} href={`/practice-areas/${s.slug}/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
+                  <Link
+                    key={s.slug}
+                    href={`/practice-areas/${s.slug}/${villeSlug}`}
+                    className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                  >
+                    <ChevronRight className="h-3 w-3" />
                     {s.name} in {city.name}
                   </Link>
                 ))}
@@ -428,53 +504,85 @@ export default async function QuartierPage({ params }: PageProps) {
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Cities in {stateData?.region}</h3>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
+                Cities in {stateData?.region}
+              </h3>
               <div className="space-y-2">
                 {regionVilles.map((v) => (
-                  <Link key={v.slug} href={`/cities/${v.slug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
+                  <Link
+                    key={v.slug}
+                    href={`/cities/${v.slug}`}
+                    className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                  >
+                    <ChevronRight className="h-3 w-3" />
                     Attorneys in {v.name}
                   </Link>
                 ))}
               </div>
-              <Link href="/cities" className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-700 text-sm font-medium mt-3">
-                All Cities <ArrowRight className="w-4 h-4" />
+              <Link
+                href="/cities"
+                className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-emerald-600 hover:text-emerald-700"
+              >
+                All Cities <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Navigation</h3>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
+                Navigation
+              </h3>
               <div className="space-y-2">
-                <Link href={`/cities/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
+                <Link
+                  href={`/cities/${villeSlug}`}
+                  className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                >
+                  <ChevronRight className="h-3 w-3" />
                   Attorneys in {city.name}
                 </Link>
                 {regionSlug && (
-                  <Link href={`/regions/${regionSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
+                  <Link
+                    href={`/regions/${regionSlug}`}
+                    className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                  >
+                    <ChevronRight className="h-3 w-3" />
                     Region {stateData?.region}
                   </Link>
                 )}
                 {deptSlug && (
-                  <Link href={`/states/${deptSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
-                    <ChevronRight className="w-3 h-3" />
+                  <Link
+                    href={`/states/${deptSlug}`}
+                    className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                  >
+                    <ChevronRight className="h-3 w-3" />
                     {city.stateName} ({city.stateCode})
                   </Link>
                 )}
-                <Link href={`/quotes/family-law/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
+                <Link
+                  href={`/quotes/family-law/${villeSlug}`}
+                  className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                >
+                  <ChevronRight className="h-3 w-3" />
                   Family Law Consultation in {city.name}
                 </Link>
-                <Link href={`/quotes/personal-injury/${villeSlug}`} className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
+                <Link
+                  href={`/quotes/personal-injury/${villeSlug}`}
+                  className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                >
+                  <ChevronRight className="h-3 w-3" />
                   Personal Injury Consultation in {city.name}
                 </Link>
-                <Link href="/services" className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
+                <Link
+                  href="/practice-areas"
+                  className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                >
+                  <ChevronRight className="h-3 w-3" />
                   All Practice Areas
                 </Link>
-                <Link href="/quotes" className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600 py-2 transition-colors">
-                  <ChevronRight className="w-3 h-3" />
+                <Link
+                  href="/quotes"
+                  className="flex items-center gap-2 py-2 text-sm text-slate-600 transition-colors hover:text-emerald-600"
+                >
+                  <ChevronRight className="h-3 w-3" />
                   Request a Consultation
                 </Link>
               </div>
@@ -482,7 +590,6 @@ export default async function QuartierPage({ params }: PageProps) {
           </div>
         </div>
       </section>
-
     </div>
   )
 }

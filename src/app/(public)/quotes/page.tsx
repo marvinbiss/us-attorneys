@@ -488,7 +488,7 @@ export default async function QuotesPage() {
               </h3>
               <div className="space-y-1.5">
                 <Link
-                  href="/services"
+                  href="/practice-areas"
                   className="flex items-center gap-2 py-1 text-sm text-gray-600 transition-colors hover:text-blue-600"
                 >
                   <ChevronRight className="h-3 w-3" />

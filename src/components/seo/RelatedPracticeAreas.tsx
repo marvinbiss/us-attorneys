@@ -18,12 +18,12 @@ const RELATED_CATEGORIES: Record<string, string[]> = {
   'business-corporate': ['intellectual-property', 'tax', 'employment', 'real-estate'],
   'intellectual-property': ['business-corporate', 'technology-cyber', 'employment'],
   'real-estate': ['business-corporate', 'tax', 'bankruptcy'],
-  'immigration': ['employment', 'criminal-defense', 'family-law'],
+  immigration: ['employment', 'criminal-defense', 'family-law'],
   'estate-planning': ['family-law', 'tax', 'real-estate'],
-  'employment': ['business-corporate', 'personal-injury', 'criminal-defense'],
-  'bankruptcy': ['tax', 'real-estate', 'business-corporate'],
-  'tax': ['business-corporate', 'bankruptcy', 'estate-planning'],
-  'specialized': ['personal-injury', 'business-corporate', 'government-administrative'],
+  employment: ['business-corporate', 'personal-injury', 'criminal-defense'],
+  bankruptcy: ['tax', 'real-estate', 'business-corporate'],
+  tax: ['business-corporate', 'bankruptcy', 'estate-planning'],
+  specialized: ['personal-injury', 'business-corporate', 'government-administrative'],
   'government-administrative': ['specialized', 'employment', 'criminal-defense'],
   'technology-cyber': ['intellectual-property', 'business-corporate', 'criminal-defense'],
   'personal-family-additional': ['family-law', 'estate-planning', 'personal-injury'],
@@ -43,12 +43,12 @@ interface RelatedPracticeAreasProps {
 }
 
 function getParentPAs() {
-  return PRACTICE_AREAS_200.filter(pa => pa.parentSlug === null)
+  return PRACTICE_AREAS_200.filter((pa) => pa.parentSlug === null)
 }
 
 function getRelatedPracticeAreas(currentSlug: string, limit: number): typeof PRACTICE_AREAS_200 {
   const allParents = getParentPAs()
-  const current = PRACTICE_AREAS_200.find(pa => pa.slug === currentSlug)
+  const current = PRACTICE_AREAS_200.find((pa) => pa.slug === currentSlug)
   if (!current) return allParents.slice(0, limit)
 
   const currentCategory = current.category
@@ -57,7 +57,7 @@ function getRelatedPracticeAreas(currentSlug: string, limit: number): typeof PRA
 
   // 1. Siblings — same category, parent PAs only, excluding current
   const siblings = allParents.filter(
-    pa => pa.category === currentCategory && pa.slug !== currentSlug
+    (pa) => pa.category === currentCategory && pa.slug !== currentSlug
   )
   for (const s of siblings) {
     if (results.length >= limit) break
@@ -69,7 +69,7 @@ function getRelatedPracticeAreas(currentSlug: string, limit: number): typeof PRA
 
   // 2. If current is a subspecialty, include the parent
   if (current.parentSlug && !seen.has(current.parentSlug)) {
-    const parent = allParents.find(pa => pa.slug === current.parentSlug)
+    const parent = allParents.find((pa) => pa.slug === current.parentSlug)
     if (parent && results.length < limit) {
       results.push(parent)
       seen.add(parent.slug)
@@ -78,7 +78,7 @@ function getRelatedPracticeAreas(currentSlug: string, limit: number): typeof PRA
 
   // 3. Subspecialties of the current PA (if it's a parent)
   if (current.parentSlug === null) {
-    const children = PRACTICE_AREAS_200.filter(pa => pa.parentSlug === currentSlug)
+    const children = PRACTICE_AREAS_200.filter((pa) => pa.parentSlug === currentSlug)
     for (const child of children) {
       if (results.length >= limit) break
       if (!seen.has(child.slug)) {
@@ -92,7 +92,7 @@ function getRelatedPracticeAreas(currentSlug: string, limit: number): typeof PRA
   const relatedCats = RELATED_CATEGORIES[currentCategory] || []
   for (const cat of relatedCats) {
     if (results.length >= limit) break
-    const catPAs = allParents.filter(pa => pa.category === cat)
+    const catPAs = allParents.filter((pa) => pa.category === cat)
     for (const pa of catPAs) {
       if (results.length >= limit) break
       if (!seen.has(pa.slug)) {
@@ -104,7 +104,7 @@ function getRelatedPracticeAreas(currentSlug: string, limit: number): typeof PRA
 
   // 5. Fallback — fill with high-volume PAs from any category
   if (results.length < limit) {
-    const highVolume = allParents.filter(pa => pa.searchVolume === 'high' && !seen.has(pa.slug))
+    const highVolume = allParents.filter((pa) => pa.searchVolume === 'high' && !seen.has(pa.slug))
     for (const pa of highVolume) {
       if (results.length >= limit) break
       results.push(pa)
@@ -125,7 +125,7 @@ export default function RelatedPracticeAreas({
   const related = getRelatedPracticeAreas(currentSlug, limit)
   if (related.length === 0) return null
 
-  const current = PRACTICE_AREAS_200.find(pa => pa.slug === currentSlug)
+  const current = PRACTICE_AREAS_200.find((pa) => pa.slug === currentSlug)
   const currentName = current?.name || 'this practice area'
 
   return (
@@ -133,14 +133,14 @@ export default function RelatedPracticeAreas({
       className={`py-8 ${className}`}
       aria-label={`Practice areas related to ${currentName}`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-          <Scale className="w-5 h-5 text-clay-400" aria-hidden="true" />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
+          <Scale className="h-5 w-5 text-clay-400" aria-hidden="true" />
           Related Practice Areas
         </h2>
 
         <div className="flex flex-wrap gap-2">
-          {related.map(pa => {
+          {related.map((pa) => {
             const href = citySlug
               ? `/practice-areas/${pa.slug}/${citySlug}`
               : `/practice-areas/${pa.slug}`
@@ -149,7 +149,7 @@ export default function RelatedPracticeAreas({
               <Link
                 key={pa.slug}
                 href={href}
-                className="inline-flex items-center px-3 py-2 bg-sand-100 hover:bg-clay-50 dark:bg-white/[0.06] dark:hover:bg-white/[0.10] text-stone-700 hover:text-clay-600 dark:text-gray-300 dark:hover:text-white rounded-lg text-sm border border-stone-200/40 hover:border-clay-200 dark:border-white/[0.08] dark:hover:border-white/[0.16] transition-all duration-200"
+                className="inline-flex items-center rounded-lg border border-stone-200/40 bg-sand-100 px-3 py-2 text-sm text-stone-700 transition-all duration-200 hover:border-clay-200 hover:bg-clay-50 hover:text-clay-600 dark:border-white/[0.08] dark:bg-white/[0.06] dark:text-gray-300 dark:hover:border-white/[0.16] dark:hover:bg-white/[0.10] dark:hover:text-white"
               >
                 {pa.name}
                 {cityName ? ` in ${cityName}` : ''}
@@ -161,11 +161,14 @@ export default function RelatedPracticeAreas({
         {/* View all practice areas link */}
         <div className="mt-4">
           <Link
-            href="/services"
-            className="text-clay-400 hover:text-clay-600 dark:text-clay-400 dark:hover:text-clay-300 text-sm flex items-center gap-1 group"
+            href="/practice-areas"
+            className="group flex items-center gap-1 text-sm text-clay-400 hover:text-clay-600 dark:text-clay-400 dark:hover:text-clay-300"
           >
             View all practice areas
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
+            <ArrowRight
+              className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
           </Link>
         </div>
       </div>

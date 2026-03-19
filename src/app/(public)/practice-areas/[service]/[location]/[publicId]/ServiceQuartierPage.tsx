@@ -1,9 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import {
-  getSpecialtyBySlug,
-  getAttorneysByServiceAndLocation,
-} from '@/lib/supabase'
+import { getSpecialtyBySlug, getAttorneysByServiceAndLocation } from '@/lib/supabase'
 import ServiceLocationPageClient from '../PageClient'
 import { getBreadcrumbSchema, getFAQSchema, getItemListSchema } from '@/lib/seo/jsonld'
 import { SITE_URL } from '@/lib/seo/config'
@@ -18,10 +15,7 @@ import {
 } from '@/lib/data/usa'
 import { getTradeContent } from '@/lib/data/trade-content'
 // TODO: Neighborhood enrichment data removed (stub was always null)
-import {
-  generateNeighborhoodContent,
-  hashCode,
-} from '@/lib/seo/location-content'
+import { generateNeighborhoodContent, hashCode } from '@/lib/seo/location-content'
 import { popularServices, relatedServices } from '@/lib/constants/navigation'
 import Breadcrumb from '@/components/Breadcrumb'
 import type { Service, Location as LocationType, Provider } from '@/types'
@@ -60,14 +54,26 @@ export default async function ServiceQuartierPage({
     if (dbService) {
       service = dbService
     } else {
-      const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+      const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
       if (!staticSvc) notFound()
-      service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+      service = {
+        id: '',
+        name: staticSvc.name,
+        slug: staticSvc.slug,
+        is_active: true,
+        created_at: '',
+      }
     }
   } catch {
-    const staticSvc = staticPracticeAreas.find(s => s.slug === specialtySlug)
+    const staticSvc = staticPracticeAreas.find((s) => s.slug === specialtySlug)
     if (!staticSvc) notFound()
-    service = { id: '', name: staticSvc.name, slug: staticSvc.slug, is_active: true, created_at: '' }
+    service = {
+      id: '',
+      name: staticSvc.name,
+      slug: staticSvc.slug,
+      is_active: true,
+      created_at: '',
+    }
   }
 
   // 3. Fetch providers
@@ -80,11 +86,9 @@ export default async function ServiceQuartierPage({
       ? quartierRealData.codePostal
       : undefined
   // Throw on failure so ISR keeps stale cache (prevents "disappearing attorneys" bug)
-  const providers = await getAttorneysByServiceAndLocation(
-    specialtySlug,
-    locationSlug,
-    { postalCode: arrondissementPostalCode },
-  ) as Provider[]
+  const providers = (await getAttorneysByServiceAndLocation(specialtySlug, locationSlug, {
+    postalCode: arrondissementPostalCode,
+  })) as Provider[]
 
   // 4. Generate content
   const trade = getTradeContent(specialtySlug)
@@ -116,7 +120,7 @@ export default async function ServiceQuartierPage({
 
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Home', url: '/' },
-    { name: 'Practice Areas', url: '/services' },
+    { name: 'Practice Areas', url: '/practice-areas' },
     { name: service.name, url: `/practice-areas/${specialtySlug}` },
     { name: cityData.name, url: `/practice-areas/${specialtySlug}/${locationSlug}` },
     { name: quartierName, url: `/practice-areas/${specialtySlug}/${locationSlug}/${quartierSlug}` },
@@ -125,7 +129,9 @@ export default async function ServiceQuartierPage({
   // Combined FAQ: 2 trade FAQ (hash-selected) + 3 quartier FAQ
   const combinedFaq: { question: string; answer: string }[] = []
   if (trade && trade.faq.length > 0) {
-    const tradeFaqHash = Math.abs(hashCode(`trade-faq-${specialtySlug}-${locationSlug}-${quartierSlug}`))
+    const tradeFaqHash = Math.abs(
+      hashCode(`trade-faq-${specialtySlug}-${locationSlug}-${quartierSlug}`)
+    )
     const idx1 = tradeFaqHash % trade.faq.length
     const idx2 = (tradeFaqHash + 3) % trade.faq.length
     combinedFaq.push({ question: trade.faq[idx1].q, answer: trade.faq[idx1].a })
@@ -136,21 +142,27 @@ export default async function ServiceQuartierPage({
 
   const faqSchema = combinedFaq.length > 0 ? getFAQSchema(combinedFaq) : null
 
-  const itemListSchema = providers.length > 0
-    ? getItemListSchema({
-        name: `${service.name} in ${quartierName}, ${cityData.name}`,
-        description: `List of verified ${svcLower}s in ${quartierName}, ${cityData.name}`,
-        url: `/practice-areas/${specialtySlug}/${locationSlug}/${quartierSlug}`,
-        items: providers.slice(0, 20).map((p, i) => ({
-          name: p.name,
-          url: getAttorneyUrl({ stable_id: p.stable_id, slug: p.slug, specialty: p.specialty?.name, city: p.address_city }),
-          position: i + 1,
-          image: getServiceImage(specialtySlug).src,
-          rating: p.rating_average ?? undefined,
-          reviewCount: p.review_count ?? undefined,
-        })),
-      })
-    : null
+  const itemListSchema =
+    providers.length > 0
+      ? getItemListSchema({
+          name: `${service.name} in ${quartierName}, ${cityData.name}`,
+          description: `List of verified ${svcLower}s in ${quartierName}, ${cityData.name}`,
+          url: `/practice-areas/${specialtySlug}/${locationSlug}/${quartierSlug}`,
+          items: providers.slice(0, 20).map((p, i) => ({
+            name: p.name,
+            url: getAttorneyUrl({
+              stable_id: p.stable_id,
+              slug: p.slug,
+              specialty: p.specialty?.name,
+              city: p.address_city,
+            }),
+            position: i + 1,
+            image: getServiceImage(specialtySlug).src,
+            rating: p.rating_average ?? undefined,
+            reviewCount: p.review_count ?? undefined,
+          })),
+        })
+      : null
 
   const jsonLdSchemas: Record<string, unknown>[] = [
     serviceSchema,
@@ -185,13 +197,19 @@ export default async function ServiceQuartierPage({
 
   // Other services for cross-linking — use related services map with fallback
   const relatedSlugs = relatedServices[specialtySlug] || []
-  const otherServices = relatedSlugs.length > 0
-    ? relatedSlugs.slice(0, 6).map(slug => {
-        const svc = staticPracticeAreas.find(s => s.slug === slug)
-        return svc ? { name: svc.name, slug: svc.slug } : null
-      }).filter((s): s is NonNullable<typeof s> => s !== null)
-    : popularServices.filter(s => s.slug !== specialtySlug).slice(0, 6)
-  const otherQuartiers = getNeighborhoodsByCity(locationSlug).filter(q => q.slug !== quartierSlug).slice(0, 10)
+  const otherServices =
+    relatedSlugs.length > 0
+      ? relatedSlugs
+          .slice(0, 6)
+          .map((slug) => {
+            const svc = staticPracticeAreas.find((s) => s.slug === slug)
+            return svc ? { name: svc.name, slug: svc.slug } : null
+          })
+          .filter((s): s is NonNullable<typeof s> => s !== null)
+      : popularServices.filter((s) => s.slug !== specialtySlug).slice(0, 6)
+  const otherQuartiers = getNeighborhoodsByCity(locationSlug)
+    .filter((q) => q.slug !== quartierSlug)
+    .slice(0, 10)
   const nearbyCities = getNearbyCities(locationSlug, 8)
   const { profile: _profile } = quartierContent
 
@@ -207,14 +225,16 @@ export default async function ServiceQuartierPage({
       ))}
 
       {/* Breadcrumb */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <Breadcrumb items={[
-            { label: 'Services', href: '/services' },
-            { label: service.name, href: `/practice-areas/${specialtySlug}` },
-            { label: cityData.name, href: `/practice-areas/${specialtySlug}/${locationSlug}` },
-            { label: quartierName },
-          ]} />
+      <div className="border-b bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-3">
+          <Breadcrumb
+            items={[
+              { label: 'Practice Areas', href: '/practice-areas' },
+              { label: service.name, href: `/practice-areas/${specialtySlug}` },
+              { label: cityData.name, href: `/practice-areas/${specialtySlug}/${locationSlug}` },
+              { label: quartierName },
+            ]}
+          />
         </div>
       </div>
 
@@ -226,16 +246,21 @@ export default async function ServiceQuartierPage({
         h1Text={h1Text}
       />
 
-
       {/* ─── INTERNAL LINKS ─────────────────────────────────── */}
-      <section className="py-12 bg-gray-50 border-t">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <section className="border-t bg-gray-50 py-12">
+        <div className="mx-auto max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8">
           {/* Back to city-level service page */}
           <Link
             href={`/practice-areas/${specialtySlug}/${locationSlug}`}
-            className="inline-flex items-center gap-2 px-5 py-3 bg-white hover:bg-blue-50 border border-gray-200 hover:border-blue-200 rounded-xl text-sm font-medium text-gray-700 hover:text-blue-700 transition-all"
+            className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-medium text-gray-700 transition-all hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
             All {svcLower}s in {cityData.name}
@@ -244,15 +269,15 @@ export default async function ServiceQuartierPage({
           {/* Other quartiers for this service */}
           {otherQuartiers.length > 0 && (
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">
+              <h3 className="mb-3 font-semibold text-gray-900">
                 {service.name} in Other Neighborhoods of {cityData.name}
               </h3>
               <div className="flex flex-wrap gap-2">
-                {otherQuartiers.map(q => (
+                {otherQuartiers.map((q) => (
                   <Link
                     key={q.slug}
                     href={`/practice-areas/${specialtySlug}/${locationSlug}/${q.slug}`}
-                    className="text-sm bg-white text-blue-700 px-3 py-1.5 rounded-full border border-blue-100 hover:bg-blue-50 transition-colors"
+                    className="rounded-full border border-blue-100 bg-white px-3 py-1.5 text-sm text-blue-700 transition-colors hover:bg-blue-50"
                   >
                     {q.name}
                   </Link>
@@ -264,15 +289,15 @@ export default async function ServiceQuartierPage({
           {/* Other services in this quartier */}
           {otherServices.length > 0 && (
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">
+              <h3 className="mb-3 font-semibold text-gray-900">
                 Other Services in {quartierName}, {cityData.name}
               </h3>
               <div className="flex flex-wrap gap-2">
-                {otherServices.map(s => (
+                {otherServices.map((s) => (
                   <Link
                     key={s.slug}
                     href={`/practice-areas/${s.slug}/${locationSlug}/${quartierSlug}`}
-                    className="text-sm bg-white text-gray-700 px-3 py-1.5 rounded-full border border-gray-200 hover:bg-gray-50 transition-colors"
+                    className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50"
                   >
                     {s.name}
                   </Link>
@@ -284,15 +309,13 @@ export default async function ServiceQuartierPage({
           {/* Nearby cities */}
           {nearbyCities.length > 0 && (
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">
-                {service.name} in Nearby Cities
-              </h3>
+              <h3 className="mb-3 font-semibold text-gray-900">{service.name} in Nearby Cities</h3>
               <div className="flex flex-wrap gap-2">
-                {nearbyCities.map(c => (
+                {nearbyCities.map((c) => (
                   <Link
                     key={c.slug}
                     href={`/practice-areas/${specialtySlug}/${c.slug}`}
-                    className="text-sm bg-white text-gray-700 px-3 py-1.5 rounded-full border border-gray-200 hover:bg-gray-50 transition-colors"
+                    className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50"
                   >
                     {c.name}
                   </Link>
@@ -302,7 +325,6 @@ export default async function ServiceQuartierPage({
           )}
         </div>
       </section>
-
     </>
   )
 }

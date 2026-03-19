@@ -379,11 +379,11 @@ const nextConfig = {
     return [
       { source: '/home', destination: '/', permanent: true },
       // Legacy routes
-      { source: '/browse', destination: '/services', permanent: true },
-      { source: '/map', destination: '/services', permanent: true },
-      { source: '/map-list', destination: '/services', permanent: true },
-      { source: '/search', destination: '/services', permanent: true },
-      { source: '/practice-areas/artisan/:path*', destination: '/services', permanent: true },
+      { source: '/browse', destination: '/practice-areas', permanent: true },
+      { source: '/map', destination: '/practice-areas', permanent: true },
+      { source: '/map-list', destination: '/practice-areas', permanent: true },
+      { source: '/services', destination: '/practice-areas', permanent: true },
+      { source: '/practice-areas/artisan/:path*', destination: '/practice-areas', permanent: true },
       // Legal page aliases
       { source: '/privacy-policy', destination: '/privacy', permanent: true },
       { source: '/general-terms', destination: '/terms', permanent: true },

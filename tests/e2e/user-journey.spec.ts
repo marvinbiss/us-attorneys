@@ -7,7 +7,7 @@ test.describe('User Journey - Client', () => {
     await expect(page.locator('body')).toBeVisible()
 
     // 2. Navigate to services
-    await page.goto('/services')
+    await page.goto('/practice-areas')
     await expect(page.locator('body')).toBeVisible()
 
     // 3. Select a practice area

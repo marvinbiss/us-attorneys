@@ -553,7 +553,7 @@ export default function CalendarPage() {
               <h4 className="mb-3 font-medium text-gray-900">Useful Links</h4>
               <div className="space-y-2 text-sm">
                 <Link
-                  href="/services"
+                  href="/practice-areas"
                   className="flex items-center gap-2 py-1 text-gray-600 hover:text-blue-600"
                 >
                   <Search className="h-4 w-4" />
