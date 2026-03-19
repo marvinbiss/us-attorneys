@@ -10,6 +10,16 @@
 -- SAFE TO RUN MULTIPLE TIMES: all statements are idempotent.
 -- ============================================================================
 
+-- Helper function used by RLS policies (referenced in 6+ policies below)
+CREATE OR REPLACE FUNCTION is_admin() RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM profiles
+    WHERE id = auth.uid() AND is_admin = true
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
+
 -- Required extension for booking overlap constraint (migration 415)
 CREATE EXTENSION IF NOT EXISTS btree_gist;
 
