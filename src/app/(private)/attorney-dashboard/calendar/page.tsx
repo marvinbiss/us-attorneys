@@ -136,7 +136,7 @@ export default function CalendarPage() {
       const saved = localStorage.getItem('calendar-settings')
       if (saved) {
         const parsed = JSON.parse(saved)
-        setSettings(prev => ({ ...prev, ...parsed }))
+        setSettings((prev) => ({ ...prev, ...parsed }))
       }
     } catch {
       // Ignore parse errors
@@ -162,7 +162,7 @@ export default function CalendarPage() {
 
         const plan: 'free' | 'pro' | 'premium' = subData.plan ?? 'free'
 
-        if (statsData.profile) {
+        if (statsData?.profile) {
           setProfile({
             id: statsData.profile.id,
             full_name: statsData.profile.full_name ?? '',
@@ -170,12 +170,12 @@ export default function CalendarPage() {
           })
         }
 
-        if (statsData.provider) {
+        if (statsData?.provider) {
           setProvider({
-            stable_id: statsData.provider.stable_id ?? null,
-            slug: statsData.provider.slug ?? null,
-            specialty: statsData.provider.specialty ?? null,
-            address_city: statsData.provider.address_city ?? null,
+            stable_id: statsData.provider?.stable_id ?? null,
+            slug: statsData.provider?.slug ?? null,
+            specialty: statsData.provider?.specialty ?? null,
+            address_city: statsData.provider?.address_city ?? null,
           })
         }
       } catch (err: unknown) {
@@ -188,64 +188,71 @@ export default function CalendarPage() {
   }, [])
 
   // Fetch schedule for the current month
-  const fetchSchedule = useCallback(async (year: number, month: number) => {
-    if (!profile) return
+  const fetchSchedule = useCallback(
+    async (year: number, month: number) => {
+      if (!profile) return
 
-    setIsLoadingSlots(true)
-    setError(null)
+      setIsLoadingSlots(true)
+      setError(null)
 
-    try {
-      const startDate = new Date(year, month, 1)
-      const endDate = new Date(year, month + 1, 0)
+      try {
+        const startDate = new Date(year, month, 1)
+        const endDate = new Date(year, month + 1, 0)
 
-      const response = await fetch(
-        `/api/availability?attorneyId=${profile.id}&startDate=${formatDateLocal(startDate)}&endDate=${formatDateLocal(endDate)}`
-      )
+        const response = await fetch(
+          `/api/availability?attorneyId=${profile.id}&startDate=${formatDateLocal(startDate)}&endDate=${formatDateLocal(endDate)}`
+        )
 
-      if (!response.ok) {
-        throw new Error('Error loading calendar')
-      }
-
-      const data = await response.json()
-
-      // Transform API data to DaySchedule format
-      const scheduleByDate: Record<string, TimeSlot[]> = {}
-
-      if (data.slots) {
-        for (const slot of data.slots) {
-          if (!scheduleByDate[slot.date]) {
-            scheduleByDate[slot.date] = []
-          }
-          scheduleByDate[slot.date].push({
-            id: slot.id,
-            start: slot.start_time,
-            end: slot.end_time,
-            available: slot.is_available,
-            booking: slot.booking ? {
-              id: slot.booking.id,
-              clientName: slot.booking.client_name,
-              service: slot.booking.service_description,
-              phone: slot.booking.client_phone,
-              email: slot.booking.client_email,
-              status: slot.booking.status,
-            } : undefined,
-          })
+        if (!response.ok) {
+          throw new Error('Error loading calendar')
         }
+
+        const data = await response.json()
+
+        // Transform API data to DaySchedule format
+        const scheduleByDate: Record<string, TimeSlot[]> = {}
+
+        if (data.slots) {
+          for (const slot of data.slots) {
+            if (!scheduleByDate[slot.date]) {
+              scheduleByDate[slot.date] = []
+            }
+            scheduleByDate[slot.date].push({
+              id: slot.id,
+              start: slot.start_time,
+              end: slot.end_time,
+              available: slot.is_available,
+              booking: slot.booking
+                ? {
+                    id: slot.booking.id,
+                    clientName: slot.booking.client_name,
+                    service: slot.booking.service_description,
+                    phone: slot.booking.client_phone,
+                    email: slot.booking.client_email,
+                    status: slot.booking.status,
+                  }
+                : undefined,
+            })
+          }
+        }
+
+        const scheduleArray: DaySchedule[] = Object.entries(scheduleByDate).map(
+          ([date, slots]) => ({
+            date,
+            slots: slots.sort((a, b) => a.start.localeCompare(b.start)),
+          })
+        )
+
+        setSchedule(scheduleArray)
+      } catch (err: unknown) {
+        logger.error('Error fetching schedule', err)
+        setError('Unable to load calendar')
+      } finally {
+        setIsLoadingSlots(false)
       }
-
-      const scheduleArray: DaySchedule[] = Object.entries(scheduleByDate).map(([date, slots]) => ({
-        date,
-        slots: slots.sort((a, b) => a.start.localeCompare(b.start)),
-      }))
-
-      setSchedule(scheduleArray)
-    } catch (err: unknown) {
-      logger.error('Error fetching schedule', err)
-      setError('Unable to load calendar')
-    } finally {
-      setIsLoadingSlots(false)
-    }
-  }, [profile])
+    },
+    [profile]
+  )
 
   // Fetch upcoming bookings
   const fetchUpcomingBookings = useCallback(async () => {
@@ -257,7 +264,10 @@ export default function CalendarPage() {
 
       if (data.bookings) {
         const upcoming = data.bookings
-          .filter((b: BookingEntry) => b.status === 'confirmed' && new Date(b.slot?.date ?? 0) >= new Date())
+          .filter(
+            (b: BookingEntry) =>
+              b.status === 'confirmed' && new Date(b.slot?.date ?? 0) >= new Date()
+          )
           .slice(0, 5)
         setUpcomingBookings(upcoming)
 
@@ -269,7 +279,7 @@ export default function CalendarPage() {
           return bookingDate.getMonth() === thisMonth && bookingDate.getFullYear() === thisYear
         }).length
 
-        setStats(prev => ({ ...prev, monthlyBookings }))
+        setStats((prev) => ({ ...prev, monthlyBookings }))
       }
     } catch (err: unknown) {
       logger.error('Error fetching bookings', err)
@@ -378,8 +388,18 @@ export default function CalendarPage() {
   const firstDayOfMonth = new Date(year, month, 1).getDay()
 
   const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ]
 
   const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -394,14 +414,14 @@ export default function CalendarPage() {
 
   const getScheduleForDate = (date: Date) => {
     const dateStr = formatDateLocal(date)
-    return schedule.find(s => s.date === dateStr)
+    return schedule.find((s) => s.date === dateStr)
   }
 
   // Show loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
       </div>
     )
   }
@@ -420,25 +440,27 @@ export default function CalendarPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <Breadcrumb items={[
-            { label: 'Attorney Dashboard', href: '/attorney-dashboard' },
-            { label: 'Calendar' }
-          ]} />
+      <div className="border-b bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+          <Breadcrumb
+            items={[
+              { label: 'Attorney Dashboard', href: '/attorney-dashboard' },
+              { label: 'Calendar' },
+            ]}
+          />
         </div>
       </div>
 
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">Attorney Dashboard</h1>
               <p className="text-blue-100">{profile?.full_name}</p>
             </div>
             <div className="flex items-center gap-4">
-              <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium capitalize">
+              <span className="rounded-full bg-yellow-500 px-3 py-1 text-sm font-medium capitalize text-white">
                 {profile?.subscription_plan}
               </span>
             </div>
@@ -446,58 +468,58 @@ export default function CalendarPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
+            <nav className="space-y-1 rounded-xl bg-white p-4 shadow-sm">
               <Link
                 href="/attorney-dashboard/dashboard"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-50"
               >
-                <TrendingUp className="w-5 h-5" />
+                <TrendingUp className="h-5 w-5" />
                 Dashboard
               </Link>
               <Link
                 href="/attorney-dashboard/calendar"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 text-blue-600 font-medium"
+                className="flex items-center gap-3 rounded-lg bg-blue-50 px-4 py-3 font-medium text-blue-600"
               >
-                <Calendar className="w-5 h-5" />
+                <Calendar className="h-5 w-5" />
                 Calendar
               </Link>
               <Link
                 href="/attorney-dashboard/received-cases"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-50"
               >
-                <FileText className="w-5 h-5" />
+                <FileText className="h-5 w-5" />
                 Cases
               </Link>
               <Link
                 href="/attorney-dashboard/messages"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-50"
               >
-                <MessageSquare className="w-5 h-5" />
+                <MessageSquare className="h-5 w-5" />
                 Messages
               </Link>
               <Link
                 href="/attorney-dashboard/reviews-received"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-50"
               >
-                <Star className="w-5 h-5" />
+                <Star className="h-5 w-5" />
                 Reviews
               </Link>
               <Link
                 href="/attorney-dashboard/profile"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-50"
               >
-                <Settings className="w-5 h-5" />
+                <Settings className="h-5 w-5" />
                 My Profile
               </Link>
               <Link
                 href="/attorney-dashboard/subscription"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-50"
               >
-                <Euro className="w-5 h-5" />
+                <Euro className="h-5 w-5" />
                 My Account
               </Link>
               <LogoutButton />
@@ -505,7 +527,7 @@ export default function CalendarPage() {
 
             {/* View public profile */}
             {provider && (
-              <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
+              <div className="mt-4 rounded-xl bg-white p-4 shadow-sm">
                 <Link
                   href={getAttorneyUrl({
                     stable_id: provider.stable_id,
@@ -513,9 +535,9 @@ export default function CalendarPage() {
                     specialty: provider.specialty,
                     city: provider.address_city,
                   })}
-                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                  className="flex items-center gap-2 font-medium text-blue-600 hover:text-blue-700"
                 >
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="h-4 w-4" />
                   View my public profile
                 </Link>
               </div>
@@ -527,15 +549,21 @@ export default function CalendarPage() {
             </div>
 
             {/* Additional links */}
-            <div className="bg-white rounded-xl shadow-sm p-4 mt-4">
-              <h4 className="font-medium text-gray-900 mb-3">Useful Links</h4>
+            <div className="mt-4 rounded-xl bg-white p-4 shadow-sm">
+              <h4 className="mb-3 font-medium text-gray-900">Useful Links</h4>
               <div className="space-y-2 text-sm">
-                <Link href="/services" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
-                  <Search className="w-4 h-4" />
+                <Link
+                  href="/services"
+                  className="flex items-center gap-2 py-1 text-gray-600 hover:text-blue-600"
+                >
+                  <Search className="h-4 w-4" />
                   Browse Services
                 </Link>
-                <Link href="/search" className="flex items-center gap-2 text-gray-600 hover:text-blue-600 py-1">
-                  <Search className="w-4 h-4" />
+                <Link
+                  href="/search"
+                  className="flex items-center gap-2 py-1 text-gray-600 hover:text-blue-600"
+                >
+                  <Search className="h-4 w-4" />
                   Find an Attorney
                 </Link>
               </div>
@@ -543,23 +571,21 @@ export default function CalendarPage() {
           </div>
 
           {/* Main content */}
-          <div className="lg:col-span-3 space-y-6">
+          <div className="space-y-6 lg:col-span-3">
             {/* Settings saved toast */}
             {settingsSaved && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3">
-                <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
-                <p className="text-sm text-green-700 font-medium">Settings saved successfully</p>
+              <div className="flex items-center gap-3 rounded-lg border border-green-200 bg-green-50 p-4">
+                <Check className="h-5 w-5 flex-shrink-0 text-green-600" />
+                <p className="text-sm font-medium text-green-700">Settings saved successfully</p>
               </div>
             )}
 
             {/* Calendar Header */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-6">
+            <div className="rounded-xl bg-white p-6 shadow-sm">
+              <div className="mb-6 flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <h2 className="text-xl font-bold text-gray-900">
-                    My Calendar
-                  </h2>
-                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                  <h2 className="text-xl font-bold text-gray-900">My Calendar</h2>
+                  <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
                     Online booking enabled
                   </span>
                 </div>
@@ -567,34 +593,28 @@ export default function CalendarPage() {
                   onClick={() => setShowSettingsModal(true)}
                   className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
                 >
-                  <Settings className="w-5 h-5" />
+                  <Settings className="h-5 w-5" />
                   Settings
                 </button>
               </div>
 
               {/* Month navigation */}
-              <div className="flex items-center justify-between mb-6">
-                <button
-                  onClick={previousMonth}
-                  className="p-2 hover:bg-gray-100 rounded-lg"
-                >
-                  <ChevronLeft className="w-5 h-5" />
+              <div className="mb-6 flex items-center justify-between">
+                <button onClick={previousMonth} className="rounded-lg p-2 hover:bg-gray-100">
+                  <ChevronLeft className="h-5 w-5" />
                 </button>
                 <h3 className="text-lg font-semibold text-gray-900">
                   {monthNames[month]} {year}
                 </h3>
-                <button
-                  onClick={nextMonth}
-                  className="p-2 hover:bg-gray-100 rounded-lg"
-                >
-                  <ChevronRight className="w-5 h-5" />
+                <button onClick={nextMonth} className="rounded-lg p-2 hover:bg-gray-100">
+                  <ChevronRight className="h-5 w-5" />
                 </button>
               </div>
 
               {/* Slots loading indicator */}
               {isLoadingSlots && (
                 <div className="flex items-center justify-center py-4">
-                  <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+                  <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
                   <span className="ml-2 text-sm text-gray-500">Loading time slots...</span>
                 </div>
               )}
@@ -602,22 +622,27 @@ export default function CalendarPage() {
               {/* Calendar Grid */}
               <div className="grid grid-cols-7 gap-px sm:gap-1">
                 {/* Day headers */}
-                {dayNames.map(day => (
-                  <div key={day} className="text-center text-xs sm:text-sm font-medium text-gray-500 py-1 sm:py-2">
+                {dayNames.map((day) => (
+                  <div
+                    key={day}
+                    className="py-1 text-center text-xs font-medium text-gray-500 sm:py-2 sm:text-sm"
+                  >
                     {day}
                   </div>
                 ))}
 
                 {/* Empty cells for days before the first of the month */}
-                {Array.from({ length: firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1 }).map((_, i) => (
-                  <div key={`empty-${i}`} className="aspect-square" />
-                ))}
+                {Array.from({ length: firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1 }).map(
+                  (_, i) => (
+                    <div key={`empty-${i}`} className="aspect-square" />
+                  )
+                )}
 
                 {/* Days of the month */}
-                {days.map(date => {
+                {days.map((date) => {
                   const daySchedule = getScheduleForDate(date)
-                  const hasBookings = daySchedule?.slots.some(s => !s.available)
-                  const hasAvailable = daySchedule?.slots.some(s => s.available)
+                  const hasBookings = daySchedule?.slots.some((s) => !s.available)
+                  const hasAvailable = daySchedule?.slots.some((s) => s.available)
                   const past = isPast(date)
 
                   return (
@@ -625,26 +650,34 @@ export default function CalendarPage() {
                       key={date.toISOString()}
                       onClick={() => !past && setSelectedDate(date)}
                       disabled={past}
-                      className={`aspect-square p-1 rounded-lg border-2 transition-all ${
+                      className={`aspect-square rounded-lg border-2 p-1 transition-all ${
                         selectedDate?.toDateString() === date.toDateString()
                           ? 'border-blue-500 bg-blue-50'
                           : isToday(date)
-                          ? 'border-blue-300 bg-blue-50'
-                          : 'border-transparent hover:bg-gray-50'
-                      } ${past ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}`}
+                            ? 'border-blue-300 bg-blue-50'
+                            : 'border-transparent hover:bg-gray-50'
+                      } ${past ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'}`}
                     >
-                      <div className={`text-sm font-medium ${
-                        isToday(date) ? 'text-blue-600' : 'text-gray-900'
-                      }`}>
+                      <div
+                        className={`text-sm font-medium ${
+                          isToday(date) ? 'text-blue-600' : 'text-gray-900'
+                        }`}
+                      >
                         {date.getDate()}
                       </div>
                       {!past && (
-                        <div className="flex justify-center gap-0.5 mt-1">
+                        <div className="mt-1 flex justify-center gap-0.5">
                           {hasBookings && (
-                            <div className="w-1.5 h-1.5 rounded-full bg-red-500" title="Confirmed appointments" />
+                            <div
+                              className="h-1.5 w-1.5 rounded-full bg-red-500"
+                              title="Confirmed appointments"
+                            />
                           )}
                           {hasAvailable && (
-                            <div className="w-1.5 h-1.5 rounded-full bg-green-500" title="Available slots" />
+                            <div
+                              className="h-1.5 w-1.5 rounded-full bg-green-500"
+                              title="Available slots"
+                            />
                           )}
                         </div>
                       )}
@@ -654,13 +687,13 @@ export default function CalendarPage() {
               </div>
 
               {/* Legend */}
-              <div className="flex flex-wrap items-center gap-3 sm:gap-6 mt-4 pt-4 border-t text-sm">
+              <div className="mt-4 flex flex-wrap items-center gap-3 border-t pt-4 text-sm sm:gap-6">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                  <div className="h-3 w-3 rounded-full bg-green-500" />
                   <span className="text-gray-600">Available</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500" />
+                  <div className="h-3 w-3 rounded-full bg-red-500" />
                   <span className="text-gray-600">Booked</span>
                 </div>
               </div>
@@ -668,48 +701,53 @@ export default function CalendarPage() {
 
             {/* Selected Day Detail */}
             {selectedDate && (
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <div className="flex items-center justify-between mb-6">
+              <div className="rounded-xl bg-white p-6 shadow-sm">
+                <div className="mb-6 flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-gray-900">
                     {selectedDate.toLocaleDateString('en-US', {
                       weekday: 'long',
                       month: 'long',
                       day: 'numeric',
-                      year: 'numeric'
+                      year: 'numeric',
                     })}
                   </h3>
                   <button
                     onClick={() => setShowSlotModal(true)}
-                    className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                    className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
                   >
-                    <Plus className="w-4 h-4" />
+                    <Plus className="h-4 w-4" />
                     Add Time Slot
                   </button>
                 </div>
 
                 <div className="space-y-3">
-                  {(getScheduleForDate(selectedDate)?.slots || defaultSlots.map((s, i) => ({
-                    id: `default-${i}`,
-                    ...s,
-                    available: true as const,
-                    booking: undefined,
-                  }))).map(slot => (
+                  {(
+                    getScheduleForDate(selectedDate)?.slots ||
+                    defaultSlots.map((s, i) => ({
+                      id: `default-${i}`,
+                      ...s,
+                      available: true as const,
+                      booking: undefined,
+                    }))
+                  ).map((slot) => (
                     <div
                       key={slot.id}
-                      className={`flex items-center justify-between p-4 rounded-lg border-2 ${
+                      className={`flex items-center justify-between rounded-lg border-2 p-4 ${
                         slot.available
                           ? 'border-green-200 bg-green-50'
                           : 'border-gray-200 bg-gray-50'
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <Clock className={`w-5 h-5 ${slot.available ? 'text-green-600' : 'text-gray-400'}`} />
+                        <Clock
+                          className={`h-5 w-5 ${slot.available ? 'text-green-600' : 'text-gray-400'}`}
+                        />
                         <div>
                           <div className="font-medium text-gray-900">
                             {slot.start} - {slot.end}
                           </div>
                           {'booking' in slot && slot.booking && (
-                            <div className="text-sm text-gray-500 mt-1">
+                            <div className="mt-1 text-sm text-gray-500">
                               <span className="font-medium">{slot.booking.clientName}</span>
                               {' - '}
                               {slot.booking.service}
@@ -723,22 +761,22 @@ export default function CalendarPage() {
                       <div className="flex items-center gap-2">
                         {slot.available ? (
                           <>
-                            <span className="text-green-600 text-sm font-medium">Available</span>
+                            <span className="text-sm font-medium text-green-600">Available</span>
                             <button
                               onClick={() => handleDeleteSlot(slot.id)}
-                              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg"
+                              className="rounded-lg p-2 text-gray-400 hover:bg-red-50 hover:text-red-500"
                               title="Delete this slot"
                             >
-                              <X className="w-4 h-4" />
+                              <X className="h-4 w-4" />
                             </button>
                           </>
                         ) : (
                           <>
-                            <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                            <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
                               Booked
                             </span>
-                            <button className="p-2 text-gray-400 hover:text-gray-600 rounded-lg">
-                              <Users className="w-4 h-4" />
+                            <button className="rounded-lg p-2 text-gray-400 hover:text-gray-600">
+                              <Users className="h-4 w-4" />
                             </button>
                           </>
                         )}
@@ -750,40 +788,33 @@ export default function CalendarPage() {
             )}
 
             {/* Upcoming bookings */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Upcoming Appointments
-              </h3>
+            <div className="rounded-xl bg-white p-6 shadow-sm">
+              <h3 className="mb-4 text-lg font-semibold text-gray-900">Upcoming Appointments</h3>
               <div className="space-y-3">
                 {upcomingBookings.length === 0 ? (
-                  <p className="text-gray-500 text-center py-4">
-                    No upcoming appointments
-                  </p>
+                  <p className="py-4 text-center text-gray-500">No upcoming appointments</p>
                 ) : (
-                  upcomingBookings.map(booking => (
+                  upcomingBookings.map((booking) => (
                     <div
                       key={booking.id}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                      className="flex items-center justify-between rounded-lg bg-gray-50 p-4"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                          <Calendar className="w-6 h-6 text-blue-600" />
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
+                          <Calendar className="h-6 w-6 text-blue-600" />
                         </div>
                         <div>
-                          <div className="font-medium text-gray-900">
-                            {booking.client_name}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {booking.service_description}
-                          </div>
+                          <div className="font-medium text-gray-900">{booking.client_name}</div>
+                          <div className="text-sm text-gray-500">{booking.service_description}</div>
                         </div>
                       </div>
                       <div className="text-right">
                         <div className="font-medium text-gray-900">
-                          {booking.slot?.date && new Date(booking.slot.date).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric'
-                          })}
+                          {booking.slot?.date &&
+                            new Date(booking.slot.date).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                            })}
                         </div>
                         <div className="text-sm text-gray-500">
                           {booking.slot?.start_time} - {booking.slot?.end_time}
@@ -796,17 +827,23 @@ export default function CalendarPage() {
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-              <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.monthlyBookings}</div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+              <div className="rounded-xl bg-white p-4 text-center shadow-sm sm:p-6">
+                <div className="text-2xl font-bold text-blue-600 sm:text-3xl">
+                  {stats.monthlyBookings}
+                </div>
                 <div className="text-sm text-gray-500">Bookings this month</div>
               </div>
-              <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-green-600">{stats.fillRate}%</div>
+              <div className="rounded-xl bg-white p-4 text-center shadow-sm sm:p-6">
+                <div className="text-2xl font-bold text-green-600 sm:text-3xl">
+                  {stats.fillRate}%
+                </div>
                 <div className="text-sm text-gray-500">Fill rate</div>
               </div>
-              <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.avgRating || '-'}</div>
+              <div className="rounded-xl bg-white p-4 text-center shadow-sm sm:p-6">
+                <div className="text-2xl font-bold text-yellow-600 sm:text-3xl">
+                  {stats.avgRating || '-'}
+                </div>
                 <div className="text-sm text-gray-500">Average rating</div>
               </div>
             </div>
@@ -816,48 +853,42 @@ export default function CalendarPage() {
 
       {/* Add Slot Modal */}
       {showSlotModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Add Time Slot
-              </h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="mx-4 w-full max-w-md rounded-xl bg-white p-6">
+            <div className="mb-6 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-900">Add Time Slot</h3>
               <button
                 onClick={() => setShowSlotModal(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
+                className="rounded-lg p-2 hover:bg-gray-100"
               >
-                <X className="w-5 h-5" />
+                <X className="h-5 w-5" />
               </button>
             </div>
             {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
-                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <div className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3">
+                <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" />
                 <p className="text-sm text-red-700">{error}</p>
               </div>
             )}
             <form onSubmit={handleAddSlot} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Start Time
-                  </label>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">Start Time</label>
                   <input
                     type="time"
                     value={newSlotStart}
                     onChange={(e) => setNewSlotStart(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    End Time
-                  </label>
+                  <label className="mb-1 block text-sm font-medium text-gray-700">End Time</label>
                   <input
                     type="time"
                     value={newSlotEnd}
                     onChange={(e) => setNewSlotEnd(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -877,7 +908,7 @@ export default function CalendarPage() {
                 <button
                   type="button"
                   onClick={() => setShowSlotModal(false)}
-                  className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50"
+                  className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50"
                   disabled={isSaving}
                 >
                   Cancel
@@ -885,9 +916,9 @@ export default function CalendarPage() {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
                 >
-                  {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {isSaving && <Loader2 className="h-4 w-4 animate-spin" />}
                   Add
                 </button>
               </div>
@@ -898,42 +929,47 @@ export default function CalendarPage() {
 
       {/* Settings Modal */}
       {showSettingsModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 max-w-[95vw] sm:max-w-lg w-full mx-4">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Calendar Settings
-              </h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="mx-4 w-full max-w-[95vw] rounded-xl bg-white p-6 sm:max-w-lg">
+            <div className="mb-6 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-900">Calendar Settings</h3>
               <button
                 onClick={() => setShowSettingsModal(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg"
+                className="rounded-lg p-2 hover:bg-gray-100"
               >
-                <X className="w-5 h-5" />
+                <X className="h-5 w-5" />
               </button>
             </div>
             <div className="space-y-6">
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Default Slots</h4>
+                <h4 className="mb-3 font-medium text-gray-900">Default Slots</h4>
                 <div className="space-y-2">
                   {defaultSlots.map((slot, i) => (
-                    <div key={i} className="flex items-center justify-between bg-gray-50 px-4 py-2 rounded-lg">
-                      <span className="text-gray-700">{slot.start} - {slot.end}</span>
+                    <div
+                      key={i}
+                      className="flex items-center justify-between rounded-lg bg-gray-50 px-4 py-2"
+                    >
+                      <span className="text-gray-700">
+                        {slot.start} - {slot.end}
+                      </span>
                       <button className="text-red-500 hover:text-red-700">
-                        <X className="w-4 h-4" />
+                        <X className="h-4 w-4" />
                       </button>
                     </div>
                   ))}
                 </div>
               </div>
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Notifications</h4>
+                <h4 className="mb-3 font-medium text-gray-900">Notifications</h4>
                 <div className="space-y-3">
                   <label className="flex items-center justify-between">
                     <span className="text-gray-700">Email for new bookings</span>
                     <input
                       type="checkbox"
                       checked={settings.emailNotifications}
-                      onChange={(e) => setSettings({ ...settings, emailNotifications: e.target.checked })}
+                      onChange={(e) =>
+                        setSettings({ ...settings, emailNotifications: e.target.checked })
+                      }
                       className="rounded border-gray-300"
                     />
                   </label>
@@ -952,27 +988,27 @@ export default function CalendarPage() {
                       type="checkbox"
                       checked={false}
                       disabled
-                      className="rounded border-gray-300 cursor-not-allowed"
+                      className="cursor-not-allowed rounded border-gray-300"
                     />
                   </div>
                 </div>
               </div>
               <div>
-                <h4 className="font-medium text-gray-900 mb-3">Service Area</h4>
+                <h4 className="mb-3 font-medium text-gray-900">Service Area</h4>
                 <input
                   type="text"
                   placeholder="E.g.: Local area (20 miles)"
                   value={settings.serviceRadius}
                   onChange={(e) => setSettings({ ...settings, serviceRadius: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-2"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2"
                 />
               </div>
               <button
                 onClick={handleSaveSettings}
                 disabled={isSaving}
-                className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
               >
-                {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
+                {isSaving && <Loader2 className="h-4 w-4 animate-spin" />}
                 Save Settings
               </button>
             </div>
