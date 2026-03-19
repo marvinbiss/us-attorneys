@@ -6,16 +6,13 @@
  */
 
 import { NextRequest } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { signUpSchema } from '@/lib/validations/schemas'
 import { withErrorHandler, RateLimitError, ApiError } from '@/lib/api/errors'
 import { apiCreated } from '@/lib/api/response'
 import { validateBody } from '@/lib/api/validation'
 import { logger } from '@/lib/logger'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 export const POST = withErrorHandler(async (request: NextRequest) => {
   // Rate limiting — auth category (5/min, fail-close)
@@ -24,12 +21,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     throw new RateLimitError(Math.ceil((rl.reset - Date.now()) / 1000))
   }
 
-  // Validate environment
-  if (!supabaseUrl || !supabaseServiceKey) {
-    throw new ApiError(500, 'INTERNAL_ERROR', 'Missing server configuration')
-  }
-
-  const supabase = createClient(supabaseUrl, supabaseServiceKey)
+  const supabase = createAdminClient()
 
   // Parse and validate request body
   const { email, password, firstName, lastName, phone } = await validateBody(request, signUpSchema)
@@ -74,7 +66,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
     id: authData.user.id,
     email: email.toLowerCase(),
     full_name: `${firstName} ${lastName}`.trim(),
-    phone_e164: phone || null,
+    phone: phone || null,
     role: 'user',
     created_at: new Date().toISOString(),
   })
