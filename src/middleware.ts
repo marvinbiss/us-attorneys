@@ -73,12 +73,15 @@ async function checkSupabaseHealth(): Promise<boolean> {
 // Content-Security-Policy — pre-computed parts (only nonce changes per request)
 // ---------------------------------------------------------------------------
 
-/** Build CSP string. In development, adds 'unsafe-eval' for Next.js HMR/Fast Refresh. */
-function buildCSP(nonce: string): string {
+/**
+ * Build CSP string.
+ * Uses 'self' + explicit allowlist (no strict-dynamic) because Next.js injects
+ * inline <script> tags without nonce attributes during SSR/SSG.  strict-dynamic
+ * would block those scripts and kill all client-side interactivity.
+ */
+function buildCSP(_nonce: string): string {
   const scriptSrc = [
     "'self'",
-    `'nonce-${nonce}'`,
-    "'strict-dynamic'",
     'https://js.stripe.com',
     'https://www.googletagmanager.com',
     'https://www.google-analytics.com',
@@ -86,13 +89,13 @@ function buildCSP(nonce: string): string {
     'https://www.googleadservices.com',
     'https://connect.facebook.net',
     'https://t.contentsquare.net',
-    ...(IS_DEV ? ["'unsafe-eval'"] : []),
+    ...(IS_DEV ? ["'unsafe-inline'", "'unsafe-eval'"] : []),
   ].join(' ')
 
   return [
     "default-src 'self'",
     `script-src ${scriptSrc}`,
-    `style-src 'self' 'nonce-${nonce}' 'unsafe-inline' https://fonts.googleapis.com`,
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com data:",
     "img-src 'self' data: blob: https: http:",
     "connect-src 'self' https://*.supabase.co https://api.stripe.com wss://*.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.sentry.io https://connect.facebook.net https://t.contentsquare.net https://nominatim.openstreetmap.org https://*.tile.openstreetmap.org" +
