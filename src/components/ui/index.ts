@@ -4,8 +4,8 @@
  */
 
 // --- Core Form Elements ---
-export { default as Button } from './button'
-export type { ButtonProps } from './button'
+export { default as Button } from './Button'
+export type { ButtonProps } from './Button'
 
 export { default as Input } from './Input'
 export type { InputProps } from './Input'
