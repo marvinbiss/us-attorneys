@@ -6,10 +6,20 @@ import { logger } from '@/lib/logger'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
-  FileText, ArrowLeft,
-  User, Mail, Phone, Lock, Bell, Shield, Trash2, Download,
-  Globe, Palette
+  FileText,
+  ArrowLeft,
+  User,
+  Mail,
+  Phone,
+  Lock,
+  Bell,
+  Shield,
+  Trash2,
+  Download,
+  Globe,
+  Palette,
 } from 'lucide-react'
+import { createBrowserClient } from '@supabase/ssr'
 import usePushNotifications from '@/hooks/usePushNotifications'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
@@ -76,17 +86,30 @@ export default function ClientSettingsPage() {
     currency: 'USD',
   })
 
-  const [activeTab, setActiveTab] = useState<'profile' | 'notifications' | 'privacy' | 'display' | 'data'>('profile')
+  const [activeTab, setActiveTab] = useState<
+    'profile' | 'notifications' | 'privacy' | 'display' | 'data'
+  >('profile')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [deleteConfirmText, setDeleteConfirmText] = useState('')
   const [deletePassword, setDeletePassword] = useState('')
   const [deleteReason, setDeleteReason] = useState('')
-  const [deletionStatus, setDeletionStatus] = useState<{ status: string; scheduled_deletion_at?: string } | null>(null)
+  const [deletionStatus, setDeletionStatus] = useState<{
+    status: string
+    scheduled_deletion_at?: string
+  } | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [userId, setUserId] = useState<string | null>(null)
   const [isExporting, setIsExporting] = useState(false)
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
+  const [passwordMessage, setPasswordMessage] = useState<{
+    type: 'success' | 'error'
+    text: string
+  } | null>(null)
 
   const pushNotifications = usePushNotifications(userId)
 
@@ -137,7 +160,7 @@ export default function ClientSettingsPage() {
           const nameParts = (profileData.profile.full_name || '').split(' ')
           const firstName = nameParts[0] || ''
           const lastName = nameParts.slice(1).join(' ')
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
             firstName,
             lastName,
@@ -196,7 +219,8 @@ export default function ClientSettingsPage() {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          full_name: [formData.firstName, formData.lastName].filter(Boolean).join(' ').trim() || undefined,
+          full_name:
+            [formData.firstName, formData.lastName].filter(Boolean).join(' ').trim() || undefined,
           phone: formData.telephone || undefined,
         }),
       })
@@ -209,6 +233,62 @@ export default function ClientSettingsPage() {
       logger.error('Failed to update profile', error)
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setPasswordMessage(null)
+
+    if (!currentPassword) {
+      setPasswordMessage({ type: 'error', text: 'Current password is required' })
+      return
+    }
+    if (newPassword.length < 8) {
+      setPasswordMessage({ type: 'error', text: 'New password must be at least 8 characters' })
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordMessage({ type: 'error', text: 'Passwords do not match' })
+      return
+    }
+
+    setIsChangingPassword(true)
+    try {
+      // Verify current password by attempting sign-in
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
+      const supabase = createBrowserClient(supabaseUrl, supabaseKey)
+
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: currentPassword,
+      })
+
+      if (signInError) {
+        setPasswordMessage({ type: 'error', text: 'Current password is incorrect' })
+        return
+      }
+
+      // Update to new password
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword,
+      })
+
+      if (updateError) {
+        setPasswordMessage({ type: 'error', text: updateError.message })
+        return
+      }
+
+      setPasswordMessage({ type: 'success', text: 'Password updated successfully' })
+      setCurrentPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+    } catch (error: unknown) {
+      logger.error('Password change failed', error)
+      setPasswordMessage({ type: 'error', text: 'An unexpected error occurred' })
+    } finally {
+      setIsChangingPassword(false)
     }
   }
 
@@ -310,19 +390,19 @@ export default function ClientSettingsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="border-b bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <Breadcrumb
             items={[
               { label: 'Client Dashboard', href: '/client-dashboard' },
-              { label: 'Settings' }
+              { label: 'Settings' },
             ]}
             className="mb-4"
           />
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href="/client-dashboard/my-cases" className="text-gray-600 hover:text-gray-900">
-                <ArrowLeft className="w-5 h-5" />
+                <ArrowLeft className="h-5 w-5" />
               </Link>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
@@ -330,7 +410,7 @@ export default function ClientSettingsPage() {
               </div>
             </div>
             {saveSuccess && (
-              <span className="text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full">
+              <span className="rounded-full bg-green-50 px-3 py-1 text-sm text-green-600">
                 Saved
               </span>
             )}
@@ -338,31 +418,31 @@ export default function ClientSettingsPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-4 gap-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="grid gap-8 lg:grid-cols-4">
           {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-4">
-            <nav className="bg-white rounded-xl shadow-sm p-4 space-y-1">
+          <div className="space-y-4 lg:col-span-1">
+            <nav className="space-y-1 rounded-xl bg-white p-4 shadow-sm">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg w-full transition-colors ${
+                  className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 transition-colors ${
                     activeTab === tab.id
-                      ? 'bg-blue-50 text-blue-600 font-medium'
+                      ? 'bg-blue-50 font-medium text-blue-600'
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <tab.icon className="w-5 h-5" />
+                  <tab.icon className="h-5 w-5" />
                   {tab.label}
                 </button>
               ))}
               <hr className="my-2" />
               <Link
                 href="/client-dashboard/my-cases"
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-gray-700 hover:bg-gray-50"
               >
-                <FileText className="w-5 h-5" />
+                <FileText className="h-5 w-5" />
                 My Cases
               </Link>
               <LogoutButton />
@@ -383,113 +463,145 @@ export default function ClientSettingsPage() {
                 {/* Profile Tab */}
                 {activeTab === 'profile' && (
                   <>
-                    <div className="bg-white rounded-xl shadow-sm p-6">
-                      <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
-                        <User className="w-5 h-5" />
+                    <div className="rounded-xl bg-white p-6 shadow-sm">
+                      <h2 className="mb-6 flex items-center gap-2 text-lg font-semibold text-gray-900">
+                        <User className="h-5 w-5" />
                         Personal Information
                       </h2>
                       <form onSubmit={handleProfileSubmit} className="space-y-6">
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div className="grid gap-6 md:grid-cols-2">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="mb-2 block text-sm font-medium text-gray-700">
                               First Name
                             </label>
                             <input
                               type="text"
                               value={formData.firstName}
-                              onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                              onChange={(e) =>
+                                setFormData({ ...formData, firstName: e.target.value })
+                              }
+                              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500"
                             />
                           </div>
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="mb-2 block text-sm font-medium text-gray-700">
                               Last Name
                             </label>
                             <input
                               type="text"
                               value={formData.lastName}
-                              onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                              onChange={(e) =>
+                                setFormData({ ...formData, lastName: e.target.value })
+                              }
+                              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500"
                             />
                           </div>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            <Mail className="w-4 h-4 inline mr-2" />
+                          <label className="mb-2 block text-sm font-medium text-gray-700">
+                            <Mail className="mr-2 inline h-4 w-4" />
                             Email
                           </label>
                           <input
                             type="email"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            <Phone className="w-4 h-4 inline mr-2" />
+                          <label className="mb-2 block text-sm font-medium text-gray-700">
+                            <Phone className="mr-2 inline h-4 w-4" />
                             Phone
                           </label>
                           <input
                             type="tel"
                             value={formData.telephone}
-                            onChange={(e) => setFormData({ ...formData, telephone: e.target.value })}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            onChange={(e) =>
+                              setFormData({ ...formData, telephone: e.target.value })
+                            }
+                            className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500"
                           />
                         </div>
                         <button
                           type="submit"
                           disabled={isSaving}
-                          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                          className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                         >
                           {isSaving ? 'Saving...' : 'Save Changes'}
                         </button>
                       </form>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-sm p-6">
-                      <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
-                        <Lock className="w-5 h-5" />
+                    <div className="rounded-xl bg-white p-6 shadow-sm">
+                      <h2 className="mb-6 flex items-center gap-2 text-lg font-semibold text-gray-900">
+                        <Lock className="h-5 w-5" />
                         Password
                       </h2>
-                      <form className="space-y-6">
+                      <form onSubmit={handlePasswordChange} className="space-y-6">
+                        {passwordMessage && (
+                          <div
+                            className={`rounded-lg p-3 text-sm ${
+                              passwordMessage.type === 'success'
+                                ? 'border border-green-200 bg-green-50 text-green-700'
+                                : 'border border-red-200 bg-red-50 text-red-700'
+                            }`}
+                          >
+                            {passwordMessage.text}
+                          </div>
+                        )}
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                          <label className="mb-2 block text-sm font-medium text-gray-700">
                             Current Password
                           </label>
                           <input
                             type="password"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500"
                             placeholder="********"
+                            disabled={isChangingPassword}
                           />
                         </div>
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div className="grid gap-6 md:grid-cols-2">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="mb-2 block text-sm font-medium text-gray-700">
                               New Password
                             </label>
                             <input
                               type="password"
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                              value={newPassword}
+                              onChange={(e) => setNewPassword(e.target.value)}
+                              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500"
                               placeholder="********"
+                              disabled={isChangingPassword}
                             />
                           </div>
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="mb-2 block text-sm font-medium text-gray-700">
                               Confirm Password
                             </label>
                             <input
                               type="password"
-                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                              value={confirmPassword}
+                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500"
                               placeholder="********"
+                              disabled={isChangingPassword}
                             />
                           </div>
                         </div>
                         <button
                           type="submit"
-                          className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                          disabled={
+                            isChangingPassword ||
+                            !currentPassword ||
+                            !newPassword ||
+                            !confirmPassword
+                          }
+                          className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                         >
-                          Change Password
+                          {isChangingPassword ? 'Changing...' : 'Change Password'}
                         </button>
                       </form>
                     </div>
@@ -498,9 +610,9 @@ export default function ClientSettingsPage() {
 
                 {/* Notifications Tab */}
                 {activeTab === 'notifications' && (
-                  <div className="bg-white rounded-xl shadow-sm p-6 space-y-8">
+                  <div className="space-y-8 rounded-xl bg-white p-6 shadow-sm">
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                      <h2 className="mb-4 text-lg font-semibold text-gray-900">
                         Email Notifications
                       </h2>
                       <div className="space-y-4">
@@ -509,7 +621,10 @@ export default function ClientSettingsPage() {
                           description="Receive a confirmation email for each booking"
                           checked={notifications.email_booking_confirmation}
                           onChange={(checked) =>
-                            setNotifications({ ...notifications, email_booking_confirmation: checked })
+                            setNotifications({
+                              ...notifications,
+                              email_booking_confirmation: checked,
+                            })
                           }
                         />
                         <ToggleSetting
@@ -542,7 +657,7 @@ export default function ClientSettingsPage() {
                     <hr />
 
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                      <h2 className="mb-4 text-lg font-semibold text-gray-900">
                         Push Notifications
                       </h2>
                       {!pushNotifications.isSupported ? (
@@ -565,7 +680,10 @@ export default function ClientSettingsPage() {
                                 description="Confirmations, changes, and reminders"
                                 checked={notifications.push_booking_updates}
                                 onChange={(checked) =>
-                                  setNotifications({ ...notifications, push_booking_updates: checked })
+                                  setNotifications({
+                                    ...notifications,
+                                    push_booking_updates: checked,
+                                  })
                                 }
                               />
                               <ToggleSetting
@@ -593,7 +711,7 @@ export default function ClientSettingsPage() {
                     <hr />
 
                     <div>
-                      <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                      <h2 className="mb-4 text-lg font-semibold text-gray-900">
                         SMS Notifications
                       </h2>
                       <div className="space-y-4">
@@ -619,7 +737,7 @@ export default function ClientSettingsPage() {
                     <button
                       onClick={savePreferences}
                       disabled={isSaving}
-                      className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                      className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                     >
                       {isSaving ? 'Saving...' : 'Save'}
                     </button>
@@ -628,18 +746,14 @@ export default function ClientSettingsPage() {
 
                 {/* Privacy Tab */}
                 {activeTab === 'privacy' && (
-                  <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
-                    <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                      Privacy Settings
-                    </h2>
+                  <div className="space-y-6 rounded-xl bg-white p-6 shadow-sm">
+                    <h2 className="mb-4 text-lg font-semibold text-gray-900">Privacy Settings</h2>
                     <div className="space-y-4">
                       <ToggleSetting
                         label="Public Profile"
                         description="Attorneys can see your profile"
                         checked={privacy.profile_public}
-                        onChange={(checked) =>
-                          setPrivacy({ ...privacy, profile_public: checked })
-                        }
+                        onChange={(checked) => setPrivacy({ ...privacy, profile_public: checked })}
                       />
                       <ToggleSetting
                         label="Online Status Visible"
@@ -653,16 +767,14 @@ export default function ClientSettingsPage() {
                         label="Allow Reviews"
                         description="Attorneys can leave reviews about you"
                         checked={privacy.allow_reviews}
-                        onChange={(checked) =>
-                          setPrivacy({ ...privacy, allow_reviews: checked })
-                        }
+                        onChange={(checked) => setPrivacy({ ...privacy, allow_reviews: checked })}
                       />
                     </div>
 
                     <button
                       onClick={savePreferences}
                       disabled={isSaving}
-                      className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                      className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                     >
                       {isSaving ? 'Saving...' : 'Save'}
                     </button>
@@ -671,34 +783,28 @@ export default function ClientSettingsPage() {
 
                 {/* Display Tab */}
                 {activeTab === 'display' && (
-                  <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
-                    <h2 className="text-lg font-semibold text-gray-900 mb-4">
+                  <div className="space-y-6 rounded-xl bg-white p-6 shadow-sm">
+                    <h2 className="mb-4 text-lg font-semibold text-gray-900">
                       Display Preferences
                     </h2>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        <Globe className="w-4 h-4 inline mr-2" />
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
+                        <Globe className="mr-2 inline h-4 w-4" />
                         Language
                       </label>
                       <select
                         value={display.language}
-                        onChange={(e) =>
-                          setDisplay({ ...display, language: e.target.value })
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        onChange={(e) => setDisplay({ ...display, language: e.target.value })}
+                        className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500"
                       >
-                        <option value="fr">French</option>
                         <option value="en">English</option>
                         <option value="es">Español</option>
-                        <option value="de">Deutsch</option>
                       </select>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Theme
-                      </label>
+                      <label className="mb-2 block text-sm font-medium text-gray-700">Theme</label>
                       <div className="grid grid-cols-3 gap-3">
                         {(['light', 'dark', 'system'] as const).map((theme) => (
                           <button
@@ -710,7 +816,7 @@ export default function ClientSettingsPage() {
                                 : 'border-gray-200 hover:border-gray-300'
                             }`}
                           >
-                            <div className="text-2xl mb-1">
+                            <div className="mb-1 text-2xl">
                               {theme === 'light' ? '☀️' : theme === 'dark' ? '🌙' : '💻'}
                             </div>
                             <div className="text-sm font-medium">
@@ -722,15 +828,13 @@ export default function ClientSettingsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
                         Timezone
                       </label>
                       <select
                         value={display.timezone}
-                        onChange={(e) =>
-                          setDisplay({ ...display, timezone: e.target.value })
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        onChange={(e) => setDisplay({ ...display, timezone: e.target.value })}
+                        className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500"
                       >
                         <option value="America/New_York">America/New_York</option>
                         <option value="America/Chicago">America/Chicago</option>
@@ -740,26 +844,22 @@ export default function ClientSettingsPage() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="mb-2 block text-sm font-medium text-gray-700">
                         Currency
                       </label>
                       <select
                         value={display.currency}
-                        onChange={(e) =>
-                          setDisplay({ ...display, currency: e.target.value })
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        onChange={(e) => setDisplay({ ...display, currency: e.target.value })}
+                        className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:ring-2 focus:ring-blue-500"
                       >
-                        <option value="EUR">EUR — Euro</option>
                         <option value="USD">USD — Dollar</option>
-                        <option value="GBP">GBP — British Pound</option>
                       </select>
                     </div>
 
                     <button
                       onClick={savePreferences}
                       disabled={isSaving}
-                      className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                      className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                     >
                       {isSaving ? 'Saving...' : 'Save'}
                     </button>
@@ -769,19 +869,20 @@ export default function ClientSettingsPage() {
                 {/* Data Tab (GDPR) */}
                 {activeTab === 'data' && (
                   <div className="space-y-6">
-                    <div className="bg-white rounded-xl shadow-sm p-6">
-                      <h2 className="text-lg font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                        <Download className="w-5 h-5" />
+                    <div className="rounded-xl bg-white p-6 shadow-sm">
+                      <h2 className="mb-2 flex items-center gap-2 text-lg font-semibold text-gray-900">
+                        <Download className="h-5 w-5" />
                         Export My Data
                       </h2>
-                      <p className="text-gray-600 mb-4">
-                        Download a copy of all your personal data in compliance with privacy regulations.
-                        The file contains your profile, bookings, reviews, and messages.
+                      <p className="mb-4 text-gray-600">
+                        Download a copy of all your personal data in compliance with privacy
+                        regulations. The file contains your profile, bookings, reviews, and
+                        messages.
                       </p>
                       <button
                         onClick={requestDataExport}
                         disabled={isExporting}
-                        className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
+                        className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
                       >
                         {isExporting ? (
                           <>
@@ -790,35 +891,37 @@ export default function ClientSettingsPage() {
                           </>
                         ) : (
                           <>
-                            <Download className="w-4 h-4" />
+                            <Download className="h-4 w-4" />
                             Download My Data
                           </>
                         )}
                       </button>
                     </div>
 
-                    <div className="bg-white rounded-xl shadow-sm p-6 border border-red-200">
-                      <h2 className="text-lg font-semibold text-red-600 mb-4 flex items-center gap-2">
-                        <Trash2 className="w-5 h-5" />
+                    <div className="rounded-xl border border-red-200 bg-white p-6 shadow-sm">
+                      <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-red-600">
+                        <Trash2 className="h-5 w-5" />
                         Delete My Account
                       </h2>
-                      <p className="text-gray-600 mb-4">
-                        Account deletion is irreversible. All your data will be
-                        permanently erased after a 30-day period, during which you
-                        can cancel your request.
+                      <p className="mb-4 text-gray-600">
+                        Account deletion is irreversible. All your data will be permanently erased
+                        after a 30-day period, during which you can cancel your request.
                       </p>
 
                       {deletionStatus?.status === 'scheduled' ? (
-                        <div className="rounded-lg bg-red-50 border border-red-200 p-4">
-                          <p className="text-sm text-red-700 mb-3">
+                        <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+                          <p className="mb-3 text-sm text-red-700">
                             Your account is scheduled for deletion on{' '}
                             <strong>
-                              {new Date(deletionStatus.scheduled_deletion_at ?? '').toLocaleDateString('en-US')}
-                            </strong>.
+                              {new Date(
+                                deletionStatus.scheduled_deletion_at ?? ''
+                              ).toLocaleDateString('en-US')}
+                            </strong>
+                            .
                           </p>
                           <button
                             onClick={cancelDeletion}
-                            className="rounded-lg bg-white border border-red-300 px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
+                            className="rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
                           >
                             Cancel Deletion
                           </button>
@@ -826,9 +929,9 @@ export default function ClientSettingsPage() {
                       ) : (
                         <button
                           onClick={() => setShowDeleteModal(true)}
-                          className="flex items-center gap-2 text-red-600 border border-red-600 px-4 py-2 rounded-lg hover:bg-red-50 transition-colors"
+                          className="flex items-center gap-2 rounded-lg border border-red-600 px-4 py-2 text-red-600 transition-colors hover:bg-red-50"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="h-4 w-4" />
                           Delete My Account
                         </button>
                       )}
@@ -843,23 +946,21 @@ export default function ClientSettingsPage() {
 
       {/* Delete Account Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <motion.div
             initial={reducedMotion ? false : { scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-2xl max-w-md w-full p-6"
+            className="w-full max-w-md rounded-2xl bg-white p-6"
           >
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
-              Delete Your Account
-            </h2>
-            <p className="text-gray-600 mb-6">
-              This action is irreversible. Your account will be deleted in 30 days.
-              You can cancel during this period.
+            <h2 className="mb-4 text-xl font-bold text-gray-900">Delete Your Account</h2>
+            <p className="mb-6 text-gray-600">
+              This action is irreversible. Your account will be deleted in 30 days. You can cancel
+              during this period.
             </p>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="mb-1 block text-sm font-medium text-gray-700">
                   Why are you leaving? (optional)
                 </label>
                 <textarea
@@ -872,7 +973,7 @@ export default function ClientSettingsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="mb-1 block text-sm font-medium text-gray-700">
                   Your Password
                 </label>
                 <input
@@ -885,7 +986,7 @@ export default function ClientSettingsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="mb-1 block text-sm font-medium text-gray-700">
                   Type <strong>DELETE MY ACCOUNT</strong> to confirm
                 </label>
                 <input
@@ -900,14 +1001,14 @@ export default function ClientSettingsPage() {
             <div className="mt-6 flex gap-4">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                className="flex-1 rounded-lg border border-gray-300 px-4 py-3 font-medium transition-colors hover:bg-gray-50"
               >
                 Cancel
               </button>
               <button
                 onClick={requestAccountDeletion}
                 disabled={deleteConfirmText !== 'DELETE MY ACCOUNT' || !deletePassword}
-                className="flex-1 bg-red-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-red-700 transition-colors disabled:opacity-50"
+                className="flex-1 rounded-lg bg-red-600 px-4 py-3 font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-50"
               >
                 Confirm
               </button>
@@ -934,7 +1035,7 @@ function ToggleSetting({
   loading?: boolean
 }) {
   return (
-    <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+    <div className="flex items-center justify-between rounded-lg border border-gray-200 p-4">
       <div>
         <div className="font-medium text-gray-900">{label}</div>
         <div className="text-sm text-gray-500">{description}</div>
