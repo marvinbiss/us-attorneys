@@ -84,8 +84,32 @@ export async function POST(request: Request) {
       )
     }
 
-    const body = await request.json()
-    const { action } = body
+    let body: unknown
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json(
+        { success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid JSON body' } },
+        { status: 400 }
+      )
+    }
+
+    // Validate the action field exists and is a known value
+    const actionSchema = z.object({
+      action: z.enum(['setup', 'verify', 'disable', 'regenerate_backup', 'verify_login']),
+    })
+    const actionResult = actionSchema.safeParse(body)
+    if (!actionResult.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 'VALIDATION_ERROR', message: 'Invalid or missing action' },
+        },
+        { status: 400 }
+      )
+    }
+
+    const { action } = actionResult.data
 
     switch (action) {
       case 'setup': {
@@ -170,11 +194,17 @@ export async function POST(request: Request) {
         })
       }
 
-      default:
+      default: {
+        // Exhaustive check — Zod enum above ensures this is unreachable
+        const _exhaustive: never = action
         return NextResponse.json(
-          { success: false, error: { message: 'Unknown action' } },
+          {
+            success: false,
+            error: { code: 'VALIDATION_ERROR', message: `Unknown action: ${_exhaustive}` },
+          },
           { status: 400 }
         )
+      }
     }
   } catch (error: unknown) {
     logger.error('2FA error:', error)

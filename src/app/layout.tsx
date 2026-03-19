@@ -34,24 +34,22 @@ const plusJakarta = Plus_Jakarta_Sans({
 const MobileBottomNav = dynamic(() => import('@/components/MobileBottomNav'), {
   ssr: false,
 })
-const ServiceWorkerRegistration = dynamic(
-  () => import('@/components/ServiceWorkerRegistration'),
-  { ssr: false }
-)
+const ServiceWorkerRegistration = dynamic(() => import('@/components/ServiceWorkerRegistration'), {
+  ssr: false,
+})
 const CookieConsent = dynamic(() => import('@/components/CookieConsent'), {
   ssr: false,
 })
 const WebVitals = dynamic(
-  () => import('@/components/WebVitals').then(mod => ({ default: mod.WebVitals })),
+  () => import('@/components/WebVitals').then((mod) => ({ default: mod.WebVitals })),
   { ssr: false }
 )
 const PageViewTracker = dynamic(() => import('@/components/PageViewTracker'), {
   ssr: false,
 })
-const CompareFloatingButton = dynamic(
-  () => import('@/components/compare/CompareFloatingButton'),
-  { ssr: false }
-)
+const CompareFloatingButton = dynamic(() => import('@/components/compare/CompareFloatingButton'), {
+  ssr: false,
+})
 
 // Viewport configuration - Primary brand color
 export const viewport: Viewport = {
@@ -94,13 +92,19 @@ export const metadata: Metadata = {
     title: 'US Attorneys — Find Top-Rated Lawyers Near You',
     description:
       'Find top-rated attorneys across all 50 states. Browse 75+ practice areas, read reviews, and request free consultations.',
-    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: 'US Attorneys — Find Top-Rated Lawyers Near You' }],
+    images: [
+      {
+        url: `${SITE_URL}/opengraph-image`,
+        width: 1200,
+        height: 630,
+        alt: 'US Attorneys — Find Top-Rated Lawyers Near You',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'US Attorneys — Find Top-Rated Lawyers Near You',
-    description:
-      'Find top-rated attorneys across all 50 states. Free consultations available.',
+    description: 'Find top-rated attorneys across all 50 states. Free consultations available.',
   },
   robots: {
     index: true,
@@ -121,12 +125,8 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   icons: {
-    icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180' },
-    ],
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
   other: {
     'mobile-web-app-capable': 'yes',
@@ -135,14 +135,14 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const attorneyCount = await getAttorneyCount()
   return (
-    <html lang="en" className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`scroll-smooth ${inter.variable} ${plusJakarta.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         {/* PWA Meta Tags (apple-mobile-web-app, mobile-web-app-capable, theme-color handled by metadata/viewport exports) */}
         {/* Anti-FOUC: apply dark class before paint */}
@@ -155,7 +155,12 @@ export default async function RootLayout({
         <meta name="msapplication-tap-highlight" content="no" />
 
         {/* OpenSearch — enables browser address bar search */}
-        <link rel="search" type="application/opensearchdescription+xml" title="US Attorneys" href="/open_search.xml" />
+        <link
+          rel="search"
+          type="application/opensearchdescription+xml"
+          title="US Attorneys"
+          href="/open_search.xml"
+        />
 
         {/* Additional icon sizes (180px apple-touch-icon + icon.svg handled by metadata.icons export) */}
         <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png" />
@@ -163,7 +168,12 @@ export default async function RootLayout({
 
         {/* LLM discovery — llms.txt (GEO/AEO optimization) */}
         <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM access guidelines" />
-        <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM detailed content" />
+        <link
+          rel="alternate"
+          type="text/plain"
+          href="/llms-full.txt"
+          title="LLM detailed content"
+        />
 
         {/* Global Organization + WebSite schema (E-E-A-T) */}
         <script
@@ -194,10 +204,10 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
-      <body className="font-sans bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+      <body className="bg-gray-50 font-sans text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-lg focus:bg-blue-600 focus:px-4 focus:py-2 focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
         >
           Skip to main content
         </a>
@@ -268,21 +278,44 @@ fbq('track', 'PageView');`}
         <WebVitals />
         <PageViewTracker />
         <ThemeProvider>
-        <MobileMenuProvider>
-        <CompareProviderWrapper>
-          <Header attorneyCount={attorneyCount} />
-          <main id="main-content" tabIndex={-1} className="pb-16 pb-[calc(4rem+env(safe-area-inset-bottom,0px))] md:pb-0 outline-none">
-            <Suspense fallback={<PageSkeleton />}>
-              {children}
-            </Suspense>
-          </main>
-          <Footer />
-          <MobileBottomNav />
-          <ServiceWorkerRegistration />
-          <CookieConsent />
-          <CompareFloatingButton />
-        </CompareProviderWrapper>
-        </MobileMenuProvider>
+          <MobileMenuProvider>
+            <CompareProviderWrapper>
+              <Header attorneyCount={attorneyCount} />
+              <main
+                id="main-content"
+                tabIndex={-1}
+                className="pb-16 pb-[calc(4rem+env(safe-area-inset-bottom,0px))] outline-none md:pb-0"
+              >
+                <Suspense fallback={<PageSkeleton />}>{children}</Suspense>
+              </main>
+              <Footer />
+              <MobileBottomNav />
+              <ServiceWorkerRegistration />
+              <CookieConsent />
+              <noscript>
+                <div
+                  style={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    background: '#1e293b',
+                    color: 'white',
+                    padding: '16px',
+                    textAlign: 'center',
+                    zIndex: 9999,
+                  }}
+                >
+                  This site uses cookies to improve your experience. By continuing to browse, you
+                  consent to our use of cookies.
+                  <a href="/privacy" style={{ color: '#60a5fa', marginLeft: '8px' }}>
+                    Privacy Policy
+                  </a>
+                </div>
+              </noscript>
+              <CompareFloatingButton />
+            </CompareProviderWrapper>
+          </MobileMenuProvider>
         </ThemeProvider>
       </body>
     </html>

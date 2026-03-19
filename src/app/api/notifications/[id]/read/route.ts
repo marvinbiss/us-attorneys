@@ -6,18 +6,40 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod'
 
-export async function POST(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+const paramsSchema = z.object({
+  id: z.string().uuid('Invalid notification ID'),
+})
+
+export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
+    const rawParams = await params
+    const validation = paramsSchema.safeParse(rawParams)
+    if (!validation.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: validation.error.issues[0]?.message || 'Invalid input',
+          },
+        },
+        { status: 400 }
+      )
+    }
+    const { id } = validation.data
     const supabase = await createClient()
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser()
     if (authError || !user) {
-      return NextResponse.json({ success: false, error: { message: 'Not authenticated' } }, { status: 401 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Not authenticated' } },
+        { status: 401 }
+      )
     }
 
     // RLS ensures user can only update their own notifications
@@ -29,12 +51,18 @@ export async function POST(
 
     if (error) {
       logger.error('Mark read error:', error)
-      return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+      return NextResponse.json(
+        { success: false, error: { message: 'Server error' } },
+        { status: 500 }
+      )
     }
 
     return NextResponse.json({ success: true })
   } catch (error: unknown) {
     logger.error('Notification read POST error:', error)
-    return NextResponse.json({ success: false, error: { message: 'Server error' } }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Server error' } },
+      { status: 500 }
+    )
   }
 }

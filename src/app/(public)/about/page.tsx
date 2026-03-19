@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Shield, Search, Lock, Eye, ArrowRight, Database, Users } from 'lucide-react'
 import { pageImages, BLUR_PLACEHOLDER } from '@/lib/data/images'
 import Breadcrumb from '@/components/Breadcrumb'
+// SECURITY: createAdminClient used for read-only SSR query — bypasses RLS safely
 import { createAdminClient } from '@/lib/supabase/admin'
 import JsonLd from '@/components/JsonLd'
 import { getOrganizationSchema, getBreadcrumbSchema } from '@/lib/seo/jsonld'

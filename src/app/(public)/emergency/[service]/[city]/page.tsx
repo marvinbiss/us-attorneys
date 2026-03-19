@@ -31,12 +31,18 @@ export async function generateMetadata({
   return {
     title,
     description,
-    robots: { index: true, follow: true },
+    robots: { index: false },
     alternates: {
       canonical: `${SITE_URL}/emergency/${service}/${villeSlug}`,
       languages: getAlternateLanguages(`/emergency/${service}/${villeSlug}`),
     },
-    openGraph: { title, description, url: `${SITE_URL}/emergency/${service}/${villeSlug}`, type: 'website', locale: 'en_US' },
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/emergency/${service}/${villeSlug}`,
+      type: 'website',
+      locale: 'en_US',
+    },
     twitter: { card: 'summary_large_image', title, description },
   }
 }
@@ -48,12 +54,12 @@ export default async function EmergencyServiceVillePage({
 }) {
   const { service, city: villeSlug } = await params
   const trade = tradeContent[service]
-  const villeData = getCityBySlug(villeSlug) || await resolveZipToCity(villeSlug)
+  const villeData = getCityBySlug(villeSlug) || (await resolveZipToCity(villeSlug))
   if (!trade || !villeData) notFound()
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
-      <h1 className="text-3xl font-bold text-gray-900 mb-4">
+    <div className="mx-auto max-w-4xl px-4 py-16">
+      <h1 className="mb-4 text-3xl font-bold text-gray-900">
         Emergency {trade.name} in {villeData.name}
       </h1>
       <p className="text-gray-500">Content coming soon.</p>

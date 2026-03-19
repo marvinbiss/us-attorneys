@@ -9,6 +9,8 @@ import { verifyResendSignature } from '@/lib/prospection/webhook-security'
  * Receives events: email.sent, email.delivered, email.bounced,
  * email.complained, email.delivery_delayed
  */
+// SECURITY: CSRF exemption — this endpoint is authenticated via webhook signature verification
+// (Stripe-Signature header / HMAC validation), not session cookies. External service POST.
 export const POST = createApiHandler(async (ctx) => {
   const rawBody = await ctx.request.text()
 

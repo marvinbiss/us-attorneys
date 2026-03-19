@@ -116,6 +116,7 @@ const faqItems = [
 async function getPlatformStats() {
   if (IS_BUILD) return { totalReviews: 0, avgRating: 0, attorneyCount: 0 }
   try {
+    // SECURITY: createAdminClient used for read-only SSR query — bypasses RLS safely
     const { createAdminClient } = await import('@/lib/supabase/admin')
     const supabase = createAdminClient()
 

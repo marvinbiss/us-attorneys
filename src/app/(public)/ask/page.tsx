@@ -5,6 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import JsonLd from '@/components/JsonLd'
 import { getBreadcrumbSchema } from '@/lib/seo/jsonld'
 import { SITE_URL, SITE_NAME } from '@/lib/seo/config'
+// SECURITY: createAdminClient used for read-only SSR query — bypasses RLS safely
 import { createAdminClient } from '@/lib/supabase/admin'
 import QuestionCard from '@/components/qa/QuestionCard'
 
@@ -24,7 +25,14 @@ export async function generateMetadata(): Promise<Metadata> {
         'Get free answers to your legal questions from licensed attorneys across all 50 states.',
       url: `${SITE_URL}/ask`,
       type: 'website',
-      images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: `${SITE_NAME} — Ask a Lawyer` }],
+      images: [
+        {
+          url: `${SITE_URL}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${SITE_NAME} — Ask a Lawyer`,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
@@ -63,7 +71,9 @@ async function getRecentQuestions(): Promise<Question[]> {
     const supabase = createAdminClient()
     const { data } = await supabase
       .from('legal_questions')
-      .select('id, slug, title, body, state_code, city, asked_by_name, status, view_count, answer_count, vote_count, is_featured, created_at, specialty_id')
+      .select(
+        'id, slug, title, body, state_code, city, asked_by_name, status, view_count, answer_count, vote_count, is_featured, created_at, specialty_id'
+      )
       .neq('status', 'flagged')
       .order('created_at', { ascending: false })
       .limit(30)
@@ -71,7 +81,7 @@ async function getRecentQuestions(): Promise<Question[]> {
     if (!data || data.length === 0) return []
 
     // Enrich with specialty names
-    const specialtyIds = Array.from(new Set(data.map(q => q.specialty_id).filter(Boolean)))
+    const specialtyIds = Array.from(new Set(data.map((q) => q.specialty_id).filter(Boolean)))
     let specialtyMap: Record<string, string> = {}
     if (specialtyIds.length > 0) {
       const { data: specs } = await supabase
@@ -79,11 +89,11 @@ async function getRecentQuestions(): Promise<Question[]> {
         .select('id, name')
         .in('id', specialtyIds as string[])
       if (specs) {
-        specialtyMap = Object.fromEntries(specs.map(s => [s.id, s.name]))
+        specialtyMap = Object.fromEntries(specs.map((s) => [s.id, s.name]))
       }
     }
 
-    return data.map(q => ({
+    return data.map((q) => ({
       id: q.id,
       slug: q.slug,
       title: q.title,
@@ -109,7 +119,9 @@ async function getFeaturedQuestions(): Promise<Question[]> {
     const supabase = createAdminClient()
     const { data } = await supabase
       .from('legal_questions')
-      .select('id, slug, title, body, state_code, city, asked_by_name, status, view_count, answer_count, vote_count, is_featured, created_at, specialty_id')
+      .select(
+        'id, slug, title, body, state_code, city, asked_by_name, status, view_count, answer_count, vote_count, is_featured, created_at, specialty_id'
+      )
       .eq('is_featured', true)
       .neq('status', 'flagged')
       .order('view_count', { ascending: false })
@@ -117,7 +129,7 @@ async function getFeaturedQuestions(): Promise<Question[]> {
 
     if (!data || data.length === 0) return []
 
-    const specialtyIds = Array.from(new Set(data.map(q => q.specialty_id).filter(Boolean)))
+    const specialtyIds = Array.from(new Set(data.map((q) => q.specialty_id).filter(Boolean)))
     let specialtyMap: Record<string, string> = {}
     if (specialtyIds.length > 0) {
       const { data: specs } = await supabase
@@ -125,11 +137,11 @@ async function getFeaturedQuestions(): Promise<Question[]> {
         .select('id, name')
         .in('id', specialtyIds as string[])
       if (specs) {
-        specialtyMap = Object.fromEntries(specs.map(s => [s.id, s.name]))
+        specialtyMap = Object.fromEntries(specs.map((s) => [s.id, s.name]))
       }
     }
 
-    return data.map(q => ({
+    return data.map((q) => ({
       id: q.id,
       slug: q.slug,
       title: q.title,
@@ -160,7 +172,7 @@ async function getTopSpecialties(): Promise<SpecialtyCount[]> {
       .order('name')
       .limit(20)
 
-    return (data || []).map(s => ({ name: s.name, id: s.id, count: 0 }))
+    return (data || []).map((s) => ({ name: s.name, id: s.id, count: 0 }))
   } catch {
     return []
   }
@@ -170,8 +182,14 @@ async function getQuestionStats(): Promise<{ total: number; answered: number; at
   try {
     const supabase = createAdminClient()
     const [totalRes, answeredRes, attorneyRes] = await Promise.all([
-      supabase.from('legal_questions').select('id', { count: 'exact', head: true }).neq('status', 'flagged'),
-      supabase.from('legal_questions').select('id', { count: 'exact', head: true }).eq('status', 'answered'),
+      supabase
+        .from('legal_questions')
+        .select('id', { count: 'exact', head: true })
+        .neq('status', 'flagged'),
+      supabase
+        .from('legal_questions')
+        .select('id', { count: 'exact', head: true })
+        .eq('status', 'answered'),
       supabase.from('legal_answers').select('attorney_id', { count: 'exact', head: true }),
     ])
     return {
@@ -202,29 +220,29 @@ export default async function AskPage() {
       <JsonLd data={breadcrumbSchema} />
 
       {/* Hero */}
-      <section className="bg-white border-b">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <section className="border-b bg-white">
+        <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
           <Breadcrumb items={[{ label: 'Ask a Lawyer' }]} className="mb-4" />
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold text-gray-900">
+          <h1 className="font-heading text-3xl font-bold text-gray-900 sm:text-4xl">
             Ask a Lawyer
           </h1>
-          <p className="mt-3 text-lg text-gray-600 max-w-2xl">
+          <p className="mt-3 max-w-2xl text-lg text-gray-600">
             Get free answers to your legal questions from licensed attorneys across all 50 states.
             Browse answered questions or ask your own.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/ask/new"
-              className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-colors hover:bg-blue-700"
             >
               Ask a Question
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/ask#questions"
-              className="inline-flex items-center gap-2 border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-6 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-50"
             >
-              <Search className="w-4 h-4" />
+              <Search className="h-4 w-4" />
               Browse Questions
             </Link>
           </div>
@@ -233,15 +251,21 @@ export default async function AskPage() {
           {stats.total > 0 && (
             <div className="mt-8 flex gap-8 text-sm">
               <div>
-                <span className="text-2xl font-bold text-gray-900">{stats.total.toLocaleString()}</span>
+                <span className="text-2xl font-bold text-gray-900">
+                  {stats.total.toLocaleString()}
+                </span>
                 <p className="text-gray-500">Questions Asked</p>
               </div>
               <div>
-                <span className="text-2xl font-bold text-green-600">{stats.answered.toLocaleString()}</span>
+                <span className="text-2xl font-bold text-green-600">
+                  {stats.answered.toLocaleString()}
+                </span>
                 <p className="text-gray-500">Answered</p>
               </div>
               <div>
-                <span className="text-2xl font-bold text-blue-600">{stats.attorneys.toLocaleString()}</span>
+                <span className="text-2xl font-bold text-blue-600">
+                  {stats.attorneys.toLocaleString()}
+                </span>
                 <p className="text-gray-500">Attorney Answers</p>
               </div>
             </div>
@@ -249,11 +273,11 @@ export default async function AskPage() {
         </div>
       </section>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
         {/* Practice Area Filter */}
         {specialties.length > 0 && (
           <section className="mb-8">
-            <h2 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-700">
               Browse by Practice Area
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -261,7 +285,7 @@ export default async function AskPage() {
                 <Link
                   key={s.id}
                   href={`/legal-questions/${s.name.toLowerCase().replace(/\s+/g, '-')}`}
-                  className="px-3 py-1.5 rounded-full bg-white border border-gray-200 text-sm text-gray-700 hover:border-blue-300 hover:text-blue-700 transition-colors"
+                  className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 transition-colors hover:border-blue-300 hover:text-blue-700"
                 >
                   {s.name}
                 </Link>
@@ -273,7 +297,7 @@ export default async function AskPage() {
         {/* Featured Questions */}
         {featuredQuestions.length > 0 && (
           <section className="mb-10">
-            <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">
+            <h2 className="mb-4 font-heading text-xl font-bold text-gray-900">
               Featured Questions
             </h2>
             <div className="space-y-3">
@@ -286,9 +310,7 @@ export default async function AskPage() {
 
         {/* Questions List */}
         <section id="questions">
-          <h2 className="font-heading text-xl font-bold text-gray-900 mb-4">
-            Recent Questions
-          </h2>
+          <h2 className="mb-4 font-heading text-xl font-bold text-gray-900">Recent Questions</h2>
 
           {recentQuestions.length > 0 ? (
             <div className="space-y-3">
@@ -297,34 +319,44 @@ export default async function AskPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
-              <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+            <div className="rounded-xl border border-gray-200 bg-white py-16 text-center">
+              <MessageSquare className="mx-auto mb-4 h-12 w-12 text-gray-300" />
               <h3 className="text-lg font-semibold text-gray-900">No questions yet</h3>
               <p className="mt-2 text-gray-600">
                 Be the first to ask a legal question and get a free answer from a licensed attorney.
               </p>
               <Link
                 href="/ask/new"
-                className="inline-flex items-center gap-2 mt-6 bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-blue-700"
               >
                 Ask the First Question
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           )}
         </section>
 
         {/* SEO Content */}
-        <section className="mt-16 prose prose-gray max-w-none">
+        <section className="prose prose-gray mt-16 max-w-none">
           <h2>How "Ask a Lawyer" Works</h2>
           <ol>
-            <li><strong>Ask your question</strong> — Describe your legal situation with as much detail as possible. Select your state and practice area for more relevant answers.</li>
-            <li><strong>Get attorney answers</strong> — Licensed attorneys from across the country review questions and provide free informational answers.</li>
-            <li><strong>Find the right lawyer</strong> — If you need representation, connect directly with the attorney who answered your question.</li>
+            <li>
+              <strong>Ask your question</strong> — Describe your legal situation with as much detail
+              as possible. Select your state and practice area for more relevant answers.
+            </li>
+            <li>
+              <strong>Get attorney answers</strong> — Licensed attorneys from across the country
+              review questions and provide free informational answers.
+            </li>
+            <li>
+              <strong>Find the right lawyer</strong> — If you need representation, connect directly
+              with the attorney who answered your question.
+            </li>
           </ol>
           <p>
-            All answers on this platform are for informational purposes only and do not constitute legal advice or create an attorney-client relationship.
-            For advice specific to your situation, consult directly with a licensed attorney.
+            All answers on this platform are for informational purposes only and do not constitute
+            legal advice or create an attorney-client relationship. For advice specific to your
+            situation, consult directly with a licensed attorney.
           </p>
         </section>
       </div>

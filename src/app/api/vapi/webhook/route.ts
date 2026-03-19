@@ -22,6 +22,8 @@ export const maxDuration = 30
 // POST /api/vapi/webhook — Main Vapi webhook handler
 // ---------------------------------------------------------------------------
 
+// SECURITY: CSRF exemption — this endpoint is authenticated via webhook signature verification
+// (Stripe-Signature header / HMAC validation), not session cookies. External service POST.
 export const POST = createApiHandler(async ({ request }) => {
   const rawBody = await request.text()
 
@@ -142,9 +144,7 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
       logger.info('Voice qualification saved', { callId, score, projectType: data.project_type })
 
       if (score === 'disqualified') {
-        const reason = !data.is_homeowner
-          ? 'not a property owner'
-          : 'area not covered'
+        const reason = !data.is_homeowner ? 'not a property owner' : 'area not covered'
         return NextResponse.json({
           result: `The prospect does not meet our criteria: ${reason}. Politely end the call.`,
         })
@@ -155,8 +155,8 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
           score === 'A'
             ? 'Excellent prospect, offer an immediate transfer.'
             : score === 'B'
-            ? 'Good prospect, offer a callback within 24 hours.'
-            : 'Prospect to follow up, offer a callback.'
+              ? 'Good prospect, offer a callback within 24 hours.'
+              : 'Prospect to follow up, offer a callback.'
         }`,
       })
     }
@@ -181,7 +181,8 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
       })
 
       return NextResponse.json({
-        result: "The transfer has been initiated. Inform the prospect that an attorney will call them back shortly.",
+        result:
+          'The transfer has been initiated. Inform the prospect that an attorney will call them back shortly.',
       })
     }
 
@@ -338,7 +339,9 @@ async function handleEndOfCallReport(event: VapiWebhookEvent): Promise<NextRespo
       attorneyId: null, // TODO: resolve from lead dispatch once voice→attorney assignment exists
       qualificationScore: voiceCall.qualification_score,
       vapiCost: cost || 0,
-    }).catch((err) => logger.error('Voice billing tracking failed', { error: String(err), callId: call.id }))
+    }).catch((err) =>
+      logger.error('Voice billing tracking failed', { error: String(err), callId: call.id })
+    )
   }
 
   logger.info('Voice call report processed', {

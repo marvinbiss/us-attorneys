@@ -5,33 +5,48 @@ import { createApiHandler } from '@/lib/api/handler'
 import { verifyTwilioSignature } from '@/lib/prospection/webhook-security'
 import { z } from 'zod'
 
-const webhookSchema = z.object({
-  MessageSid: z.string().min(1, 'MessageSid required'),
-  MessageStatus: z.string().min(1, 'MessageStatus required'),
-  ErrorCode: z.string().optional(),
-  ErrorMessage: z.string().optional(),
-}).passthrough()
+const webhookSchema = z
+  .object({
+    MessageSid: z.string().min(1, 'MessageSid required'),
+    MessageStatus: z.string().min(1, 'MessageStatus required'),
+    ErrorCode: z.string().optional(),
+    ErrorMessage: z.string().optional(),
+  })
+  .passthrough()
 
 /**
  * Webhook Twilio - Status callbacks pour SMS et WhatsApp
  * Receives status updates: queued, sent, delivered, read, failed
  */
+// SECURITY: CSRF exemption — this endpoint is authenticated via webhook signature verification
+// (Stripe-Signature header / HMAC validation), not session cookies. External service POST.
 export const POST = createApiHandler(async (ctx) => {
   const formData = await ctx.request.formData()
   const params: Record<string, string> = {}
-  formData.forEach((value, key) => { params[key] = value.toString() })
+  formData.forEach((value, key) => {
+    params[key] = value.toString()
+  })
 
   // Verify the Twilio signature
   const signature = ctx.request.headers.get('x-twilio-signature') || ''
   const url = ctx.request.url
   if (!verifyTwilioSignature(signature, url, params)) {
     logger.warn('Invalid Twilio webhook signature')
-    return NextResponse.json({ success: false, error: { message: 'Invalid signature' } }, { status: 403 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid signature' } },
+      { status: 403 }
+    )
   }
 
   const validated = webhookSchema.safeParse(params)
   if (!validated.success) {
-    return NextResponse.json({ success: false, error: { message: 'Missing or invalid parameters', details: validated.error.flatten() } }, { status: 400 })
+    return NextResponse.json(
+      {
+        success: false,
+        error: { message: 'Missing or invalid parameters', details: validated.error.flatten() },
+      },
+      { status: 400 }
+    )
   }
 
   const messageSid = validated.data.MessageSid
@@ -75,10 +90,7 @@ export const POST = createApiHandler(async (ctx) => {
       break
   }
 
-  await supabase
-    .from('prospection_messages')
-    .update(updateData)
-    .eq('external_id', messageSid)
+  await supabase.from('prospection_messages').update(updateData).eq('external_id', messageSid)
 
   return new NextResponse('OK', { status: 200 })
 }, {})

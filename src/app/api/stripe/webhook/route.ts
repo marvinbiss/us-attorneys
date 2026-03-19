@@ -62,18 +62,17 @@ async function checkIdempotency(eventId: string): Promise<boolean> {
   const supabase = createAdminClient()
 
   // Try to insert the event - will fail if already exists due to UNIQUE constraint
-  const { error } = await supabase
-    .from('webhook_events')
-    .insert({
-      stripe_event_id: eventId,
-      type: 'stripe_webhook',
-      status: 'processing',
-      created_at: new Date().toISOString(),
-    })
+  const { error } = await supabase.from('webhook_events').insert({
+    stripe_event_id: eventId,
+    type: 'stripe_webhook',
+    status: 'processing',
+    created_at: new Date().toISOString(),
+  })
 
   if (error) {
     // Event already exists - check its status
-    if (error.code === '23505') { // Unique violation
+    if (error.code === '23505') {
+      // Unique violation
       const { data: existing } = await supabase
         .from('webhook_events')
         .select('status')
@@ -121,14 +120,13 @@ async function markEventFailed(eventId: string, errorMsg: string): Promise<void>
     .eq('stripe_event_id', eventId)
 }
 
+// SECURITY: CSRF exemption — this endpoint is authenticated via webhook signature verification
+// (Stripe-Signature header / HMAC validation), not session cookies. External service POST.
 export const POST = createApiHandler(async ({ request }) => {
   // Rate limiting (fail-open for webhooks)
   const rl = await rateLimit(request, RATE_LIMITS.webhook)
   if (!rl.success) {
-    return NextResponse.json(
-      { error: 'Too many requests' },
-      { status: 429 }
-    )
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
   }
 
   const body = await request.text()
@@ -137,10 +135,7 @@ export const POST = createApiHandler(async ({ request }) => {
 
   if (!signature) {
     logger.error('Missing stripe-signature header')
-    return NextResponse.json(
-      { error: 'Missing signature' },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: 'Missing signature' }, { status: 400 })
   }
 
   if (!env.STRIPE_WEBHOOK_SECRET) {
@@ -151,17 +146,10 @@ export const POST = createApiHandler(async ({ request }) => {
   let event: Stripe.Event
 
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      env.STRIPE_WEBHOOK_SECRET
-    )
+    event = stripe.webhooks.constructEvent(body, signature, env.STRIPE_WEBHOOK_SECRET)
   } catch (error: unknown) {
     logger.error('Webhook signature verification failed:', error)
-    return NextResponse.json(
-      { error: 'Webhook signature verification failed' },
-      { status: 400 }
-    )
+    return NextResponse.json({ error: 'Webhook signature verification failed' }, { status: 400 })
   }
 
   // IDEMPOTENCY CHECK: Skip if already processed
@@ -223,10 +211,7 @@ export const POST = createApiHandler(async ({ request }) => {
     // Mark event as failed for debugging
     await markEventFailed(event.id, errorMessage)
 
-    return NextResponse.json(
-      { error: 'Webhook handler failed' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 })
   }
 }, {})
 
@@ -242,13 +227,13 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     return
   }
 
-  const customerId = typeof session.customer === 'string'
-    ? session.customer
-    : session.customer?.id ?? null
+  const customerId =
+    typeof session.customer === 'string' ? session.customer : (session.customer?.id ?? null)
 
-  const subscriptionId = typeof session.subscription === 'string'
-    ? session.subscription
-    : session.subscription?.id ?? null
+  const subscriptionId =
+    typeof session.subscription === 'string'
+      ? session.subscription
+      : (session.subscription?.id ?? null)
 
   const supabase = createAdminClient()
 
@@ -295,16 +280,17 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     },
   })
 
-  logger.info(`Checkout completed for user ${userId}: plan=${planId}, customer=${customerId}, attorney=${attorneyId}`)
+  logger.info(
+    `Checkout completed for user ${userId}: plan=${planId}, customer=${customerId}, attorney=${attorneyId}`
+  )
 }
 
 /**
  * Handle new subscription creation — update attorney tier
  */
 async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
-  const customerId = typeof subscription.customer === 'string'
-    ? subscription.customer
-    : subscription.customer.id
+  const customerId =
+    typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id
 
   const attorneyId = subscription.metadata?.attorney_id
   const planId = subscription.metadata?.plan_id
@@ -328,7 +314,7 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
   }
 
   // Resolve tier from price ID
-  const tier = planId || await resolveTierFromSubscription(subscription)
+  const tier = planId || (await resolveTierFromSubscription(subscription))
 
   const periodEnd = subscription.current_period_end
     ? new Date(subscription.current_period_end * 1000).toISOString()
@@ -367,13 +353,14 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription) {
     },
   })
 
-  logger.info(`Subscription created for attorney ${targetAttorneyId}: tier=${tier}, status=${subscription.status}`)
+  logger.info(
+    `Subscription created for attorney ${targetAttorneyId}: tier=${tier}, status=${subscription.status}`
+  )
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
-  const customerId = typeof subscription.customer === 'string'
-    ? subscription.customer
-    : subscription.customer.id
+  const customerId =
+    typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id
 
   const profile = await findProfileByCustomerId(customerId)
   const newStatus = mapStripeStatus(subscription.status)
@@ -424,9 +411,8 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 }
 
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
-  const customerId = typeof subscription.customer === 'string'
-    ? subscription.customer
-    : subscription.customer.id
+  const customerId =
+    typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id
 
   const profile = await findProfileByCustomerId(customerId)
   const supabase = createAdminClient()
@@ -480,9 +466,8 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 }
 
 async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
-  const customerId = typeof invoice.customer === 'string'
-    ? invoice.customer
-    : invoice.customer?.id ?? null
+  const customerId =
+    typeof invoice.customer === 'string' ? invoice.customer : (invoice.customer?.id ?? null)
 
   if (!customerId) {
     logger.warn('Invoice payment succeeded but no customer ID', { invoiceId: invoice.id })
@@ -511,9 +496,8 @@ async function handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
 }
 
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
-  const customerId = typeof invoice.customer === 'string'
-    ? invoice.customer
-    : invoice.customer?.id ?? null
+  const customerId =
+    typeof invoice.customer === 'string' ? invoice.customer : (invoice.customer?.id ?? null)
 
   if (!customerId) {
     logger.warn('Invoice payment failed but no customer ID', { invoiceId: invoice.id })
@@ -566,7 +550,9 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
     logger.info(`Push notification sent to profile ${profile.id} for payment failure`)
   } catch (pushError) {
     // Push notification failure should not break the webhook
-    logger.warn(`Failed to send push notification for payment failure`, { error: String(pushError) })
+    logger.warn(`Failed to send push notification for payment failure`, {
+      error: String(pushError),
+    })
   }
 
   logger.info(`Invoice payment failed for profile ${profile.id}: status set to past_due`)
@@ -588,10 +574,7 @@ async function updateAttorneySubscription(
   }
 ): Promise<void> {
   const supabase = createAdminClient()
-  const { error } = await supabase
-    .from('attorneys')
-    .update(updates)
-    .eq('id', attorneyId)
+  const { error } = await supabase.from('attorneys').update(updates).eq('id', attorneyId)
 
   if (error) {
     logger.error(`Failed to update attorney subscription for ${attorneyId}`, error)

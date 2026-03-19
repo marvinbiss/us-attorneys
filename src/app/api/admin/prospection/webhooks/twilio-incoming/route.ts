@@ -4,7 +4,11 @@ import { logger } from '@/lib/logger'
 import { createApiHandler } from '@/lib/api/handler'
 import { verifyTwilioSignature } from '@/lib/prospection/webhook-security'
 import { maskPhone } from '@/lib/prospection/message-queue'
-import { generateWithFallback, shouldEscalate, validateAIOutput } from '@/lib/prospection/ai-response'
+import {
+  generateWithFallback,
+  shouldEscalate,
+  validateAIOutput,
+} from '@/lib/prospection/ai-response'
 import { sendWhatsAppReply } from '@/lib/prospection/channels/whatsapp'
 import { sendProspectionSMS } from '@/lib/prospection/channels/sms'
 import type { ProspectionContact, ProspectionConversationMessage } from '@/types/prospection'
@@ -13,15 +17,22 @@ import type { ProspectionContact, ProspectionConversationMessage } from '@/types
  * Twilio Webhook - Incoming messages (SMS and WhatsApp)
  * Handles contact responses and triggers AI if configured
  */
+// SECURITY: CSRF exemption — this endpoint is authenticated via webhook signature verification
+// (Stripe-Signature header / HMAC validation), not session cookies. External service POST.
 export const POST = createApiHandler(async (ctx) => {
   const formData = await ctx.request.formData()
   const params: Record<string, string> = {}
-  formData.forEach((value, key) => { params[key] = value.toString() })
+  formData.forEach((value, key) => {
+    params[key] = value.toString()
+  })
 
   // Verify the signature
   const signature = ctx.request.headers.get('x-twilio-signature') || ''
   if (!verifyTwilioSignature(signature, ctx.request.url, params)) {
-    return NextResponse.json({ success: false, error: { message: 'Invalid signature' } }, { status: 403 })
+    return NextResponse.json(
+      { success: false, error: { message: 'Invalid signature' } },
+      { status: 403 }
+    )
   }
 
   const from = params.From?.replace('whatsapp:', '') || ''
@@ -38,7 +49,9 @@ export const POST = createApiHandler(async (ctx) => {
   // Find contact by phone number
   const { data: contact } = await supabase
     .from('prospection_contacts')
-    .select('id, contact_type, company_name, contact_name, email, phone, phone_e164, address, postal_code, city, department, region, location_code, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at')
+    .select(
+      'id, contact_type, company_name, contact_name, email, phone, phone_e164, address, postal_code, city, department, region, location_code, tags, custom_fields, consent_status, opted_out_at, is_active, created_at, updated_at'
+    )
     .eq('phone_e164', from)
     .eq('is_active', true)
     .single()
@@ -49,7 +62,19 @@ export const POST = createApiHandler(async (ctx) => {
   }
 
   // Check if this is an opt-out (STOP)
-  if (['stop', 'unsubscribe', 'cancel', 'opt out', 'quit', 'arret', 'arrêt', 'desabonner', 'désabonner'].includes(body.trim().toLowerCase())) {
+  if (
+    [
+      'stop',
+      'unsubscribe',
+      'cancel',
+      'opt out',
+      'quit',
+      'arret',
+      'arrêt',
+      'desabonner',
+      'désabonner',
+    ].includes(body.trim().toLowerCase())
+  ) {
     await supabase
       .from('prospection_contacts')
       .update({ consent_status: 'opted_out', opted_out_at: new Date().toISOString() })
@@ -61,7 +86,9 @@ export const POST = createApiHandler(async (ctx) => {
   // Find or create conversation
   let { data: conversation } = await supabase
     .from('prospection_conversations')
-    .select('id, campaign_id, contact_id, message_id, channel, status, ai_provider, ai_model, ai_replies_count, assigned_to, last_message_at, created_at, updated_at')
+    .select(
+      'id, campaign_id, contact_id, message_id, channel, status, ai_provider, ai_model, ai_replies_count, assigned_to, last_message_at, created_at, updated_at'
+    )
     .eq('contact_id', contact.id)
     .eq('channel', channel)
     .in('status', ['open', 'ai_handling'])
@@ -89,14 +116,12 @@ export const POST = createApiHandler(async (ctx) => {
   }
 
   // Save the incoming message
-  await supabase
-    .from('prospection_conversation_messages')
-    .insert({
-      conversation_id: conversation.id,
-      direction: 'inbound',
-      sender_type: 'contact',
-      content: body,
-    })
+  await supabase.from('prospection_conversation_messages').insert({
+    conversation_id: conversation.id,
+    direction: 'inbound',
+    sender_type: 'contact',
+    content: body,
+  })
 
   // Update the conversation
   await supabase
@@ -131,7 +156,9 @@ export const POST = createApiHandler(async (ctx) => {
   // Check if AI auto-reply is enabled
   const { data: aiSettings } = await supabase
     .from('prospection_ai_settings')
-    .select('id, default_provider, claude_model, claude_max_tokens, claude_temperature, openai_model, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, attorney_system_prompt, client_system_prompt, municipality_system_prompt')
+    .select(
+      'id, default_provider, claude_model, claude_max_tokens, claude_temperature, openai_model, openai_max_tokens, openai_temperature, auto_reply_enabled, max_auto_replies, escalation_keywords, attorney_system_prompt, client_system_prompt, municipality_system_prompt'
+    )
     .limit(1)
     .single()
 
@@ -152,7 +179,9 @@ export const POST = createApiHandler(async (ctx) => {
         // Load conversation history
         const { data: history } = await supabase
           .from('prospection_conversation_messages')
-          .select('id, conversation_id, direction, sender_type, content, ai_provider, ai_model, ai_prompt_tokens, ai_completion_tokens, ai_cost, external_id, created_at')
+          .select(
+            'id, conversation_id, direction, sender_type, content, ai_provider, ai_model, ai_prompt_tokens, ai_completion_tokens, ai_cost, external_id, created_at'
+          )
           .eq('conversation_id', conversation.id)
           .order('created_at', { ascending: true })
 
@@ -161,9 +190,15 @@ export const POST = createApiHandler(async (ctx) => {
 
         let systemPrompt = ''
         switch ((contact as ProspectionContact).contact_type) {
-          case 'attorney': systemPrompt = aiSettings.attorney_system_prompt; break
-          case 'client': systemPrompt = aiSettings.client_system_prompt; break
-          case 'municipality': systemPrompt = aiSettings.municipality_system_prompt; break
+          case 'attorney':
+            systemPrompt = aiSettings.attorney_system_prompt
+            break
+          case 'client':
+            systemPrompt = aiSettings.client_system_prompt
+            break
+          case 'municipality':
+            systemPrompt = aiSettings.municipality_system_prompt
+            break
         }
 
         const aiResult = await generateWithFallback({
@@ -172,8 +207,10 @@ export const POST = createApiHandler(async (ctx) => {
           systemPrompt,
           conversationHistory: (history || []) as ProspectionConversationMessage[],
           contactContext: contact as ProspectionContact,
-          maxTokens: provider === 'claude' ? aiSettings.claude_max_tokens : aiSettings.openai_max_tokens,
-          temperature: provider === 'claude' ? aiSettings.claude_temperature : aiSettings.openai_temperature,
+          maxTokens:
+            provider === 'claude' ? aiSettings.claude_max_tokens : aiSettings.openai_max_tokens,
+          temperature:
+            provider === 'claude' ? aiSettings.claude_temperature : aiSettings.openai_temperature,
         })
 
         // Validate AI output before sending
@@ -190,19 +227,17 @@ export const POST = createApiHandler(async (ctx) => {
         }
 
         // Save the AI response
-        await supabase
-          .from('prospection_conversation_messages')
-          .insert({
-            conversation_id: conversation.id,
-            direction: 'outbound',
-            sender_type: 'ai',
-            content: replyContent,
-            ai_provider: aiResult.provider,
-            ai_model: aiResult.model,
-            ai_prompt_tokens: aiResult.tokens.prompt,
-            ai_completion_tokens: aiResult.tokens.completion,
-            ai_cost: aiResult.cost,
-          })
+        await supabase.from('prospection_conversation_messages').insert({
+          conversation_id: conversation.id,
+          direction: 'outbound',
+          sender_type: 'ai',
+          content: replyContent,
+          ai_provider: aiResult.provider,
+          ai_model: aiResult.model,
+          ai_prompt_tokens: aiResult.tokens.prompt,
+          ai_completion_tokens: aiResult.tokens.completion,
+          ai_cost: aiResult.cost,
+        })
 
         // Update the AI counter
         await supabase

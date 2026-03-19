@@ -41,7 +41,10 @@ const ZIP_PHASE1_COUNT = 500
 
 // ─── English intent prefixes ────────────────────────────────────────────────
 // URL prefix for each English intent
+// All English intents (for service hub sitemaps)
 const EN_INTENTS = ['attorneys', 'hire', 'cost', 'reviews', 'emergency'] as const
+// Intents whose city pages are indexed (cost/reviews/emergency city pages have noindex — coming soon content)
+const EN_INTENTS_WITH_CITY_PAGES = ['attorneys', 'hire'] as const
 // Hub path prefix for service hubs per intent
 const EN_INTENT_HUB_PREFIX: Record<string, string> = {
   attorneys: '/practice-areas',
@@ -141,8 +144,6 @@ export async function generateSitemaps() {
   const phase1 = TOP_CITIES_PHASE1 // 300 cities
   const hispanicCities = TOP_HISPANIC_CITIES // 200
 
-  const emergencySlugs = Object.keys(tradeContent)
-
   const sitemaps: { id: string }[] = [
     // ── Static ──────────────────────────────────────────────────────────
     { id: 'static' },
@@ -154,7 +155,7 @@ export async function generateSitemaps() {
     { id: 'geo' },
     { id: 'quotes-services' },
     // quotes-service-cities removed — /quotes/[service]/[location] pages have noindex
-    ...batchIds('emergency-service-cities', emergencySlugs.length * phase1, BATCH_SIZE),
+    // emergency-service-cities removed — /emergency/[service]/[city] pages have noindex (coming soon)
     // tarifs-service-cities removed — /pricing/[service]/[city] pages have noindex
     // tarifs-task-cities removed — /pricing/[service]/[city]/[task] pages have noindex
     // reviews-services removed — /reviews/[service] pages have noindex
@@ -166,9 +167,14 @@ export async function generateSitemaps() {
 
     // ── NEW English intent sitemaps ─────────────────────────────────────
     // Intent service hubs (one sitemap per intent, ~75 PA each = small)
-    ...EN_INTENTS.map((intent) => ({ id: `${intent}-service-hubs` })),
-    // Intent × city sitemaps (batched)
-    ...EN_INTENTS.flatMap((intent) => batchIds(`${intent}-cities`, pa * phase1, BATCH_SIZE)),
+    // reviews-service-hubs removed — /reviews/[service] pages have noindex
+    ...EN_INTENTS.filter((i) => i !== 'reviews').map((intent) => ({
+      id: `${intent}-service-hubs`,
+    })),
+    // Intent × city sitemaps (batched) — only intents whose city pages are indexed
+    ...EN_INTENTS_WITH_CITY_PAGES.flatMap((intent) =>
+      batchIds(`${intent}-cities`, pa * phase1, BATCH_SIZE)
+    ),
 
     // ── NEW Spanish intent sitemaps ─────────────────────────────────────
     ...ES_INTENTS.flatMap((intent) =>
@@ -277,12 +283,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: BUILD_DATE,
     }))
 
-    // Guide pages (editorial)
-    const guideSlugs = ['certified-attorney', 'avoid-scams', 'legal-quotes', 'find-attorney']
-    const guidePages: MetadataRoute.Sitemap = guideSlugs.map((slug) => ({
-      url: `${SITE_URL}/guides/${slug}`,
-      lastModified: BUILD_DATE,
-    }))
+    // Guide pages (editorial) — removed: all 4 guide pages have noindex (coming soon content)
+    const guidePages: MetadataRoute.Sitemap = []
 
     // Guide specialty hub pages (75 practice areas)
     const guideHubPages: MetadataRoute.Sitemap = practiceAreas.map((pa) => ({
@@ -305,11 +307,8 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
       lastModified: BUILD_DATE,
     }))
 
-    const emergencySlugs = Object.keys(tradeContent)
-    const emergencyPages: MetadataRoute.Sitemap = emergencySlugs.map((slug) => ({
-      url: `${SITE_URL}/emergency/${slug}`,
-      lastModified: BUILD_DATE,
-    }))
+    // emergency hub pages removed — /emergency/[service]/[city] pages have noindex (coming soon content)
+    const emergencyPages: MetadataRoute.Sitemap = []
 
     const pricingPages: MetadataRoute.Sitemap = Object.keys(tradeContent).map((slug) => ({
       url: `${SITE_URL}/pricing/${slug}`,
@@ -623,7 +622,7 @@ export default async function sitemap({ id }: { id: string }): Promise<MetadataR
   }
 
   // ── Intent × city sitemaps (batched at 45K) ────────────────────────────
-  for (const intent of EN_INTENTS) {
+  for (const intent of EN_INTENTS_WITH_CITY_PAGES) {
     if (id.startsWith(`${intent}-cities-`)) {
       const batchIndex = parseInt(id.slice(`${intent}-cities-`.length), 10)
       if (isNaN(batchIndex)) break

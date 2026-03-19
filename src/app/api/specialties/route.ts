@@ -9,13 +9,17 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 
-export const dynamic = 'force-dynamic'
+// Specialties rarely change — cache for 1 hour (ISR revalidation)
+export const revalidate = 3600
 
 export async function GET(request: NextRequest) {
   try {
     const rateLimitResult = await rateLimit(request, RATE_LIMITS.api)
     if (!rateLimitResult.success) {
-      return NextResponse.json({ success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests' } }, { status: 429 })
+      return NextResponse.json(
+        { success: false, error: { code: 'RATE_LIMITED', message: 'Too many requests' } },
+        { status: 429 }
+      )
     }
 
     // adminClient justified: public endpoint, no user session — RLS would block anonymous reads
@@ -31,7 +35,10 @@ export async function GET(request: NextRequest) {
     if (error) {
       logger.error('Specialties API error', error)
       return NextResponse.json(
-        { success: false, error: { code: 'DATABASE_ERROR', message: 'Failed to fetch specialties' } },
+        {
+          success: false,
+          error: { code: 'DATABASE_ERROR', message: 'Failed to fetch specialties' },
+        },
         { status: 500 }
       )
     }

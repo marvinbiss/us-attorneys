@@ -425,6 +425,7 @@ export default async function AttorneyDirectoryPage({ params }: PageProps) {
   let recentQuoteCount = 0
   if (process.env.NEXT_BUILD_SKIP_DB !== '1') {
     try {
+      // SECURITY: createAdminClient used for read-only SSR query — bypasses RLS safely
       const { createAdminClient } = await import('@/lib/supabase/admin')
       const supabase = createAdminClient()
       const thirtyDaysAgo = new Date()

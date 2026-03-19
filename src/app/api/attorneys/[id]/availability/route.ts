@@ -19,23 +19,18 @@ import { getAvailableSlots } from '@/lib/availability'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
 
-export const dynamic = 'force-dynamic'
+// GET-only read endpoint — cache for 5 minutes (matches CDN s-maxage=300)
+export const revalidate = 300
 
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params
 
     // Validate UUID format
     if (!UUID_REGEX.test(id)) {
-      return NextResponse.json(
-        { error: 'Invalid attorney ID format' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Invalid attorney ID format' }, { status: 400 })
     }
 
     // Rate limit: 30 req/min (search tier — public, unauthenticated)
@@ -82,18 +77,12 @@ export async function GET(
     const response = NextResponse.json(result)
 
     // CDN cache: 5 min, stale-while-revalidate 10 min
-    response.headers.set(
-      'Cache-Control',
-      'public, s-maxage=300, stale-while-revalidate=600'
-    )
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
     response.headers.set('X-RateLimit-Remaining', String(rl.remaining))
 
     return response
   } catch (error: unknown) {
     logger.error('Availability API error', error as Error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
