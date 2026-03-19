@@ -16,31 +16,33 @@ const bookingPatchSchema = z.object({
 // GET /api/bookings/[id] - Get booking details
 export const dynamic = 'force-dynamic'
 
-export const GET = createApiHandler(async ({ user, params }) => {
-  const bookingId = params?.id
-  if (!bookingId) {
-    return NextResponse.json(
-      { success: false, error: { code: 'VALIDATION_ERROR', message: 'Missing booking ID' } },
-      { status: 400 }
-    )
-  }
+export const GET = createApiHandler(
+  async ({ user, params }) => {
+    const bookingId = params?.id
+    if (!bookingId) {
+      return NextResponse.json(
+        { success: false, error: { code: 'VALIDATION_ERROR', message: 'Missing booking ID' } },
+        { status: 400 }
+      )
+    }
 
-  // Validate booking ID format (must be full UUID)
-  const idValidation = bookingIdSchema.safeParse(bookingId)
-  if (!idValidation.success) {
-    return NextResponse.json(
-      { success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid booking ID' } },
-      { status: 400 }
-    )
-  }
+    // Validate booking ID format (must be full UUID)
+    const idValidation = bookingIdSchema.safeParse(bookingId)
+    if (!idValidation.success) {
+      return NextResponse.json(
+        { success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid booking ID' } },
+        { status: 400 }
+      )
+    }
 
-  // Use admin client for booking lookup (cross-user reads)
-  const adminSupabase = createAdminClient()
+    // Use admin client for booking lookup (cross-user reads)
+    const adminSupabase = createAdminClient()
 
-  // Query booking by exact ID only (no partial matching for security)
-  const { data: booking, error } = await adminSupabase
-    .from('bookings')
-    .select(`
+    // Query booking by exact ID only (no partial matching for security)
+    const { data: booking, error } = await adminSupabase
+      .from('bookings')
+      .select(
+        `
       id,
       client_name,
       client_phone,
@@ -62,155 +64,183 @@ export const GET = createApiHandler(async ({ user, params }) => {
         end_time,
         attorney_id
       )
-    `)
-    .eq('id', bookingId)
-    .single()
-
-  if (error || !booking) {
-    return NextResponse.json(
-      { success: false, error: { code: 'NOT_FOUND', message: 'Booking not found' } },
-      { status: 404 }
-    )
-  }
-
-  const slotData = booking.slot as Array<{ id: string; date: string; start_time: string; end_time: string; attorney_id: string }> | null
-  const slot = slotData?.[0] || null
-
-  // Authorization check: user must be the client or the attorney
-  const isOwner = booking.client_id === user!.id
-  const isAttorney = slot?.attorney_id === user!.id
-  const isEmailMatch = user!.email?.toLowerCase() === booking.client_email?.toLowerCase()
-
-  if (!isOwner && !isAttorney && !isEmailMatch) {
-    return NextResponse.json(
-      { success: false, error: { code: 'FORBIDDEN', message: 'Unauthorized access to this booking' } },
-      { status: 403 }
-    )
-  }
-
-  // Fetch attorney details
-  let attorneyProfile = null
-  if (slot?.attorney_id) {
-    const { data: attorneyData } = await adminSupabase
-      .from('profiles')
-      .select('id, full_name, phone_e164, email')
-      .eq('id', slot.attorney_id)
+    `
+      )
+      .eq('id', bookingId)
       .single()
-    attorneyProfile = attorneyData
-  }
 
-  // Format response for confirmation page
-  return NextResponse.json({
-    success: true,
-    data: {
-      booking: {
-        id: booking.id,
-        clientName: booking.client_name,
-        clientEmail: booking.client_email,
-        clientPhone: booking.client_phone,
-        specialtyName: booking.service_description || 'Service',
-        status: booking.status,
-        createdAt: booking.created_at,
-        cancelledAt: booking.cancelled_at,
-        cancelledBy: booking.cancelled_by,
-        cancellationReason: booking.cancellation_reason,
-        rescheduledAt: booking.rescheduled_at,
-        paymentStatus: booking.payment_status,
-        depositAmount: booking.deposit_amount,
-        date: slot?.date,
-        startTime: slot?.start_time,
-        endTime: slot?.end_time,
-        slotId: slot?.id,
-        attorneyId: attorneyProfile?.id || slot?.attorney_id,
-        attorneyName: attorneyProfile?.full_name || 'Attorney',
-        attorneyPhone: attorneyProfile?.phone_e164 ?? null,
-        attorneyEmail: attorneyProfile?.email,
-        attorneyAvatar: null,
-        // Legacy format for backward compatibility
-        client_name: booking.client_name,
-        client_phone: booking.client_phone,
-        client_email: booking.client_email,
-        service_description: booking.service_description,
-        slot: booking.slot,
-        attorney: attorneyProfile || { id: slot?.attorney_id, full_name: 'Attorney' },
+    if (error || !booking) {
+      return NextResponse.json(
+        { success: false, error: { code: 'NOT_FOUND', message: 'Booking not found' } },
+        { status: 404 }
+      )
+    }
+
+    const slotData = booking.slot as Array<{
+      id: string
+      date: string
+      start_time: string
+      end_time: string
+      attorney_id: string
+    }> | null
+    const slot = slotData?.[0] || null
+
+    // Authorization check: user must be the client or the attorney
+    const isOwner = booking.client_id === user?.id
+    const isAttorney = slot?.attorney_id === user?.id
+    const isEmailMatch = user?.email?.toLowerCase() === booking.client_email?.toLowerCase()
+
+    if (!isOwner && !isAttorney && !isEmailMatch) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 'FORBIDDEN', message: 'Unauthorized access to this booking' },
+        },
+        { status: 403 }
+      )
+    }
+
+    // Fetch attorney details
+    let attorneyProfile = null
+    if (slot?.attorney_id) {
+      const { data: attorneyData } = await adminSupabase
+        .from('profiles')
+        .select('id, full_name, phone_e164, email')
+        .eq('id', slot.attorney_id)
+        .single()
+      attorneyProfile = attorneyData
+    }
+
+    // Format response for confirmation page
+    return NextResponse.json({
+      success: true,
+      data: {
+        booking: {
+          id: booking.id,
+          clientName: booking.client_name,
+          clientEmail: booking.client_email,
+          clientPhone: booking.client_phone,
+          specialtyName: booking.service_description || 'Service',
+          status: booking.status,
+          createdAt: booking.created_at,
+          cancelledAt: booking.cancelled_at,
+          cancelledBy: booking.cancelled_by,
+          cancellationReason: booking.cancellation_reason,
+          rescheduledAt: booking.rescheduled_at,
+          paymentStatus: booking.payment_status,
+          depositAmount: booking.deposit_amount,
+          date: slot?.date,
+          startTime: slot?.start_time,
+          endTime: slot?.end_time,
+          slotId: slot?.id,
+          attorneyId: attorneyProfile?.id || slot?.attorney_id,
+          attorneyName: attorneyProfile?.full_name || 'Attorney',
+          attorneyPhone: attorneyProfile?.phone_e164 ?? null,
+          attorneyEmail: attorneyProfile?.email,
+          attorneyAvatar: null,
+          // Legacy format for backward compatibility
+          client_name: booking.client_name,
+          client_phone: booking.client_phone,
+          client_email: booking.client_email,
+          service_description: booking.service_description,
+          slot: booking.slot,
+          attorney: attorneyProfile || { id: slot?.attorney_id, full_name: 'Attorney' },
+        },
       },
-    },
-  })
-}, { requireAuth: true })
+    })
+  },
+  { requireAuth: true }
+)
 
 // PATCH /api/bookings/[id] - Update booking status
-export const PATCH = createApiHandler(async ({ request, user, params }) => {
-  const bookingId = params?.id
-  if (!bookingId) {
-    return NextResponse.json(
-      { success: false, error: { message: 'Missing booking ID' } },
-      { status: 400 }
-    )
-  }
+export const PATCH = createApiHandler(
+  async ({ request, user, params }) => {
+    const bookingId = params?.id
+    if (!bookingId) {
+      return NextResponse.json(
+        { success: false, error: { code: 'MISSING_ID', message: 'Missing booking ID' } },
+        { status: 400 }
+      )
+    }
 
-  // Validate booking ID format
-  const idValidation = bookingIdSchema.safeParse(bookingId)
-  if (!idValidation.success) {
-    return NextResponse.json(
-      { success: false, error: { message: 'Invalid booking ID' } },
-      { status: 400 }
-    )
-  }
+    // Validate booking ID format
+    const idValidation = bookingIdSchema.safeParse(bookingId)
+    if (!idValidation.success) {
+      return NextResponse.json(
+        { success: false, error: { code: 'VALIDATION_ERROR', message: 'Invalid booking ID' } },
+        { status: 400 }
+      )
+    }
 
-  const body = await request.json()
-  const result = bookingPatchSchema.safeParse(body)
-  if (!result.success) {
-    return NextResponse.json({ success: false, error: { message: 'Invalid request', details: result.error.flatten() } }, { status: 400 })
-  }
-  const { status, notes } = result.data
+    const body = await request.json()
+    const result = bookingPatchSchema.safeParse(body)
+    if (!result.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Invalid request',
+            details: result.error.flatten(),
+          },
+        },
+        { status: 400 }
+      )
+    }
+    const { status, notes } = result.data
 
-  // Verify user has access to this booking
-  const adminSupabase = createAdminClient()
-  const { data: existingBooking, error: fetchError } = await adminSupabase
-    .from('bookings')
-    .select('id, client_id, client_email, slot:availability_slots(attorney_id)')
-    .eq('id', bookingId)
-    .single()
+    // Verify user has access to this booking
+    const adminSupabase = createAdminClient()
+    const { data: existingBooking, error: fetchError } = await adminSupabase
+      .from('bookings')
+      .select('id, client_id, client_email, slot:availability_slots(attorney_id)')
+      .eq('id', bookingId)
+      .single()
 
-  if (fetchError || !existingBooking) {
-    return NextResponse.json(
-      { success: false, error: { message: 'Booking not found' } },
-      { status: 404 }
-    )
-  }
+    if (fetchError || !existingBooking) {
+      return NextResponse.json(
+        { success: false, error: { code: 'NOT_FOUND', message: 'Booking not found' } },
+        { status: 404 }
+      )
+    }
 
-  // Check authorization: must be owner or attorney
-  const slotData = existingBooking.slot as Array<{ attorney_id: string }> | null
-  const isOwner = existingBooking.client_id === user!.id
-  const isAttorney = slotData?.[0]?.attorney_id === user!.id
-  const isEmailMatch = user!.email?.toLowerCase() === existingBooking.client_email?.toLowerCase()
+    // Check authorization: must be owner or attorney
+    const slotData = existingBooking.slot as Array<{ attorney_id: string }> | null
+    const isOwner = existingBooking.client_id === user?.id
+    const isAttorney = slotData?.[0]?.attorney_id === user?.id
+    const isEmailMatch = user?.email?.toLowerCase() === existingBooking.client_email?.toLowerCase()
 
-  if (!isOwner && !isAttorney && !isEmailMatch) {
-    return NextResponse.json(
-      { success: false, error: { message: 'You are not authorized to modify this booking' } },
-      { status: 403 }
-    )
-  }
+    if (!isOwner && !isAttorney && !isEmailMatch) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: { code: 'FORBIDDEN', message: 'You are not authorized to modify this booking' },
+        },
+        { status: 403 }
+      )
+    }
 
-  const updateData: Record<string, string | undefined> = {}
-  if (status) updateData.status = status
-  if (notes !== undefined) updateData.notes = notes
-  updateData.updated_at = new Date().toISOString()
+    const updateData: Record<string, string | undefined> = {}
+    if (status) updateData.status = status
+    if (notes !== undefined) updateData.notes = notes
+    updateData.updated_at = new Date().toISOString()
 
-  const { data, error } = await adminSupabase
-    .from('bookings')
-    .update(updateData)
-    .eq('id', bookingId)
-    .select()
-    .single()
+    const { data, error } = await adminSupabase
+      .from('bookings')
+      .update(updateData)
+      .eq('id', bookingId)
+      .select()
+      .single()
 
-  if (error) {
-    logger.error('Booking update error:', error)
-    throw error
-  }
+    if (error) {
+      logger.error('Booking update error:', error)
+      throw error
+    }
 
-  return NextResponse.json({
-    success: true,
-    booking: data,
-  })
-}, { requireAuth: true })
+    return NextResponse.json({
+      success: true,
+      booking: data,
+    })
+  },
+  { requireAuth: true }
+)

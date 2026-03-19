@@ -9,8 +9,8 @@ const oauthSchema = z.object({
   next: z.string().optional(),
 })
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,7 +18,14 @@ export async function POST(request: NextRequest) {
     const result = oauthSchema.safeParse(body)
     if (!result.success) {
       return NextResponse.json(
-        { error: 'Invalid provider', details: result.error.flatten() },
+        {
+          success: false,
+          error: {
+            code: 'INVALID_PROVIDER',
+            message: 'Invalid provider',
+            details: result.error.flatten(),
+          },
+        },
         { status: 400 }
       )
     }
@@ -26,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
     const redirectTo = next
       ? `${siteUrl}/auth/callback?next=${encodeURIComponent(next)}`
       : `${siteUrl}/auth/callback`
@@ -45,16 +52,16 @@ export async function POST(request: NextRequest) {
     if (error) {
       logger.error('OAuth error', error)
       return NextResponse.json(
-        { error: error.message },
+        { success: false, error: { code: 'OAUTH_ERROR', message: error.message } },
         { status: 400 }
       )
     }
 
-    return NextResponse.json({ url: data.url })
+    return NextResponse.json({ success: true, data: { url: data.url } })
   } catch (error: unknown) {
     logger.error('OAuth error', error)
     return NextResponse.json(
-      { error: 'Server error' },
+      { success: false, error: { code: 'SERVER_ERROR', message: 'Server error' } },
       { status: 500 }
     )
   }
