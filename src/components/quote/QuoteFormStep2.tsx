@@ -31,26 +31,26 @@ export function QuoteFormStep2({
   onNext,
   onPrev,
 }: QuoteFormStep2Props) {
-  const filteredCities = cityQuery.length >= 2
-    ? cities
-        .filter((v) =>
-          v.name.toLowerCase().includes(cityQuery.toLowerCase()) ||
-          v.zipCode.startsWith(cityQuery)
-        )
-        .slice(0, 8)
-    : []
+  const filteredCities =
+    cityQuery.length >= 2
+      ? cities
+          .filter(
+            (v) =>
+              v.name.toLowerCase().includes(cityQuery.toLowerCase()) ||
+              v.zipCode.startsWith(cityQuery)
+          )
+          .slice(0, 8)
+      : []
 
   return (
     <div className="space-y-6">
-      <h3 className="font-heading text-xl font-bold text-slate-900 mb-1">
+      <h3 className="mb-1 font-heading text-xl font-bold text-slate-900">
         Where is your case located?
       </h3>
-      <p className="text-slate-500 text-sm mb-4">
-        Enter your city to find attorneys near you.
-      </p>
+      <p className="mb-4 text-sm text-slate-500">Enter your city to find attorneys near you.</p>
 
       <div>
-        <label htmlFor="city" className="block text-sm font-semibold text-slate-700 mb-2">
+        <label htmlFor="city" className="mb-2 block text-sm font-semibold text-slate-700">
           City <span className="text-red-500">*</span>
         </label>
         <div className="relative">
@@ -78,15 +78,15 @@ export function QuoteFormStep2({
             style={{ fontSize: '16px' }}
             className={`w-full rounded-xl border ${
               errors.city ? 'border-red-400 ring-2 ring-red-100' : 'border-gray-300'
-            } bg-white px-4 py-3 text-slate-900 placeholder:text-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all`}
+            } bg-white px-4 py-3 text-slate-900 transition-all placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/30`}
           />
           {showCitySuggestions && filteredCities.length > 0 && (
-            <ul className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-auto">
+            <ul className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-gray-200 bg-white shadow-lg">
               {filteredCities.map((v) => (
                 <li key={v.slug}>
                   <button
                     type="button"
-                    className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors text-sm"
+                    className="w-full px-4 py-3 text-left text-sm transition-colors hover:bg-blue-50"
                     onMouseDown={(e) => {
                       e.preventDefault()
                       updateField('city', v.name)
@@ -96,7 +96,7 @@ export function QuoteFormStep2({
                     }}
                   >
                     <span className="font-medium text-slate-900">{v.name}</span>
-                    <span className="text-gray-400 ml-2">
+                    <span className="ml-2 text-gray-400">
                       ({v.stateName}, {v.zipCode})
                     </span>
                   </button>
@@ -109,13 +109,15 @@ export function QuoteFormStep2({
           type="button"
           onClick={handleGeolocation}
           disabled={geoLoading}
-          className="mt-2 inline-flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors disabled:opacity-50"
+          className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 transition-colors hover:text-blue-800 disabled:opacity-50"
         >
-          <MapPin className="w-4 h-4" />
+          <MapPin className="h-4 w-4" />
           {geoLoading ? 'Locating...' : 'Use my location'}
         </button>
         {errors.city && (
-          <p id="city-error" role="alert" className="mt-1.5 text-sm text-red-600">{errors.city}</p>
+          <p id="city-error" role="alert" className="mt-1.5 text-sm text-red-600">
+            {errors.city}
+          </p>
         )}
       </div>
 
@@ -123,16 +125,16 @@ export function QuoteFormStep2({
         <button
           type="button"
           onClick={onPrev}
-          className="flex-1 inline-flex items-center justify-center gap-2 border-2 border-gray-200 hover:border-gray-300 text-slate-700 font-semibold px-6 py-3.5 rounded-xl hover:bg-gray-50 transition-all duration-300"
+          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-gray-200 px-6 py-3.5 font-semibold text-slate-700 transition-all duration-300 hover:border-gray-300 hover:bg-gray-50"
         >
-          <ArrowLeft className="w-5 h-5" /> Previous
+          <ArrowLeft className="h-5 w-5" /> Previous
         </button>
         <button
           type="button"
           onClick={onNext}
-          className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700 hover:shadow-xl"
         >
-          Next <ArrowRight className="w-5 h-5" />
+          Next <ArrowRight className="h-5 w-5" />
         </button>
       </div>
     </div>
