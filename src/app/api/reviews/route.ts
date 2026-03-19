@@ -5,13 +5,13 @@
  */
 
 import { revalidatePath } from 'next/cache'
-import { createClient } from '@supabase/supabase-js'
 import { createHmac, timingSafeEqual } from 'crypto'
 import { apiLogger } from '@/lib/logger'
 import { createApiHandler, apiSuccess, apiError } from '@/lib/api/handler'
 import { slugify } from '@/lib/utils'
 import { createReviewSchema, validateRequest } from '@/lib/validations/schemas'
 import { withTimeout } from '@/lib/api/timeout'
+import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 import type { SupabaseClientType } from '@/types'
 
@@ -46,20 +46,14 @@ interface Review {
   would_recommend: boolean
   client_name: string
   created_at: string
-  artisan_response: string | null
-  artisan_responded_at: string | null
+  attorney_response: string | null
+  attorney_responded_at: string | null
 }
 
 // Initialize Supabase client (anon key only — RLS enforced)
-function getSupabaseClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error('Supabase configuration missing')
-  }
-
-  return createClient(supabaseUrl, supabaseKey)
+// Uses centralized server client from @/lib/supabase/server
+async function getSupabaseClient() {
+  return createClient()
 }
 
 // Helper to get attorney display name
@@ -72,7 +66,11 @@ function getAttorneyDisplayName(attorneyData: AttorneyProfile | AttorneyProfile[
 }
 
 // Helper to get client info from profiles join
-function getClientInfo(client: ClientProfile | ClientProfile[] | null): { name: string; email: string; phone: string | null } {
+function getClientInfo(client: ClientProfile | ClientProfile[] | null): {
+  name: string
+  email: string
+  phone: string | null
+} {
   if (!client) return { name: 'Client', email: '', phone: null }
   const profile = Array.isArray(client) ? client[0] : client
   return {
@@ -83,75 +81,84 @@ function getClientInfo(client: ClientProfile | ClientProfile[] | null): { name: 
 }
 
 // Query schema for GET request - require full UUID for bookingId to prevent enumeration
-const getQuerySchema = z.object({
-  bookingId: z.string().uuid('Invalid booking ID').optional(),
-  attorneyId: z.string().uuid().optional(),
-}).refine(data => data.bookingId || data.attorneyId, {
-  message: 'bookingId or attorneyId required',
-})
+const getQuerySchema = z
+  .object({
+    bookingId: z.string().uuid('Invalid booking ID').optional(),
+    attorneyId: z.string().uuid().optional(),
+  })
+  .refine((data) => data.bookingId || data.attorneyId, {
+    message: 'bookingId or attorneyId required',
+  })
 
 // GET /api/reviews - Get booking info for review or attorney reviews
 export const dynamic = 'force-dynamic'
 
 export const GET = createApiHandler(async ({ request }) => {
-    const { searchParams } = new URL(request.url)
+  const { searchParams } = new URL(request.url)
 
-    const queryValidation = getQuerySchema.safeParse({
-      bookingId: searchParams.get('bookingId') || undefined,
-      attorneyId: searchParams.get('attorneyId') || undefined,
-    })
+  const queryValidation = getQuerySchema.safeParse({
+    bookingId: searchParams.get('bookingId') || undefined,
+    attorneyId: searchParams.get('attorneyId') || undefined,
+  })
 
-    if (!queryValidation.success) {
-      return apiError('VALIDATION_ERROR', queryValidation.error.issues[0]?.message || 'Invalid parameters', 400)
-    }
+  if (!queryValidation.success) {
+    return apiError(
+      'VALIDATION_ERROR',
+      queryValidation.error.issues[0]?.message || 'Invalid parameters',
+      400
+    )
+  }
 
-    const { bookingId, attorneyId } = queryValidation.data
-    const supabase = getSupabaseClient()
+  const { bookingId, attorneyId } = queryValidation.data
+  const supabase = await getSupabaseClient()
 
-    // Get booking info for review submission - use exact match to prevent enumeration
-    if (bookingId) {
-      const { data: booking, error } = await withTimeout(
-        supabase
-          .from('bookings')
-          .select(`
+  // Get booking info for review submission - use exact match to prevent enumeration
+  if (bookingId) {
+    const { data: booking, error } = await withTimeout(
+      supabase
+        .from('bookings')
+        .select(
+          `
             id,
             attorney_id,
             service_name,
             status,
             client:profiles!client_id(full_name, email, phone_e164),
             attorney:attorneys!bookings_attorney_id_fkey(id, name)
-          `)
-          .eq('id', bookingId)
-          .single()
-      )
-
-      if (error || !booking) {
-        // Don't reveal whether the booking exists or not to prevent enumeration
-        return apiError('NOT_FOUND', 'Booking not found', 404)
-      }
-
-      const typedBooking = booking as BookingWithRelations
-
-      // Check if already reviewed
-      const { data: existingReview } = await supabase
-        .from('reviews')
-        .select('id')
-        .eq('booking_id', typedBooking.id)
+          `
+        )
+        .eq('id', bookingId)
         .single()
+    )
 
-      return apiSuccess({
-        attorneyName: getAttorneyDisplayName(typedBooking.attorney),
-        specialtyName: typedBooking.service_name || 'Service',
-        alreadyReviewed: !!existingReview,
-      })
+    if (error || !booking) {
+      // Don't reveal whether the booking exists or not to prevent enumeration
+      return apiError('NOT_FOUND', 'Booking not found', 404)
     }
 
-    // Get published reviews for an attorney (only status = 'published')
-    if (attorneyId) {
-      const { data: reviews, error } = await withTimeout(
-        supabase
-          .from('reviews')
-          .select(`
+    const typedBooking = booking as BookingWithRelations
+
+    // Check if already reviewed
+    const { data: existingReview } = await supabase
+      .from('reviews')
+      .select('id')
+      .eq('booking_id', typedBooking.id)
+      .single()
+
+    return apiSuccess({
+      attorneyName: getAttorneyDisplayName(typedBooking.attorney),
+      specialtyName: typedBooking.service_name || 'Service',
+      alreadyReviewed: !!existingReview,
+    })
+  }
+
+  // Get published reviews for an attorney (only status = 'published')
+  if (attorneyId) {
+    const { data: reviews, error } = await withTimeout(
+      supabase
+        .from('reviews')
+        .select(
+          `
             id,
             rating,
             rating_communication,
@@ -161,221 +168,229 @@ export const GET = createApiHandler(async ({ request }) => {
             would_recommend,
             client_name,
             created_at,
-            artisan_response,
-            artisan_responded_at
-          `)
-          .eq('attorney_id', attorneyId)
-          .eq('status', 'published')
-          .order('created_at', { ascending: false })
-      )
+            attorney_response,
+            attorney_responded_at
+          `
+        )
+        .eq('attorney_id', attorneyId)
+        .eq('status', 'published')
+        .order('created_at', { ascending: false })
+    )
 
-      if (error) {
-        apiLogger.error('Database error:', error)
-        return apiError('DATABASE_ERROR', 'Error retrieving reviews', 500)
-      }
+    if (error) {
+      apiLogger.error('Database error:', error)
+      return apiError('DATABASE_ERROR', 'Error retrieving reviews', 500)
+    }
 
-      const typedReviews = (reviews || []) as Review[]
+    const typedReviews = (reviews || []) as Review[]
 
-      // Calculate stats
-      const totalReviews = typedReviews.length
-      const avgRating = totalReviews > 0
-        ? typedReviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
-        : 0
-      const recommendRate = totalReviews > 0
+    // Calculate stats
+    const totalReviews = typedReviews.length
+    const avgRating =
+      totalReviews > 0 ? typedReviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews : 0
+    const recommendRate =
+      totalReviews > 0
         ? (typedReviews.filter((r) => r.would_recommend).length / totalReviews) * 100
         : 0
 
-      // Rating distribution
-      const distribution = [0, 0, 0, 0, 0]
-      typedReviews.forEach((r) => {
-        if (r.rating >= 1 && r.rating <= 5) {
-          distribution[r.rating - 1]++
-        }
-      })
+    // Rating distribution
+    const distribution = [0, 0, 0, 0, 0]
+    typedReviews.forEach((r) => {
+      if (r.rating >= 1 && r.rating <= 5) {
+        distribution[r.rating - 1]++
+      }
+    })
 
-      return apiSuccess({
-        reviews: typedReviews,
-        stats: {
-          total: totalReviews,
-          average: Math.round(avgRating * 10) / 10,
-          recommendRate: Math.round(recommendRate),
-          distribution,
-        },
-      })
-    }
+    return apiSuccess({
+      reviews: typedReviews,
+      stats: {
+        total: totalReviews,
+        average: Math.round(avgRating * 10) / 10,
+        recommendRate: Math.round(recommendRate),
+        distribution,
+      },
+    })
+  }
 
-    return apiError('VALIDATION_ERROR', 'bookingId or attorneyId required', 400)
+  return apiError('VALIDATION_ERROR', 'bookingId or attorneyId required', 400)
 }, {})
 
 // POST /api/reviews - Submit a review
 export const POST = createApiHandler(async ({ request }) => {
-    const body = await request.json()
+  const body = await request.json()
 
-    // Validate request body
-    const validation = validateRequest(createReviewSchema, body)
+  // Validate request body
+  const validation = validateRequest(createReviewSchema, body)
 
-    if (!validation.success) {
-      return apiError('VALIDATION_ERROR', 'Invalid data', 400)
+  if (!validation.success) {
+    return apiError('VALIDATION_ERROR', 'Invalid data', 400)
+  }
+
+  const {
+    bookingId,
+    comment,
+    reviewToken,
+    ratingCommunication,
+    ratingResult,
+    ratingResponsiveness,
+    isAnonymous,
+  } = validation.data
+
+  // Compute overall rating: prefer sub-ratings average, fallback to single rating
+  const hasSubRatings = ratingCommunication && ratingResult && ratingResponsiveness
+  const rating = hasSubRatings
+    ? Math.round((ratingCommunication + ratingResult + ratingResponsiveness) / 3)
+    : (validation.data.rating ?? 3)
+  const wouldRecommend = validation.data.wouldRecommend ?? body.wouldRecommend ?? true
+
+  // Validate HMAC review token (prevents fake reviews)
+  if (!reviewToken) {
+    return apiError('VALIDATION_ERROR', 'Review token is required', 400)
+  }
+  if (!process.env.REVIEW_HMAC_SECRET) {
+    apiLogger.error('REVIEW_HMAC_SECRET is not configured — rejecting review submission')
+    return apiError('INTERNAL_ERROR', 'Review submission is temporarily unavailable', 503)
+  }
+  {
+    const expected = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
+      .update(bookingId)
+      .digest('hex')
+      .slice(0, 32)
+    const provided = Buffer.from(reviewToken, 'hex')
+    const expectedBuf = Buffer.from(expected, 'hex')
+    if (provided.length !== expectedBuf.length || !timingSafeEqual(provided, expectedBuf)) {
+      return apiError('AUTHENTICATION_ERROR', 'Invalid token', 401)
     }
+  }
 
-    const {
-      bookingId,
-      comment,
-      reviewToken,
-      ratingCommunication,
-      ratingResult,
-      ratingResponsiveness,
-      isAnonymous,
-    } = validation.data
+  // Validate bookingId is a valid UUID to prevent enumeration
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  if (!uuidRegex.test(bookingId)) {
+    return apiError('VALIDATION_ERROR', 'Invalid booking ID', 400)
+  }
 
-    // Compute overall rating: prefer sub-ratings average, fallback to single rating
-    const hasSubRatings = ratingCommunication && ratingResult && ratingResponsiveness
-    const rating = hasSubRatings
-      ? Math.round((ratingCommunication + ratingResult + ratingResponsiveness) / 3)
-      : validation.data.rating ?? 3
-    const wouldRecommend = validation.data.wouldRecommend ?? body.wouldRecommend ?? true
+  const supabase = await getSupabaseClient()
 
-    // Validate HMAC review token (prevents fake reviews)
-    if (!reviewToken) {
-      return apiError('VALIDATION_ERROR', 'Review token is required', 400)
-    }
-    if (!process.env.REVIEW_HMAC_SECRET) {
-      apiLogger.error('REVIEW_HMAC_SECRET is not configured — rejecting review submission')
-      return apiError('INTERNAL_ERROR', 'Review submission is temporarily unavailable', 503)
-    }
-    {
-      const expected = createHmac('sha256', process.env.REVIEW_HMAC_SECRET)
-        .update(bookingId)
-        .digest('hex')
-        .slice(0, 32)
-      const provided = Buffer.from(reviewToken, 'hex')
-      const expectedBuf = Buffer.from(expected, 'hex')
-      if (provided.length !== expectedBuf.length || !timingSafeEqual(provided, expectedBuf)) {
-        return apiError('AUTHENTICATION_ERROR', 'Invalid token', 401)
-      }
-    }
-
-    // Validate bookingId is a valid UUID to prevent enumeration
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-    if (!uuidRegex.test(bookingId)) {
-      return apiError('VALIDATION_ERROR', 'Invalid booking ID', 400)
-    }
-
-    const supabase = getSupabaseClient()
-
-    // Find the booking using exact match to prevent enumeration
-    // Join profiles via client_id to get client name and email
-    const { data: booking, error: bookingError } = await withTimeout(
-      supabase
-        .from('bookings')
-        .select(`
+  // Find the booking using exact match to prevent enumeration
+  // Join profiles via client_id to get client name and email
+  const { data: booking, error: bookingError } = await withTimeout(
+    supabase
+      .from('bookings')
+      .select(
+        `
           id,
           attorney_id,
           status,
           client:profiles!client_id(full_name, email, phone_e164)
-        `)
-        .eq('id', bookingId)
-        .single()
-    )
+        `
+      )
+      .eq('id', bookingId)
+      .single()
+  )
 
-    if (bookingError || !booking) {
-      // Generic error to prevent enumeration
-      return apiError('NOT_FOUND', 'Booking not found', 404)
-    }
+  if (bookingError || !booking) {
+    // Generic error to prevent enumeration
+    return apiError('NOT_FOUND', 'Booking not found', 404)
+  }
 
-    // Check booking status
-    if (!['confirmed', 'completed'].includes(booking.status)) {
-      return apiError('VALIDATION_ERROR', 'This booking cannot be reviewed', 400)
-    }
+  // Check booking status
+  if (!['confirmed', 'completed'].includes(booking.status)) {
+    return apiError('VALIDATION_ERROR', 'This booking cannot be reviewed', 400)
+  }
 
-    // Check if already reviewed
-    const { data: existingReview } = await supabase
-      .from('reviews')
-      .select('id')
-      .eq('booking_id', booking.id)
+  // Check if already reviewed
+  const { data: existingReview } = await supabase
+    .from('reviews')
+    .select('id')
+    .eq('booking_id', booking.id)
+    .single()
+
+  if (existingReview) {
+    return apiError('REVIEW_ALREADY_EXISTS', 'You have already left a review for this booking', 409)
+  }
+
+  // Extract client info from profiles join
+  const clientInfo = getClientInfo(booking.client as ClientProfile | ClientProfile[] | null)
+
+  // Basic fraud detection
+  const cleanComment = comment.trim()
+  const fraudIndicators = detectFraudIndicators(cleanComment, rating)
+
+  // Create the review
+  const { data: review, error: insertError } = await supabase
+    .from('reviews')
+    .insert({
+      booking_id: booking.id,
+      attorney_id: booking.attorney_id,
+      client_name: isAnonymous ? 'Verified Client' : clientInfo.name,
+      client_email: clientInfo.email,
+      rating,
+      rating_communication: ratingCommunication || null,
+      rating_result: ratingResult || null,
+      rating_responsiveness: ratingResponsiveness || null,
+      comment: cleanComment,
+      would_recommend: wouldRecommend,
+      status: fraudIndicators.length > 0 ? 'pending_review' : 'published',
+      fraud_indicators: fraudIndicators.length > 0 ? fraudIndicators : null,
+      created_at: new Date().toISOString(),
+    })
+    .select()
+    .single()
+
+  if (insertError) {
+    apiLogger.error('Review insert error:', insertError)
+    return apiError('DATABASE_ERROR', 'Error creating review', 500)
+  }
+
+  // Update attorney's average rating (non-blocking)
+  updateAttorneyRating(supabase, booking.attorney_id).catch((err) =>
+    apiLogger.error('Update rating failed', err)
+  )
+
+  // On-demand revalidation of affected pages (non-blocking)
+  try {
+    const { data: attorneyData } = await supabase
+      .from('attorneys')
+      .select(
+        'address_city, slug, stable_id, primary_specialty:specialties!attorneys_primary_specialty_id_fkey(slug)'
+      )
+      .eq('id', booking.attorney_id)
       .single()
 
-    if (existingReview) {
-      return apiError('REVIEW_ALREADY_EXISTS', 'You have already left a review for this booking', 409)
-    }
+    if (attorneyData) {
+      const primarySpec = attorneyData.primary_specialty as unknown as { slug: string } | null
+      const specialtySlug = primarySpec?.slug || 'attorney'
+      const locationSlug = slugify(attorneyData.address_city || 'united-states')
+      const publicId = attorneyData.slug || attorneyData.stable_id
 
-    // Extract client info from profiles join
-    const clientInfo = getClientInfo(booking.client as ClientProfile | ClientProfile[] | null)
-
-    // Basic fraud detection
-    const cleanComment = comment.trim()
-    const fraudIndicators = detectFraudIndicators(cleanComment, rating)
-
-    // Create the review
-    const { data: review, error: insertError } = await supabase
-      .from('reviews')
-      .insert({
-        booking_id: booking.id,
-        attorney_id: booking.attorney_id,
-        client_name: isAnonymous ? 'Verified Client' : clientInfo.name,
-        client_email: clientInfo.email,
-        rating,
-        rating_communication: ratingCommunication || null,
-        rating_result: ratingResult || null,
-        rating_responsiveness: ratingResponsiveness || null,
-        comment: cleanComment,
-        would_recommend: wouldRecommend,
-        status: fraudIndicators.length > 0 ? 'pending_review' : 'published',
-        fraud_indicators: fraudIndicators.length > 0 ? fraudIndicators : null,
-        created_at: new Date().toISOString(),
-      })
-      .select()
-      .single()
-
-    if (insertError) {
-      apiLogger.error('Review insert error:', insertError)
-      return apiError('DATABASE_ERROR', 'Error creating review', 500)
-    }
-
-    // Update attorney's average rating (non-blocking)
-    updateAttorneyRating(supabase, booking.attorney_id).catch((err) => apiLogger.error('Update rating failed', err))
-
-    // On-demand revalidation of affected pages (non-blocking)
-    try {
-      const { data: attorneyData } = await supabase
-        .from('attorneys')
-        .select('address_city, slug, stable_id, primary_specialty:specialties!attorneys_primary_specialty_id_fkey(slug)')
-        .eq('id', booking.attorney_id)
-        .single()
-
-      if (attorneyData) {
-        const primarySpec = attorneyData.primary_specialty as unknown as { slug: string } | null
-        const specialtySlug = primarySpec?.slug || 'attorney'
-        const locationSlug = slugify(attorneyData.address_city || 'united-states')
-        const publicId = attorneyData.slug || attorneyData.stable_id
-
-        // Attorney profile page
-        if (publicId) {
-          revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, 'page')
-        }
-        // City reviews page
-        revalidatePath(`/reviews/${specialtySlug}/${locationSlug}`, 'page')
-        // City listing
-        revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}`, 'page')
-
-        apiLogger.info('Revalidated paths after review submission', {
-          attorneyId: booking.attorney_id,
-          reviewId: review.id,
-        })
+      // Attorney profile page
+      if (publicId) {
+        revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}/${publicId}`, 'page')
       }
-    } catch (revalError) {
-      apiLogger.error('Revalidation failed after review submission:', revalError)
-    }
+      // City reviews page
+      revalidatePath(`/reviews/${specialtySlug}/${locationSlug}`, 'page')
+      // City listing
+      revalidatePath(`/practice-areas/${specialtySlug}/${locationSlug}`, 'page')
 
-    return apiSuccess({
-      review: {
-        id: review.id,
-        status: review.status,
-      },
-      message: fraudIndicators.length > 0
+      apiLogger.info('Revalidated paths after review submission', {
+        attorneyId: booking.attorney_id,
+        reviewId: review.id,
+      })
+    }
+  } catch (revalError) {
+    apiLogger.error('Revalidation failed after review submission:', revalError)
+  }
+
+  return apiSuccess({
+    review: {
+      id: review.id,
+      status: review.status,
+    },
+    message:
+      fraudIndicators.length > 0
         ? 'Your review will be published after verification'
         : 'Thank you for your review!',
-    })
+  })
 }, {})
 
 // Fraud detection helper
@@ -418,10 +433,11 @@ async function updateAttorneyRating(supabase: SupabaseClientType, attorneyId: st
     .from('reviews')
     .select('rating')
     .eq('attorney_id', attorneyId)
-    // REMOVED: .eq('status', 'published') to include ALL real reviews in rating calculation
+  // REMOVED: .eq('status', 'published') to include ALL real reviews in rating calculation
 
   if (reviews && reviews.length > 0) {
-    const avgRating = reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length
+    const avgRating =
+      reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length
 
     await supabase
       .from('attorneys')
