@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
     const redirectTo = next
       ? `${siteUrl}/auth/callback?next=${encodeURIComponent(next)}`
       : `${siteUrl}/auth/callback`

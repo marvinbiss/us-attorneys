@@ -51,7 +51,7 @@ export interface SendResult {
 
 // ── Configuration ────────────────────────────────────────────────────────────
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
 
 function emailWrapper(content: string, unsubUrl: string): string {
   return `<!DOCTYPE html>

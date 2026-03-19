@@ -78,7 +78,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   // Retrieve the provider linked to this user
   const { data: provider, error: attorneyError } = await supabase
     .from('attorneys')
-    .select('id, avatar_url')
+    .select('id, profile_image_url')
     .eq('user_id', user!.id)
     .single()
 
@@ -143,7 +143,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const fileBlob = new Blob([buffer], { type: file.type })
 
   // Delete the old avatar if it exists
-  const currentAvatarUrl = provider.avatar_url as string | null
+  const currentAvatarUrl = provider.profile_image_url as string | null
   if (currentAvatarUrl) {
     const oldPath = storagePathFromUrl(currentAvatarUrl, 'avatars')
     if (oldPath) {
@@ -174,10 +174,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   const publicUrl = publicUrlData.publicUrl
 
-  // Update the avatar_url column in attorneys
+  // Update the profile_image_url column in attorneys
   const { error: updateError } = await supabase
     .from('attorneys')
-    .update({ avatar_url: publicUrl })
+    .update({ profile_image_url: publicUrl })
     .eq('user_id', user!.id)
 
   if (updateError) {
@@ -199,10 +199,10 @@ export async function DELETE(): Promise<NextResponse> {
   const { error: guardError, user, supabase } = await requireAttorney()
   if (guardError) return guardError
 
-  // Retrieve the attorney and their current avatar_url
+  // Retrieve the attorney and their current profile_image_url
   const { data: provider, error: attorneyError } = await supabase
     .from('attorneys')
-    .select('id, avatar_url')
+    .select('id, profile_image_url')
     .eq('user_id', user!.id)
     .single()
 
@@ -213,7 +213,7 @@ export async function DELETE(): Promise<NextResponse> {
     )
   }
 
-  const currentAvatarUrl = provider.avatar_url as string | null
+  const currentAvatarUrl = provider.profile_image_url as string | null
 
   if (!currentAvatarUrl) {
     return NextResponse.json(
@@ -245,10 +245,10 @@ export async function DELETE(): Promise<NextResponse> {
     )
   }
 
-  // Set avatar_url to NULL in providers (only after successful deletion)
+  // Set profile_image_url to NULL in attorneys (only after successful deletion)
   const { error: updateError } = await supabase
     .from('attorneys')
-    .update({ avatar_url: null })
+    .update({ profile_image_url: null })
     .eq('user_id', user!.id)
 
   if (updateError) {

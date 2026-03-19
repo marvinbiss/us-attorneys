@@ -139,14 +139,14 @@ async function sendDeadlineNotification(supabase: any, reminder: ReminderRow, ti
       const resend = new Resend(process.env.RESEND_API_KEY)
 
       await resend.emails.send({
-        from: 'US Attorneys <noreply@us-attorneys.com>',
+        from: 'US Attorneys <noreply@lawtendr.com>',
         to: profile.email,
         subject: title,
         html: `
           <h2>${title}</h2>
           <p>Hi${profile.full_name ? ` ${profile.full_name}` : ''},</p>
           <p>${body}</p>
-          <p><a href="https://us-attorneys.com${url}" style="background:#2563eb;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;">Check Your Deadline</a></p>
+          <p><a href="https://lawtendr.com${url}" style="background:#2563eb;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;display:inline-block;">Check Your Deadline</a></p>
           <p style="color:#666;font-size:12px;margin-top:24px;">This is an automated reminder from US Attorneys. You can manage your reminders in your account settings.</p>
         `,
       })

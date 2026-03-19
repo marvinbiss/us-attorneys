@@ -152,7 +152,7 @@ async function sendEmailAlert(payload: AlertPayload): Promise<boolean> {
         Authorization: `Bearer ${resendApiKey}`,
       },
       body: JSON.stringify({
-        from: 'US Attorneys Alerts <alerts@us-attorneys.com>',
+        from: 'US Attorneys Alerts <alerts@lawtendr.com>',
         to: [alertEmail],
         subject: `[${payload.level.toUpperCase()}] ${payload.title}`,
         html: `

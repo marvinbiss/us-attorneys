@@ -80,7 +80,11 @@ export const POST = createApiHandler(async ({ request }) => {
     body = await request.json()
   } else {
     const text = await request.text()
-    body = JSON.parse(text)
+    try {
+      body = JSON.parse(text)
+    } catch {
+      return new NextResponse(null, { status: 400 })
+    }
   }
 
   const validation = analyticsSchema.safeParse(body)

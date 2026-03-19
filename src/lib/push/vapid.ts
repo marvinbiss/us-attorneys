@@ -44,7 +44,7 @@ let configured = false
 export function ensureVapidConfigured(): void {
   if (configured) return
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
   const mailto = `mailto:push@${new URL(siteUrl).hostname}`
 
   try {

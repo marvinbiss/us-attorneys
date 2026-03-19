@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { logger } from '@/lib/logger'
 import {
   Search,
   Plus,
@@ -62,7 +63,7 @@ export default function AdminServicesPage() {
         setError('Error loading services')
       }
     } catch (err: unknown) {
-      console.error('Failed to fetch services:', err)
+      logger.error('Failed to fetch services', err)
       setError('Connection error')
     } finally {
       setLoading(false)
@@ -91,7 +92,7 @@ export default function AdminServicesPage() {
       setFormData({ name: '', description: '', icon: '' })
       fetchSpecialties()
     } catch (err: unknown) {
-      console.error('Failed to save service:', err)
+      logger.error('Failed to save service', err)
       setError('Connection error')
     }
   }
@@ -109,7 +110,7 @@ export default function AdminServicesPage() {
       setDeleteModal({ open: false, specialtyId: '', specialtyName: '' })
       fetchSpecialties()
     } catch (err: unknown) {
-      console.error('Failed to delete service:', err)
+      logger.error('Failed to delete service', err)
       setError('Connection error')
     }
   }

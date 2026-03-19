@@ -22,6 +22,21 @@ export async function POST() {
     }
 
     const admin = createAdminClient()
+
+    // Verify the authenticated user has an attorney profile (ownership check)
+    const { data: attorneyProfile } = await admin
+      .from('attorneys')
+      .select('id, user_id')
+      .eq('user_id', user.id)
+      .single()
+
+    if (!attorneyProfile) {
+      return NextResponse.json(
+        { error: 'No attorney profile found. Only verified attorneys can manage billing.' },
+        { status: 403 }
+      )
+    }
+
     const { data: profile } = await admin
       .from('profiles')
       .select('stripe_customer_id')

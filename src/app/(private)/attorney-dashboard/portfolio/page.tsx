@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { logger } from '@/lib/logger'
 import {
   Plus,
   Image as ImageIcon,
@@ -43,7 +44,7 @@ export default function PortfolioPage() {
         setError(data.error || 'Error loading portfolio')
       }
     } catch (err: unknown) {
-      console.error('Error fetching portfolio:', err)
+      logger.error('Error fetching portfolio', err)
       setError('Connection error')
     } finally {
       setLoading(false)
@@ -74,7 +75,7 @@ export default function PortfolioPage() {
         alert(data.error || 'Error deleting item')
       }
     } catch (err: unknown) {
-      console.error('Error deleting item:', err)
+      logger.error('Error deleting item', err)
       alert('Error deleting item')
     }
   }
@@ -93,7 +94,7 @@ export default function PortfolioPage() {
         )
       }
     } catch (err: unknown) {
-      console.error('Error toggling visibility:', err)
+      logger.error('Error toggling visibility', err)
     }
   }
 
@@ -111,7 +112,7 @@ export default function PortfolioPage() {
         )
       }
     } catch (err: unknown) {
-      console.error('Error toggling featured:', err)
+      logger.error('Error toggling featured', err)
     }
   }
 

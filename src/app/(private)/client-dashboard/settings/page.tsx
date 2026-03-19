@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
 import {
@@ -146,7 +147,7 @@ export default function ClientSettingsPage() {
         }
       }
     } catch (error: unknown) {
-      console.error('Failed to load user data:', error)
+      logger.error('Failed to load user data', error)
     } finally {
       setIsLoading(false)
     }
@@ -160,7 +161,7 @@ export default function ClientSettingsPage() {
         setDeletionStatus(data.deletionRequest)
       }
     } catch (error: unknown) {
-      console.error('Failed to load deletion status:', error)
+      logger.error('Failed to load deletion status', error)
     }
   }
 
@@ -180,7 +181,7 @@ export default function ClientSettingsPage() {
         setTimeout(() => setSaveSuccess(false), 3000)
       }
     } catch (error: unknown) {
-      console.error('Failed to save preferences:', error)
+      logger.error('Failed to save preferences', error)
     } finally {
       setIsSaving(false)
     }
@@ -205,7 +206,7 @@ export default function ClientSettingsPage() {
         setTimeout(() => setSaveSuccess(false), 3000)
       }
     } catch (error: unknown) {
-      console.error('Failed to update profile:', error)
+      logger.error('Failed to update profile', error)
     } finally {
       setIsSaving(false)
     }
@@ -245,7 +246,7 @@ export default function ClientSettingsPage() {
         URL.revokeObjectURL(url)
       }
     } catch (error: unknown) {
-      console.error('Failed to export data:', error)
+      logger.error('Failed to export data', error)
     } finally {
       setIsExporting(false)
     }
@@ -275,7 +276,7 @@ export default function ClientSettingsPage() {
         alert(error.error)
       }
     } catch (error: unknown) {
-      console.error('Failed to request deletion:', error)
+      logger.error('Failed to request deletion', error)
     }
   }
 
@@ -286,7 +287,7 @@ export default function ClientSettingsPage() {
         setDeletionStatus(null)
       }
     } catch (error: unknown) {
-      console.error('Failed to cancel deletion:', error)
+      logger.error('Failed to cancel deletion', error)
     }
   }
 

@@ -19,7 +19,7 @@ export const GET = createApiHandler(async ({ request }) => {
 
   const { data, error } = await supabase
     .from('attorneys')
-    .select('name, slug, stable_id, specialty, address_city, is_verified, rating_average, review_count')
+    .select('name, slug, stable_id, address_city, is_verified, rating_average, review_count, specialty:specialties!primary_specialty_id(name, slug)')
     .or(`name.ilike.%${safeQ}%,slug.ilike.%${safeQ}%`)
     .eq('is_active', true)
     .order('is_verified', { ascending: false })
@@ -35,7 +35,7 @@ export const GET = createApiHandler(async ({ request }) => {
       name: p.name,
       slug: p.slug,
       stable_id: p.stable_id,
-      specialty: p.specialty,
+      specialty: (p.specialty as { name?: string } | null)?.name || null,
       city: p.address_city,
       is_verified: p.is_verified === true,
       rating: p.rating_average,

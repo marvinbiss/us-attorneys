@@ -11,7 +11,7 @@ import { sendReviewRequestSMS, type SMSData } from '@/lib/notifications/sms'
 import { logger } from '@/lib/logger'
 import { verifyCronSecret } from '@/lib/cron-auth'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
 
 // Review request email template
 function getReviewEmailTemplate(data: {

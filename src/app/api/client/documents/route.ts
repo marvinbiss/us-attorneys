@@ -173,7 +173,7 @@ export const POST = createApiHandler(async ({ request, user }) => {
     return apiError('SERVER_ERROR', 'Failed to save document record', 500)
   }
 
-  return apiSuccess({ document: doc }, 201)
+  return apiSuccess({ document: doc })
 }, { requireAuth: true })
 
 // ─── DELETE: Remove a document ───────────────────────────────────────────────

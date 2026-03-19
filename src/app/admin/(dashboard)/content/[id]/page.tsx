@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
   Save,
@@ -147,7 +148,7 @@ export default function AdminEditContenuPage() {
       setSortOrder(data.sort_order ?? 0)
       setIsDirty(false)
     } catch (err: unknown) {
-      console.error('Error:', err)
+      logger.error('Content operation failed', err)
       setError('Error loading page')
     } finally {
       setLoading(false)
@@ -219,7 +220,7 @@ export default function AdminEditContenuPage() {
         showToast(err.error?.message || 'Error saving page', 'error')
       }
     } catch (err: unknown) {
-      console.error('Error:', err)
+      logger.error('Content operation failed', err)
       showToast('Error saving page', 'error')
     } finally {
       setSaving(false)
@@ -287,7 +288,7 @@ export default function AdminEditContenuPage() {
         showToast(err?.error?.message || 'Error publishing page', 'error')
       }
     } catch (err: unknown) {
-      console.error('Error:', err)
+      logger.error('Content operation failed', err)
       showToast('Error publishing page', 'error')
     } finally {
       setSaving(false)
@@ -309,7 +310,7 @@ export default function AdminEditContenuPage() {
         showToast('Error unpublishing page', 'error')
       }
     } catch (err: unknown) {
-      console.error('Error:', err)
+      logger.error('Content operation failed', err)
       showToast('Error unpublishing page', 'error')
     } finally {
       setSaving(false)
@@ -331,7 +332,7 @@ export default function AdminEditContenuPage() {
         showToast('Error deleting page', 'error')
       }
     } catch (err: unknown) {
-      console.error('Error:', err)
+      logger.error('Content operation failed', err)
       showToast('Error deleting page', 'error')
     } finally {
       setSaving(false)
@@ -742,7 +743,7 @@ export default function AdminEditContenuPage() {
                   type="url"
                   value={canonicalUrl}
                   onChange={(e) => { setCanonicalUrl(e.target.value); setIsDirty(true) }}
-                  placeholder="https://us-attorneys.com/page"
+                  placeholder="https://lawtendr.com/page"
                   maxLength={FIELD_LIMITS.canonicalUrl}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />

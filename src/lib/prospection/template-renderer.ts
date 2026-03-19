@@ -143,7 +143,7 @@ export function renderTemplate(
   }
 
   // Unsubscribe link with HMAC-signed token to prevent tampering
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
   const unsubToken = generateUnsubscribeToken(contact.id, campaign.channel)
   rendered = rendered.replaceAll('{{unsubscribe_link}}', `${siteUrl}/api/prospection/unsubscribe?token=${unsubToken}`)
 

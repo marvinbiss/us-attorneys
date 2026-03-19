@@ -6,6 +6,7 @@
 import { apiSuccess, apiError } from '@/lib/api/handler'
 import { logger } from '@/lib/logger'
 import { getResendClient } from '@/lib/api/resend-client'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { z } from 'zod'
 
 const getResend = () => getResendClient()
@@ -16,6 +17,12 @@ const newsletterSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting: 3 per 5 minutes (newsletter preset)
+    const rl = await rateLimit(request, RATE_LIMITS.newsletter)
+    if (!rl.success) {
+      return apiError('RATE_LIMIT_EXCEEDED', 'Too many requests. Please try again later.', 429)
+    }
+
     const body = await request.json()
 
     // Validate input
@@ -29,7 +36,7 @@ export async function POST(request: Request) {
     // Send welcome email (non-blocking — don't crash signup if email fails)
     try {
       await getResend().emails.send({
-        from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
+        from: process.env.FROM_EMAIL || 'noreply@lawtendr.com',
         to: email,
         subject: 'Welcome to the US Attorneys Newsletter!',
         html: `
@@ -46,7 +53,7 @@ export async function POST(request: Request) {
           <hr />
           <p style="color: #666; font-size: 12px;">
             To unsubscribe, simply reply to this email.<br />
-            <a href="https://us-attorneys.com">us-attorneys.com</a>
+            <a href="https://lawtendr.com">lawtendr.com</a>
           </p>
         `,
       })

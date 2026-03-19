@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import { ArrowLeft, Save, Upload, Loader2 } from 'lucide-react'
 import { RichTextEditor } from '@/components/admin/cms/RichTextEditor'
 import { StructuredFieldsEditor } from '@/components/admin/cms/StructuredFieldsEditor'
@@ -163,7 +164,7 @@ export default function AdminNewContentPage() {
         showToast(err.error?.message || 'Error saving page', 'error')
       }
     } catch (error: unknown) {
-      console.error('Error:', error)
+      logger.error('Content operation failed', error)
       showToast('Error saving page', 'error')
     } finally {
       setSaving(false)
@@ -233,7 +234,7 @@ export default function AdminNewContentPage() {
         showToast(err.error?.message || 'Error creating page', 'error')
       }
     } catch (error: unknown) {
-      console.error('Error:', error)
+      logger.error('Content operation failed', error)
       showToast('Error publishing page', 'error')
     } finally {
       setSaving(false)
@@ -550,7 +551,7 @@ export default function AdminNewContentPage() {
                   type="url"
                   value={canonicalUrl}
                   onChange={(e) => { setCanonicalUrl(e.target.value); setIsDirty(true) }}
-                  placeholder="https://us-attorneys.com/page"
+                  placeholder="https://lawtendr.com/page"
                   maxLength={FIELD_LIMITS.canonicalUrl}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 />

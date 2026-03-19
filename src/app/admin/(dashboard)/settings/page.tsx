@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { logger } from '@/lib/logger'
 import {
   Settings,
   Users,
@@ -32,8 +33,8 @@ interface PlatformSettings {
 
 const DEFAULT_SETTINGS: PlatformSettings = {
   siteName: 'US Attorneys',
-  contactEmail: 'contact@us-attorneys.com',
-  supportEmail: 'support@us-attorneys.com',
+  contactEmail: 'contact@lawtendr.com',
+  supportEmail: 'support@lawtendr.com',
   maintenanceMode: false,
   registrationEnabled: true,
   emailNotifications: true,
@@ -73,7 +74,7 @@ export default function AdminParametresPage() {
         setOriginalSettings(merged)
       }
     } catch (error: unknown) {
-      console.error('Failed to fetch settings:', error)
+      logger.error('Failed to fetch settings', error)
     } finally {
       setLoading(false)
     }
@@ -94,7 +95,7 @@ export default function AdminParametresPage() {
         setTimeout(() => setSaveSuccess(false), 3000)
       }
     } catch (error: unknown) {
-      console.error('Save failed:', error)
+      logger.error('Save failed', error)
     } finally {
       setSaving(false)
     }

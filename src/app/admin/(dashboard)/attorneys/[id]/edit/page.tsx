@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+import { logger } from '@/lib/logger'
 import {
   ChevronLeft,
   Save,
@@ -142,7 +143,7 @@ export default function EditAttorneyPage() {
         setToast({ message: 'Failed to load data', type: 'error' })
       }
     } catch (err: unknown) {
-      console.error('Fetch error:', err)
+      logger.error('Fetch error', err)
       setToast({ message: 'Connection error', type: 'error' })
     } finally {
       setLoading(false)
@@ -210,7 +211,7 @@ export default function EditAttorneyPage() {
         setToast({ message: errorMsg, type: 'error' })
       }
     } catch (err: unknown) {
-      console.error('Save exception:', err)
+      logger.error('Save exception', err)
       setToast({ message: 'Server connection error', type: 'error' })
     } finally {
       setSaving(false)

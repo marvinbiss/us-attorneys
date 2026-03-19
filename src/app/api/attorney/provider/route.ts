@@ -50,7 +50,7 @@ export async function GET() {
     // Fetch provider by user_id — includes all fields editable in the profile tabs
     const { data: provider, error: attorneyError } = await supabase
       .from('attorneys')
-      .select('id, stable_id, name, slug, email, phone, phone_secondary, website, bar_number, specialty, description, bio, address_line1, address_city, address_zip, address_state, address_county, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, user_id, created_at, updated_at, intervention_radius_km, services_offered, service_prices, free_quote, opening_hours, available_24h, accepts_new_clients, faq, team_size, avatar_url, certifications')
+      .select('id, stable_id, name, slug, email, phone, website, bar_number, description, bio, address_line1, address_city, address_zip, address_state, address_county, latitude, longitude, is_verified, is_active, noindex, rating_average, review_count, user_id, created_at, updated_at, profile_image_url, specialty:specialties!primary_specialty_id(name, slug)')
       .eq('user_id', user.id)
       .single()
 

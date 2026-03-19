@@ -8,6 +8,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { createErrorResponse, createSuccessResponse, ErrorCode } from '@/lib/errors/types'
@@ -114,12 +115,15 @@ export async function POST(request: NextRequest) {
       clientZip,
     } = validation.data
 
+    // Use RLS-respecting client for reads (attorneys are publicly readable)
+    const supabase = await createClient()
+    // AdminClient only for inserts (unauthenticated user cannot insert via RLS)
     const adminSupabase = createAdminClient()
 
     // --- Verify attorney exists (if specified) ---
     let attorney: { id: string; name: string; slug: string; user_id: string | null } | null = null
     if (attorneyId) {
-      const { data: attyData, error: attorneyError } = await adminSupabase
+      const { data: attyData, error: attorneyError } = await supabase
         .from('attorneys')
         .select('id, name, slug, user_id')
         .eq('id', attorneyId)

@@ -3,6 +3,7 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import { Shield, Activity, Star, AlertTriangle, ArrowRight, MessageSquare, Phone } from 'lucide-react'
 import { ErrorBanner } from '@/components/admin/ErrorBanner'
 import { useAdminFetch } from '@/hooks/admin/useAdminFetch'
@@ -20,8 +21,8 @@ class ChartErrorBoundary extends Component<
     return { hasError: true }
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error('[ActivityChart] render error:', error, info.componentStack)
+  componentDidCatch(error: Error, _info: ErrorInfo) {
+    logger.error('[ActivityChart] render error', error, { action: 'componentDidCatch' })
   }
 
   render() {

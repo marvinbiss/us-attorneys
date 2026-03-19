@@ -12,7 +12,7 @@ import { sendEmail } from '@/lib/api/resend-client'
 import type { LeadEventType } from '@/lib/dashboard/events'
 import { logger } from '@/lib/logger'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
 const SITE_NAME = 'US Attorneys'
 
 // ============================================================

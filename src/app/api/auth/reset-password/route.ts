@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     }
 
     const { email } = validation.data
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
 
     // Send password reset email
     const { error } = await supabase.auth.resetPasswordForEmail(email, {

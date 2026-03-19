@@ -141,18 +141,18 @@ export async function GET(request: Request) {
       `[Cron] Review metrics recalculation complete: ${totalUpdated} updated, ${totalSkipped} skipped, ${totalErrors} errors`
     )
 
-    // Refresh materialized view mv_provider_stats
+    // Refresh materialized view mv_attorney_stats
     let mvRefreshed = false
     try {
-      const { error: mvError } = await supabase.rpc('refresh_provider_stats')
+      const { error: mvError } = await supabase.rpc('refresh_attorney_stats')
       if (mvError) {
-        logger.error('[Cron] Failed to refresh mv_provider_stats:', mvError)
+        logger.error('[Cron] Failed to refresh mv_attorney_stats:', mvError)
       } else {
         mvRefreshed = true
-        logger.info('[Cron] mv_provider_stats refreshed successfully')
+        logger.info('[Cron] mv_attorney_stats refreshed successfully')
       }
     } catch (mvErr) {
-      logger.error('[Cron] Exception refreshing mv_provider_stats:', mvErr)
+      logger.error('[Cron] Exception refreshing mv_attorney_stats:', mvErr)
     }
 
     return NextResponse.json({

@@ -28,7 +28,7 @@ export function getResendClient(): Resend {
 }
 
 // Default sender
-const DEFAULT_FROM = process.env.RESEND_FROM_EMAIL || 'US Attorneys <noreply@us-attorneys.com>'
+const DEFAULT_FROM = process.env.RESEND_FROM_EMAIL || 'US Attorneys <noreply@lawtendr.com>'
 
 // Types
 export interface EmailParams {
@@ -259,7 +259,7 @@ export async function sendWelcomeEmail(params: {
   </div>
 
   <p style="color: #666; font-size: 14px;">
-    If you have any questions, feel free to contact us at support@us-attorneys.com
+    If you have any questions, feel free to contact us at support@lawtendr.com
   </p>
 
   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
@@ -378,7 +378,7 @@ export async function sendClaimApprovedEmail(params: {
 
   <p style="color: #999; font-size: 12px; text-align: center;">
     US Attorneys - Find qualified attorneys near you<br>
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'}" style="color: #999;">us-attorneys.com</a>
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'}" style="color: #999;">lawtendr.com</a>
   </p>
 </body>
 </html>

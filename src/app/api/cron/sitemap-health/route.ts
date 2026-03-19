@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   const sitemapIndexUrl = `${SITE_URL}/sitemap.xml`
   const indexValidation = validateFetchUrl(sitemapIndexUrl)
   if (!indexValidation.valid) {
-    console.error('[sitemap-health] CRITICAL: sitemap index URL blocked by SSRF filter:', indexValidation.reason)
+    logger.error('[sitemap-health] CRITICAL: sitemap index URL blocked by SSRF filter', null, { action: 'ssrf-check', component: 'cron' })
     return NextResponse.json({ error: 'Invalid sitemap index URL', reason: indexValidation.reason }, { status: 500 })
   }
 
@@ -69,7 +69,7 @@ export async function GET(request: Request) {
           return { url, status: res.status, urls: urlCount, ok }
         } catch (error: unknown) {
           const message = error instanceof Error ? error.message : 'Unknown error'
-          console.error(`[sitemap-health] Fetch failed for ${url}: ${message}`)
+          logger.error(`[sitemap-health] Fetch failed for ${url}: ${message}`)
           failures.push(url)
           return { url, status: 0, urls: 0, ok: false }
         }

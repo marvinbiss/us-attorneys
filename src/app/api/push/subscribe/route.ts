@@ -9,6 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -39,6 +40,15 @@ const unsubscribeSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 10 per minute (apiWrite preset — authenticated endpoint)
+    const rl = await rateLimit(request, RATE_LIMITS.apiWrite)
+    if (!rl.success) {
+      return NextResponse.json(
+        { success: false, error: { code: 'RATE_LIMIT_EXCEEDED', message: 'Too many requests. Please try again later.' } },
+        { status: 429 },
+      )
+    }
+
     const supabase = await createClient()
     const {
       data: { user },

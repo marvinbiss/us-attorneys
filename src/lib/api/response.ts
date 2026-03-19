@@ -1,12 +1,14 @@
 /**
  * Centralized API Response Helpers — US Attorneys
  *
- * Guarantees a consistent success envelope across all API routes:
+ * THE single source of truth for all API response envelopes.
+ * Import from here (not from handler.ts) for new routes.
  *
- *   Success: { "success": true, "data": T, "meta"?: {...} }
- *   Created: { "success": true, "data": T }   (HTTP 201)
- *   NoContent: empty body                      (HTTP 204)
- *   Paginated: { "success": true, "data": T[], "meta": { pagination: {...} } }
+ *   Success:   { "success": true, "data": T, "meta"?: {...} }        (HTTP 200)
+ *   Created:   { "success": true, "data": T }                        (HTTP 201)
+ *   NoContent: empty body                                             (HTTP 204)
+ *   Paginated: { "success": true, "data": T[], "meta": { pagination } }
+ *   Error:     { "success": false, "error": { code, message } }      (HTTP 4xx/5xx)
  */
 
 import { NextResponse } from 'next/server'
@@ -28,6 +30,14 @@ export interface ApiSuccessBody<T> {
   success: true
   data: T
   meta?: Record<string, unknown>
+}
+
+export interface ApiErrorBody {
+  success: false
+  error: {
+    code: string
+    message: string
+  }
 }
 
 export interface ApiPaginatedBody<T> {
@@ -108,6 +118,24 @@ export function apiCreated<T>(data: T, meta?: Record<string, unknown>): NextResp
     body.meta = meta
   }
   return NextResponse.json(body, { status: 201 })
+}
+
+/**
+ * Standard error response.
+ *
+ * @param code    Machine-readable error code (e.g., 'VALIDATION_ERROR', 'NOT_FOUND')
+ * @param message Human-readable description
+ * @param status  HTTP status code (default 400)
+ *
+ * @example
+ *   return apiError('VALIDATION_ERROR', 'Invalid email address', 400)
+ *   return apiError('NOT_FOUND', 'Attorney not found', 404)
+ */
+export function apiError(code: string, message: string, status: number = 400): NextResponse<ApiErrorBody> {
+  return NextResponse.json(
+    { success: false as const, error: { code, message } },
+    { status }
+  )
 }
 
 /**

@@ -20,7 +20,7 @@ export const companyIdentity = {
   tagline: 'Find Top-Rated Attorneys Near You',
   description:
     'US Attorneys is the leading attorney directory covering all 50 states. Find experienced lawyers by practice area, read verified reviews, and get free consultations.',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com',
 
   // Legal identity (Level 1 — from env vars, null until company registration)
   legalName: process.env.COMPANY_LEGAL_NAME || null,
@@ -35,12 +35,12 @@ export const companyIdentity = {
   foundingDate: process.env.COMPANY_FOUNDING_DATE || null,
 
   // Contact (real and functional)
-  email: 'contact@us-attorneys.com',
-  supportEmail: 'support@us-attorneys.com',
-  dpoEmail: 'dpo@us-attorneys.com',
-  pressEmail: 'press@us-attorneys.com',
-  partnersEmail: 'partners@us-attorneys.com',
-  careersEmail: 'careers@us-attorneys.com',
+  email: 'contact@lawtendr.com',
+  supportEmail: 'support@lawtendr.com',
+  dpoEmail: 'dpo@lawtendr.com',
+  pressEmail: 'press@lawtendr.com',
+  partnersEmail: 'partners@lawtendr.com',
+  careersEmail: 'careers@lawtendr.com',
 
   // Social (real profiles)
   social: {

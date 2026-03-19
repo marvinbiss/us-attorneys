@@ -125,7 +125,7 @@ export function SEOPanel({
                 </h3>
                 {/* URL */}
                 <p className="text-sm text-[#006621] mt-1 truncate">
-                  us-attorneys.com &rsaquo; page
+                  lawtendr.com &rsaquo; page
                 </p>
                 {/* Description */}
                 <p className="text-sm text-[#545454] mt-0.5 line-clamp-2">

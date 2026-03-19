@@ -45,7 +45,7 @@ async function getRecentProviders(limit = 50) {
 
     const { data, error } = await supabase
       .from('attorneys')
-      .select('id, stable_id, name, slug, specialty, address_line1, address_zip, address_city, address_state, is_verified, is_active, phone, bar_number, rating_average, review_count')
+      .select('id, stable_id, name, slug, address_line1, address_zip, address_city, address_state, is_verified, is_active, phone, bar_number, rating_average, review_count, specialty:specialties!primary_specialty_id(name, slug)')
       .eq('is_active', true)
       .order('phone', { ascending: false, nullsFirst: false })
       .order('is_verified', { ascending: false })
@@ -179,10 +179,11 @@ export default async function ArtisansPage() {
         {providers.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {providers.map((provider) => {
+              const specialtyObj = provider.specialty as { name?: string; slug?: string } | null
               const providerUrl = getAttorneyUrl({
                 stable_id: provider.stable_id,
                 slug: provider.slug,
-                specialty: provider.specialty,
+                specialty: specialtyObj?.name || null,
                 city: provider.address_city,
               })
               const ratingValue = provider.rating_average?.toFixed(1)
@@ -217,8 +218,8 @@ export default async function ArtisansPage() {
                           </span>
                         )}
                       </div>
-                      {provider.specialty && (
-                        <p className="text-sm text-slate-500 font-medium mt-0.5 capitalize">{provider.specialty}</p>
+                      {specialtyObj?.name && (
+                        <p className="text-sm text-slate-500 font-medium mt-0.5 capitalize">{specialtyObj.name}</p>
                       )}
                     </div>
                     {ratingValue && provider.review_count > 0 && (

@@ -70,7 +70,7 @@ interface ServiceProvider {
   slug: string
   stable_id?: string
   address_city?: string
-  address_postal_code?: string
+  address_zip?: string
   provider_locations?: Array<{
     location?: { name: string; slug: string } | null
   }>
@@ -606,7 +606,7 @@ export default async function ServicePage({ params }: PageProps) {
                     {provider.address_city && (
                       <p className="text-sm text-gray-500 mt-1 flex items-center gap-1">
                         <MapPin className="w-3 h-3" />
-                        {provider.address_postal_code} {provider.address_city}
+                        {provider.address_zip} {provider.address_city}
                       </p>
                     )}
                   </Link>

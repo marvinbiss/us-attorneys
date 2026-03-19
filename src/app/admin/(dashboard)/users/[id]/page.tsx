@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
   Mail,
@@ -59,7 +60,7 @@ export default function AdminUserDetailPage() {
         router.push('/admin/users')
       }
     } catch (error: unknown) {
-      console.error('Failed to fetch user:', error)
+      logger.error('Failed to fetch user', error)
       router.push('/admin/users')
     } finally {
       setLoading(false)
@@ -80,7 +81,7 @@ export default function AdminUserDetailPage() {
         setEditMode(false)
       }
     } catch (error: unknown) {
-      console.error('Failed to save user:', error)
+      logger.error('Failed to save user', error)
     } finally {
       setSaving(false)
     }
@@ -93,7 +94,7 @@ export default function AdminUserDetailPage() {
       })
       router.push('/admin/users')
     } catch (error: unknown) {
-      console.error('Delete failed:', error)
+      logger.error('Delete failed', error)
     }
   }
 

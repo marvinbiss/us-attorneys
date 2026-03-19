@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { logger } from '@/lib/logger'
 import {
   Lock,
   Download,
@@ -77,7 +78,7 @@ export default function AdminRgpdPage() {
         setTotal(data.total || 0)
       }
     } catch (error: unknown) {
-      console.error('Failed to fetch GDPR requests:', error)
+      logger.error('Failed to fetch GDPR requests', error)
     } finally {
       setLoading(false)
     }
@@ -98,7 +99,7 @@ export default function AdminRgpdPage() {
         }
       }
     } catch (error: unknown) {
-      console.error('Search failed:', error)
+      logger.error('Search failed', error)
     } finally {
       setSearching(false)
     }
@@ -122,7 +123,7 @@ export default function AdminRgpdPage() {
         URL.revokeObjectURL(url)
       }
     } catch (error: unknown) {
-      console.error('Export failed:', error)
+      logger.error('Export failed', error)
     } finally {
       setExportingUser(null)
     }
@@ -142,7 +143,7 @@ export default function AdminRgpdPage() {
         fetchRequests()
       }
     } catch (error: unknown) {
-      console.error('Delete failed:', error)
+      logger.error('Delete failed', error)
     }
   }
 

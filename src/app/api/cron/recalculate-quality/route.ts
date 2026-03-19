@@ -71,7 +71,7 @@ export async function GET(request: Request) {
       // Fetch active providers for quality score calculation
       const { data: providers, error } = await supabase
         .from('attorneys')
-        .select('id, name, bar_number, address_line1, address_city, address_zip, address_county, latitude, longitude, phone, email, specialty, description, updated_at')
+        .select('id, name, bar_number, address_line1, address_city, address_zip, address_county, latitude, longitude, phone, email, description, updated_at, specialty:specialties!primary_specialty_id(name, slug)')
         .eq('is_active', true)
         .range(offset, offset + BATCH_SIZE - 1)
         .order('id')

@@ -82,7 +82,7 @@ export async function createVoiceLead(
       urgency: validUrgency,
       status: 'pending',
       client_name: callerName,
-      client_email: (qualData.email as string) ?? `voice+${voiceCall.id.slice(0, 8)}@us-attorneys.com`,
+      client_email: (qualData.email as string) ?? `voice+${voiceCall.id.slice(0, 8)}@lawtendr.com`,
       client_phone: voiceCall.caller_phone,
     })
     .select('id')
@@ -129,13 +129,9 @@ export async function createVoiceLead(
     .select('id, name, phone, email, user_id')
     .eq('is_active', true)
 
-  if (specialtyName) {
-    matchQuery = matchQuery.ilike('specialty', `%${specialtyName}%`)
-  }
-
   if (zipPrefix) {
-    // Match attorneys whose address_postal_code starts with the same ZIP prefix
-    matchQuery = matchQuery.ilike('address_postal_code', `${zipPrefix}%`)
+    // Match attorneys whose address_zip starts with the same ZIP prefix
+    matchQuery = matchQuery.ilike('address_zip', `${zipPrefix}%`)
   }
 
   // Round-robin: prefer attorneys who haven't received a lead recently
@@ -212,7 +208,7 @@ export async function createVoiceLead(
       `New lead on US Attorneys!\n` +
       `${specialtyName}${location}\n` +
       `Client: ${callerName}\n` +
-      `Log in to respond: us-attorneys.com/attorney-dashboard/leads`
+      `Log in to respond: lawtendr.com/attorney-dashboard/leads`
 
     const smsResult = await sendSMS(matchedAttorney.phone, smsMessage)
 

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import {
   Calendar,
   Clock,
@@ -80,7 +81,7 @@ export default function BookingPage() {
       const json = await response.json()
       setBooking(json.data?.booking || json.booking)
     } catch (err: unknown) {
-      console.error('Error fetching booking:', err)
+      logger.error('Error fetching booking', err)
       setError(err instanceof Error ? err.message : 'Error loading data')
     } finally {
       setIsLoading(false)
@@ -128,7 +129,7 @@ export default function BookingPage() {
         new Date(`${b.date}T${b.start_time}`).getTime()
       ))
     } catch (err: unknown) {
-      console.error('Error fetching slots:', err)
+      logger.error('Error fetching slots', err)
     } finally {
       setIsLoadingSlots(false)
     }
@@ -156,7 +157,7 @@ export default function BookingPage() {
       setShowRescheduleModal(false)
       setSelectedNewSlot(null)
     } catch (err: unknown) {
-      console.error('Reschedule error:', err)
+      logger.error('Reschedule error', err)
       setError(err instanceof Error ? err.message : 'Error rescheduling')
     } finally {
       setIsRescheduling(false)

@@ -5,9 +5,9 @@ import { getResendClient } from '@/lib/api/resend-client'
 // Lazy getter for Resend client
 const getResend = () => getResendClient()
 
-const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@us-attorneys.com'
+const FROM_EMAIL = process.env.FROM_EMAIL || 'noreply@lawtendr.com'
 const SITE_NAME = 'US Attorneys'
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
 
 export interface BookingEmailData {
   bookingId: string

@@ -152,7 +152,7 @@ export const POST = createApiHandler(async ({ request }) => {
 
   if (!provider.bar_number) {
     return NextResponse.json(
-      { error: 'This listing does not have a bar number. Contact us at support@us-attorneys.com to claim this listing manually.' },
+      { error: 'This listing does not have a bar number. Contact us at support@lawtendr.com to claim this listing manually.' },
       { status: 400 }
     )
   }

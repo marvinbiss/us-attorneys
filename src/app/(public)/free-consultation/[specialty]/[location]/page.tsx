@@ -352,7 +352,7 @@ export default async function FreeConsultationPage({ params }: PageProps) {
             isPartOf: {
               '@type': 'WebSite',
               name: 'US Attorneys',
-              url: 'https://us-attorneys.com',
+              url: 'https://lawtendr.com',
             },
             mainEntity: {
               '@type': 'CollectionPage',

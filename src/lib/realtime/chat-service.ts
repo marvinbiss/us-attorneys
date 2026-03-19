@@ -599,7 +599,7 @@ class ChatService {
       .select(`
         id, client_id, attorney_id, quote_id, booking_id, status, last_message_at, unread_count, created_at,
         client:profiles!client_id(id, full_name),
-        provider:providers!attorney_id(id, name, avatar_url),
+        provider:attorneys!attorney_id(id, name, profile_image_url),
         settings:conversation_settings(is_muted, is_archived, is_pinned, notification_preference)
       `)
       .eq(column, userId)

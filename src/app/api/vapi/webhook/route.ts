@@ -45,8 +45,13 @@ export const POST = createApiHandler(async ({ request }) => {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const eventType = event.message?.type
-  logger.info('Vapi webhook received', { type: eventType, callId: event.message?.call?.id })
+  if (!event.message) {
+    logger.warn('Vapi webhook: missing event.message')
+    return NextResponse.json({ ok: true })
+  }
+
+  const eventType = event.message.type
+  logger.info('Vapi webhook received', { type: eventType, callId: event.message.call?.id })
 
   switch (eventType) {
     case 'assistant-request':
@@ -105,6 +110,9 @@ function handleAssistantRequest(): NextResponse {
 // ---------------------------------------------------------------------------
 
 async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse> {
+  if (!event.message) {
+    return NextResponse.json({ result: 'No message data' })
+  }
   const functionCall = event.message.functionCall
   if (!functionCall) {
     return NextResponse.json({ result: 'No function call data' })
@@ -187,6 +195,7 @@ async function handleFunctionCall(event: VapiWebhookEvent): Promise<NextResponse
 // ---------------------------------------------------------------------------
 
 async function handleStatusUpdate(event: VapiWebhookEvent): Promise<NextResponse> {
+  if (!event.message) return NextResponse.json({ ok: true })
   const supabase = createAdminClient()
   const status = event.message.status?.status
   const call = event.message.call
@@ -271,6 +280,7 @@ async function handleStatusUpdate(event: VapiWebhookEvent): Promise<NextResponse
 // ---------------------------------------------------------------------------
 
 async function handleEndOfCallReport(event: VapiWebhookEvent): Promise<NextResponse> {
+  if (!event.message) return NextResponse.json({ ok: true })
   const supabase = createAdminClient()
   const call = event.message.call
   const recordingUrl = event.message.recordingUrl as string | undefined

@@ -252,7 +252,7 @@ export default function EstimationWidget({ context, hideLauncher = false }: Esti
               <p className="text-[11px] text-gray-400">
                 Powered by{' '}
                 <a
-                  href="https://us-attorneys.com"
+                  href="https://lawtendr.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-gray-500 transition-colors"

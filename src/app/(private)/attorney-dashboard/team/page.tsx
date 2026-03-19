@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { logger } from '@/lib/logger'
 import {
   Users,
   Plus,
@@ -80,7 +81,7 @@ export default function TeamPage() {
         const data = await res.json()
         setMembers(data.members ?? [])
       } catch (err: unknown) {
-        console.error('Error fetching team:', err)
+        logger.error('Error fetching team', err)
         setError('Unable to load team')
       } finally {
         setIsLoading(false)
@@ -155,7 +156,7 @@ export default function TeamPage() {
         color: COLORS[0].value,
       })
     } catch (err: unknown) {
-      console.error('Error saving member:', err)
+      logger.error('Error saving member', err)
       setError('Error saving member')
     } finally {
       setIsSaving(false)
@@ -178,7 +179,7 @@ export default function TeamPage() {
 
       setMembers(members.filter(m => m.id !== memberId))
     } catch (err: unknown) {
-      console.error('Error deleting member:', err)
+      logger.error('Error deleting member', err)
       setError('Error deleting member')
     }
   }
@@ -210,7 +211,7 @@ export default function TeamPage() {
           : m
       ))
     } catch (err: unknown) {
-      console.error('Error toggling member:', err)
+      logger.error('Error toggling member', err)
     }
   }
 

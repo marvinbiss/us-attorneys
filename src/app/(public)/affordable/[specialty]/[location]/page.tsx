@@ -239,7 +239,7 @@ export default async function AffordablePage({ params }: PageProps) {
             isPartOf: {
               '@type': 'WebSite',
               name: 'US Attorneys',
-              url: 'https://us-attorneys.com',
+              url: 'https://lawtendr.com',
             },
             ...(providers.length > 0 ? {
               mainEntity: {

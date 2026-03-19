@@ -26,7 +26,7 @@ function ensureVapidConfigured(): boolean {
 
   try {
     webpush.setVapidDetails(
-      'mailto:support@us-attorneys.com',
+      'mailto:support@lawtendr.com',
       publicKey,
       privateKey
     )

@@ -23,7 +23,7 @@ export default function SetupPasswordPage() {
           <h1 className="text-xl font-bold text-gray-900 mb-2">Invalid Link</h1>
           <p className="text-gray-600">
             This link does not contain the required information.
-            Contact us at <a href="mailto:support@us-attorneys.com" className="text-amber-600 underline">support@us-attorneys.com</a>.
+            Contact us at <a href="mailto:support@lawtendr.com" className="text-amber-600 underline">support@lawtendr.com</a>.
           </p>
         </div>
       </div>
@@ -43,7 +43,7 @@ export default function SetupPasswordPage() {
 
       if (verifyError) {
         setError(verifyError.message === 'Token has expired or is invalid'
-          ? 'This link has expired. Contact support@us-attorneys.com to receive a new link.'
+          ? 'This link has expired. Contact support@lawtendr.com to receive a new link.'
           : `Error: ${verifyError.message}`)
         setLoading(false)
         return

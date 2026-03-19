@@ -24,7 +24,7 @@ const updateProfileSchema = z.object({
   address_line1: z.string().max(200).optional(),
   address_city: z.string().max(100).optional(),
   address_zip: z.string().max(10).optional(),
-  specialty: z.string().max(100).optional(),
+  primary_specialty_id: z.string().uuid().optional(),
 })
 
 export const dynamic = 'force-dynamic'
@@ -52,7 +52,7 @@ export async function GET() {
     const { data: provider } = await withTimeout(
       supabase
         .from('attorneys')
-        .select('id, name, slug, bar_number, phone, address_line1, address_city, address_zip, address_state, specialty, rating_average, review_count, is_verified, is_active')
+        .select('id, name, slug, bar_number, phone, address_line1, address_city, address_zip, address_state, rating_average, review_count, is_verified, is_active, specialty:specialties!primary_specialty_id(name, slug)')
         .eq('user_id', user!.id)
         .single()
     )
@@ -87,7 +87,7 @@ export async function PUT(request: Request) {
       address_line1,
       address_city,
       address_zip,
-      specialty,
+      primary_specialty_id,
     } = result.data
 
     // Update profiles table (only columns that exist: full_name)
@@ -120,7 +120,7 @@ export async function PUT(request: Request) {
     if (address_line1 !== undefined) providerUpdate.address_line1 = address_line1
     if (address_city !== undefined) providerUpdate.address_city = address_city
     if (address_zip !== undefined) providerUpdate.address_zip = address_zip
-    if (specialty !== undefined) providerUpdate.specialty = specialty
+    if (primary_specialty_id !== undefined) providerUpdate.primary_specialty_id = primary_specialty_id
 
     let provider = null
     if (Object.keys(providerUpdate).length > 0) {
@@ -129,7 +129,7 @@ export async function PUT(request: Request) {
           .from('attorneys')
           .update(providerUpdate)
           .eq('user_id', user!.id)
-          .select('id, name, slug, bar_number, phone, address_line1, address_city, address_zip, specialty, stable_id, is_verified, is_active')
+          .select('id, name, slug, bar_number, phone, address_line1, address_city, address_zip, stable_id, is_verified, is_active, specialty:specialties!primary_specialty_id(name, slug)')
           .single()
       )
 
@@ -143,7 +143,7 @@ export async function PUT(request: Request) {
     // On-demand revalidation of affected pages (non-blocking)
     if (provider) {
       try {
-        const specialtySlug = slugify(provider.specialty || 'attorney')
+        const specialtySlug = slugify((provider.specialty as { slug?: string } | null)?.slug || 'attorney')
         const locationSlug = slugify(provider.address_city || 'united-states')
         const publicId = provider.slug || provider.stable_id
 

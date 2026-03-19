@@ -102,8 +102,8 @@ export default async function CareersPage() {
           </p>
           <p className="text-gray-500 mb-8">
             For spontaneous applications, contact us at{' '}
-            <a href="mailto:careers@us-attorneys.com" className="text-blue-600 hover:underline font-medium">
-              careers@us-attorneys.com
+            <a href="mailto:careers@lawtendr.com" className="text-blue-600 hover:underline font-medium">
+              careers@lawtendr.com
             </a>
           </p>
           <Link

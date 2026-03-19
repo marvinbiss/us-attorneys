@@ -73,8 +73,8 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
 
   // Send email to support team
   const { error: sendError } = await getResend().emails.send({
-    from: process.env.FROM_EMAIL || 'contact@us-attorneys.com',
-    to: 'contact@us-attorneys.com',
+    from: process.env.FROM_EMAIL || 'contact@lawtendr.com',
+    to: 'contact@lawtendr.com',
     reply_to: safeEmailHeader,
     subject: `[Contact] ${safeSubject} - ${safeName}`,
     html: `
@@ -100,7 +100,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   // Send confirmation email to user (non-critical — don't fail if this errors)
   try {
     await getResend().emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
+      from: process.env.FROM_EMAIL || 'noreply@lawtendr.com',
       to: email,
       subject: 'Your message has been received - US Attorneys',
       html: `
@@ -113,7 +113,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
         <hr />
         <p>Best regards,<br />The US Attorneys Team</p>
         <p style="color: #666; font-size: 12px;">
-          <a href="https://us-attorneys.com">us-attorneys.com</a>
+          <a href="https://lawtendr.com">lawtendr.com</a>
         </p>
       `,
     })

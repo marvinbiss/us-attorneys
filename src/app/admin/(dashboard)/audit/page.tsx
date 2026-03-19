@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { logger } from '@/lib/logger'
 import {
   Shield,
   ChevronLeft,
@@ -116,7 +117,7 @@ export default function AdminAuditPage() {
           setLogsTotal(data.total || 0)
         }
       } catch (error: unknown) {
-        console.error('Failed to fetch audit logs:', error)
+        logger.error('Failed to fetch audit logs', error)
       } finally {
         setLogsLoading(false)
       }
@@ -161,7 +162,7 @@ export default function AdminAuditPage() {
           setEventTypeCounts(counts)
         }
       } catch (error: unknown) {
-        console.error('Failed to fetch lead events:', error)
+        logger.error('Failed to fetch lead events', error)
       } finally {
         setEventsLoading(false)
       }

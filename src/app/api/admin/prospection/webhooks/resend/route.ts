@@ -24,9 +24,15 @@ export const POST = createApiHandler(async (ctx) => {
     return new NextResponse('OK', { status: 200 })
   }
 
-  const event = JSON.parse(rawBody)
-  const eventType: string = event.type
-  const data = event.data
+  let event: Record<string, unknown>
+  try {
+    event = JSON.parse(rawBody)
+  } catch {
+    return new NextResponse('OK', { status: 200 })
+  }
+  const eventType = event.type as string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data = event.data as any
 
   if (!eventType || !data) {
     return new NextResponse('OK', { status: 200 })
@@ -49,7 +55,7 @@ export const POST = createApiHandler(async (ctx) => {
   }
 
   // Resend sends the email_id in data.email_id
-  const emailId: string | undefined = data.email_id
+  const emailId: string | undefined = data?.email_id as string | undefined
   if (!emailId) {
     logger.warn('Resend webhook missing email_id', { eventType })
     return new NextResponse('OK', { status: 200 })

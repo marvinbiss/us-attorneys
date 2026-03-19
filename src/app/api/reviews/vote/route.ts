@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createApiHandler } from '@/lib/api/handler'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 
@@ -32,6 +33,15 @@ function getVoterFingerprint(
 }
 
 export const POST = createApiHandler(async ({ request }) => {
+    // Rate limiting: 5 per minute (reviews preset)
+    const rl = await rateLimit(request, RATE_LIMITS.reviews)
+    if (!rl.success) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Too many votes. Please try again later.' } },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
     const result = voteSchema.safeParse(body)
     if (!result.success) {

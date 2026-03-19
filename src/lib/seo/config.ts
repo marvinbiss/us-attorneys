@@ -1,4 +1,4 @@
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com').trim().replace(/\/+$/, '')
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com').trim().replace(/\/+$/, '')
 export const SITE_NAME = 'US Attorneys'
 export const PHONE_NUMBER = '(800) 555-0199'
 export const PHONE_TEL = 'tel:+18005550199'

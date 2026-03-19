@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import {
   TrendingUp,
   Star,
@@ -78,7 +79,7 @@ export default function StatisticsPage() {
 
         setStats(data.stats)
       } catch (err: unknown) {
-        console.error('Error fetching stats:', err)
+        logger.error('Error fetching stats', err)
       } finally {
         setIsLoading(false)
       }

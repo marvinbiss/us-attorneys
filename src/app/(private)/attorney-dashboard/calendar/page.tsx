@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import {
   Calendar,
   ChevronLeft,
@@ -178,7 +179,7 @@ export default function CalendarPage() {
           })
         }
       } catch (err: unknown) {
-        console.error('Error fetching profile:', err)
+        logger.error('Error fetching profile', err)
       } finally {
         setIsLoading(false)
       }
@@ -239,7 +240,7 @@ export default function CalendarPage() {
 
       setSchedule(scheduleArray)
     } catch (err: unknown) {
-      console.error('Error fetching schedule:', err)
+      logger.error('Error fetching schedule', err)
       setError('Unable to load calendar')
     } finally {
       setIsLoadingSlots(false)
@@ -271,7 +272,7 @@ export default function CalendarPage() {
         setStats(prev => ({ ...prev, monthlyBookings }))
       }
     } catch (err: unknown) {
-      console.error('Error fetching bookings:', err)
+      logger.error('Error fetching bookings', err)
     }
   }, [profile])
 
@@ -316,7 +317,7 @@ export default function CalendarPage() {
       setNewSlotEnd('10:00')
       setRepeatWeekly(false)
     } catch (err: unknown) {
-      console.error('Error adding slot:', err)
+      logger.error('Error adding slot', err)
       setError(err instanceof Error ? err.message : 'Error adding slot')
     } finally {
       setIsSaving(false)
@@ -340,7 +341,7 @@ export default function CalendarPage() {
       // Refresh schedule
       await fetchSchedule(currentDate.getFullYear(), currentDate.getMonth())
     } catch (err: unknown) {
-      console.error('Error deleting slot:', err)
+      logger.error('Error deleting slot', err)
       setError(err instanceof Error ? err.message : 'Error deleting slot')
     }
   }
@@ -364,7 +365,7 @@ export default function CalendarPage() {
       setTimeout(() => setSettingsSaved(false), 3000)
       setShowSettingsModal(false)
     } catch (err: unknown) {
-      console.error('Error saving settings:', err)
+      logger.error('Error saving settings', err)
       setError(err instanceof Error ? err.message : 'Error saving settings')
     } finally {
       setIsSaving(false)

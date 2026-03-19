@@ -375,7 +375,7 @@ export const POST = createApiHandler(async ({ request }) => {
       message: fraudIndicators.length > 0
         ? 'Your review will be published after verification'
         : 'Thank you for your review!',
-    }, 201)
+    })
 }, {})
 
 // Fraud detection helper

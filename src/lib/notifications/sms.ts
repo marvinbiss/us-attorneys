@@ -59,14 +59,14 @@ const smsTemplates = {
     `Booking confirmed ✓
 ${data.date} at ${data.time}
 ${data.attorneyName}
-Manage: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
+Manage: lawtendr.com/b/${data.bookingId.slice(0, 8)}`,
 
   // 24h reminder (highest impact)
   reminder24h: (data: SMSData) =>
     `Reminder: Appointment tomorrow
 ${data.date} at ${data.time}
 ${data.attorneyName}
-Confirm/Cancel: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
+Confirm/Cancel: lawtendr.com/b/${data.bookingId.slice(0, 8)}`,
 
   // 1h reminder
   reminder1h: (data: SMSData) =>
@@ -79,26 +79,26 @@ ${data.specialtyName}`,
     `Appointment cancelled
 ${data.date} at ${data.time}
 ${data.attorneyName}
-Reschedule: us-attorneys.com`,
+Reschedule: lawtendr.com`,
 
   // Reschedule confirmation
   reschedule: (data: SMSData) =>
     `Appointment rescheduled ✓
 New: ${data.date} at ${data.time}
 ${data.attorneyName}
-Manage: us-attorneys.com/b/${data.bookingId.slice(0, 8)}`,
+Manage: lawtendr.com/b/${data.bookingId.slice(0, 8)}`,
 
   // Waitlist notification
   waitlistAvailable: (data: SMSData) =>
     `Slot available!
 ${data.attorneyName}
 ${data.date}
-Book now: us-attorneys.com`,
+Book now: lawtendr.com`,
 
   // Review request (post-appointment)
   reviewRequest: (data: SMSData) =>
     `How was your appointment with ${data.attorneyName}?
-Leave a review: us-attorneys.com/leave-review/${data.bookingId.slice(0, 8)}`,
+Leave a review: lawtendr.com/leave-review/${data.bookingId.slice(0, 8)}`,
 }
 
 // Send SMS function

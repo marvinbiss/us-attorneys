@@ -94,9 +94,9 @@ export interface SiteStats {
 export interface HomepageProvider {
   name: string
   slug: string
-  specialty: string | null
+  specialty: { name: string; slug: string } | null
   address_city: string | null
-  address_postal_code: string | null
+  address_zip: string | null
   is_verified: boolean
   rating_average: number | null
   review_count: number | null
@@ -197,12 +197,12 @@ export async function getHomepageData(): Promise<HomepageData> {
           ),
           supabase
             .from('attorneys')
-            .select('name, slug, specialty, address_city, address_postal_code, is_verified, rating_average, review_count, stable_id')
+            .select('name, slug, address_city, address_zip, is_verified, rating_average, review_count, stable_id, specialty:specialties!primary_specialty_id(name, slug)')
             .eq('is_active', true)
             .eq('is_verified', true)
             .not('rating_average', 'is', null)
             .not('address_city', 'is', null)
-            .not('specialty', 'is', null)
+            .not('primary_specialty_id', 'is', null)
             .gt('review_count', 2)
             .lt('review_count', 500)
             .gte('rating_average', 4)
@@ -226,7 +226,7 @@ export async function getHomepageData(): Promise<HomepageData> {
         return {
           ...stats,
           specialtyCounts,
-          topProviders: (providersRes.data ?? []) as HomepageProvider[],
+          topProviders: (providersRes.data ?? []) as unknown as HomepageProvider[],
           recentReviews: (reviewsRes.data ?? []) as HomepageReview[],
         }
       } catch {

@@ -150,3 +150,14 @@ function validateEnv(): Env {
 }
 
 export const env = validateEnv()
+
+/**
+ * Centralized environment variable access.
+ * Import from here instead of repeating process.env fallbacks everywhere.
+ */
+
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://lawtendr.com'
+export const FROM_EMAIL = process.env.FROM_EMAIL ?? 'contact@lawtendr.com'
+export const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? '').split(',').filter((e: string) => e.trim().length > 0)
+export const CRON_SECRET = process.env.CRON_SECRET ?? ''
+export const REVALIDATE_SECRET = process.env.REVALIDATE_SECRET ?? ''

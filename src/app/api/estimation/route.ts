@@ -86,7 +86,7 @@ function buildSystemPrompt(
     ? `"Would you like to send your inquiry to ${attorneyName}?"`
     : `"Would you like to connect with a verified ${practiceAreaName.toLowerCase()} attorney in ${cityName}?"`
 
-  return `You are the fee estimation assistant for us-attorneys.com.
+  return `You are the fee estimation assistant for lawtendr.com.
 CONTEXT:
 • Practice Area: ${practiceAreaName}
 • City: ${cityName} (${stateCode})

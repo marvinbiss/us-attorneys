@@ -153,7 +153,7 @@ export const POST = createApiHandler(async ({ request }) => {
 
     // Send both confirmation emails in parallel (use allSettled so one failure doesn't block the other)
     const resend = getResend()
-    const fromEmail = process.env.FROM_EMAIL || 'noreply@us-attorneys.com'
+    const fromEmail = process.env.FROM_EMAIL || 'noreply@lawtendr.com'
 
     const emailResults = await Promise.allSettled([
       // Confirmation to client
@@ -174,14 +174,14 @@ export const POST = createApiHandler(async ({ request }) => {
           <p>We will forward your request to available attorneys in your area. You will receive up to 3 free consultations as soon as possible.</p>
           <p>Best regards,<br />The US Attorneys Team</p>
           <p style="color: #666; font-size: 12px;">
-            <a href="https://us-attorneys.com">us-attorneys.com</a>
+            <a href="https://lawtendr.com">lawtendr.com</a>
           </p>
         `,
       }),
       // Notification to admin
       resend.emails.send({
         from: fromEmail,
-        to: 'contact@us-attorneys.com',
+        to: 'contact@lawtendr.com',
         subject: `[New Consultation] ${specialtyNames[data.service] || data.service} - ${data.city || 'USA'}`,
         html: `
           <h2>New consultation request</h2>

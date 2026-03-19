@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { logger } from '@/lib/logger'
 import {
   X,
   Image as ImageIcon,
@@ -94,7 +95,7 @@ export default function AddPortfolioModal({
         setAfterFile(uploaded)
       }
     } catch (err: unknown) {
-      console.error('Upload error:', err)
+      logger.error('Upload error', err)
       setError(err instanceof Error ? err.message : 'Error uploading file')
     } finally {
       setUploading(false)
@@ -150,7 +151,7 @@ export default function AddPortfolioModal({
       const data = await response.json()
       onCreated(data.item)
     } catch (err: unknown) {
-      console.error('Save error:', err)
+      logger.error('Save error', err)
       setError(err instanceof Error ? err.message : 'Error saving')
     } finally {
       setSaving(false)

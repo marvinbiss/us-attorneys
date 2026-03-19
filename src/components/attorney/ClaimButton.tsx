@@ -169,8 +169,8 @@ export function ClaimButton({ attorneyId, attorneyName, hasBarNumber }: ClaimBut
             <p className="text-sm text-amber-700 mt-1">
               This profile cannot yet be claimed automatically.
               Contact us at{' '}
-              <a href="mailto:support@us-attorneys.com" className="underline font-medium">
-                support@us-attorneys.com
+              <a href="mailto:support@lawtendr.com" className="underline font-medium">
+                support@lawtendr.com
               </a>{' '}
               with a copy of your bar admission certificate.
             </p>

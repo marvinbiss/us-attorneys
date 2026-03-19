@@ -325,7 +325,7 @@ export const PATCH = createApiHandler(async ({ request }) => {
     let emailStatus = 'skipped'
     if (!claim.user_id) {
       const claimEmail = claim.claimant_email!.trim().toLowerCase()
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
 
       try {
         const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({

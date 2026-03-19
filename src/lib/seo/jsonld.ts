@@ -53,7 +53,7 @@ export function getWebsiteSchema() {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE_NAME,
-    alternateName: ['us-attorneys.com'],
+    alternateName: ['lawtendr.com'],
     url: SITE_URL,
     publisher: { '@id': `${SITE_URL}#organization` },
     potentialAction: {

@@ -55,7 +55,7 @@ function getAllowedHostname(): string {
   try {
     return new URL(SITE_URL).hostname
   } catch {
-    return 'us-attorneys.com'
+    return 'lawtendr.com'
   }
 }
 
@@ -115,7 +115,7 @@ export function validateFetchUrl(url: string): { valid: true; url: URL } | { val
   // Validate hostname against allowed domain
   const allowedHostname = getAllowedHostname()
 
-  // Allow exact match or subdomain match (e.g., www.us-attorneys.com)
+  // Allow exact match or subdomain match (e.g., www.lawtendr.com)
   if (hostname !== allowedHostname && !hostname.endsWith('.' + allowedHostname)) {
     return { valid: false, reason: `Hostname not allowed: ${hostname} (expected: ${allowedHostname})` }
   }

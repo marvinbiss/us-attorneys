@@ -125,7 +125,7 @@ function unsubscribePage(message: string, success: boolean): string {
     <h1>${escapeHtml(message)}</h1>
     <p>${success
       ? 'You will no longer receive communications from us.'
-      : 'Please try again or contact support@us-attorneys.com'
+      : 'Please try again or contact support@lawtendr.com'
     }</p>
   </div>
 </body>

@@ -70,7 +70,7 @@ export const GET = createApiHandler(async ({ request }) => {
 
   let query = supabase
     .from('attorneys')
-    .select('name, slug, stable_id, specialty, address_city, is_verified, is_active, rating_average, review_count')
+    .select('name, slug, stable_id, address_city, is_verified, is_active, rating_average, review_count, specialty:specialties!primary_specialty_id(name, slug)')
 
   if (slug) {
     query = query.eq('slug', slug)
@@ -96,7 +96,8 @@ export const GET = createApiHandler(async ({ request }) => {
   }
 
   const name = escapeXml((provider.name || 'Attorney').length > 26 ? (provider.name || 'Attorney').slice(0, 24) + '...' : (provider.name || 'Attorney'))
-  const specialty = escapeXml((provider.specialty || '').length > 28 ? (provider.specialty || '').slice(0, 26) + '...' : (provider.specialty || ''))
+  const specialtyName = (provider.specialty as { name?: string } | null)?.name || ''
+  const specialty = escapeXml(specialtyName.length > 28 ? specialtyName.slice(0, 26) + '...' : specialtyName)
   const city = escapeXml((provider.address_city || '').length > 20 ? (provider.address_city || '').slice(0, 18) + '...' : (provider.address_city || ''))
   const rating = Math.min(5, Math.max(0, provider.rating_average || 0))
   const reviews = provider.review_count || 0

@@ -144,45 +144,34 @@ export function createApiHandler<T = unknown>(
 
 /**
  * Create a JSON response
- * @deprecated Use apiSuccess() for the standard response format
+ * @deprecated Use apiSuccess() from '@/lib/api/response' instead
  */
 export function jsonResponse<T>(data: T, status: number = 200) {
   return NextResponse.json({ success: true, data }, { status })
 }
 
 // ============================================
-// Standard API Response Helpers
+// Re-exports from the canonical response module
 // ============================================
-// All API routes should use these two helpers for consistency:
-//   Success: { success: true, data: T }
-//   Error:   { success: false, error: { code: string, message: string } }
+// For new routes, import directly from '@/lib/api/response'.
+// These re-exports exist for backward compatibility.
 // ============================================
 
-/**
- * Standard success response
- *
- * @example apiSuccess({ user: { id: '1', name: 'Jane' } })
- * @example apiSuccess({ id: '1' }, 201)
- */
-export function apiSuccess<T>(data: T, status: number = 200) {
-  return NextResponse.json({ success: true, data }, { status })
-}
-
-/**
- * Standard error response
- *
- * @example apiError('VALIDATION_ERROR', 'Invalid email address', 400)
- * @example apiError('NOT_FOUND', 'Attorney not found', 404)
- */
-export function apiError(code: string, message: string, status: number = 400) {
-  return NextResponse.json(
-    { success: false, error: { code, message } },
-    { status }
-  )
-}
+export {
+  apiSuccess,
+  apiError,
+  apiPaginated,
+  apiCreated,
+  apiNoContent,
+  type ApiSuccessBody,
+  type ApiErrorBody,
+  type ApiPaginatedBody,
+  type PaginationMeta,
+} from '@/lib/api/response'
 
 /**
  * Create a paginated response
+ * @deprecated Use apiPaginated() from '@/lib/api/response' instead — it provides richer pagination metadata.
  */
 export function paginatedResponse<T>(
   data: T[],

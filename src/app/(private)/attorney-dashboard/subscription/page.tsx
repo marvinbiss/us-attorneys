@@ -262,11 +262,11 @@ export default function SubscriptionPage() {
                       about your account and features.
                     </p>
                     <a
-                      href="mailto:contact@us-attorneys.com"
+                      href="mailto:contact@lawtendr.com"
                       className="inline-flex items-center gap-2 mt-3 text-sm font-medium text-blue-600 hover:text-blue-800"
                     >
                       <Mail className="w-4 h-4" />
-                      contact@us-attorneys.com
+                      contact@lawtendr.com
                     </a>
                   </div>
                 </div>

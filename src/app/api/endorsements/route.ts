@@ -53,11 +53,11 @@ export const GET = createApiHandler(async ({ request }) => {
         id,
         name,
         slug,
-        avatar_url,
-        specialty,
+        profile_image_url,
         address_city,
         address_state,
-        is_verified
+        is_verified,
+        specialty:specialties!primary_specialty_id(name, slug)
       )
     `)
     .eq('endorsed_id', endorsedId)

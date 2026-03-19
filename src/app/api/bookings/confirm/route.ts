@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
 
       // Attorney notification
       if (attorney?.email) {
-        const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'}/attorney-dashboard/bookings`
+        const dashboardUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'}/attorney-dashboard/bookings`
         const attorneyTemplate = emailTemplates.bookingNotificationAttorney(
           attorneyName,
           booking.client_name,

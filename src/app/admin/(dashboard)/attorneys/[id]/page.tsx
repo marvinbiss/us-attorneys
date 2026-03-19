@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
   Edit2,
@@ -88,7 +89,7 @@ export default function AdminAttorneyDetailPage() {
         router.push('/admin/attorneys')
       }
     } catch (error: unknown) {
-      console.error('Failed to fetch attorney:', error)
+      logger.error('Failed to fetch attorney', error)
       router.push('/admin/attorneys')
     } finally {
       setLoading(false)
@@ -112,7 +113,7 @@ export default function AdminAttorneyDetailPage() {
         setToast({ type: 'error', message: data.error || 'Verification failed' })
       }
     } catch (error: unknown) {
-      console.error('Verify failed:', error)
+      logger.error('Verify failed', error)
       setToast({ type: 'error', message: 'Connection error' })
     }
   }
@@ -134,7 +135,7 @@ export default function AdminAttorneyDetailPage() {
         setToast({ type: 'error', message: data.error || 'Action failed' })
       }
     } catch (error: unknown) {
-      console.error('Suspend failed:', error)
+      logger.error('Suspend failed', error)
       setToast({ type: 'error', message: 'Connection error' })
     }
   }
@@ -153,7 +154,7 @@ export default function AdminAttorneyDetailPage() {
         setToast({ type: 'error', message: data.error || 'Deletion failed' })
       }
     } catch (error: unknown) {
-      console.error('Delete failed:', error)
+      logger.error('Delete failed', error)
       setToast({ type: 'error', message: 'Connection error' })
     }
   }

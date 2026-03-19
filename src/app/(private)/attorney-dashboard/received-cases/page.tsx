@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { logger } from '@/lib/logger'
 import { FileText, MessageSquare, ArrowLeft, Filter, Calendar, MapPin, ChevronRight, Eye, Send, Loader2, X, Phone, CheckCircle2, Euro, Clock, Pencil } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import AttorneySidebar from '@/components/attorney-dashboard/AttorneySidebar'
@@ -110,7 +111,7 @@ export default function ReceivedCasesPage() {
         }
       }
     } catch (error: unknown) {
-      console.error('Error fetching leads:', error)
+      logger.error('Error fetching leads', error)
     } finally {
       setLoading(false)
     }
@@ -263,7 +264,7 @@ export default function ReceivedCasesPage() {
         }
       }
     } catch (error: unknown) {
-      console.error('Error sending quote:', error)
+      logger.error('Error sending quote', error)
       setToast({ message: 'Error sending quote', type: 'error' })
     } finally {
       setSubmitting(false)

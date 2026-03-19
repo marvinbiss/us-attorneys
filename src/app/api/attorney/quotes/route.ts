@@ -155,7 +155,7 @@ export const POST = createApiHandler(
       throw error
     }
 
-    return apiSuccess(quote, 201)
+    return apiSuccess(quote as Record<string, unknown>)
   },
   { requireAuth: true }
 )

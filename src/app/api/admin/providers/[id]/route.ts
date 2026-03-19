@@ -123,7 +123,7 @@ export const GET = createApiHandler(async ({ params }) => {
 
   const { data: provider, error } = await supabase
     .from('attorneys')
-    .select('id, user_id, stable_id, name, slug, email, phone, bar_number, specialty, description, bio, address_line1, address_city, address_zip, address_state, address_county, latitude, longitude, is_verified, is_active, rating_average, review_count, created_at, updated_at')
+    .select('id, user_id, stable_id, name, slug, email, phone, bar_number, description, bio, address_line1, address_city, address_zip, address_state, address_county, latitude, longitude, is_verified, is_active, rating_average, review_count, created_at, updated_at, specialty:specialties!primary_specialty_id(name, slug)')
     .eq('id', attorneyId)
     .single()
 
@@ -143,7 +143,7 @@ export const GET = createApiHandler(async ({ params }) => {
       slug: provider.slug,
       phone: provider.phone || '',
       bar_number: provider.bar_number || '',
-      specialty: provider.specialty || '',
+      specialty: (provider.specialty as { name?: string } | null)?.name || '',
       description: provider.description || '',
       bio: provider.bio || '',
       // Use DB column names directly so form fields match

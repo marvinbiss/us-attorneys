@@ -17,7 +17,7 @@ export interface EmailOptions {
   from?: string
 }
 
-const DEFAULT_FROM = 'US Attorneys <noreply@us-attorneys.com>'
+const DEFAULT_FROM = 'US Attorneys <noreply@lawtendr.com>'
 
 /**
  * Send an email using Resend API

@@ -27,7 +27,7 @@ function buildSpec() {
     },
     servers: [
       {
-        url: SITE_URL || 'https://us-attorneys.com',
+        url: SITE_URL || 'https://lawtendr.com',
         description: 'Production',
       },
     ],

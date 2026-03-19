@@ -57,8 +57,8 @@ export const POST = createApiHandler(async ({ request }) => {
 
     const data = validation.data
 
-    // Sanitize page_url: must start with "/" or "https://us-attorneys.com"
-    if (data.page_url && !data.page_url.startsWith('/') && !data.page_url.startsWith('https://us-attorneys.com')) {
+    // Sanitize page_url: must start with "/" or "https://lawtendr.com"
+    if (data.page_url && !data.page_url.startsWith('/') && !data.page_url.startsWith('https://lawtendr.com')) {
       data.page_url = undefined
     }
     const supabase = createAdminClient()
@@ -147,7 +147,7 @@ export const POST = createApiHandler(async ({ request }) => {
 // Admin notification
 // ============================================================
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://us-attorneys.com'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lawtendr.com'
 
 async function notifyAdminNewEstimationLead(
   data: z.infer<typeof estimationLeadSchema>,
@@ -294,7 +294,7 @@ async function sendClientConfirmationEmail(
       <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
       <p style="color: #aaa; font-size: 12px; text-align: center;">
         US Attorneys – The qualified attorneys platform<br>
-        <a href="${SITE_URL}" style="color: #aaa;">us-attorneys.com</a>
+        <a href="${SITE_URL}" style="color: #aaa;">lawtendr.com</a>
       </p>
     </div>
   </div>

@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
 import { getResendClient } from '@/lib/api/resend-client'
+import { rateLimit, RATE_LIMITS } from '@/lib/rate-limiter'
 import { z } from 'zod'
 
 function escapeHtml(str: string): string {
@@ -43,6 +44,15 @@ const attorneyRegistrationSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    // Rate limiting: 3 per 5 minutes (registration preset)
+    const rl = await rateLimit(request, RATE_LIMITS.registration)
+    if (!rl.success) {
+      return NextResponse.json(
+        { error: 'Too many registration attempts. Please try again later.' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
 
     // Validate input
@@ -60,7 +70,7 @@ export async function POST(request: Request) {
     // Send both emails in parallel (neither should crash the signup)
     const emailResults = await Promise.allSettled([
       getResend().emails.send({
-        from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
+        from: process.env.FROM_EMAIL || 'noreply@lawtendr.com',
         to: data.email,
         subject: 'Your registration on US Attorneys - Confirmation',
         html: `
@@ -77,13 +87,13 @@ export async function POST(request: Request) {
           <p>Welcome to US Attorneys!</p>
           <hr />
           <p style="color: #666; font-size: 12px;">
-            <a href="https://us-attorneys.com">us-attorneys.com</a>
+            <a href="https://lawtendr.com">lawtendr.com</a>
           </p>
         `,
       }),
       getResend().emails.send({
-        from: process.env.FROM_EMAIL || 'noreply@us-attorneys.com',
-        to: 'attorneys@us-attorneys.com',
+        from: process.env.FROM_EMAIL || 'noreply@lawtendr.com',
+        to: 'attorneys@lawtendr.com',
         subject: `[New registration] ${escapeHtml(data.firmName ?? '')} - ${escapeHtml(practiceAreaFinal ?? '')}`,
         html: `
           <h2>New attorney registration request</h2>
@@ -109,7 +119,7 @@ export async function POST(request: Request) {
           ${data.experience ? `<p><strong>Experience:</strong> ${escapeHtml(data.experience)}</p>` : ''}
           ${data.certifications ? `<p><strong>Certifications:</strong> ${escapeHtml(data.certifications)}</p>` : ''}
           <hr />
-          <p><a href="https://us-attorneys.com/admin">Access admin dashboard</a></p>
+          <p><a href="https://lawtendr.com/admin">Access admin dashboard</a></p>
         `,
       }),
     ])

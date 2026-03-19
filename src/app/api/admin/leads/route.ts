@@ -55,12 +55,11 @@ export const GET = createApiHandler(async ({ request }) => {
 
   let attorneysQuery = supabase
     .from('attorneys')
-    .select('id, stable_id, name, slug, specialty, address_city, is_verified')
+    .select('id, stable_id, name, slug, address_city, is_verified, specialty:specialties!primary_specialty_id(name, slug)')
     .eq('is_active', true)
     .order('name', { ascending: true })
     .limit(100)
   if (city) attorneysQuery = attorneysQuery.ilike('address_city', `${city}%`)
-  if (service) attorneysQuery = attorneysQuery.ilike('specialty', `${service}%`)
 
   // Execute all 3 queries in parallel (instead of sequential)
   const assignedPromise = assignedQuery.then(

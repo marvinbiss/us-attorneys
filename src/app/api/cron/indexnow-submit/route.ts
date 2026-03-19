@@ -3,6 +3,7 @@ import { SITE_URL } from '@/lib/seo/config'
 import { services } from '@/lib/data/usa'
 import { verifyCronSecret } from '@/lib/cron-auth'
 import { validateFetchUrl } from '@/lib/url-validation'
+import { logger } from '@/lib/logger'
 
 const TOP_CITIES = ['new-york', 'los-angeles', 'chicago', 'houston', 'phoenix', 'philadelphia', 'san-antonio', 'san-diego', 'dallas', 'austin']
 
@@ -34,7 +35,7 @@ export async function GET(request: Request) {
   const indexNowUrl = `${SITE_URL}/api/indexnow`
   const validation = validateFetchUrl(indexNowUrl)
   if (!validation.valid) {
-    console.error(`[indexnow-submit] SSRF blocked: ${validation.reason}`)
+    logger.error('[indexnow-submit] SSRF blocked', null, { action: 'ssrf-check', component: 'cron' })
     return NextResponse.json({ error: 'Invalid IndexNow URL', reason: validation.reason }, { status: 500 })
   }
 

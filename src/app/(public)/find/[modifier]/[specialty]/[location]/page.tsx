@@ -269,7 +269,7 @@ export default async function DemographicPage({ params }: PageProps) {
             isPartOf: {
               '@type': 'WebSite',
               name: 'US Attorneys',
-              url: 'https://us-attorneys.com',
+              url: 'https://lawtendr.com',
             },
           }),
         }}

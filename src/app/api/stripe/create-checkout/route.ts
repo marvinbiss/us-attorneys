@@ -7,6 +7,7 @@
 import { NextResponse } from 'next/server'
 import { stripe, PLANS, PlanId } from '@/lib/stripe/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { logger } from '@/lib/logger'
 import { validateStripePriceIds } from '@/lib/stripe-admin'
 import { z } from 'zod'
@@ -38,6 +39,21 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
+      )
+    }
+
+    // Verify the authenticated user has an attorney profile (ownership check)
+    const admin = createAdminClient()
+    const { data: attorneyProfile } = await admin
+      .from('attorneys')
+      .select('id, user_id')
+      .eq('user_id', user.id)
+      .single()
+
+    if (!attorneyProfile) {
+      return NextResponse.json(
+        { error: 'No attorney profile found. Only verified attorneys can subscribe.' },
+        { status: 403 }
       )
     }
 
@@ -96,6 +112,7 @@ export async function POST(request: Request) {
       cancel_url: `${siteUrl}/attorney-dashboard/subscription?canceled=true`,
       metadata: {
         user_id: user.id,
+        attorney_id: attorneyProfile.id,
         plan_id: planId,
       },
     })

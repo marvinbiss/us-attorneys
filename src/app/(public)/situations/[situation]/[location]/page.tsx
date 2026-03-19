@@ -341,7 +341,7 @@ export default async function SituationPage({ params }: PageProps) {
             isPartOf: {
               '@type': 'WebSite',
               name: 'US Attorneys',
-              url: 'https://us-attorneys.com',
+              url: 'https://lawtendr.com',
             },
           }),
         }}

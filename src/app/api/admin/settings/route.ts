@@ -27,8 +27,8 @@ export const dynamic = 'force-dynamic'
 // Default settings
 const DEFAULT_SETTINGS = {
   siteName: 'US Attorneys',
-  contactEmail: 'contact@us-attorneys.com',
-  supportEmail: 'support@us-attorneys.com',
+  contactEmail: 'contact@lawtendr.com',
+  supportEmail: 'support@lawtendr.com',
   maintenanceMode: false,
   registrationEnabled: true,
   emailNotifications: true,

@@ -92,7 +92,7 @@ export default function BookingConfirmationPage() {
 VERSION:2.0
 PRODID:-//USAttorneys//EN
 BEGIN:VEVENT
-UID:${booking.id}@us-attorneys.com
+UID:${booking.id}@lawtendr.com
 DTSTART:${formatICSDate(startDate)}
 DTEND:${formatICSDate(endDate)}
 SUMMARY:Appointment: ${booking.specialtyName} - ${booking.attorneyName}

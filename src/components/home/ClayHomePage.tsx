@@ -30,17 +30,17 @@ const SERVICE_ITEMS = [
 // Featured attorneys (manual selection — verified profiles)
 const FEATURED_ATTORNEYS = [
   {
-    name: 'Smith & Associates', specialty: 'Personal Injury', address_city: 'New York', address_postal_code: '10001',
+    name: 'Smith & Associates', specialty: 'Personal Injury', address_city: 'New York', address_zip: '10001',
     rating_average: 4.6, review_count: 34, is_verified: true, slug: 'personal-injury',
     stable_id: 'smith-associates-new-york', profileCity: 'new-york',
   },
   {
-    name: 'Davis Law Group', specialty: 'Criminal Defense', address_city: 'Los Angeles', address_postal_code: '90001',
+    name: 'Davis Law Group', specialty: 'Criminal Defense', address_city: 'Los Angeles', address_zip: '90001',
     rating_average: 4.9, review_count: 9, is_verified: true, slug: 'criminal-defense',
     stable_id: 'davis-law-group-los-angeles', profileCity: 'los-angeles',
   },
   {
-    name: 'Martinez Family Law', specialty: 'Family Law', address_city: 'Chicago', address_postal_code: '60601',
+    name: 'Martinez Family Law', specialty: 'Family Law', address_city: 'Chicago', address_zip: '60601',
     rating_average: 4.7, review_count: 95, is_verified: true, slug: 'family-law',
     stable_id: 'martinez-family-law-chicago', profileCity: 'chicago',
   },
@@ -399,7 +399,7 @@ export function ClayHomePage({ stats, specialtyCounts, topProviders, recentRevie
                       <div className="px-5 pb-5 pt-4">
                         <div className="text-base font-black text-stone-900 mb-0.5 line-clamp-1">{formatName(a.name)}</div>
                         <div className="text-sm text-stone-400 mb-2.5 line-clamp-1">
-                          {a.specialty}{a.address_city ? ` · ${a.address_city}` : ''}{a.address_postal_code ? ` (${a.address_postal_code})` : ''}
+                          {typeof a.specialty === 'object' && a.specialty ? (a.specialty as { name: string }).name : a.specialty}{a.address_city ? ` · ${a.address_city}` : ''}{a.address_zip ? ` (${a.address_zip})` : ''}
                         </div>
                         <div className="flex items-center gap-1.5 mb-3">
                           <span className="text-sm">{renderStars(rating)}</span>

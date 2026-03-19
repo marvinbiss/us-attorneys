@@ -70,7 +70,7 @@ export const GET = createApiHandler(async ({ params }) => {
   try {
     const { data: provider } = await supabase
       .from('attorneys')
-      .select('id, name, slug, email, phone, bar_number, is_verified, is_active, stable_id, noindex, address_city, address_zip, address_line1, address_state, specialty, rating_average, review_count, created_at')
+      .select('id, name, slug, email, phone, bar_number, is_verified, is_active, stable_id, noindex, address_city, address_zip, address_line1, address_state, rating_average, review_count, created_at, specialty:specialties!primary_specialty_id(name, slug)')
       .eq('user_id', userId)
       .maybeSingle()
     attorneyData = provider

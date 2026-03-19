@@ -181,10 +181,10 @@ export default function AccessibilityPage() {
           <p className="text-gray-700 mb-2">
             <strong>Email:</strong>{' '}
             <a
-              href="mailto:accessibility@us-attorneys.com"
+              href="mailto:accessibility@lawtendr.com"
               className="text-blue-700 underline hover:text-blue-900"
             >
-              accessibility@us-attorneys.com
+              accessibility@lawtendr.com
             </a>
           </p>
           <p className="text-gray-700">

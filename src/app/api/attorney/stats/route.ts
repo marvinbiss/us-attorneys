@@ -67,7 +67,7 @@ export const GET = createApiHandler(async ({ request, user }) => {
       .single(),
     supabase
       .from('attorneys')
-      .select('id, stable_id, slug, specialty, address_city, address_postal_code, is_verified, name, description, phone, email')
+      .select('id, stable_id, slug, address_city, address_zip, is_verified, name, description, phone, email, specialty:specialties!primary_specialty_id(name, slug)')
       .eq('user_id', user!.id)
       .single(),
   ]))

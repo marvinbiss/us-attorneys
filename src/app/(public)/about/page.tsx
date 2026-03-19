@@ -57,7 +57,7 @@ async function getStats() {
     try {
       const { data: stats, error } = await Promise.race([
         supabase
-          .from('mv_provider_stats')
+          .from('mv_attorney_stats')
           .select('active_count, unique_cities, total_reviews, providers_with_reviews')
           .single(),
         new Promise<never>((_, reject) =>
@@ -133,7 +133,7 @@ const commitments = [
   },
   {
     title: 'Data protection',
-    description: 'Full compliance with data privacy laws, secure hosting, privacy officer reachable at privacy@us-attorneys.com.',
+    description: 'Full compliance with data privacy laws, secure hosting, privacy officer reachable at privacy@lawtendr.com.',
   },
   {
     title: 'Fee transparency',

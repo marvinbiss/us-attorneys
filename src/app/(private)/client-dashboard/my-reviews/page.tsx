@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import { FileText, MessageSquare, Star, Settings, ArrowLeft, Edit2, Trash2, Loader2 } from 'lucide-react'
 import Breadcrumb from '@/components/Breadcrumb'
 import { QuickSiteLinks } from '@/components/InternalLinks'
@@ -52,7 +53,7 @@ export default function MyReviewsPage() {
         setPendingReview(data.pendingReviews || [])
       }
     } catch (error: unknown) {
-      console.error('Error fetching reviews:', error)
+      logger.error('Error fetching reviews', error)
     } finally {
       setLoading(false)
     }
@@ -101,7 +102,7 @@ export default function MyReviewsPage() {
         }
       }
     } catch (error: unknown) {
-      console.error('Error submitting review:', error)
+      logger.error('Error submitting review', error)
     } finally {
       setSubmitting(false)
       setRating(5)
@@ -121,7 +122,7 @@ export default function MyReviewsPage() {
         await fetchReviews()
       }
     } catch (error: unknown) {
-      console.error('Error deleting review:', error)
+      logger.error('Error deleting review', error)
     }
   }
 

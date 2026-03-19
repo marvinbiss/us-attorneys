@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { logger } from '@/lib/logger'
 import { Star, ArrowLeft, ThumbsUp, MessageCircle, Loader2, X } from 'lucide-react'
 import AttorneySidebar from '@/components/attorney-dashboard/AttorneySidebar'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -48,7 +49,7 @@ export default function ReviewsReceivedPage() {
         setStats(data.stats || stats)
       }
     } catch (error: unknown) {
-      console.error('Error fetching reviews:', error)
+      logger.error('Error fetching reviews', error)
     } finally {
       setLoading(false)
     }
