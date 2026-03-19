@@ -17,7 +17,7 @@ export const GET = createApiHandler(async ({ request }) => {
   // Verify admin with settings:read permission (data export)
   const authResult = await requirePermission('settings', 'read')
   if (!authResult.success || !authResult.admin) {
-    return authResult.error!
+    return authResult.error as NextResponse
   }
 
   const supabase = createAdminClient()
@@ -77,18 +77,30 @@ export const GET = createApiHandler(async ({ request }) => {
   }
 
   // Audit log for data export
-  await logAdminAction(authResult.admin.id, 'data.export', 'settings', type, { format, recordCount: data.length })
+  await logAdminAction(authResult.admin.id, 'data.export', 'settings', type, {
+    format,
+    recordCount: data.length,
+  })
 
   if (format === 'csv') {
     if (data.length === 0) {
       return new NextResponse('No data', { status: 200 })
     }
 
+    // Properly escape CSV values: handle newlines, quotes, and commas per RFC 4180
+    const escapeCSV = (value: unknown): string => {
+      const str = String(value ?? '')
+      if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+        return '"' + str.replace(/"/g, '""') + '"'
+      }
+      return str
+    }
+
     const headers = Object.keys(data[0] as object)
     const csv = [
       headers.join(','),
-      ...data.map(row =>
-        headers.map(h => JSON.stringify((row as Record<string, unknown>)[h] ?? '')).join(',')
+      ...data.map((row) =>
+        headers.map((h) => escapeCSV((row as Record<string, unknown>)[h])).join(',')
       ),
     ].join('\n')
 
