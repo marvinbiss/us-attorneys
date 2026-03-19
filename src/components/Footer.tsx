@@ -21,7 +21,7 @@ import GeoFooterLinks from './seo/GeoFooterLinks'
 // Navigation links
 const navigationLinks = [
   { name: 'Home', href: '/' },
-  { name: 'Practice Areas', href: '/services' },
+  { name: 'Practice Areas', href: '/practice-areas' },
   { name: 'Cities', href: '/cities' },
   { name: 'Attorney Map', href: '/attorney-map' },
   { name: 'Search', href: '/search' },

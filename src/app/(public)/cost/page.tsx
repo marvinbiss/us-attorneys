@@ -9,9 +9,9 @@ import JsonLd from '@/components/JsonLd'
 
 export const revalidate = REVALIDATE.staticPages
 
-const PAGE_TITLE = 'Hire an Attorney — Find Verified Lawyers by Practice Area'
+const PAGE_TITLE = 'Attorney Costs — How Much Does a Lawyer Cost by Practice Area'
 const PAGE_DESCRIPTION =
-  'Hire a verified attorney in any practice area. Browse 75+ specialties including personal injury, criminal defense, family law, business law, and immigration. Free initial consultation available.'
+  'Understand attorney costs across 75+ practice areas. Compare hourly rates, flat fees, contingency fees, and retainer costs for personal injury, criminal defense, family law, and more.'
 
 export function generateMetadata(): Metadata {
   return {
@@ -24,13 +24,12 @@ export function generateMetadata(): Metadata {
       locale: 'en_US',
     },
     alternates: {
-      canonical: `${SITE_URL}/hire`,
+      canonical: `${SITE_URL}/cost`,
     },
     robots: { index: true, follow: true },
   }
 }
 
-// Group practice areas by category
 const categories: Record<string, string[]> = {
   'Personal Injury': [
     'personal-injury',
@@ -79,45 +78,45 @@ const categories: Record<string, string[]> = {
   ],
 }
 
-export default function HireIndexPage() {
+export default function CostIndexPage() {
   const paMap = new Map(practiceAreas.map((pa) => [pa.slug, pa]))
 
-  const breadcrumbItems = [{ label: 'Hire an Attorney' }]
+  const breadcrumbItems = [{ label: 'Attorney Costs' }]
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Home', url: '/' },
-    { name: 'Hire an Attorney', url: '/hire' },
+    { name: 'Attorney Costs', url: '/cost' },
   ])
 
   return (
     <div className="min-h-screen bg-white">
       <JsonLd data={breadcrumbSchema} />
 
-      <section className="bg-gradient-to-b from-blue-50 to-white">
+      <section className="bg-gradient-to-b from-indigo-50 to-white">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <Breadcrumb items={breadcrumbItems} className="mb-4" />
           <h1 className="font-heading text-3xl font-bold text-gray-900 sm:text-4xl">
-            Hire an Attorney
+            Attorney Costs
           </h1>
           <p className="mt-4 max-w-3xl text-lg text-gray-600">
-            Browse practice areas to find and hire a verified attorney in your area. All lawyers in
-            our directory are bar-verified. Free initial consultation available for most practice
-            areas.
+            How much does a lawyer cost? It depends on the practice area, your location, and the
+            complexity of your case. Browse detailed cost breakdowns for every specialty, including
+            hourly rates, flat fees, contingency arrangements, and typical retainer amounts.
           </p>
         </div>
       </section>
 
       <section className="py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Free consultation banner */}
-          <div className="mb-10 rounded-xl border border-blue-200 bg-blue-50 p-6">
-            <h2 className="mb-2 text-lg font-semibold text-blue-900">Free Initial Consultation</h2>
-            <p className="text-sm text-blue-800">
-              Most attorneys in our directory offer a free initial consultation. Select a practice
-              area and your location to get started.
+          <div className="mb-10 rounded-xl border border-indigo-200 bg-indigo-50 p-6">
+            <h2 className="mb-2 text-lg font-semibold text-indigo-900">Understanding Legal Fees</h2>
+            <p className="text-sm text-indigo-800">
+              Attorney fees vary widely by practice area and location. Personal injury lawyers
+              typically work on contingency (33-40% of settlement), while criminal defense and
+              family law attorneys usually charge hourly ($150-$500/hr) or flat fees. Select a
+              practice area for detailed pricing information.
             </p>
           </div>
 
-          {/* Practice areas by category */}
           {Object.entries(categories).map(([category, slugs]) => {
             const areas = slugs.map((slug) => paMap.get(slug)).filter(Boolean) as {
               slug: string
@@ -132,8 +131,8 @@ export default function HireIndexPage() {
                   {areas.map((pa) => (
                     <Link
                       key={pa.slug}
-                      href={`/hire/${pa.slug}/new-york`}
-                      className="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 transition-all hover:border-blue-300 hover:text-blue-700 hover:shadow-sm"
+                      href={`/cost/${pa.slug}/new-york`}
+                      className="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 transition-all hover:border-indigo-300 hover:text-indigo-700 hover:shadow-sm"
                     >
                       {pa.name}
                     </Link>
@@ -143,7 +142,6 @@ export default function HireIndexPage() {
             )
           })}
 
-          {/* Remaining practice areas */}
           {(() => {
             const categorized = new Set(Object.values(categories).flat())
             const remaining = practiceAreas.filter((pa) => !categorized.has(pa.slug))
@@ -156,8 +154,8 @@ export default function HireIndexPage() {
                   {remaining.map((pa) => (
                     <Link
                       key={pa.slug}
-                      href={`/hire/${pa.slug}/new-york`}
-                      className="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 transition-all hover:border-blue-300 hover:text-blue-700 hover:shadow-sm"
+                      href={`/cost/${pa.slug}/new-york`}
+                      className="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 transition-all hover:border-indigo-300 hover:text-indigo-700 hover:shadow-sm"
                     >
                       {pa.name}
                     </Link>

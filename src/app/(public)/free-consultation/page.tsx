@@ -9,9 +9,9 @@ import JsonLd from '@/components/JsonLd'
 
 export const revalidate = REVALIDATE.staticPages
 
-const PAGE_TITLE = 'Hire an Attorney — Find Verified Lawyers by Practice Area'
+const PAGE_TITLE = 'Free Consultation — Talk to a Lawyer for Free by Practice Area'
 const PAGE_DESCRIPTION =
-  'Hire a verified attorney in any practice area. Browse 75+ specialties including personal injury, criminal defense, family law, business law, and immigration. Free initial consultation available.'
+  'Get a free legal consultation with verified attorneys across 75+ practice areas. No obligation, no upfront cost. Find lawyers offering free initial consultations in personal injury, family law, criminal defense, and more.'
 
 export function generateMetadata(): Metadata {
   return {
@@ -24,13 +24,12 @@ export function generateMetadata(): Metadata {
       locale: 'en_US',
     },
     alternates: {
-      canonical: `${SITE_URL}/hire`,
+      canonical: `${SITE_URL}/free-consultation`,
     },
     robots: { index: true, follow: true },
   }
 }
 
-// Group practice areas by category
 const categories: Record<string, string[]> = {
   'Personal Injury': [
     'personal-injury',
@@ -79,45 +78,45 @@ const categories: Record<string, string[]> = {
   ],
 }
 
-export default function HireIndexPage() {
+export default function FreeConsultationIndexPage() {
   const paMap = new Map(practiceAreas.map((pa) => [pa.slug, pa]))
 
-  const breadcrumbItems = [{ label: 'Hire an Attorney' }]
+  const breadcrumbItems = [{ label: 'Free Consultation' }]
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: 'Home', url: '/' },
-    { name: 'Hire an Attorney', url: '/hire' },
+    { name: 'Free Consultation', url: '/free-consultation' },
   ])
 
   return (
     <div className="min-h-screen bg-white">
       <JsonLd data={breadcrumbSchema} />
 
-      <section className="bg-gradient-to-b from-blue-50 to-white">
+      <section className="bg-gradient-to-b from-teal-50 to-white">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <Breadcrumb items={breadcrumbItems} className="mb-4" />
           <h1 className="font-heading text-3xl font-bold text-gray-900 sm:text-4xl">
-            Hire an Attorney
+            Free Legal Consultation
           </h1>
           <p className="mt-4 max-w-3xl text-lg text-gray-600">
-            Browse practice areas to find and hire a verified attorney in your area. All lawyers in
-            our directory are bar-verified. Free initial consultation available for most practice
-            areas.
+            Many attorneys offer a free initial consultation to discuss your case with no
+            obligation. This is your chance to understand your legal options, get a case evaluation,
+            and determine if you need representation — all at no cost.
           </p>
         </div>
       </section>
 
       <section className="py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Free consultation banner */}
-          <div className="mb-10 rounded-xl border border-blue-200 bg-blue-50 p-6">
-            <h2 className="mb-2 text-lg font-semibold text-blue-900">Free Initial Consultation</h2>
-            <p className="text-sm text-blue-800">
-              Most attorneys in our directory offer a free initial consultation. Select a practice
-              area and your location to get started.
+          <div className="mb-10 rounded-xl border border-teal-200 bg-teal-50 p-6">
+            <h2 className="mb-2 text-lg font-semibold text-teal-900">What to Expect</h2>
+            <p className="text-sm text-teal-800">
+              A free consultation typically lasts 15-30 minutes. The attorney will review your
+              situation, explain your legal options, discuss potential outcomes, and outline their
+              fees if you decide to proceed. There is no obligation to hire the attorney after the
+              consultation.
             </p>
           </div>
 
-          {/* Practice areas by category */}
           {Object.entries(categories).map(([category, slugs]) => {
             const areas = slugs.map((slug) => paMap.get(slug)).filter(Boolean) as {
               slug: string
@@ -132,8 +131,8 @@ export default function HireIndexPage() {
                   {areas.map((pa) => (
                     <Link
                       key={pa.slug}
-                      href={`/hire/${pa.slug}/new-york`}
-                      className="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 transition-all hover:border-blue-300 hover:text-blue-700 hover:shadow-sm"
+                      href={`/free-consultation/${pa.slug}/new-york`}
+                      className="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 transition-all hover:border-teal-300 hover:text-teal-700 hover:shadow-sm"
                     >
                       {pa.name}
                     </Link>
@@ -143,7 +142,6 @@ export default function HireIndexPage() {
             )
           })}
 
-          {/* Remaining practice areas */}
           {(() => {
             const categorized = new Set(Object.values(categories).flat())
             const remaining = practiceAreas.filter((pa) => !categorized.has(pa.slug))
@@ -156,8 +154,8 @@ export default function HireIndexPage() {
                   {remaining.map((pa) => (
                     <Link
                       key={pa.slug}
-                      href={`/hire/${pa.slug}/new-york`}
-                      className="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 transition-all hover:border-blue-300 hover:text-blue-700 hover:shadow-sm"
+                      href={`/free-consultation/${pa.slug}/new-york`}
+                      className="rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 transition-all hover:border-teal-300 hover:text-teal-700 hover:shadow-sm"
                     >
                       {pa.name}
                     </Link>

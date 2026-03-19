@@ -387,6 +387,8 @@ const nextConfig = {
       // Legal page aliases
       { source: '/privacy-policy', destination: '/privacy', permanent: true },
       { source: '/general-terms', destination: '/terms', permanent: true },
+      // Legacy French blog category route
+      { source: '/blog/category/categorie/:category', destination: '/blog/category/:category', permanent: true },
     ]
   },
 

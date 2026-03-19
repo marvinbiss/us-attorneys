@@ -66,7 +66,7 @@ export default function MobileMenu({
   return (
     <div
       data-menu-content="mobile-menu"
-      className="max-h-[calc(100vh-120px)] overflow-y-auto border-t border-gray-100/50 bg-white/95 backdrop-blur-xl dark:border-gray-700/50 dark:bg-gray-900/95 lg:hidden"
+      className="relative z-[9998] max-h-[calc(100vh-120px)] overflow-y-auto border-t border-gray-100/50 bg-white/95 backdrop-blur-xl dark:border-gray-700/50 dark:bg-gray-900/95 lg:hidden"
     >
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
         {/* Search Mobile - Dual Field */}
