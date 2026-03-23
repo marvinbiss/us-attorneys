@@ -84,7 +84,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@types/web-push": "^3.6.4",
-    "@vitejs/plugin-react": "^5.1.3",
+    "@vitejs/plugin-react": "^6.0.1",
     "@vitest/coverage-v8": "^4.1.0",
     "adm-zip": "^0.5.16",
     "autoprefixer": "^10.4.24",
