@@ -11,7 +11,7 @@ jobs:
     name: SEO & Security Guardrails
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Admin auth invariant
         run: bash scripts/ci/check-admin-auth.sh
